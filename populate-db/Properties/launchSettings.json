@@ -3,7 +3,7 @@
     "PopulateDB": {
       "commandName": "Project",
       "environmentVariables": {
-        "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\VSProjects\\MTG-Inventory\\mtg-inventory-main-service-account.json"
+        "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\mtg-inventory-main-service-account.json"
       }
     }
   }
