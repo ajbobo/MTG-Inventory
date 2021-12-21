@@ -1,0 +1,7 @@
+.simple_table {
+    border: 2px solid black
+}
+
+.simple_table td, th  {
+    border: 1px dashed black
+}
