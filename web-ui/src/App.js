@@ -24,23 +24,13 @@ const db = getFirestore(fbapp);
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            curTab: "inventory"
-        };
-    }
-
-    chooseTab(tabName) {
-        console.log("chooseTab -> tabName:" + tabName);
-        this.setState({
-            curTab:tabName
-        })
     }
 
     render() {
         return (
             <div>
                 <h1>Magic: The Gathering Inventory</h1>
-                <Tabs defaultActiveKey="inventory" id="mainScreen" className="mb-3">
+                <Tabs defaultActiveKey="setlists" id="mainScreen" className="mb-3">
                     <Tab eventKey="inventory" title="Inventory"><Inventory/></Tab>
                     <Tab eventKey="setlists" title="Set Lists"><SetLists db={db}/></Tab>
                     <Tab eventKey="prices" title="Prices"><Prices/></Tab>
