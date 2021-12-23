@@ -1,7 +1,13 @@
 import './App.css';
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
+import Inventory from './Inventory';
+import SetLists from './SetLists';
+import Prices from './Prices';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBfAgbzeYJxOdG97bi6l8VdxTN9JUNHeMg",
@@ -15,56 +21,33 @@ const firebaseConfig = {
 const fbapp = initializeApp(firebaseConfig);
 const db = getFirestore(fbapp);
 
-class SetTable extends React.Component {
+class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            sets: []
+            curTab: "inventory"
         };
     }
 
-    componentDidMount() {
-        const getSets = async (db) => {
-            const setsCollection = collection(db, 'sets');
-            const setsSnapshot = await getDocs(query(setsCollection, orderBy('Date', 'desc')));
-            var res = setsSnapshot.docs.map(doc => doc.data());
-            this.setState({ sets: res });
-        };
-
-        getSets(db);
+    chooseTab(tabName) {
+        console.log("chooseTab -> tabName:" + tabName);
+        this.setState({
+            curTab:tabName
+        })
     }
 
     render() {
         return (
-            <table className="simple_table">
-                <thead>
-                    <tr>
-                        <th>Code</th>
-                        <th>Set Name</th>
-                        <th>Icon</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.state.sets.map((r) => (
-                        <tr>
-                            <td>{r.Code}</td>
-                            <td>{r.Name}</td>
-                            <td><img src={r.Icon_Uri} /></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        )
+            <div>
+                <h1>Magic: The Gathering Inventory</h1>
+                <Tabs defaultActiveKey="inventory" id="mainScreen" className="mb-3">
+                    <Tab eventKey="inventory" title="Inventory"><Inventory/></Tab>
+                    <Tab eventKey="setlists" title="Set Lists"><SetLists db={db}/></Tab>
+                    <Tab eventKey="prices" title="Prices"><Prices/></Tab>
+                </Tabs>
+            </div>
+        );
     }
-}
-
-function App() {
-    return (
-        <div>
-            <h1>React testing here</h1>
-            <SetTable />
-        </div>
-    );
 }
 
 export default App;
