@@ -1,49 +1,81 @@
 import './SetLists.css'
 import React from 'react';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Dropdown from 'react-bootstrap/Dropdown'
-import Button from 'react-bootstrap/Button'
+import Table from 'react-bootstrap/Table'
 
 class SetLists extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             db: this.props.db,
-            sets: []
+            sets: [],
+            cards: [],
+            loading: false
         };
     }
 
-    componentDidMount() {
-        // Should I just make an API call to Scryfall instead?
-        // That way I wouldn't have to update my database when new sets are released
-        const getSets = async (db) => {
-            const setsCollection = collection(db, 'sets');
-            const setsSnapshot = await getDocs(query(setsCollection, orderBy('Date', 'desc')));
-            var res = setsSnapshot.docs.map(doc => doc.data());
-            this.setState({ sets: res });
-        };
+    async scryfallApi(endpoint, page) {
+        var Url = "https://api.scryfall.com/" + endpoint + (page ? "&page=" + page : "");
 
-        getSets(this.state.db);
+        console.log("Scryfall API call: " + Url);
+        return fetch(Url)
+            .then(res => res.json())
+            .then(data => {
+                console.log("Scryfall result");
+                console.log(data);
+                return data;
+            })
+            .catch(error => console.log(error));
     }
 
-    getSetContents(code) {
-        const getCards = async (db) => {
-            const setCollection = collection(db, code);
-            const setSnapshot = await getDocs(setCollection);
-            if (setSnapshot.size === 0) {
-                this.setState({
-                    noCards: true
-                });
-            }
-            else {
-                this.setState({
-                    noCards: null
-                });
-            }
+    async componentDidMount() {
+        this.getSetInfo();
+    }
+
+    async getSetInfo() {
+        // Call Scryfall and get the sets that I'm interested in
+        const setData = await this.scryfallApi("sets");
+
+        var filteredSets = [];
+        setData.data.forEach((set) => {
+            if (!set.digital && (set.set_type === "core" || set.set_type === "expansion"))
+                filteredSets.push(set);
+        });
+
+        console.log("filtered sets");
+        console.log(filteredSets);
+
+        this.setState({
+            sets: filteredSets
+        })
+    }
+
+    async getSetContents(code) {
+        // Call Scryfall and get the cards for the specified set
+        this.setState({ // Try to force a refresh that shows a loading message
+            cards: [],
+            loading: true
+        });
+
+        var curCardList = [];
+        var page = 1;
+        var needMore = true;
+        while (needMore) {
+            const fullData = await this.scryfallApi("cards/search?q=set:" + code + "&order=set&unique=prints", page);
+
+            fullData.data.forEach(card => curCardList.push(card));
+
+            if (fullData.has_more)
+                page++;
+            else
+                needMore = false
         }
 
-        getCards(this.state.db);
+        this.setState({
+            cards: curCardList,
+            loading: false
+        });
     }
 
     selectSet(code, name, iconUri) {
@@ -54,11 +86,6 @@ class SetLists extends React.Component {
         });
 
         this.getSetContents(code);
-    }
-
-    populateSet() {
-        // Make Scryfall calls to get the cards, add them to the database?
-        // Or just make the API call, and join it with inventory from the db?
     }
 
     render() {
@@ -72,18 +99,33 @@ class SetLists extends React.Component {
                     </h3>
                     <DropdownButton id="set-dropdown" title="Choose a Set">
                         {this.state.sets.map((r) => (
-                            <Dropdown.Item href="#" onClick={() => { this.selectSet(r.Code, r.Name, r.Icon_Uri) }}>
-                                <img src={r.Icon_Uri} alt="" /> {r.Name}
+                            <Dropdown.Item href="#" onClick={() => { this.selectSet(r.code, r.name, r.icon_svg_uri) }}>
+                                <img src={r.icon_svg_uri} alt="" /> {r.name}
                             </Dropdown.Item>
                         ))}
                     </DropdownButton>
                 </div>
                 <div>
-                    {this.state.noCards ?
-                        <div>
-                            <p>There are no cards in the set</p>
-                            <Button onClick={this.populateSet()}>Get Card List</Button>
-                        </div>
+                    {this.state.loading ? <h3>loading cards...</h3> : null}
+                </div>
+                <div>
+                    {(this.state.cards && this.state.cards.length) > 0 ?
+                        <Table striped bordered hover>
+                            <thead>
+                                <th>#</th>
+                                <th>Card Name</th>
+                                <th>Rarity</th>
+                            </thead>
+                            <tbody>
+                                {this.state.cards.map((card) => (
+                                    <tr>
+                                        <td>{card.collector_number}</td>
+                                        <td>{card.name}</td>
+                                        <td>{card.rarity}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
                         :
                         null
                     }
