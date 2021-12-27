@@ -58,7 +58,9 @@ class SetLists extends React.Component {
             if (fullData.has_more)
                 page++;
             else
-                needMore = false
+                needMore = false;
+
+            await new Promise(r => setTimeout(r, 100)); // Add a short pause between API calls to not overload Scryfall's servers
         }
 
         this.setState({

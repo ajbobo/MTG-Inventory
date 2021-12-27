@@ -64,7 +64,7 @@ class App extends React.Component {
         return (
             <div className="CastingCost">
                 {splitText.map((sym, index) => (
-                    (sym && sym.length > 0) ? <img key={index} src={this.state.symbols["{" + sym + "}"]} alt={"{" + sym + "}"}/> : null // The {} were removed in the split, so they need to be put back
+                    (sym && sym.length > 0) ? <img key={index} src={this.state.symbols["{" + sym + "}"]} alt={"{" + sym + "}"} /> : null // The {} were removed in the split, so they need to be put back
                 ))}
             </div>
         )
@@ -75,9 +75,9 @@ class App extends React.Component {
             <div>
                 <h1>Magic: The Gathering Inventory</h1>
                 <Tabs defaultActiveKey="setlists" id="mainScreen" className="mb-3">
-                    <Tab eventKey="inventory" title="Inventory"><Inventory/></Tab>
-                    <Tab eventKey="setlists" title="Set Lists"><SetLists db={db} scryfallApi={this.scryfallApi} convertTextToSymbols={this.convertTextToSymbols}/></Tab>
-                    <Tab eventKey="prices" title="Prices"><Prices/></Tab>
+                    <Tab eventKey="inventory" title="Inventory"><Inventory /></Tab>
+                    <Tab eventKey="setlists" title="Set Lists"><SetLists db={db} scryfallApi={this.scryfallApi} convertTextToSymbols={this.convertTextToSymbols} /></Tab>
+                    <Tab eventKey="prices" title="Prices"><Prices /></Tab>
                 </Tabs>
             </div>
         );
