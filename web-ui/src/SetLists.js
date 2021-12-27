@@ -7,26 +7,15 @@ import Table from 'react-bootstrap/Table'
 class SetLists extends React.Component {
     constructor(props) {
         super(props);
+        this.scryfallApi = props.scryfallApi;
+        this.convertTextToSymbols = props.convertTextToSymbols;
         this.state = {
             db: this.props.db,
+            selectedSet: "Choose a Set",
             sets: [],
             cards: [],
             loading: false
         };
-    }
-
-    async scryfallApi(endpoint, page) {
-        var Url = "https://api.scryfall.com/" + endpoint + (page ? "&page=" + page : "");
-
-        console.log("Scryfall API call: " + Url);
-        return fetch(Url)
-            .then(res => res.json())
-            .then(data => {
-                console.log("Scryfall result");
-                console.log(data);
-                return data;
-            })
-            .catch(error => console.log(error));
     }
 
     async componentDidMount() {
@@ -82,7 +71,8 @@ class SetLists extends React.Component {
         this.setState({
             setCode: code,
             setName: name,
-            iconUri: iconUri
+            iconUri: iconUri,
+            selectedSet: name
         });
 
         this.getSetContents(code);
@@ -92,35 +82,36 @@ class SetLists extends React.Component {
         return (
             <div className="SetLists">
                 <div className="SetHeader">
-                    <h3>
-                        {this.state.iconUri ? <img src={this.state.iconUri} width="50px" height="50px" alt="" /> : null}
-                        {this.state.setName ? this.state.setName : "No set selected"}
-                        {this.state.iconUri ? <img src={this.state.iconUri} width="50px" height="50px" alt="" /> : null}
-                    </h3>
-                    <DropdownButton id="set-dropdown" title="Choose a Set">
-                        {this.state.sets.map((r) => (
-                            <Dropdown.Item href="#" onClick={() => { this.selectSet(r.code, r.name, r.icon_svg_uri) }}>
+                    {this.state.iconUri ? <img src={this.state.iconUri} width="50px" height="50px" alt="" /> : null}
+                    <DropdownButton id="set-dropdown" title={this.state.selectedSet}>
+                        {this.state.sets.map((r, index) => (
+                            <Dropdown.Item key={index} href="#" onClick={() => { this.selectSet(r.code, r.name, r.icon_svg_uri) }}>
                                 <img src={r.icon_svg_uri} alt="" /> {r.name}
                             </Dropdown.Item>
                         ))}
                     </DropdownButton>
+                    {this.state.iconUri ? <img src={this.state.iconUri} width="50px" height="50px" alt="" /> : null}
                 </div>
                 <div>
                     {this.state.loading ? <h3>loading cards...</h3> : null}
                 </div>
-                <div>
+                <div className="CardTable">
                     {(this.state.cards && this.state.cards.length) > 0 ?
-                        <Table striped bordered hover>
+                        <Table striped hover bordered size="sm">
                             <thead>
-                                <th>#</th>
-                                <th>Card Name</th>
-                                <th>Rarity</th>
+                                <tr>
+                                    <th width="35px">#</th>
+                                    <th>Card Name</th>
+                                    <th width="115px">Casting Cost</th>
+                                    <th width="115px">Rarity</th>
+                                </tr>
                             </thead>
                             <tbody>
-                                {this.state.cards.map((card) => (
-                                    <tr>
+                                {this.state.cards.map((card, index) => (
+                                    <tr key={index}>
                                         <td>{card.collector_number}</td>
                                         <td>{card.name}</td>
+                                        <td>{this.convertTextToSymbols(card.mana_cost ? card.mana_cost : card.card_faces ? card.card_faces[0].mana_cost : null)}</td>
                                         <td>{card.rarity}</td>
                                     </tr>
                                 ))}
