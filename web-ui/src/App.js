@@ -56,6 +56,15 @@ class App extends React.Component {
         })
     }
 
+    cleanUpStyles(eventKey) {
+        // This feels like a very hacky way to hide/show the SetList table, but it's what I can figure out that works
+        var setlist = document.getElementById("mainScreen-tabpane-setlists");
+        if (eventKey === "setlists")
+            setlist.style.display = "flex";
+        else
+            setlist.style.display = null;
+    }
+
     convertTextToSymbols = (text) => { // This has to be declared like this so that "this" is the App, not the tab that is calling it
         if (!text)
             return null;
@@ -64,7 +73,7 @@ class App extends React.Component {
         return (
             <div className="CastingCost">
                 {splitText.map((sym, index) => (
-                    (sym && sym.length > 0) ? <img key={index} src={this.state.symbols["{" + sym + "}"]} alt={"{" + sym + "}"} /> : null // The {} were removed in the split, so they need to be put back
+                    (sym && sym.length > 0) ? this.state.symbols["{" + sym + "}"] ? <img key={index} src={this.state.symbols["{" + sym + "}"]} alt={"{" + sym + "}"} /> : sym : null // The {} were removed in the split, so they need to be put back
                 ))}
             </div>
         )
@@ -72,9 +81,9 @@ class App extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="Base FlexPanel">
                 <h1>Magic: The Gathering Inventory</h1>
-                <Tabs defaultActiveKey="setlists" id="mainScreen" className="mb-3">
+                <Tabs defaultActiveKey="setlists" id="mainScreen" className="mb-3" onSelect={this.cleanUpStyles}>
                     <Tab eventKey="inventory" title="Inventory"><Inventory /></Tab>
                     <Tab eventKey="setlists" title="Set Lists"><SetLists db={db} scryfallApi={this.scryfallApi} convertTextToSymbols={this.convertTextToSymbols} /></Tab>
                     <Tab eventKey="prices" title="Prices"><Prices /></Tab>

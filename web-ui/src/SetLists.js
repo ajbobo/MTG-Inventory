@@ -12,6 +12,7 @@ class SetLists extends React.Component {
         this.state = {
             db: this.props.db,
             selectedSet: "Choose a Set",
+            selectedCard: null,
             sets: [],
             cards: [],
             loading: false
@@ -53,7 +54,7 @@ class SetLists extends React.Component {
         while (needMore) {
             const fullData = await this.scryfallApi("cards/search?q=set:" + code + "&order=set&unique=prints", page);
 
-            fullData.data.forEach(card => curCardList.push(card));
+            fullData.data.forEach(card => { if (!card.digital) curCardList.push(card) } );
 
             if (fullData.has_more)
                 page++;
@@ -70,59 +71,84 @@ class SetLists extends React.Component {
     }
 
     selectSet(code, name, iconUri) {
+        document.getElementById("mainScreen-tabpane-setlists").style.display="flex"; // A hack to make the table visible
+
         this.setState({
             setCode: code,
             setName: name,
             iconUri: iconUri,
-            selectedSet: name
+            selectedSet: name,
+            selectedCard: null
         });
 
         this.getSetContents(code);
+    }
+
+    selectCard(card) {
+        this.setState({
+            selectedCard: card
+        });
     }
 
     render() {
         return (
             <div className="SetLists">
                 <div className="SetHeader">
-                    {this.state.iconUri ? <img src={this.state.iconUri} width="50px" height="50px" alt="" /> : null}
-                    <DropdownButton id="set-dropdown" title={this.state.selectedSet}>
+                    {this.state.iconUri ? <img src={this.state.iconUri} alt="" /> : null}
+                    <DropdownButton id="set-dropdown" title={this.state.selectedSet} height="400px">
                         {this.state.sets.map((r, index) => (
                             <Dropdown.Item key={index} href="#" onClick={() => { this.selectSet(r.code, r.name, r.icon_svg_uri) }}>
                                 <img src={r.icon_svg_uri} alt="" /> {r.name}
                             </Dropdown.Item>
                         ))}
                     </DropdownButton>
-                    {this.state.iconUri ? <img src={this.state.iconUri} width="50px" height="50px" alt="" /> : null}
+                    {this.state.iconUri ? <img src={this.state.iconUri} alt="" /> : null}
                 </div>
-                <div>
-                    {this.state.loading ? <h3>loading cards...</h3> : null}
-                </div>
-                <div className="CardTable">
-                    {(this.state.cards && this.state.cards.length) > 0 ?
-                        <Table striped hover bordered size="sm">
-                            <thead>
-                                <tr>
-                                    <th width="35px">#</th>
-                                    <th>Card Name</th>
-                                    <th width="115px">Casting Cost</th>
-                                    <th width="115px">Rarity</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.state.cards.map((card, index) => (
-                                    <tr key={index}>
-                                        <td>{card.collector_number}</td>
-                                        <td>{card.name}</td>
-                                        <td>{this.convertTextToSymbols(card.mana_cost ? card.mana_cost : card.card_faces ? card.card_faces[0].mana_cost : null)}</td>
-                                        <td>{card.rarity}</td>
+                {this.state.loading ? <div><h3>loading cards...</h3></div> : null}
+                {(this.state.cards && this.state.cards.length) > 0 ?
+                    <div className="CardInfoPanel">
+                        <div className="CardTable">
+                            <Table striped hover bordered size="sm">
+                                <thead>
+                                    <tr>
+                                        <th width="35px">#</th>
+                                        <th>Card Name</th>
+                                        <th width="115px">Casting Cost</th>
+                                        <th width="115px">Rarity</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </Table>
-                        :
-                        null
-                    }
-                </div>
+                                </thead>
+                                <tbody>
+                                    {this.state.cards.map((card, index) => (
+                                        <tr key={index} onClick={() => { this.selectCard(card) }}>
+                                            <td>{card.collector_number}</td>
+                                            <td>{card.name}</td>
+                                            <td>{this.convertTextToSymbols(card.mana_cost ? card.mana_cost : card.card_faces ? card.card_faces[0].mana_cost : null)}</td>
+                                            <td>{card.rarity}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+                        </div>
+                        {this.state.selectedCard ?
+                            this.state.selectedCard.image_uris ?
+                                <div className="CardPanel">
+                                    <img src={this.state.selectedCard.image_uris.normal} alt="" />
+                                </div>
+                                :
+                                this.state.selectedCard.card_faces ?
+                                    <div className="CardPanel">
+                                        <img src={this.state.selectedCard.card_faces[0].image_uris.normal} alt="" />
+                                        <img src={this.state.selectedCard.card_faces[1].image_uris.normal} alt="" />
+                                    </div>
+                                    :
+                                    null
+                            :
+                            null
+                        }
+                    </div>
+                    :
+                    null
+                }
             </div>
         )
     }
