@@ -1,13 +1,8 @@
-.Base {
-    width: 100%;
-    height: 100%;
-}
-
 .CastingCost img {
     max-height: 15px;
 }
 
-.tab-content, .tab-pane { /*These are created by Bootstrap, so I can't just give them the FlexPanel class (or maybe I can?)*/
+.tab-content, .tab-pane { /*These are created by Bootstrap, so I don't think I can just give them the flexprep class*/
     display: flex;
     flex: 1;
     flex-direction: column;

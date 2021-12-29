@@ -9,13 +9,13 @@ body {
     overflow-x: hidden;
 }
 
-.FlexPanel { /* All divs leading to a panel that needs its own scroll bar need to use this */
+.flexprep { /* All divs leading to a panel that needs its own scroll bar need to use this */
     display: flex;
     flex: 1;
     flex-direction: column;
 }
 
-.RootElement {
+#root {
     /* background: black; */
     /* padding: 10px; */
     width: 100%;

@@ -33,8 +33,8 @@ class SetLists extends React.Component {
                 filteredSets.push(set);
         });
 
-        console.log("filtered sets");
-        console.log(filteredSets);
+        // console.log("filtered sets");
+        // console.log(filteredSets);
 
         this.setState({
             sets: filteredSets

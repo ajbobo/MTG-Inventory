@@ -72,16 +72,17 @@ class App extends React.Component {
         let splitText = text.split(/\{|\}/); // Split on { or } - It leaves some empty elements, but separates the right values
         return (
             <div className="CastingCost">
-                {splitText.map((sym, index) => (
-                    (sym && sym.length > 0) ? this.state.symbols["{" + sym + "}"] ? <img key={index} src={this.state.symbols["{" + sym + "}"]} alt={"{" + sym + "}"} /> : sym : null // The {} were removed in the split, so they need to be put back
-                ))}
+                {splitText.map((sym, index) => {
+                    var name = "{" + sym + "}"; // The {} were removed in the split, so they need to be put back
+                    return (sym && sym.length > 0) ? this.state.symbols[name] ? <img key={index} src={this.state.symbols[name]} alt={name} /> : sym : null
+                })}
             </div>
         )
     }
 
     render() {
         return (
-            <div className="Base FlexPanel">
+            <div className="flexprep">
                 <h1>Magic: The Gathering Inventory</h1>
                 <Tabs defaultActiveKey="setlists" id="mainScreen" className="mb-3" onSelect={this.cleanUpStyles}>
                     <Tab eventKey="inventory" title="Inventory"><Inventory /></Tab>
