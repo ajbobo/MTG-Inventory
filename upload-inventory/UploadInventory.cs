@@ -20,13 +20,11 @@ namespace MTG_Inventory
         public string Set { get; set; }
         public int Collector_Number { get; set; }
         public bool Foil { get; set; }
+        public string UniqueID { get; private set; }
 
-        public string UniqueName
+        public MTG_Card()
         {
-            get
-            {
-                return SetCode + "_" + Collector_Number + (Foil ? "_f" : null);
-            }
+            UniqueID = Guid.NewGuid().ToString();
         }
 
     }
@@ -35,12 +33,16 @@ namespace MTG_Inventory
     {
         static readonly HttpClient client = new HttpClient();
         private static Dictionary<string, string> setNameMap = new Dictionary<string, string>();
+        private static readonly string UNKNOWN_SET = "unk";
 
         private static async Task<SetResponse> LoadSetInformation()
         {
-            // Some sets' names don't match between Deckbox and Scryfall, this maps them together
+            Console.Write("Reading Set information from Scryfall...");
+
+            // Some sets' names don't match between Deckbox and Scryfall, this allows me to map Deckbox names to Scryfall SetCodes
             Dictionary<string, string> replacementNames = new Dictionary<string, string>()
             {
+                // { "Scryfall Name", "Deckbox Name"},
                 { "Magic 2014", "Magic 2014 Core Set" },
                 { "Magic 2015", "Magic 2015 Core Set" },
                 { "Modern Masters 2017", "Modern Masters 2017 Edition" },
@@ -71,13 +73,15 @@ namespace MTG_Inventory
 
         private static List<MTG_Card> ReadCardsFromFile(string filename)
         {
+            Console.Write("Reading from CSV file ({0})...", filename);
+
             List<MTG_Card> res = new List<MTG_Card>();
 
             using (var reader = new StreamReader(filename))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
                 // Supposedly, this can be done with a specific record class instead of dynamic
-                //     But I haven't been able to get it to work
+                //     I haven't been able to get it to work, but this isn't too bad
                 var results = csv.GetRecords<dynamic>();
 
                 foreach (dynamic record in results)
@@ -90,7 +94,7 @@ namespace MTG_Inventory
 
                     // Use a fake set code for cards that don't fit into another set
                     string set = card_props["Edition"]?.ToString();
-                    string setCode = (set != null & setNameMap.ContainsKey(set) ? setNameMap[set] : "unk");
+                    string setCode = (set != null & setNameMap.ContainsKey(set) ? setNameMap[set] : UNKNOWN_SET);
 
                     MTG_Card card = new MTG_Card
                     {
@@ -113,23 +117,24 @@ namespace MTG_Inventory
 
         private static async Task UploadCardsToFirebase(List<MTG_Card> theList)
         {
-            System.Console.WriteLine("Connecting to database");
+            System.Console.Write("Uploading to database...");
             FirestoreDb db = FirestoreDb.Create("mtg-inventory-9d4ca");
 
             foreach (MTG_Card curCard in theList)
             {
-                DocumentReference docRef = db
-                    .Collection("user_inventory").Document(curCard.UniqueName);
+                DocumentReference docRef = db.Collection("user_inventory").Document(curCard.UniqueID);
                 Dictionary<string, object> entry = new Dictionary<string, object>
                 {
+                    // These fields should be set for every card
                     { "Name", curCard.Name },
                     { "Set_Code", curCard.SetCode },
                     { "Collector_Number", curCard.Collector_Number },
                     { "Count", curCard.Count }
                 };
 
+                // These fields are only set if needed
                 if (curCard.Foil) entry.Add("Foil", true);
-                if (curCard.SetCode.Equals("unk")) entry.Add("Set", curCard.Set);
+                if (curCard.SetCode.Equals(UNKNOWN_SET)) entry.Add("Set", curCard.Set);
 
                 await docRef.SetAsync(entry);
             }
