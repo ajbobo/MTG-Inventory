@@ -48,6 +48,11 @@
     overflow-y: scroll;
 }
 
+.CardTable img.Rarity {
+    width: 25px;
+    height: 25px;
+}
+
 /* .CardTable Table { */
     /* background: lightpink; */
 /* } */

@@ -114,7 +114,7 @@ class SetLists extends React.Component {
                                         <th width="35px">#</th>
                                         <th>Card Name</th>
                                         <th width="115px">Casting Cost</th>
-                                        <th width="115px">Rarity</th>
+                                        <th width="35px">Rarity</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -123,7 +123,7 @@ class SetLists extends React.Component {
                                             <td>{card.collector_number}</td>
                                             <td>{card.name}</td>
                                             <td>{this.convertTextToSymbols(card.mana_cost ? card.mana_cost : card.card_faces ? card.card_faces[0].mana_cost : null)}</td>
-                                            <td>{card.rarity}</td>
+                                            <td><img className="Rarity" src={card.rarity + ".png"} title={card.rarity} alt={card.rarity}/></td>
                                         </tr>
                                     ))}
                                 </tbody>
