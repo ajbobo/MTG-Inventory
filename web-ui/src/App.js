@@ -84,7 +84,7 @@ class App extends React.Component {
         return (
             <div className="flexprep">
                 <h1>Magic: The Gathering Inventory</h1>
-                <Tabs defaultActiveKey="setlists" id="mainScreen" className="mb-3" onSelect={this.cleanUpStyles}>
+                <Tabs defaultActiveKey="inventory" id="mainScreen" className="mb-3" onSelect={this.cleanUpStyles}>
                     <Tab eventKey="inventory" title="Inventory"><Inventory /></Tab>
                     <Tab eventKey="setlists" title="Set Lists"><SetLists db={db} scryfallApi={this.scryfallApi} convertTextToSymbols={this.convertTextToSymbols} /></Tab>
                     <Tab eventKey="prices" title="Prices"><Prices /></Tab>

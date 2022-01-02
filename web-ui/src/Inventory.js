@@ -1,4 +1,5 @@
 import './Inventory.css'
+import Filters from './Filters'
 import React from 'react';
 
 class Inventory extends React.Component{
@@ -9,7 +10,8 @@ class Inventory extends React.Component{
     render() {
         return (
             <div className="Inventory">
-                <h1>Inventory goes here</h1>
+                <Filters />
+                <h1>Actual inventory table here</h1>
             </div>
         )
     }
