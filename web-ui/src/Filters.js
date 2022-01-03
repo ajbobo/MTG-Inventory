@@ -70,7 +70,6 @@ class Filters extends React.Component {
             filters.rarity = this.updateSingleFilter(filters.rarity, rarity);
         }
         else if (changeRequest.startsWith('qty:')) {
-            console.log(changeRequest);
             filters.qty = changeRequest.substring(4);
         }
 
@@ -83,10 +82,10 @@ class Filters extends React.Component {
 
     render() {
         return (
-            <Form className='Filters mb-3'>
+            <Form className='Filters'>
                 <Row>
                     <Col sm='auto'>
-                        <FormGroup className="mb-3 " controlId="formColor">
+                        <FormGroup controlId="formColor">
                             <Row>
                                 <Col>
                                     <FormCheck type="checkbox" label="White" onClick={() => this.updateFilters("color:W")} />
@@ -103,18 +102,18 @@ class Filters extends React.Component {
                     </Col>
 
                     <Col sm='auto'>
-                        <FormGroup className="mb-3 " controlId="formRarity">
-                            <div className='mb-3'>
-                                <FormCheck type="checkbox" label="Common" onClick={() => this.updateFilters("rarity:C")}/>
-                                <FormCheck type="checkbox" label="Uncommon" onClick={() => this.updateFilters("rarity:U")}/>
-                                <FormCheck type="checkbox" label="Rare" onClick={() => this.updateFilters("rarity:R")}/>
-                                <FormCheck type="checkbox" label="Mythic" onClick={() => this.updateFilters("rarity:M")}/>
+                        <FormGroup controlId="formRarity">
+                            <div>
+                                <FormCheck type="checkbox" label="Common" onClick={() => this.updateFilters("rarity:C")} />
+                                <FormCheck type="checkbox" label="Uncommon" onClick={() => this.updateFilters("rarity:U")} />
+                                <FormCheck type="checkbox" label="Rare" onClick={() => this.updateFilters("rarity:R")} />
+                                <FormCheck type="checkbox" label="Mythic" onClick={() => this.updateFilters("rarity:M")} />
                             </div>
                         </FormGroup>
                     </Col>
 
                     <Col sm='auto'>
-                        <FormGroup as={Row} className="mb-3" controlId="formQty">
+                        <FormGroup as={Row} controlId="formQty">
                             <FormLabel column sm='auto'>Quantity</FormLabel>
                             <Col>
                                 <FormSelect onChange={(evt) => this.updateFilters("qty:" + evt.target.value)}>
@@ -128,7 +127,9 @@ class Filters extends React.Component {
                     </Col>
                 </Row>
 
-                <FormText>Current Filters: {this.filtersToString(this.state.filters)}</FormText>
+                <Row>
+                    <FormText style={{"textAlign":"center"}}>Current Filters: {this.filtersToString(this.state.filters)}</FormText>
+                </Row>
             </Form>
         )
     }
