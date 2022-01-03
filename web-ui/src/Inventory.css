@@ -1,6 +1,0 @@
-.Inventory {
-    border: 1px dashed darkblue;
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-}

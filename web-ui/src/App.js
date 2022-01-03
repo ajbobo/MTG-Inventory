@@ -1,13 +1,9 @@
 import './App.css';
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Tabs from 'react-bootstrap/Tabs';
-import Tab from 'react-bootstrap/Tab';
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import Inventory from './Inventory';
-import SetLists from './SetLists';
-import Prices from './Prices';
+import InventoryPanel from './InventoryPanel';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBfAgbzeYJxOdG97bi6l8VdxTN9JUNHeMg",
@@ -84,11 +80,7 @@ class App extends React.Component {
         return (
             <div className="flexprep">
                 <h1>Magic: The Gathering Inventory</h1>
-                <Tabs defaultActiveKey="inventory" id="mainScreen" className="mb-3" onSelect={this.cleanUpStyles}>
-                    <Tab eventKey="inventory" title="Inventory"><Inventory /></Tab>
-                    <Tab eventKey="setlists" title="Set Lists"><SetLists db={db} scryfallApi={this.scryfallApi} convertTextToSymbols={this.convertTextToSymbols} /></Tab>
-                    <Tab eventKey="prices" title="Prices"><Prices /></Tab>
-                </Tabs>
+                <InventoryPanel db={db} scryfallApi={this.scryfallApi} convertTextToSymbols={this.convertTextToSymbols} />
             </div>
         );
     }

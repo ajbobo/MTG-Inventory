@@ -1,10 +1,11 @@
-import './SetLists.css'
+import './InventoryPanel.css'
+import Filters from './Filters'
 import React from 'react';
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Dropdown from 'react-bootstrap/Dropdown'
 import Table from 'react-bootstrap/Table'
 
-class SetLists extends React.Component {
+class InventoryPanel extends React.Component {
     constructor(props) {
         super(props);
         this.scryfallApi = props.scryfallApi;
@@ -71,8 +72,6 @@ class SetLists extends React.Component {
     }
 
     selectSet(code, name, iconUri) {
-        document.getElementById("mainScreen-tabpane-setlists").style.display="flex"; // A hack to make the table visible
-
         this.setState({
             setCode: code,
             setName: name,
@@ -90,10 +89,15 @@ class SetLists extends React.Component {
         });
     }
 
+    filtersChanged(filters) {
+        console.log("App.FiltersChanged");
+        console.log(filters);
+    }
+
     render() {
         return (
-            <div className="SetLists">
-                <div className="SetHeader">
+            <div className="InventoryPanel">
+                <div className="InventoryHeader">
                     {this.state.iconUri ? <img src={this.state.iconUri} alt="" /> : null}
                     <DropdownButton id="set-dropdown" title={this.state.selectedSet} height="400px">
                         {this.state.sets.map((r, index) => (
@@ -104,6 +108,7 @@ class SetLists extends React.Component {
                     </DropdownButton>
                     {this.state.iconUri ? <img src={this.state.iconUri} alt="" /> : null}
                 </div>
+                <Filters sets={this.state.sets} OnChanged={this.filtersChanged} />
                 {this.state.loading ? <div><h3>loading cards...</h3></div> : null}
                 {(this.state.cards && this.state.cards.length) > 0 ?
                     <div className="CardInfoPanel">
@@ -154,4 +159,4 @@ class SetLists extends React.Component {
     }
 }
 
-export default SetLists;
+export default InventoryPanel;
