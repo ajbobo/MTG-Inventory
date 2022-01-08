@@ -16,7 +16,7 @@ namespace MTG_Inventory
     {
         public int Count { get; set; }
         public string Name { get; set; }
-        public string SetCode {get; set; }
+        public string SetCode { get; set; }
         public string Set { get; set; }
         public int Collector_Number { get; set; }
         public bool Foil { get; set; }
@@ -117,9 +117,10 @@ namespace MTG_Inventory
 
         private static async Task UploadCardsToFirebase(List<MTG_Card> theList)
         {
-            System.Console.Write("Uploading to database...");
+            System.Console.WriteLine("Uploading to database...");
             FirestoreDb db = FirestoreDb.Create("mtg-inventory-9d4ca");
 
+            int count = 0;
             foreach (MTG_Card curCard in theList)
             {
                 DocumentReference docRef = db.Collection("user_inventory").Document(curCard.UniqueID);
@@ -137,6 +138,10 @@ namespace MTG_Inventory
                 if (curCard.SetCode.Equals(UNKNOWN_SET)) entry.Add("Set", curCard.Set);
 
                 await docRef.SetAsync(entry);
+
+                count++;
+                if (count % 100 == 0)
+                    Console.WriteLine("Cards written: {0}", count);
             }
 
             Console.WriteLine("Done");
