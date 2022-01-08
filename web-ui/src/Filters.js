@@ -126,10 +126,6 @@ class Filters extends React.Component {
                         </FormGroup>
                     </Col>
                 </Row>
-
-                <Row>
-                    <FormText style={{"textAlign":"center"}}>Current Filters: {this.filtersToString(this.state.filters)}</FormText>
-                </Row>
             </Form>
         )
     }

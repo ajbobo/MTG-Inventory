@@ -65,7 +65,7 @@ class App extends React.Component {
         if (!text)
             return null;
 
-        let splitText = text.split(/\{|\}/); // Split on { or } - It leaves some empty elements, but separates the right values
+        let splitText = (text instanceof Array ? text : text.split(/\{|\}/)); // Split strings on { or } - It leaves some empty elements, but separates the right values
         return (
             <div className="CastingCost">
                 {splitText.map((sym, index) => {

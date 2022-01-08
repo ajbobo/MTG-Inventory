@@ -48,6 +48,7 @@ class InventoryPanel extends React.Component {
         // Call Scryfall and get the cards for the specified set
         this.setState({ // Try to force a refresh that shows a loading message
             cards: [],
+            filteredCards: [],
             loading: true
         });
 
@@ -99,8 +100,22 @@ class InventoryPanel extends React.Component {
             return false;
 
         let include = true;
-        if (filters.rarity && filters.rarity.indexOf(card.rarity.toUpperCase()[0]) === -1) {
-            include = false;
+        if (filters.rarity) {
+            include = filters.rarity.indexOf(card.rarity.toUpperCase()[0]) >= 0;
+        }
+
+        if (include && filters.color) {
+            // Check for colors
+            let hasColor = false; // Only one color in the color identity needs to be in the filters
+            card.color_identity.forEach((color) => {
+                hasColor |= filters.color.indexOf(color.toUpperCase()) >= 0;
+            });
+            include = hasColor;
+
+            // Check for colorless
+            if (card.color_identity.length === 0) {
+                include = filters.color.indexOf("N") >= 0;
+            }
         }
         return include;
     }
@@ -109,8 +124,8 @@ class InventoryPanel extends React.Component {
         if (!this.state.cards)
             return;
 
-        console.log("Changed filters");
-        console.log(filters);
+        // console.log("Changed filters");
+        // console.log(filters);
 
         let filtered = [];
 
@@ -142,7 +157,7 @@ class InventoryPanel extends React.Component {
                 </div>
                 <Filters sets={this.state.sets} OnChanged={(filters) => this.filtersChanged(filters)} />
                 {this.state.loading ? <div><h3>loading cards...</h3></div> : null}
-                {(!this.state.loading && this.state.filteredCards && this.state.filteredCards.length) > 0 ?
+                {(this.state.filteredCards && this.state.filteredCards.length) > 0 ?
                     <div className="CardInfoPanel">
                         <div className="CardTable">
                             <Table striped hover bordered size="sm">
@@ -150,6 +165,7 @@ class InventoryPanel extends React.Component {
                                     <tr>
                                         <th width="35px">#</th>
                                         <th>Card Name</th>
+                                        <th width="115px">Color Identity</th>
                                         <th width="115px">Casting Cost</th>
                                         <th width="35px">Rarity</th>
                                     </tr>
@@ -159,6 +175,7 @@ class InventoryPanel extends React.Component {
                                         <tr key={index} onClick={() => { this.selectCard(card) }} className={this.state.selectedCard === card ? "Selected" : ""}>
                                             <td>{card.collector_number}</td>
                                             <td>{card.name}</td>
+                                            <td>{this.convertTextToSymbols(card.color_identity ? card.color_identity : null)}</td>
                                             <td>{this.convertTextToSymbols(card.mana_cost ? card.mana_cost : card.card_faces ? card.card_faces[0].mana_cost : null)}</td>
                                             <td><img className="Rarity" src={card.rarity + ".png"} title={card.rarity} alt={card.rarity} /></td>
                                         </tr>
