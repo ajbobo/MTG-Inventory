@@ -18,9 +18,6 @@ const fbapp = initializeApp(firebaseConfig);
 const db = getFirestore(fbapp);
 
 class App extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
         this.getGlobalSymbols();

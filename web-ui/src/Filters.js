@@ -4,7 +4,6 @@ import Form from 'react-bootstrap/Form'
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import FormSelect from 'react-bootstrap/FormSelect';
-import FormText from 'react-bootstrap/FormText';
 import FormCheck from 'react-bootstrap/FormCheck'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
