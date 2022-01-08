@@ -16,6 +16,8 @@ class InventoryPanel extends React.Component {
             selectedCard: null,
             sets: [],
             cards: [],
+            filteredCards: [],
+            filters: {},
             loading: false
         };
     }
@@ -55,7 +57,7 @@ class InventoryPanel extends React.Component {
         while (needMore) {
             const fullData = await this.scryfallApi("cards/search?q=set:" + code + "&order=set&unique=prints", page);
 
-            fullData.data.forEach(card => { if (!card.digital) curCardList.push(card) } );
+            fullData.data.forEach(card => { if (!card.digital) curCardList.push(card) });
 
             if (fullData.has_more)
                 page++;
@@ -67,8 +69,11 @@ class InventoryPanel extends React.Component {
 
         this.setState({
             cards: curCardList,
+            filteredCards: curCardList,
             loading: false
         });
+
+        this.filtersChanged(this.state.filters);
     }
 
     selectSet(code, name, iconUri) {
@@ -89,9 +94,36 @@ class InventoryPanel extends React.Component {
         });
     }
 
+    checkFilters(card, filters) {
+        if (!card)
+            return false;
+
+        let include = true;
+        if (filters.rarity && filters.rarity.indexOf(card.rarity.toUpperCase()[0]) === -1) {
+            include = false;
+        }
+        return include;
+    }
+
     filtersChanged(filters) {
-        console.log("App.FiltersChanged");
+        if (!this.state.cards)
+            return;
+
+        console.log("Changed filters");
         console.log(filters);
+
+        let filtered = [];
+
+        this.state.cards.forEach((card) => {
+            if (this.checkFilters(card, filters))
+                filtered.push(card);
+        })
+
+        this.setState({
+            filteredCards: filtered,
+            filters: filters,
+            selectedCard: (this.checkFilters(this.state.selectedCard, filters) ? this.state.selectedCard : null),
+        })
     }
 
     render() {
@@ -108,9 +140,9 @@ class InventoryPanel extends React.Component {
                     </DropdownButton>
                     {this.state.iconUri ? <img src={this.state.iconUri} alt="" /> : null}
                 </div>
-                <Filters sets={this.state.sets} OnChanged={this.filtersChanged} />
+                <Filters sets={this.state.sets} OnChanged={(filters) => this.filtersChanged(filters)} />
                 {this.state.loading ? <div><h3>loading cards...</h3></div> : null}
-                {(this.state.cards && this.state.cards.length) > 0 ?
+                {(!this.state.loading && this.state.filteredCards && this.state.filteredCards.length) > 0 ?
                     <div className="CardInfoPanel">
                         <div className="CardTable">
                             <Table striped hover bordered size="sm">
@@ -123,12 +155,12 @@ class InventoryPanel extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {this.state.cards.map((card, index) => (
-                                        <tr key={index} onClick={() => { this.selectCard(card) }}>
+                                    {this.state.filteredCards.map((card, index) => (
+                                        <tr key={index} onClick={() => { this.selectCard(card) }} className={this.state.selectedCard === card ? "Selected" : ""}>
                                             <td>{card.collector_number}</td>
                                             <td>{card.name}</td>
                                             <td>{this.convertTextToSymbols(card.mana_cost ? card.mana_cost : card.card_faces ? card.card_faces[0].mana_cost : null)}</td>
-                                            <td><img className="Rarity" src={card.rarity + ".png"} title={card.rarity} alt={card.rarity}/></td>
+                                            <td><img className="Rarity" src={card.rarity + ".png"} title={card.rarity} alt={card.rarity} /></td>
                                         </tr>
                                     ))}
                                 </tbody>

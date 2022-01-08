@@ -53,6 +53,10 @@
     height: 25px;
 }
 
+.CardTable tr.Selected {
+    background: yellowgreen;
+}
+
 /* .CardTable Table { */
     /* background: lightpink; */
 /* } */
