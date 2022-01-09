@@ -146,13 +146,37 @@ namespace MTG_Inventory
 
             Console.WriteLine("Done");
         }
+        private static void writeCardsToJson(List<MTG_Card> theList)
+        {
+            Console.WriteLine("Writing to JSON file");
+
+            string filename = "../web-ui/src/data/hard_coded.js";
+
+            List<string> lines = new List<string>();
+            Boolean needcomma = false;
+            lines.Add("export const hard_coded_inventory = [");
+            foreach (MTG_Card card in theList)
+            {
+                lines.Add((needcomma ? "," : "") + JsonConvert.SerializeObject(card));
+                needcomma = true;
+            }
+            lines.Add("];");
+            File.WriteAllLines(filename, lines);
+
+            // string result = JsonConvert.SerializeObject(theList);
+            // await File.WriteAllTextAsync(filename, result);
+
+            Console.WriteLine("Done");
+        }
 
         public static async Task Main(string[] args)
         {
             await LoadSetInformation();
 
             List<MTG_Card> theList = ReadCardsFromFile("Inventory.csv");
-            await UploadCardsToFirebase(theList);
+            // await UploadCardsToFirebase(theList);
+            writeCardsToJson(theList);
         }
+
     }
 }

@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import InventoryPanel from './InventoryPanel';
+import Inventory from './data/Inventory';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBfAgbzeYJxOdG97bi6l8VdxTN9JUNHeMg",
@@ -18,9 +19,17 @@ const fbapp = initializeApp(firebaseConfig);
 const db = getFirestore(fbapp);
 
 class App extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            inventory: {}
+        };
+    }
 
     componentDidMount() {
         this.getGlobalSymbols();
+        this.loadUserInventory();
     }
 
     async scryfallApi(endpoint, page) {
@@ -47,6 +56,14 @@ class App extends React.Component {
         this.setState({
             symbols: symbols
         })
+    }
+
+    loadUserInventory() {
+        let inventory = new Inventory(db);
+
+        this.setState({
+            inventory: inventory
+        });
     }
 
     cleanUpStyles(eventKey) {
@@ -77,7 +94,7 @@ class App extends React.Component {
         return (
             <div className="flexprep">
                 <h1>Magic: The Gathering Inventory</h1>
-                <InventoryPanel db={db} scryfallApi={this.scryfallApi} convertTextToSymbols={this.convertTextToSymbols} />
+                <InventoryPanel inventory={this.state.inventory} scryfallApi={this.scryfallApi} convertTextToSymbols={this.convertTextToSymbols} />
             </div>
         );
     }

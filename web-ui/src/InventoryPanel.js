@@ -11,7 +11,6 @@ class InventoryPanel extends React.Component {
         this.scryfallApi = props.scryfallApi;
         this.convertTextToSymbols = props.convertTextToSymbols;
         this.state = {
-            db: this.props.db,
             selectedSet: "Choose a Set",
             selectedCard: null,
             sets: [],
@@ -45,13 +44,13 @@ class InventoryPanel extends React.Component {
     }
 
     async getSetContents(code) {
-        // Call Scryfall and get the cards for the specified set
         this.setState({ // Try to force a refresh that shows a loading message
             cards: [],
             filteredCards: [],
             loading: true
         });
-
+        
+        // Call Scryfall and get the cards for the specified set
         var curCardList = [];
         var page = 1;
         var needMore = true;
@@ -117,6 +116,17 @@ class InventoryPanel extends React.Component {
                 include = filters.color.indexOf("N") >= 0;
             }
         }
+
+        if (include && filters.qty) {
+            const qty = this.props.inventory.getCardCount(this.state.setCode, card.collector_number);
+            // esLint doesn't like what I'm about to do, tell it to ignore the == and != 
+            // eslint-disable-next-line
+            if (filters.qty == 0 && qty != 0) // filters.qty will be a string, this allows comparisons between strings and ints
+                include = false;
+            else
+                include = (qty >= filters.qty);
+        }
+
         return include;
     }
 
@@ -164,6 +174,7 @@ class InventoryPanel extends React.Component {
                                 <thead>
                                     <tr>
                                         <th width="35px">#</th>
+                                        <th width="40px">Cnt</th>
                                         <th>Card Name</th>
                                         <th width="115px">Color Identity</th>
                                         <th width="115px">Casting Cost</th>
@@ -174,6 +185,7 @@ class InventoryPanel extends React.Component {
                                     {this.state.filteredCards.map((card, index) => (
                                         <tr key={index} onClick={() => { this.selectCard(card) }} className={this.state.selectedCard === card ? "Selected" : ""}>
                                             <td>{card.collector_number}</td>
+                                            <td>{this.props.inventory.getCardCount(this.state.setCode, card.collector_number)}</td>
                                             <td>{card.name}</td>
                                             <td>{this.convertTextToSymbols(card.color_identity ? card.color_identity : null)}</td>
                                             <td>{this.convertTextToSymbols(card.mana_cost ? card.mana_cost : card.card_faces ? card.card_faces[0].mana_cost : null)}</td>
