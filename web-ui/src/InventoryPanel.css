@@ -53,6 +53,11 @@
     height: 25px;
 }
 
+.CardTable .QtyCell img {
+    margin-left: 5px;
+    padding-bottom: 4px;
+}
+
 .CardTable tr.Selected {
     background: yellowgreen;
 }

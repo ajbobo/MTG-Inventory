@@ -151,6 +151,16 @@ class InventoryPanel extends React.Component {
         })
     }
 
+    formatQty(counts) {
+        return (
+            <div className='QtyCell'>
+                {counts.total} 
+                {counts.foil ? <img src='foil.png' alt="" title={'Foil: ' + counts.foil}/> : null} 
+                {counts.prerelease ? <img src='prerelease.png' alt='' title={'Prerelease: ' + counts.prerelease} /> : null}
+            </div>
+        )
+    }
+
     render() {
         return (
             <div className="InventoryPanel">
@@ -174,7 +184,7 @@ class InventoryPanel extends React.Component {
                                 <thead>
                                     <tr>
                                         <th width="35px">#</th>
-                                        <th width="40px">Cnt</th>
+                                        <th width="80px">Cnt</th>
                                         <th>Card Name</th>
                                         <th width="115px">Color Identity</th>
                                         <th width="115px">Casting Cost</th>
@@ -185,7 +195,7 @@ class InventoryPanel extends React.Component {
                                     {this.state.filteredCards.map((card, index) => (
                                         <tr key={index} onClick={() => { this.selectCard(card) }} className={this.state.selectedCard === card ? "Selected" : ""}>
                                             <td>{card.collector_number}</td>
-                                            <td>{this.props.inventory.getCardCount(this.state.setCode, card.collector_number)}</td>
+                                            <td>{this.formatQty(this.props.inventory.getCardCount(this.state.setCode, card.collector_number))}</td>
                                             <td>{card.name}</td>
                                             <td>{this.convertTextToSymbols(card.color_identity ? card.color_identity : null)}</td>
                                             <td>{this.convertTextToSymbols(card.mana_cost ? card.mana_cost : card.card_faces ? card.card_faces[0].mana_cost : null)}</td>

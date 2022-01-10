@@ -12,21 +12,55 @@ using Scryfall;
 
 namespace MTG_Inventory
 {
+    public class CardTypeCount
+    {
+        public CardTypeCount(bool? foil, bool? preRelease, bool? spanish)
+        {
+            this.Foil = foil;
+            this.PreRelease = preRelease;
+            this.Spanish = spanish;
+        }
+
+        public int Count { get; set; }
+        public bool? Foil { get; set; }
+        public bool? PreRelease { get; set; }
+        public bool? Spanish { get; set; }
+    }
+
     public class MTG_Card
     {
-        public int Count { get; set; }
+        public List<CardTypeCount> Counts { get; private set; }
         public string Name { get; set; }
         public string SetCode { get; set; }
         public string Set { get; set; }
         public int Collector_Number { get; set; }
-        public bool Foil { get; set; }
         public string UniqueID { get; private set; }
 
         public MTG_Card()
         {
             UniqueID = Guid.NewGuid().ToString();
+            Counts = new List<CardTypeCount>();
         }
 
+        public void SetCount(int count, bool? foil, bool? preRelease, bool? spanish)
+        {
+            foreach (CardTypeCount ctc in Counts)
+            {
+                if (ctc.Foil == foil && ctc.PreRelease == preRelease && ctc.Spanish == spanish)
+                {
+                    Console.WriteLine("Incrementing existing collection of \"{0}\" => Foil:{1}  PreRelease:{2}  Spanish:{3}", Name, foil, preRelease, spanish);
+                    ctc.Count += count;
+                    return;
+                }
+            }
+
+            if ((foil ?? false) || (preRelease ?? false) || (spanish ?? false))
+                Console.WriteLine("Adding special version of \"{0}\" => Foil:{1}  PreRelease:{2}  Spanish:{3}", Name, foil, preRelease, spanish);
+
+            CardTypeCount newCtc = new CardTypeCount(foil, preRelease, spanish);
+            newCtc.Count = count;
+            Counts.Add(newCtc);
+        }
     }
 
     class UploadInventory
@@ -71,9 +105,34 @@ namespace MTG_Inventory
             return null;
         }
 
+        private static MTG_Card FindOrMakeCard(List<MTG_Card> theList, string name, string setCode, string setName, int collector_number)
+        {
+            foreach (MTG_Card card in theList)
+            {
+                if (card.Collector_Number == collector_number &&
+                    card.Name.Equals(name) &&
+                    card.Set.Equals(setName) &&
+                    card.SetCode.Equals(setCode))
+                {
+                    return card;
+                }
+            }
+
+            MTG_Card newCard = new MTG_Card
+            {
+                Collector_Number = collector_number,
+                Name = name,
+                Set = setName,
+                SetCode = setCode,
+            };
+            theList.Add(newCard);
+
+            return newCard;
+        }
+
         private static List<MTG_Card> ReadCardsFromFile(string filename)
         {
-            Console.Write("Reading from CSV file ({0})...", filename);
+            Console.WriteLine("Reading from CSV file ({0})...", filename);
 
             List<MTG_Card> res = new List<MTG_Card>();
 
@@ -89,24 +148,19 @@ namespace MTG_Inventory
                     IDictionary<String, Object> card_props = (IDictionary<String, Object>)record;
 
                     int count = 1, number = 0; // Default values in case the CSV is missing data
+                    bool? foil = false, prerelease = false, spanish = false;
                     int.TryParse(card_props["Count"].ToString(), out count);
                     int.TryParse(card_props["Card Number"].ToString(), out number);
+                    foil = (card_props["Foil"].ToString().ToLower().Equals("true") ? true : null);
+                    prerelease = (card_props["PreRelease"].ToString().ToLower().Equals("true") ? true : null);
+                    spanish = (card_props["Language"].ToString().ToLower().Equals("spanish") ? true : null);
 
                     // Use a fake set code for cards that don't fit into another set
                     string set = card_props["Edition"]?.ToString();
                     string setCode = (set != null & setNameMap.ContainsKey(set) ? setNameMap[set] : UNKNOWN_SET);
 
-                    MTG_Card card = new MTG_Card
-                    {
-                        Count = count,
-                        Collector_Number = number,
-                        Name = card_props["Name"].ToString(),
-                        Set = set,
-                        SetCode = setCode,
-                        Foil = card_props["Foil"].ToString().ToLower().Equals("foil"),
-                    };
-
-                    res.Add(card);
+                    MTG_Card card = FindOrMakeCard(res, card_props["Name"].ToString(), setCode, set, number);
+                    card.SetCount(count, foil, prerelease, spanish);
                 }
 
                 Console.WriteLine("Number of records read: {0}", res.Count);
@@ -115,40 +169,45 @@ namespace MTG_Inventory
             return res;
         }
 
-        private static async Task UploadCardsToFirebase(List<MTG_Card> theList)
-        {
-            System.Console.WriteLine("Uploading to database...");
-            FirestoreDb db = FirestoreDb.Create("mtg-inventory-9d4ca");
+        // Put this back in once the web-ui is ready to work with Firebase, instead of hard-coded.js
+        // private static async Task UploadCardsToFirebase(List<MTG_Card> theList)
+        // {
+        //     System.Console.WriteLine("Uploading to database...");
+        //     FirestoreDb db = FirestoreDb.Create("mtg-inventory-9d4ca");
 
-            int count = 0;
-            foreach (MTG_Card curCard in theList)
-            {
-                DocumentReference docRef = db.Collection("user_inventory").Document(curCard.UniqueID);
-                Dictionary<string, object> entry = new Dictionary<string, object>
-                {
-                    // These fields should be set for every card
-                    { "Name", curCard.Name },
-                    { "Set_Code", curCard.SetCode },
-                    { "Collector_Number", curCard.Collector_Number },
-                    { "Count", curCard.Count }
-                };
+        //     int count = 0;
+        //     foreach (MTG_Card curCard in theList)
+        //     {
+        //         DocumentReference docRef = db.Collection("user_inventory").Document(curCard.UniqueID);
+        //         Dictionary<string, object> entry = new Dictionary<string, object>
+        //         {
+        //             // These fields should be set for every card
+        //             { "Name", curCard.Name },
+        //             { "Set_Code", curCard.SetCode },
+        //             { "Collector_Number", curCard.Collector_Number },
+        //         };
 
-                // These fields are only set if needed
-                if (curCard.Foil) entry.Add("Foil", true);
-                if (curCard.SetCode.Equals(UNKNOWN_SET)) entry.Add("Set", curCard.Set);
+        //         // These fields are only set if needed
+        //         if (curCard.SetCode.Equals(UNKNOWN_SET)) entry.Add("Set", curCard.Set);
 
-                await docRef.SetAsync(entry);
+        //         await docRef.SetAsync(entry);
 
-                count++;
-                if (count % 100 == 0)
-                    Console.WriteLine("Cards written: {0}", count);
-            }
+        //         count++;
+        //         if (count % 100 == 0)
+        //             Console.WriteLine("Cards written: {0}", count);
+        //     }
 
-            Console.WriteLine("Done");
-        }
+        //     Console.WriteLine("Done");
+        // }
+
         private static void writeCardsToJson(List<MTG_Card> theList)
         {
             Console.WriteLine("Writing to JSON file");
+
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
 
             string filename = "../web-ui/src/data/hard_coded.js";
 
@@ -157,14 +216,11 @@ namespace MTG_Inventory
             lines.Add("export const hard_coded_inventory = [");
             foreach (MTG_Card card in theList)
             {
-                lines.Add((needcomma ? "," : "") + JsonConvert.SerializeObject(card));
+                lines.Add((needcomma ? "," : "") + JsonConvert.SerializeObject(card, settings));
                 needcomma = true;
             }
             lines.Add("];");
             File.WriteAllLines(filename, lines);
-
-            // string result = JsonConvert.SerializeObject(theList);
-            // await File.WriteAllTextAsync(filename, result);
 
             Console.WriteLine("Done");
         }

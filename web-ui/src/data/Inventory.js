@@ -1,5 +1,5 @@
-import {collection, query, getDocs} from 'firebase/firestore'
-import {hard_coded_inventory} from '../data/hard_coded.js'
+import { collection, query, getDocs } from 'firebase/firestore'
+import { hard_coded_inventory } from '../data/hard_coded.js'
 
 class Inventory {
     cards = {};
@@ -24,7 +24,7 @@ class Inventory {
                 this.cards[data.SetCode] = {};
             this.cards[data.SetCode][data.Collector_Number.toString()] = {
                 collector_number: data.Collector_Number,
-                count: data.Count,
+                counts: data.Counts,
                 name: data.Name,
                 set_code: data.SetCode
             };
@@ -34,12 +34,29 @@ class Inventory {
 
     getCardCount(setCode, collector_number) {
         const set = this.cards[setCode];
-        if (set){
+        if (set) {
             const card = set[collector_number.toString()];
-            if (card)
-                return card.count
+            if (card) {
+                let count = {total:0};
+                card.counts.forEach((ctc) => {
+                    count.total += ctc.Count;
+                    if (ctc.Foil) {
+                        if (!count.foil) count.foil = 0;
+                        count.foil += ctc.Count;
+                    }
+                    if (ctc.PreRelease) {
+                        if (!count.prerelease) count.prerelease = 0;
+                        count.prerelease += ctc.Count;
+                    }
+                    if (ctc.Spanish) {
+                        if (!count.spanish) count.spanish = 0;
+                        count.spanish += ctc.Count;
+                    }
+                });
+                return count;
+            }
         }
-        return 0;
+        return {total: 0};
     }
 }
 
