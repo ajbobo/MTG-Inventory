@@ -1,14 +1,6 @@
-Each card should only appear in the DB once
-    Foil and Prerelease should be counts, not booleans
-    Count should be an object?
-        Count: {"std": 2, "foil": 1, "prerelease": 1}
-    The upload program will need to be changed to write this new format
-
 Can I update the database to have fewer documents?
     Would that reduce the number of reads/writes against the quota?
     Maybe a document for each set, which has an array of cards
-
-Apparently, there's a way to cache Firebase results - Can I use that to reduce calls to the API?
 
 collector_number from Deckbox and from Scryfall don't match for old sets
     I fixed this in my spreadsheet, but I'll have to do something about it here, too
