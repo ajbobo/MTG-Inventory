@@ -8,8 +8,23 @@ class Inventory {
         console.log("Creating new Inventory object");
         this.db = db;
 
+        // this.setupCaching();
         this.populateCards();
     }
+
+    // Reenable this when ready to work with Firebase again
+    // setupCaching() {
+    //     enableIndexedDbPersistence(this.db)
+    //         .catch((err) => {
+    //             if (err.code == 'failed-precondition') {
+    //                 console.log("ERROR: Unable to enable caching because the app is option in multiple tabs");
+    //             }
+    //             else {
+    //                 console.log("ERROR: Something happened during cache setup: " + err.code);
+    //                 console.log(err);
+    //             }
+    //         })
+    // }
 
     async populateCards() {
         console.log("Reading user_inventory from Json file");
@@ -19,23 +34,24 @@ class Inventory {
         // const user_inventory = await getDocs(user_inventory_query);
         const user_inventory = hard_coded_inventory;
         user_inventory.forEach((doc) => {
-            const data = doc; //doc.data();
+            // const data = doc.data(); // Firebase-style
+            const data = doc; // JSON-style
             if (!this.cards[data.SetCode])
                 this.cards[data.SetCode] = {};
-            this.cards[data.SetCode][data.Collector_Number.toString()] = {
-                collector_number: data.Collector_Number,
+            this.cards[data.SetCode][data.CollectorNumber.toString()] = {
+                collectorNumber: data.CollectorNumber,
                 counts: data.Counts,
                 name: data.Name,
-                set_code: data.SetCode
+                setCode: data.SetCode
             };
         })
         console.log(this.cards);
     }
 
-    getCardCount(setCode, collector_number) {
+    getCardCount(setCode, collectorNumber) {
         const set = this.cards[setCode];
         if (set) {
-            const card = set[collector_number.toString()];
+            const card = set[collectorNumber.toString()];
             if (card) {
                 let count = {total:0};
                 card.counts.forEach((ctc) => {

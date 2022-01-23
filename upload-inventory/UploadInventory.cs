@@ -33,7 +33,7 @@ namespace MTG_Inventory
         public string Name { get; set; }
         public string SetCode { get; set; }
         public string Set { get; set; }
-        public int Collector_Number { get; set; }
+        public int CollectorNumber { get; set; }
         public string UniqueID { get; private set; }
 
         public MTG_Card()
@@ -105,11 +105,11 @@ namespace MTG_Inventory
             return null;
         }
 
-        private static MTG_Card FindOrMakeCard(List<MTG_Card> theList, string name, string setCode, string setName, int collector_number)
+        private static MTG_Card FindOrMakeCard(List<MTG_Card> theList, string name, string setCode, string setName, int collectorNumber)
         {
             foreach (MTG_Card card in theList)
             {
-                if (card.Collector_Number == collector_number &&
+                if (card.CollectorNumber == collectorNumber &&
                     card.Name.Equals(name) &&
                     card.Set.Equals(setName) &&
                     card.SetCode.Equals(setCode))
@@ -120,7 +120,7 @@ namespace MTG_Inventory
 
             MTG_Card newCard = new MTG_Card
             {
-                Collector_Number = collector_number,
+                CollectorNumber = collectorNumber,
                 Name = name,
                 Set = setName,
                 SetCode = setCode,
@@ -147,10 +147,10 @@ namespace MTG_Inventory
                 {
                     IDictionary<String, Object> card_props = (IDictionary<String, Object>)record;
 
-                    int count = 1, number = 0; // Default values in case the CSV is missing data
+                    int count = 1, collectorNumber = 0; // Default values in case the CSV is missing data
                     bool? foil = false, prerelease = false, spanish = false;
                     int.TryParse(card_props["Count"].ToString(), out count);
-                    int.TryParse(card_props["Card Number"].ToString(), out number);
+                    int.TryParse(card_props["Card Number"].ToString(), out collectorNumber);
                     foil = (card_props["Foil"].ToString().ToLower().Equals("true") ? true : null);
                     prerelease = (card_props["PreRelease"].ToString().ToLower().Equals("true") ? true : null);
                     spanish = (card_props["Language"].ToString().ToLower().Equals("spanish") ? true : null);
@@ -159,7 +159,7 @@ namespace MTG_Inventory
                     string set = card_props["Edition"]?.ToString();
                     string setCode = (set != null & setNameMap.ContainsKey(set) ? setNameMap[set] : UNKNOWN_SET);
 
-                    MTG_Card card = FindOrMakeCard(res, card_props["Name"].ToString(), setCode, set, number);
+                    MTG_Card card = FindOrMakeCard(res, card_props["Name"].ToString(), setCode, set, collectorNumber);
                     card.SetCount(count, foil, prerelease, spanish);
                 }
 

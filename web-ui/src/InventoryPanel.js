@@ -118,7 +118,7 @@ class InventoryPanel extends React.Component {
         }
 
         if (include && filters.qty) {
-            const qty = this.props.inventory.getCardCount(this.state.setCode, card.collector_number);
+            const qty = this.props.inventory.getCardCount(this.state.setCode, card.collector_number).total;
             // esLint doesn't like what I'm about to do, tell it to ignore the == and != 
             // eslint-disable-next-line
             if (filters.qty == 0 && qty != 0) // filters.qty will be a string, this allows comparisons between strings and ints
