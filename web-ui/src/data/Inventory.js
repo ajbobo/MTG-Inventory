@@ -1,4 +1,4 @@
-import { collection, query, getDocs } from 'firebase/firestore'
+import { collection, query, getDocs, enableIndexedDbPersistence, disableNetwork } from 'firebase/firestore'
 import { hard_coded_inventory } from '../data/hard_coded.js'
 
 class Inventory {
@@ -8,34 +8,35 @@ class Inventory {
         console.log("Creating new Inventory object");
         this.db = db;
 
-        // this.setupCaching();
+        this.setupCaching();
         this.populateCards();
     }
 
-    // Reenable this when ready to work with Firebase again
-    // setupCaching() {
-    //     enableIndexedDbPersistence(this.db)
-    //         .catch((err) => {
-    //             if (err.code == 'failed-precondition') {
-    //                 console.log("ERROR: Unable to enable caching because the app is option in multiple tabs");
-    //             }
-    //             else {
-    //                 console.log("ERROR: Something happened during cache setup: " + err.code);
-    //                 console.log(err);
-    //             }
-    //         })
-    // }
+    setupCaching() {
+        enableIndexedDbPersistence(this.db)
+            .catch((err) => {
+                if (err.code == 'failed-precondition') {
+                    console.log("ERROR: Unable to enable caching because the app is option in multiple tabs");
+                }
+                else {
+                    console.log("ERROR: Something happened during cache setup: " + err.code);
+                    console.log(err);
+                }
+            });
+
+        disableNetwork(this.db);
+    }
 
     async populateCards() {
-        console.log("Reading user_inventory from Json file");
-        // console.log("Reading user_inventory from Firebase");
-        // const user_inventory_query = query(collection(this.db, "user_inventory"));
+        // console.log("Reading user_inventory from Json file");
+        console.log("Reading user_inventory from Firebase");
+        const user_inventory_query = query(collection(this.db, "user_inventory"));
 
-        // const user_inventory = await getDocs(user_inventory_query);
-        const user_inventory = hard_coded_inventory;
+        const user_inventory = await getDocs(user_inventory_query);
+        // const user_inventory = hard_coded_inventory;
         user_inventory.forEach((doc) => {
-            // const data = doc.data(); // Firebase-style
-            const data = doc; // JSON-style
+            const data = doc.data(); // Firebase-style
+            // const data = doc; // JSON-style
             if (!this.cards[data.SetCode])
                 this.cards[data.SetCode] = {};
             this.cards[data.SetCode][data.CollectorNumber.toString()] = {
