@@ -93,7 +93,7 @@ class App extends React.Component {
     render() {
         return (
             <div className="flexprep">
-                <h1>Magic: The Gathering Inventory</h1>
+                <h1 className="TitleBanner">Magic: The Gathering Inventory</h1>
                 <InventoryPanel inventory={this.state.inventory} scryfallApi={this.scryfallApi} convertTextToSymbols={this.convertTextToSymbols} />
             </div>
         );
