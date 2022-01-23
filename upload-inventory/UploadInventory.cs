@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Globalization;
-using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -9,60 +8,10 @@ using Google.Cloud.Firestore;
 using Newtonsoft.Json;
 using CsvHelper;
 using Scryfall;
+using MTG_Inventory;
 
 namespace MTG_Inventory
 {
-    public class CardTypeCount
-    {
-        public CardTypeCount(bool? foil, bool? preRelease, bool? spanish)
-        {
-            this.Foil = foil;
-            this.PreRelease = preRelease;
-            this.Spanish = spanish;
-        }
-
-        public int Count { get; set; }
-        public bool? Foil { get; set; }
-        public bool? PreRelease { get; set; }
-        public bool? Spanish { get; set; }
-    }
-
-    public class MTG_Card
-    {
-        public List<CardTypeCount> Counts { get; private set; }
-        public string Name { get; set; }
-        public string SetCode { get; set; }
-        public string Set { get; set; }
-        public int CollectorNumber { get; set; }
-        public string UniqueID { get; private set; }
-
-        public MTG_Card()
-        {
-            UniqueID = Guid.NewGuid().ToString();
-            Counts = new List<CardTypeCount>();
-        }
-
-        public void SetCount(int count, bool? foil, bool? preRelease, bool? spanish)
-        {
-            foreach (CardTypeCount ctc in Counts)
-            {
-                if (ctc.Foil == foil && ctc.PreRelease == preRelease && ctc.Spanish == spanish)
-                {
-                    Console.WriteLine("Incrementing existing collection of \"{0}\" => Foil:{1}  PreRelease:{2}  Spanish:{3}", Name, foil, preRelease, spanish);
-                    ctc.Count += count;
-                    return;
-                }
-            }
-
-            if ((foil ?? false) || (preRelease ?? false) || (spanish ?? false))
-                Console.WriteLine("Adding special version of \"{0}\" => Foil:{1}  PreRelease:{2}  Spanish:{3}", Name, foil, preRelease, spanish);
-
-            CardTypeCount newCtc = new CardTypeCount(foil, preRelease, spanish);
-            newCtc.Count = count;
-            Counts.Add(newCtc);
-        }
-    }
-
     class UploadInventory
     {
         static readonly HttpClient client = new HttpClient();
@@ -139,8 +88,6 @@ namespace MTG_Inventory
             using (var reader = new StreamReader(filename))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-                // Supposedly, this can be done with a specific record class instead of dynamic
-                //     I haven't been able to get it to work, but this isn't too bad
                 var results = csv.GetRecords<dynamic>();
 
                 foreach (dynamic record in results)
@@ -169,36 +116,25 @@ namespace MTG_Inventory
             return res;
         }
 
-        // Put this back in once the web-ui is ready to work with Firebase, instead of hard-coded.js
-        // private static async Task UploadCardsToFirebase(List<MTG_Card> theList)
-        // {
-        //     System.Console.WriteLine("Uploading to database...");
-        //     FirestoreDb db = FirestoreDb.Create("mtg-inventory-9d4ca");
+        private static async Task UploadCardsToFirebase(List<MTG_Card> theList)
+        {
+            System.Console.WriteLine("Uploading to database...");
+            FirestoreDb db = FirestoreDb.Create("mtg-inventory-9d4ca");
 
-        //     int count = 0;
-        //     foreach (MTG_Card curCard in theList)
-        //     {
-        //         DocumentReference docRef = db.Collection("user_inventory").Document(curCard.UniqueID);
-        //         Dictionary<string, object> entry = new Dictionary<string, object>
-        //         {
-        //             // These fields should be set for every card
-        //             { "Name", curCard.Name },
-        //             { "Set_Code", curCard.SetCode },
-        //             { "Collector_Number", curCard.Collector_Number },
-        //         };
+            int count = 0;
+            foreach (MTG_Card curCard in theList)
+            {
+                DocumentReference docRef = await db.Collection("user_inventory").AddAsync(curCard); // Add Async() will create a document with a random name
 
-        //         // These fields are only set if needed
-        //         if (curCard.SetCode.Equals(UNKNOWN_SET)) entry.Add("Set", curCard.Set);
+                count++;
+                if (count % 100 == 0)
+                {
+                    Console.WriteLine("Cards written: {0}", count);
+                }
+            }
 
-        //         await docRef.SetAsync(entry);
-
-        //         count++;
-        //         if (count % 100 == 0)
-        //             Console.WriteLine("Cards written: {0}", count);
-        //     }
-
-        //     Console.WriteLine("Done");
-        // }
+            Console.WriteLine("Done");
+        }
 
         private static void writeCardsToJson(List<MTG_Card> theList)
         {
@@ -229,9 +165,9 @@ namespace MTG_Inventory
         {
             await LoadSetInformation();
 
-            List<MTG_Card> theList = ReadCardsFromFile("Inventory.csv");
-            // await UploadCardsToFirebase(theList);
-            writeCardsToJson(theList);
+            List<MTG_Card> theList = ReadCardsFromFile("data/Inventory.csv");
+            await UploadCardsToFirebase(theList);
+            // writeCardsToJson(theList);
         }
 
     }
