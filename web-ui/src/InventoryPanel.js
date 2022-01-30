@@ -155,8 +155,8 @@ class InventoryPanel extends React.Component {
         return (
             <div className='QtyCell'>
                 {counts.total} 
-                {counts.foil ? <img src='foil.png' alt="" title={'Foil: ' + counts.foil}/> : null} 
-                {counts.prerelease ? <img src='prerelease.png' alt='' title={'Prerelease: ' + counts.prerelease} /> : null}
+                {counts.foil ? <img src='foil.png' alt='' title={'Foil: ' + counts.foil}/> : null} 
+                {counts.other ? <img src='other.png' alt='' title={'Other printings: ' + counts.other} /> : null}
             </div>
         )
     }

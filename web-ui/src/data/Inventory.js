@@ -56,18 +56,13 @@ class Inventory {
             if (card) {
                 let count = {total:0};
                 card.counts.forEach((ctc) => {
-                    count.total += ctc.Count;
-                    if (ctc.Foil) {
-                        if (!count.foil) count.foil = 0;
-                        count.foil += ctc.Count;
-                    }
-                    if (ctc.PreRelease) {
-                        if (!count.prerelease) count.prerelease = 0;
-                        count.prerelease += ctc.Count;
-                    }
-                    if (ctc.Spanish) {
-                        if (!count.spanish) count.spanish = 0;
-                        count.spanish += ctc.Count;
+                    // Go through each property of the CTC, count the total, foil, and whether there are others
+                    for (let name of Object.keys(ctc)) {
+                        switch (name) {
+                            case "Count": count.total += ctc.Count; break;
+                            case "Foil": if (!count.foil) count.foil = 0; count.foil += ctc.Count; break;
+                            default: if (!count.other) count.other = true; break;
+                        }
                     }
                 });
                 return count;
