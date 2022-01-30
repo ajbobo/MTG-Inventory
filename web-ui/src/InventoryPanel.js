@@ -10,8 +10,6 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 class InventoryPanel extends React.Component {
     constructor(props) {
         super(props);
-        this.scryfallApi = props.scryfallApi;
-        this.convertTextToSymbols = props.convertTextToSymbols;
         this.state = {
             selectedSet: "Choose a Set",
             selectedCard: null,
@@ -29,16 +27,13 @@ class InventoryPanel extends React.Component {
 
     async getSetInfo() {
         // Call Scryfall and get the sets that I'm interested in
-        const setData = await this.scryfallApi("sets");
+        const setData = await this.props.scryfallApi("sets");
 
         var filteredSets = [];
         setData.data.forEach((set) => {
             if (!set.digital && (set.set_type === "core" || set.set_type === "expansion"))
                 filteredSets.push(set);
         });
-
-        // console.log("filtered sets");
-        // console.log(filteredSets);
 
         this.setState({
             sets: filteredSets
@@ -57,7 +52,7 @@ class InventoryPanel extends React.Component {
         var page = 1;
         var needMore = true;
         while (needMore) {
-            const fullData = await this.scryfallApi("cards/search?q=set:" + code + "&order=set&unique=prints", page);
+            const fullData = await this.props.scryfallApi("cards/search?q=set:" + code + "&order=set&unique=prints", page);
 
             fullData.data.forEach(card => { if (!card.digital) curCardList.push(card) });
 
@@ -139,9 +134,6 @@ class InventoryPanel extends React.Component {
         if (!this.state.cards)
             return;
 
-        // console.log("Changed filters");
-        // console.log(filters);
-
         let filtered = [];
 
         this.state.cards.forEach((card) => {
@@ -209,8 +201,8 @@ class InventoryPanel extends React.Component {
                                             <td>{card.collector_number}</td>
                                             <td>{this.displayCTCInventory(card)}</td>
                                             <td>{card.name}</td>
-                                            <td>{this.convertTextToSymbols(card.color_identity ? card.color_identity : null)}</td>
-                                            <td>{this.convertTextToSymbols(card.mana_cost ? card.mana_cost : card.card_faces ? card.card_faces[0].mana_cost : null)}</td>
+                                            <td>{this.props.convertTextToSymbols(card.color_identity ? card.color_identity : null)}</td>
+                                            <td>{this.props.convertTextToSymbols(card.mana_cost ? card.mana_cost : card.card_faces ? card.card_faces[0].mana_cost : null)}</td>
                                             <td><img className="Rarity" src={card.rarity + ".png"} title={card.rarity} alt={card.rarity} /></td>
                                         </tr>
                                     ))}
