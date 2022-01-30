@@ -126,6 +126,8 @@ class InventoryPanel extends React.Component {
             // eslint-disable-next-line
             if (filters.qty == 0 && qty != 0) // filters.qty will be a string, this allows comparisons between strings and ints
                 include = false;
+            else if (filters.qty == '<4')
+                include = (qty < 4);
             else
                 include = (qty >= filters.qty);
         }

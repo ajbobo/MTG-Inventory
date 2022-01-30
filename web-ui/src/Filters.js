@@ -120,6 +120,7 @@ class Filters extends React.Component {
                                     <option value='0'>0</option>
                                     <option value='1'>1+</option>
                                     <option value='4'>4+</option>
+                                    <option value='<4'>&lt;4</option>
                                 </FormSelect>
                             </Col>
                         </FormGroup>
