@@ -1,9 +1,11 @@
 import './InventoryPanel.css'
 import Filters from './Filters'
-import React from 'react';
+import editCTC from './EditCTC'
+import React from 'react'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Dropdown from 'react-bootstrap/Dropdown'
 import Table from 'react-bootstrap/Table'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 
 class InventoryPanel extends React.Component {
     constructor(props) {
@@ -49,7 +51,7 @@ class InventoryPanel extends React.Component {
             filteredCards: [],
             loading: true
         });
-        
+
         // Call Scryfall and get the cards for the specified set
         var curCardList = [];
         var page = 1;
@@ -118,7 +120,8 @@ class InventoryPanel extends React.Component {
         }
 
         if (include && filters.qty) {
-            const qty = this.props.inventory.getCardCount(this.state.setCode, card.collector_number).total;
+            const cardRecord = this.props.inventory.getCard(this.state.setCode, card.collector_number);
+            const qty = this.props.inventory.getCardCount(cardRecord).total;
             // esLint doesn't like what I'm about to do, tell it to ignore the == and != 
             // eslint-disable-next-line
             if (filters.qty == 0 && qty != 0) // filters.qty will be a string, this allows comparisons between strings and ints
@@ -151,13 +154,20 @@ class InventoryPanel extends React.Component {
         })
     }
 
-    formatQty(counts) {
+    displayCTCInventory(card) {
+        const cardRecord = this.props.inventory.getCard(this.state.setCode, card.collector_number);
+        if (!cardRecord)
+            return null; // TODO: This still needs to open the Popover, but then it needs to create a CardRecord in Inventory
+        const counts = this.props.inventory.getCardCount(cardRecord);
+
         return (
-            <div className='QtyCell'>
-                {counts.total} 
-                {counts.foil ? <img src='foil.png' alt='' title={'Foil: ' + counts.foil}/> : null} 
-                {counts.other ? <img src='other.png' alt='' title={'Other printings: ' + counts.other} /> : null}
-            </div>
+            <OverlayTrigger trigger='click' placement='right' overlay={editCTC(cardRecord)} rootClose='true'>
+                <div className='QtyCell'>
+                    {counts.total}
+                    {counts.foil ? <img src='foil.png' alt='' title={'Foil: ' + counts.foil} /> : null}
+                    {counts.other ? <img src='other.png' alt='' title={'Other printings: ' + counts.other} /> : null}
+                </div>
+            </OverlayTrigger>
         )
     }
 
@@ -195,7 +205,7 @@ class InventoryPanel extends React.Component {
                                     {this.state.filteredCards.map((card, index) => (
                                         <tr key={index} onClick={() => { this.selectCard(card) }} className={this.state.selectedCard === card ? "Selected" : ""}>
                                             <td>{card.collector_number}</td>
-                                            <td>{this.formatQty(this.props.inventory.getCardCount(this.state.setCode, card.collector_number))}</td>
+                                            <td>{this.displayCTCInventory(card)}</td>
                                             <td>{card.name}</td>
                                             <td>{this.convertTextToSymbols(card.color_identity ? card.color_identity : null)}</td>
                                             <td>{this.convertTextToSymbols(card.mana_cost ? card.mana_cost : card.card_faces ? card.card_faces[0].mana_cost : null)}</td>

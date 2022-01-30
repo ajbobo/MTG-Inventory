@@ -27,6 +27,17 @@ class Inventory {
         disableNetwork(this.db);
     }
 
+    compareCTC(a, b) {
+        // CTCs are sorted by the number of properties they have
+        //    0 properties = Standard -> sorted first
+        //    1 property = Foil, Spanish, etc -> sorted second
+        //    2 properties = PreRelease+Foil, etc -> sorted third
+        const cntA = Object.keys(a).length - 1;
+        const cntB = Object.keys(b).length - 1;
+
+        return cntA - cntB;
+    }
+
     async populateCards() {
         // console.log("Reading user_inventory from Json file");
         console.log("Reading user_inventory from Firebase");
@@ -41,7 +52,7 @@ class Inventory {
                 this.cards[data.SetCode] = {};
             this.cards[data.SetCode][data.CollectorNumber.toString()] = {
                 collectorNumber: data.CollectorNumber,
-                counts: data.Counts,
+                counts: data.Counts.sort(this.compareCTC),
                 name: data.Name,
                 setCode: data.SetCode
             };
@@ -49,26 +60,30 @@ class Inventory {
         console.log(this.cards);
     }
 
-    getCardCount(setCode, collectorNumber) {
+    getCard(setCode, collectorNumber) {
         const set = this.cards[setCode];
         if (set) {
-            const card = set[collectorNumber.toString()];
-            if (card) {
-                let count = {total:0};
-                card.counts.forEach((ctc) => {
-                    // Go through each property of the CTC, count the total, foil, and whether there are others
-                    for (let name of Object.keys(ctc)) {
-                        switch (name) {
-                            case "Count": count.total += ctc.Count; break;
-                            case "Foil": if (!count.foil) count.foil = 0; count.foil += ctc.Count; break;
-                            default: if (!count.other) count.other = true; break;
-                        }
-                    }
-                });
-                return count;
-            }
+            return set[collectorNumber.toString()];
         }
-        return {total: 0};
+        return null;
+    }
+
+    getCardCount(card) {
+        if (card) {
+            let count = { total: 0 };
+            card.counts.forEach((ctc) => {
+                // Go through each property of the CTC, count the totals, foils, and whether there are others
+                for (let name of Object.keys(ctc)) {
+                    switch (name) {
+                        case "Count": count.total += ctc.Count; break;
+                        case "Foil": if (!count.foil) count.foil = 0; count.foil += ctc.Count; break;
+                        default: if (!count.other) count.other = true; break;
+                    }
+                }
+            });
+            return count;
+        }
+        return { total: 0 };
     }
 }
 
