@@ -1,7 +1,6 @@
 import './EditCTC.css'
 import React from 'react'
 import Popover from 'react-bootstrap/Popover';
-import PopoverHeader from 'react-bootstrap/PopoverHeader';
 import PopoverBody from 'react-bootstrap/PopoverBody';
 
 function formatCTC(ctc) {
@@ -12,11 +11,17 @@ function formatCTC(ctc) {
     }
 
     return (
-        <div>
-            <p>{description.length > 0 ? description : 'Standard'}  {ctc.Count}</p>
-            {/* Add buttons here */}
-        </div>
-    );
+        <tr>
+            <td>{description.length > 0 ? description : "Standard"}</td>
+            <td style={{width:"25px", textAlign:"center"}}><b>{ctc.Count}</b></td>
+            <td>
+                <button class="CTCButton">+</button>
+                <button class="CTCButton">-</button>
+                <button class="CTCButton">=</button>
+                <button class="CTCButton">X</button>
+            </td>
+        </tr>
+    )
 }
 
 function editCTC(card) {
@@ -25,8 +30,11 @@ function editCTC(card) {
 
     return (
         <Popover id='edit_ctc'>
-            <PopoverHeader>{card.name}</PopoverHeader>
-            <PopoverBody>{card.counts.map((ctc) => formatCTC(ctc))}</PopoverBody>
+            <PopoverBody>
+                <table class="CTCTable">
+                    {card.counts.map((ctc) => formatCTC(ctc))}
+                </table>
+            </PopoverBody>
         </Popover>
     );
 }
