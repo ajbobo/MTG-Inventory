@@ -150,9 +150,9 @@ class InventoryPanel extends React.Component {
 
     displayCTCInventory(card) {
         const cardRecord = this.props.inventory.getCard(this.state.setCode, card.collector_number);
-        if (!cardRecord)
-            return null; // TODO: This still needs to open the Popover, but then it needs to create a CardRecord in Inventory
         const counts = this.props.inventory.getCardCount(cardRecord);
+        console.log("displayCTCInventory | cardRecord:");
+        console.log(cardRecord);
 
         return (
             <OverlayTrigger trigger='click' placement='right' overlay={editCTC(cardRecord)} rootClose='true'>

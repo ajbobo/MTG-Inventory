@@ -25,9 +25,6 @@ function formatCTC(ctc) {
 }
 
 function editCTC(card) {
-    if (!card)
-        return null; // TODO: This should still open the Popover, but then the user should be able to add new cards/types
-
     return (
         <Popover id='edit_ctc'>
             <PopoverBody>

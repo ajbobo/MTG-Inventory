@@ -63,7 +63,15 @@ class Inventory {
     getCard(setCode, collectorNumber) {
         const set = this.cards[setCode];
         if (set) {
-            return set[collectorNumber.toString()];
+            let card = set[collectorNumber.toString()];
+            if (card != null)
+                return card;
+            return {
+                collectorNumber: parseInt(collectorNumber),
+                counts: [{ Count: 0 }],
+                name: "",
+                setCode: setCode
+            };
         }
         return null;
     }
