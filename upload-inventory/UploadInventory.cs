@@ -8,11 +8,10 @@ using Google.Cloud.Firestore;
 using Newtonsoft.Json;
 using CsvHelper;
 using Scryfall;
-using MTG_Inventory;
 
 namespace MTG_Inventory
 {
-    class UploadInventory
+    class UploadInventory  
     {
         static readonly HttpClient client = new HttpClient();
         private static Dictionary<string, string> setNameMap = new Dictionary<string, string>();
