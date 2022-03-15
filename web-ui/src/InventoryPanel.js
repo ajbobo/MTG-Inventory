@@ -150,13 +150,12 @@ class InventoryPanel extends React.Component {
 
     displayCTCInventory(card) {
         const cardRecord = this.props.inventory.getCard(this.state.setCode, card.collector_number);
-        const counts = this.props.inventory.getCardCount(cardRecord);
-
         if (!cardRecord.name)
             cardRecord.name = this.state.cards.find(curCard => curCard.collector_number == card.collector_number).name;
         if (!cardRecord.set)
             cardRecord.set = this.state.selectedSet;
 
+        const counts = this.props.inventory.getCardCount(cardRecord);
         return (
             <OverlayTrigger trigger='click' placement='right' rootClose='true'
                 overlay={(props) => editCTC(props, cardRecord, this.props.inventory)}

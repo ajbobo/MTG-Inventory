@@ -1,3 +1,8 @@
+.EditCTC {
+    display: flex;
+    flex-flow: column;
+}
+
 .CTCButton {
     width: 25px;
     height: 25px;

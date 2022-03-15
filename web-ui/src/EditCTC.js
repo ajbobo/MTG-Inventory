@@ -2,6 +2,7 @@ import './EditCTC.css'
 import React from 'react'
 import Popover from 'react-bootstrap/Popover';
 import PopoverBody from 'react-bootstrap/PopoverBody';
+import Button from 'react-bootstrap/Button';
 
 var _inventory = null;
 
@@ -13,10 +14,10 @@ function formatCTC(ctc, card, index) {
     }
 
     return (
-        <tr key={index}>
+        <tr key={index} >
             <td>{description.length > 0 ? description : "Standard"}</td>
             <td style={{ width: "25px", textAlign: "center" }}><b>{ctc.Count}</b></td>
-            <td>
+            <td style={{ display: "flow" }}>
                 <button className="CTCButton" onClick={() => addOne(ctc, card)}>+</button>
                 <button className="CTCButton" onClick={() => subtractOne(ctc, card)}>-</button>
                 <button className="CTCButton" onClick={() => setToFour(ctc, card)}>=</button>
@@ -29,15 +30,18 @@ function formatCTC(ctc, card, index) {
 function editCTC(props, card, inventory) {
     // console.log("editCTC() - (" + card.collectorNumber + ")");
     _inventory = inventory;
-    
+
     return (
         <Popover id='edit_ctc' {...props}>
-            <PopoverBody>
-                <table className="CTCTable">
-                    <tbody>
-                        {card.counts.map((ctc, index) => formatCTC(ctc, card, index))}
-                    </tbody>
-                </table>
+            <PopoverBody style={{ padding:"0px" }}>
+                <div className="EditCTC">
+                    <table className="CTCTable">
+                        <tbody>
+                            {card.counts.map((ctc, index) => formatCTC(ctc, card, index))}
+                        </tbody>
+                    </table>
+                    <Button variant='outline-primary' size='sm'>Add CardType</Button>
+                </div>
             </PopoverBody>
         </Popover>
     );

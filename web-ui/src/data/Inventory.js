@@ -69,15 +69,17 @@ class Inventory {
             let card = set[collectorNumber.toString()];
             if (card != null)
                 return card;
-
-            // The card is not in inventory, create a basic cardRecord for it
-            return {
-                collectorNumber: parseInt(collectorNumber),
-                counts: [{ Count: 0 }],
-                setCode: setCode
-            };
         }
-        return null;
+        else {
+            this.cards[setCode] = {}; // Create the set in the inventory
+        }
+        
+        // The card is not in inventory, create a basic cardRecord for it
+        return {
+            collectorNumber: parseInt(collectorNumber),
+            counts: [{ Count: 0 }],
+            setCode: setCode
+        };
     }
 
     getCardCount(card) {
@@ -120,7 +122,7 @@ class Inventory {
 
     updateDatabase() {
         console.log("Writing to Firebase");
-        this.modified.forEach(async(card) => {
+        this.modified.forEach(async (card) => {
             const insertCard = {
                 CollectorNumber: card.collectorNumber,
                 Counts: card.counts,

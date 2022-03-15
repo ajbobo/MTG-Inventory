@@ -1,3 +1,19 @@
+Should I change EditCTC into a React object instead of a group of functions?
+
+Add filters for Foil, Prerelease, etc.
+
+Add filters for card type
+
+Include column for card type
+
+Card panel doesn't scroll when 2 sides are shown and they overflow the bottom of the window
+
+Add a panel of set information
+    Number of cards in the set
+    Cards collected
+    Percentage collected
+    Adjust values based on current filters
+
 Can I update the database to have fewer documents?
     Would that reduce the number of reads/writes against the quota?
     Maybe a document for each set, which has an array of cards
