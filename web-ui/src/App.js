@@ -6,6 +6,7 @@ import { getFirestore } from 'firebase/firestore';
 import InventoryPanel from './InventoryPanel';
 import Inventory from './data/Inventory';
 
+// https://console.firebase.google.com/u/0/project/mtg-inventory-9d4ca/overview
 const firebaseConfig = {
     apiKey: "AIzaSyBfAgbzeYJxOdG97bi6l8VdxTN9JUNHeMg",
     authDomain: "mtg-inventory-9d4ca.firebaseapp.com",
