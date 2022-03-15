@@ -15,7 +15,7 @@ class Inventory {
     setupCaching() {
         enableIndexedDbPersistence(this.db)
             .catch((err) => {
-                if (err.code == 'failed-precondition') {
+                if (err.code === 'failed-precondition') {
                     console.log("ERROR: Unable to enable caching because the app is option in multiple tabs");
                 }
                 else {
@@ -53,7 +53,6 @@ class Inventory {
             this.cards[data.SetCode][data.CollectorNumber.toString()] = {
                 collectorNumber: data.CollectorNumber,
                 counts: data.Counts.sort(this.compareCTC),
-                name: data.Name,
                 setCode: data.SetCode
             };
         })
@@ -66,10 +65,11 @@ class Inventory {
             let card = set[collectorNumber.toString()];
             if (card != null)
                 return card;
+
+            // The card is not in inventory, create a cardRecord for it
             return {
                 collectorNumber: parseInt(collectorNumber),
                 counts: [{ Count: 0 }],
-                name: "",
                 setCode: setCode
             };
         }
@@ -92,6 +92,22 @@ class Inventory {
             return count;
         }
         return { total: 0 };
+    }
+
+    updateInventory(card, ctc) {
+        if (!card || !ctc)
+            return;
+
+        const cardNum = card.collectorNumber;
+        const set = card.setCode;
+
+        // Add this card to inventory, if it isn't already there
+        if (!this.cards[set][cardNum]) {
+            this.cards[set][cardNum] = card;
+        }
+
+        // Add the CTC to the card
+        // FINISH ME
     }
 }
 

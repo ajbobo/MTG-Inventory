@@ -121,7 +121,7 @@ class InventoryPanel extends React.Component {
             // eslint-disable-next-line
             if (filters.qty == 0 && qty != 0) // filters.qty will be a string, this allows comparisons between strings and ints
                 include = false;
-            else if (filters.qty == '<4')
+            else if (filters.qty === '<4')
                 include = (qty < 4);
             else
                 include = (qty >= filters.qty);
@@ -151,18 +151,16 @@ class InventoryPanel extends React.Component {
     displayCTCInventory(card) {
         const cardRecord = this.props.inventory.getCard(this.state.setCode, card.collector_number);
         const counts = this.props.inventory.getCardCount(cardRecord);
-        console.log("displayCTCInventory | cardRecord:");
-        console.log(cardRecord);
 
         return (
-            <OverlayTrigger trigger='click' placement='right' overlay={editCTC(cardRecord)} rootClose='true'>
+            <OverlayTrigger trigger='click' placement='right' overlay={(props) => editCTC(props, cardRecord, this.props.inventory)} rootClose='true'>
                 <div className='QtyCell'>
                     {counts.total}
                     {counts.foil ? <img src='foil.png' alt='' title={'Foil: ' + counts.foil} /> : null}
                     {counts.other ? <img src='other.png' alt='' title={'Other printings: ' + counts.other} /> : null}
                 </div>
             </OverlayTrigger>
-        )
+        );
     }
 
     render() {
