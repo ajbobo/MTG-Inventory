@@ -152,8 +152,15 @@ class InventoryPanel extends React.Component {
         const cardRecord = this.props.inventory.getCard(this.state.setCode, card.collector_number);
         const counts = this.props.inventory.getCardCount(cardRecord);
 
+        if (!cardRecord.name)
+            cardRecord.name = this.state.cards.find(curCard => curCard.collector_number == card.collector_number).name;
+        if (!cardRecord.set)
+            cardRecord.set = this.state.selectedSet;
+
         return (
-            <OverlayTrigger trigger='click' placement='right' overlay={(props) => editCTC(props, cardRecord, this.props.inventory)} rootClose='true'>
+            <OverlayTrigger trigger='click' placement='right' rootClose='true'
+                overlay={(props) => editCTC(props, cardRecord, this.props.inventory)}
+                onExited={() => this.props.inventory.updateDatabase()}>
                 <div className='QtyCell'>
                     {counts.total}
                     {counts.foil ? <img src='foil.png' alt='' title={'Foil: ' + counts.foil} /> : null}

@@ -1,8 +1,9 @@
-import { collection, query, getDocs, enableIndexedDbPersistence, disableNetwork } from 'firebase/firestore'
-import { hard_coded_inventory } from '../data/hard_coded.js'
+import { collection, query, getDocs, enableIndexedDbPersistence, disableNetwork, doc, setDoc, addDoc } from 'firebase/firestore'
+// import { hard_coded_inventory } from '../data/hard_coded.js'
 
 class Inventory {
     cards = {};
+    modified = [];
 
     constructor(db) {
         console.log("Creating new Inventory object");
@@ -24,7 +25,7 @@ class Inventory {
                 }
             });
 
-        disableNetwork(this.db);
+        disableNetwork(this.db); // This forces the app to use the cached database
     }
 
     compareCTC(a, b) {
@@ -53,7 +54,10 @@ class Inventory {
             this.cards[data.SetCode][data.CollectorNumber.toString()] = {
                 collectorNumber: data.CollectorNumber,
                 counts: data.Counts.sort(this.compareCTC),
-                setCode: data.SetCode
+                setCode: data.SetCode,
+                set: data.Set,
+                name: data.Name,
+                uuid: doc.id,
             };
         })
         console.log(this.cards);
@@ -66,7 +70,7 @@ class Inventory {
             if (card != null)
                 return card;
 
-            // The card is not in inventory, create a cardRecord for it
+            // The card is not in inventory, create a basic cardRecord for it
             return {
                 collectorNumber: parseInt(collectorNumber),
                 counts: [{ Count: 0 }],
@@ -108,6 +112,32 @@ class Inventory {
 
         // Add the CTC to the card
         // FINISH ME
+
+        // Update the list of cards that have been modified
+        if (!this.modified.includes(card))
+            this.modified.push(card);
+    }
+
+    updateDatabase() {
+        console.log("Writing to Firebase");
+        this.modified.forEach(async(card) => {
+            const insertCard = {
+                CollectorNumber: card.collectorNumber,
+                Counts: card.counts,
+                SetCode: card.setCode,
+                Set: card.set,
+                Name: card.name
+            }
+            if (card.uuid) {
+                console.log("Updating -- Card Number: " + card.collectorNumber + "  Set: " + card.setCode);
+                await setDoc(doc(this.db, "user_inventory", card.uuid), insertCard);
+            }
+            else {
+                console.log("Inserting -- Card Number: " + card.collectorNumber + "  Set: " + card.setCode);
+                await addDoc(collection(this.db, "user_inventory"), insertCard);
+            }
+        });
+        this.modified.length = 0; // Clear the modified list
     }
 }
 
