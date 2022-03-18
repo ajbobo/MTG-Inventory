@@ -2,6 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "CLI (terminal)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build cli",
+            "program": "${workspaceFolder}/cli/bin/Debug/net6.0/MTG-CLI.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/cli",
+            "stopAtEntry": false,
+            "console": "integratedTerminal"
+        },
+        {
             "command": "npm start",
             "name": "Run npm start",
             "request": "launch",
@@ -10,26 +21,16 @@
             "env": { "PORT": "3005" } // Set the port that Node will use (3000 is the default, but something is using it on my PC)
         },
         {
-            // Use IntelliSense to find out which attributes exist for C# debugging
-            // Use hover for the description of the existing attributes
-            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
             "name": "Upload-Inventory (console)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build upload-inventory",
-            // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/upload-inventory/bin/Debug/net5.0/upload-inventory.dll",
             "args": [],
             "cwd": "${workspaceFolder}/upload-inventory",
-            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false,
             "env": { "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\mtg-inventory-main-service-account.json" }
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach"
         }
     ]
 }
