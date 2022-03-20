@@ -2,6 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "CLI_2 (terminal)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build cli2",
+            "program": "${workspaceFolder}/cli2/bin/Debug/net6.0/cli2.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/cli2",
+            "stopAtEntry": false,
+            "console": "externalTerminal"
+        },
+        {
             "name": "CLI (terminal)",
             "type": "coreclr",
             "request": "launch",
@@ -18,7 +29,9 @@
             "request": "launch",
             "type": "node-terminal",
             "cwd": "${workspaceFolder}/web-ui",
-            "env": { "PORT": "3005" } // Set the port that Node will use (3000 is the default, but something is using it on my PC)
+            "env": {
+                "PORT": "3005" // Set the port that Node will use (3000 is the default, but something is using it on my PC)
+            } 
         },
         {
             "name": "Upload-Inventory (console)",
@@ -30,7 +43,9 @@
             "cwd": "${workspaceFolder}/upload-inventory",
             "console": "internalConsole",
             "stopAtEntry": false,
-            "env": { "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\mtg-inventory-main-service-account.json" }
+            "env": {
+                "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\mtg-inventory-main-service-account.json"
+            }
         }
     ]
 }
