@@ -1,5 +1,4 @@
-﻿using Terminal.Gui;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 
 namespace MTG_CLI
 {
@@ -8,110 +7,76 @@ namespace MTG_CLI
         private static HttpClient httpClient = new HttpClient();
 
         private static List<Scryfall.Set> SetList = new List<Scryfall.Set>();
-        private static Scryfall.Set? SelectedSet;
-
-        private static MenuBar CreateMenu()
-        {
-            var menu = new MenuBar(new MenuBarItem[] {
-                new MenuBarItem("_File", new MenuItem[] {
-                    new MenuItem("E_xit", "", () => Application.RequestStop() )
-                })
-            });
-
-            return menu;
-        }
-
-        private static Window CreateMainWindow()
-        {
-            var win = new Window("Magic: the Gathering -- Personal Inventory")
-            {
-                X = 0,
-                Y = 0,
-                Width = Dim.Fill(),
-                Height = Dim.Fill()
-            };
-
-            return win;
-        }
-
-        private static void AddCommandLabels(Window win)
-        {
-            win.Add(new Label("Ctrl-F: Change Filters")
-            {
-                X = 0,
-                Y = 0
-            });
-            win.Add(new Label("Ctrl-S: Select Set")
-            {
-                X = 0,
-                Y = 1
-            });
-        }
-
-        private static FrameView CreateSetListSelection()
-        {
-            // TODO: This should probably be a modal dialog instead of an imbedded frame
-            var frame = new FrameView("Select a Set")
-            {
-                X = 0,
-                Y = 2,
-                Width = Dim.Percent(50),
-                Height = 10
-            };
-            var listView = new ListView(SetList)
-            {
-                X = 0,
-                Y = 0,
-                Width = Dim.Fill(),
-                Height = Dim.Fill()
-            };
-            frame.Add(listView);
-
-            return frame;
-        }
+        private static List<Scryfall.Card> CardList = new List<Scryfall.Card>();
 
         async private static Task<bool> GetStartingData()
         {
-            // TODO: I kind of want to move the data storage (Sets, Inventory, maybe more) out of the CLI_Window class
+            SetList.Clear();
+
             HttpResponseMessage msg = await httpClient.GetAsync("https://api.scryfall.com/sets");
             if (msg.IsSuccessStatusCode)
             {
-                string resp = await msg.Content.ReadAsStringAsync();
-                JObject respObj = JObject.Parse(resp);
-                IList<JToken> data = respObj["data"]?.Children().ToList<JToken>() ?? new List<JToken>();
-                foreach (JToken token in data)
+                string respStr = await msg.Content.ReadAsStringAsync();
+                JObject respObj = JObject.Parse(respStr);
+                Scryfall.SetListResponse resp = respObj.ToObject<Scryfall.SetListResponse>() ?? Scryfall.SetListResponse.NONE;
+                foreach (Scryfall.Set curSet in resp.data ?? new List<Scryfall.Set>())
                 {
-                    Scryfall.Set? curSet = token.ToObject<Scryfall.Set>() ?? Scryfall.Set.NONE;
-                    if (curSet.Set_Type == Scryfall.SetType.CORE || curSet.Set_Type == Scryfall.SetType.EXPANSION)
+                    if (curSet.Set_Type == Scryfall.Set.SetType.CORE || curSet.Set_Type == Scryfall.Set.SetType.EXPANSION)
                         SetList.Add(curSet);
                 }
-                SelectedSet = SetList[0];
                 return true;
             }
-            else
-            {
-                // Do something smart here
-            }
             return false;
+        }
+
+        async private static Task<bool> GetSetCards(Scryfall.Set targetSet)
+        {
+            CardList.Clear();
+
+            int page = 1;
+            bool done = false;
+            while (!done)
+            {
+                HttpResponseMessage msg = await httpClient.GetAsync($"https://api.scryfall.com/cards/search?q=set:{targetSet.Code}&order=set&unique=prints&page={page}");
+                if (msg.IsSuccessStatusCode)
+                {
+                    string respStr = await msg.Content.ReadAsStringAsync();
+                    JObject respObj = JObject.Parse(respStr);
+                    Scryfall.CardListResponse resp = respObj.ToObject<Scryfall.CardListResponse>() ?? Scryfall.CardListResponse.NONE;
+                    foreach (Scryfall.Card curCard in resp.data ?? new List<Scryfall.Card>())
+                    {
+                        CardList.Add(curCard);
+                    }
+                    if (resp.has_more ?? false)
+                        page++;
+                    else
+                        done = true;
+                }
+                else {
+                    // Do something smart
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         async public static Task Main(string[] args)
         {
             await GetStartingData();
 
-            Application.Init();
+            var win = new TerminalView();
 
-            var menu = CreateMenu();
-            var win = CreateMainWindow();
+            // Configure TerminalWindow with callbacks, events, etc.
+            win.SetList = SetList;
+            win.SelectedSetChanged += async (newSet) =>
+            {
+                win.SetCurrentSet(newSet);
+                await GetSetCards(newSet);
+                win.SetCardList(CardList);
+            };
 
-            AddCommandLabels(win);
-
-            var selectSet = CreateSetListSelection();
-            win.Add(selectSet);
-
-            Application.Top.Add(menu, win);
-
-            Application.Run();
+            win.Start();
         }
     }
 }
