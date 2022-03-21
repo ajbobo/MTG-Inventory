@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build term",
-            "program": "${workspaceFolder}/term/bin/Debug/net6.0/cli2.dll",
+            "program": "${workspaceFolder}/term/bin/Debug/net6.0/term.dll",
             "args": [],
             "cwd": "${workspaceFolder}/term",
             "stopAtEntry": false,

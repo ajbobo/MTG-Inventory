@@ -37,11 +37,17 @@ namespace MTG_CLI
 
             _statusBar = new StatusBar(new StatusItem[]{
                 new StatusItem(Key.F, "Filters (~Shift-F~)", ChooseFilters ),
-                new StatusItem(Key.S, "Choose Set (~Shift-S)", ChooseSet ),
+                new StatusItem(Key.S, "Choose Set (~Shift-S~)", ChooseSet ),
+                new StatusItem(Key.G, "Goto Card (~Shift-G~)", FindCard ),
             });
 
             _curSetFrame = new FrameView() { X = 0, Y = 0, Width = Dim.Percent(75), Height = Dim.Fill() };
             _curCardFrame = new FrameView() { X = Pos.Right(_curSetFrame), Y = Pos.Top(_curSetFrame) + 3, Width = Dim.Fill(), Height = Dim.Fill() };
+        }
+
+        private void FindCard()
+        {
+            MessageBox.Query("Res", "You get to type a card name", "ok");
         }
 
         private void ChooseFilters()

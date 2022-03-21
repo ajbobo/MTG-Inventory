@@ -15,6 +15,17 @@
             "group": "build"
         },
         {
+            "label": "clean term",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "clean",
+                "${workspaceFolder}/term/term.csproj",
+            ],
+            "problemMatcher":"$msCompile",
+            "group": "none"
+        },
+        {
             "label": "build upload-inventory",
             "command": "dotnet",
             "type": "process",
