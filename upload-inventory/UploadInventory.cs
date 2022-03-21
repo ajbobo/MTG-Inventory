@@ -95,13 +95,13 @@ namespace MTG_Inventory
 
                     int count = 1; // Default values in case the CSV is missing data
                     string collectorNumber = "0"; 
-                    bool? foil = false, prerelease = false, spanish = false;
+                    bool foil = false, prerelease = false, spanish = false;
 
                     int.TryParse(card_props["Count"].ToString(), out count);
                     collectorNumber = card_props["Card Number"].ToString();
-                    foil = (card_props["Foil"].ToString().ToLower().Equals("true") ? true : null);
-                    prerelease = (card_props["PreRelease"].ToString().ToLower().Equals("true") ? true : null);
-                    spanish = (card_props["Language"].ToString().ToLower().Equals("spanish") ? true : null);
+                    foil = (card_props["Foil"].ToString().ToLower().Equals("true"));
+                    prerelease = (card_props["PreRelease"].ToString().ToLower().Equals("true"));
+                    spanish = (card_props["Language"].ToString().ToLower().Equals("spanish"));
 
                     // Use a fake set code for cards that don't fit into another set
                     string set = card_props["Edition"]?.ToString();
@@ -150,13 +150,15 @@ namespace MTG_Inventory
 
             List<string> lines = new List<string>();
             Boolean needcomma = false;
-            lines.Add("export const hard_coded_inventory = [");
+            lines.Add("[");
+            // lines.Add("export const hard_coded_inventory = [");
             foreach (MTG_Card card in theList)
             {
                 lines.Add((needcomma ? "," : "") + JsonConvert.SerializeObject(card, settings));
                 needcomma = true;
             }
-            lines.Add("];");
+            lines.Add("]");
+            // lines.Add("];");
             File.WriteAllLines(filename, lines);
 
             Console.WriteLine("Done");
@@ -167,8 +169,8 @@ namespace MTG_Inventory
             await LoadSetInformation();
 
             List<MTG_Card> theList = ReadCardsFromFile("data/Inventory.csv");
-            // await UploadCardsToFirebase(theList);
             writeCardsToJson(theList);
+            await UploadCardsToFirebase(theList);
         }
 
     }

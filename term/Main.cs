@@ -23,6 +23,8 @@ namespace MTG_CLI
                 {
                     if (curSet.Set_Type == Scryfall.Set.SetType.CORE || 
                         curSet.Set_Type == Scryfall.Set.SetType.EXPANSION ||
+                        curSet.Set_Type == Scryfall.Set.SetType.MASTERPIECE ||
+                        curSet.Set_Type == Scryfall.Set.SetType.MASTERS ||
                         // To limit the number of funny sets to ones that are (mostly) actually collectable, I needed to add some more filters
                         (curSet.Set_Type == Scryfall.Set.SetType.FUNNY && curSet.Block_Code.Length == 0 && curSet.Parent_Set_Code.Length == 0))
                         _setList.Add(curSet);
