@@ -56,7 +56,7 @@ namespace MTG_Inventory
         [FirestoreProperty] public string Name { get; set; }
         [FirestoreProperty] public string SetCode { get; set; }
         [FirestoreProperty] public string Set { get; set; }
-        [FirestoreProperty] public int CollectorNumber { get; set; }
+        [FirestoreProperty] public string CollectorNumber { get; set; }
 
         public MTG_Card()
         {

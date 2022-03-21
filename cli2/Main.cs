@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
 
 namespace MTG_CLI
 {
@@ -6,23 +6,26 @@ namespace MTG_CLI
     {
         private static HttpClient httpClient = new HttpClient();
 
-        private static List<Scryfall.Set> SetList = new List<Scryfall.Set>();
-        private static List<Scryfall.Card> CardList = new List<Scryfall.Card>();
+        private static Inventory _inventory = new();
+        private static List<Scryfall.Set> _setList = new();
+        private static List<Scryfall.Card> _cardList = new();
 
-        async private static Task<bool> GetStartingData()
+        async private static Task<bool> GetSetData()
         {
-            SetList.Clear();
+            _setList.Clear();
 
             HttpResponseMessage msg = await httpClient.GetAsync("https://api.scryfall.com/sets");
             if (msg.IsSuccessStatusCode)
             {
                 string respStr = await msg.Content.ReadAsStringAsync();
-                JObject respObj = JObject.Parse(respStr);
-                Scryfall.SetListResponse resp = respObj.ToObject<Scryfall.SetListResponse>() ?? Scryfall.SetListResponse.NONE;
-                foreach (Scryfall.Set curSet in resp.data ?? new List<Scryfall.Set>())
+                Scryfall.SetListResponse resp = JsonConvert.DeserializeObject<Scryfall.SetListResponse>(respStr) ?? new();
+                foreach (Scryfall.Set curSet in resp.data)
                 {
-                    if (curSet.Set_Type == Scryfall.Set.SetType.CORE || curSet.Set_Type == Scryfall.Set.SetType.EXPANSION)
-                        SetList.Add(curSet);
+                    if (curSet.Set_Type == Scryfall.Set.SetType.CORE || 
+                        curSet.Set_Type == Scryfall.Set.SetType.EXPANSION ||
+                        // To limit the number of funny sets to ones that are (mostly) actually collectable, I needed to add some more filters
+                        (curSet.Set_Type == Scryfall.Set.SetType.FUNNY && curSet.Block_Code.Length == 0 && curSet.Parent_Set_Code.Length == 0))
+                        _setList.Add(curSet);
                 }
                 return true;
             }
@@ -31,28 +34,27 @@ namespace MTG_CLI
 
         async private static Task<bool> GetSetCards(Scryfall.Set targetSet)
         {
-            CardList.Clear();
+            _cardList.Clear();
 
             int page = 1;
             bool done = false;
             while (!done)
             {
-                HttpResponseMessage msg = await httpClient.GetAsync($"https://api.scryfall.com/cards/search?q=set:{targetSet.Code}&order=set&unique=prints&page={page}");
+                HttpResponseMessage msg = await httpClient.GetAsync($"https://api.scryfall.com/cards/search?q=set:{targetSet.Code} and game:paper&order=set&unique=prints&page={page}");
                 if (msg.IsSuccessStatusCode)
                 {
                     string respStr = await msg.Content.ReadAsStringAsync();
-                    JObject respObj = JObject.Parse(respStr);
-                    Scryfall.CardListResponse resp = respObj.ToObject<Scryfall.CardListResponse>() ?? Scryfall.CardListResponse.NONE;
-                    foreach (Scryfall.Card curCard in resp.data ?? new List<Scryfall.Card>())
-                    {
-                        CardList.Add(curCard);
-                    }
-                    if (resp.has_more ?? false)
+                    Scryfall.CardListResponse resp = JsonConvert.DeserializeObject<Scryfall.CardListResponse>(respStr) ?? new();
+                    foreach (Scryfall.Card curCard in resp.data)
+                        _cardList.Add(curCard);
+
+                    if (resp.has_more)
                         page++;
                     else
                         done = true;
                 }
-                else {
+                else
+                {
                     // Do something smart
                     return false;
                 }
@@ -61,22 +63,31 @@ namespace MTG_CLI
             return true;
         }
 
-        async public static Task Main(string[] args)
+        private static void StartTerminalView()
         {
-            await GetStartingData();
+            var win = new TerminalView(_inventory);
 
-            var win = new TerminalView();
-
-            // Configure TerminalWindow with callbacks, events, etc.
-            win.SetList = SetList;
+            win.SetList = _setList;
             win.SelectedSetChanged += async (newSet) =>
             {
                 win.SetCurrentSet(newSet);
                 await GetSetCards(newSet);
-                win.SetCardList(CardList);
+                win.SetCardList(_cardList);
             };
 
             win.Start();
+        }
+
+        async public static Task Main(string[] args)
+        {
+            Console.WriteLine("Reading Set data from Scryfall");
+            await GetSetData();
+
+            Console.WriteLine("Reading Inventory data");
+            // await _inventory.ReadFromFirebase();
+            _inventory.ReadFromJson();
+
+            StartTerminalView();
         }
     }
 }

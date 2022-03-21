@@ -53,11 +53,11 @@ namespace MTG_Inventory
             return null;
         }
 
-        private static MTG_Card FindOrMakeCard(List<MTG_Card> theList, string name, string setCode, string setName, int collectorNumber)
+        private static MTG_Card FindOrMakeCard(List<MTG_Card> theList, string name, string setCode, string setName, string collectorNumber)
         {
             foreach (MTG_Card card in theList)
             {
-                if (card.CollectorNumber == collectorNumber &&
+                if (card.CollectorNumber.Equals(collectorNumber) &&
                     card.Name.Equals(name) &&
                     card.Set.Equals(setName) &&
                     card.SetCode.Equals(setCode))
@@ -93,10 +93,12 @@ namespace MTG_Inventory
                 {
                     IDictionary<String, Object> card_props = (IDictionary<String, Object>)record;
 
-                    int count = 1, collectorNumber = 0; // Default values in case the CSV is missing data
+                    int count = 1; // Default values in case the CSV is missing data
+                    string collectorNumber = "0"; 
                     bool? foil = false, prerelease = false, spanish = false;
+
                     int.TryParse(card_props["Count"].ToString(), out count);
-                    int.TryParse(card_props["Card Number"].ToString(), out collectorNumber);
+                    collectorNumber = card_props["Card Number"].ToString();
                     foil = (card_props["Foil"].ToString().ToLower().Equals("true") ? true : null);
                     prerelease = (card_props["PreRelease"].ToString().ToLower().Equals("true") ? true : null);
                     spanish = (card_props["Language"].ToString().ToLower().Equals("spanish") ? true : null);
@@ -165,8 +167,8 @@ namespace MTG_Inventory
             await LoadSetInformation();
 
             List<MTG_Card> theList = ReadCardsFromFile("data/Inventory.csv");
-            await UploadCardsToFirebase(theList);
-            // writeCardsToJson(theList);
+            // await UploadCardsToFirebase(theList);
+            writeCardsToJson(theList);
         }
 
     }

@@ -11,12 +11,16 @@ namespace MTG_CLI
         private FrameView _curSetFrame;
         private FrameView _curCardFrame;
 
-        public List<Scryfall.Set>? SetList { get; set; }
+        private Inventory _inventory;
+        private string _curSetCode = "";
+        public List<Scryfall.Set> SetList { get; set; } = new();
 
         public event Action<Scryfall.Set>? SelectedSetChanged;
 
-        public TerminalView()
+        public TerminalView(Inventory inventory)
         {
+            _inventory = inventory;
+
             Application.Init();
 
             _mainWindow = new Window("Magic: The Gathering -- Collection Inventory") { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
@@ -64,6 +68,8 @@ namespace MTG_CLI
 
         public void SetCurrentSet(Scryfall.Set curSet)
         {
+            _curSetCode = curSet.Code;
+
             _curSetFrame.Title = curSet.Name;
             _curSetFrame.RemoveAll();
             _curSetFrame.Add(new Label("Loading cards...") { X = Pos.Center(), Y = 0 });
@@ -87,7 +93,7 @@ namespace MTG_CLI
             {
                 DataRow row = table.NewRow();
                 row["#"] = card.collector_number;
-                row["Cnt"] = "0";
+                row["Cnt"] = _inventory.GetTotalCardCount(_curSetCode, card.collector_number);
                 row["Name"] = card.name;
                 row["Color"] = String.Join("", card.color_identity?.ToArray() ?? new string[] { });
                 row["Cost"] = card.mana_cost;
@@ -104,6 +110,9 @@ namespace MTG_CLI
             cardTable.SelectedCellChanged += (args) => UpdateCardFrame(cardList[args.NewRow]);
 
             _curSetFrame.Add(cardTable);
+            cardTable.SetFocus();
+
+            UpdateCardFrame(cardList[0]);
         }
 
         private void UpdateCardFrame(Scryfall.Card card)

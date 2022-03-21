@@ -10,7 +10,10 @@
             "args": [],
             "cwd": "${workspaceFolder}/cli2",
             "stopAtEntry": false,
-            "console": "externalTerminal"
+            "console": "externalTerminal",
+            "env": {
+                "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\mtg-inventory-main-service-account.json"
+            }
         },
         {
             "name": "CLI (terminal)",

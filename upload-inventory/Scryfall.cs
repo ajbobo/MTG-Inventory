@@ -40,6 +40,7 @@ namespace Scryfall
             PROMO,
             TOKEN,
             MEMORABILIA,
+            ALCHEMY,
         }
     }
 }
