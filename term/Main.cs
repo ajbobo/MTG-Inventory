@@ -80,6 +80,7 @@ namespace MTG_CLI
 
         async public static Task Main(string[] args)
         {
+            Console.Title = "Inventory Terminal";
             Console.WriteLine("Reading Set data from Scryfall");
             await GetSetData();
 
