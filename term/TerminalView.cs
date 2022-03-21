@@ -91,6 +91,7 @@ namespace MTG_CLI
             DataTable table = new DataTable();
             table.Columns.Add(new DataColumn("#"));
             table.Columns.Add(new DataColumn("Cnt"));
+            table.Columns.Add(new DataColumn("Rarity"));
             table.Columns.Add(new DataColumn("Name"));
             table.Columns.Add(new DataColumn("Color"));
             table.Columns.Add(new DataColumn("Cost"));
@@ -100,6 +101,7 @@ namespace MTG_CLI
                 DataRow row = table.NewRow();
                 row["#"] = card.collector_number;
                 row["Cnt"] = _inventory.GetTotalCardCount(_curSetCode, card.collector_number);
+                row["Rarity"] = card.rarity.ToUpper()[0];
                 row["Name"] = card.name;
                 row["Color"] = String.Join("", card.color_identity?.ToArray() ?? new string[] { });
                 row["Cost"] = card.mana_cost;
@@ -109,8 +111,10 @@ namespace MTG_CLI
             var cardTable = new TableView(table) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             cardTable.FullRowSelect = true;
             cardTable.Style.AlwaysShowHeaders = true;
+            cardTable.Style.ExpandLastColumn = false;
             cardTable.Style.ColumnStyles.Add(table.Columns["#"], new TableView.ColumnStyle() { MaxWidth = 5, MinWidth = 5 });
             cardTable.Style.ColumnStyles.Add(table.Columns["Cnt"], new TableView.ColumnStyle() { MaxWidth = 3, MinWidth = 3 });
+            cardTable.Style.ColumnStyles.Add(table.Columns["Rarity"], new TableView.ColumnStyle() { MinWidth = 2, MaxWidth = 2 });
             cardTable.Style.ColumnStyles.Add(table.Columns["Name"], new TableView.ColumnStyle() { MinWidth = 15 });
             cardTable.Style.ColumnStyles.Add(table.Columns["Color"], new TableView.ColumnStyle() { MaxWidth = 5, MinWidth = 5 });
             cardTable.SelectedCellChanged += (args) => UpdateCardFrame(cardList[args.NewRow]);
@@ -119,6 +123,28 @@ namespace MTG_CLI
             cardTable.SetFocus();
 
             UpdateCardFrame(cardList[0]);
+        }
+
+        // To color the Rarity column, assign this as the ColorGetter to the column's ColumnStyle
+        ColorScheme GetRarityColor(TableView.CellColorGetterArgs args)
+        {
+            string rarity = (string)args.CellValue;
+            Color newColor = rarity switch
+            {
+                "C" => Color.White,
+                "U" => Color.BrightBlue,
+                "R" => Color.Red,
+                "M" => Color.Magenta,
+                _ => Color.Black
+            };
+            if (newColor == Color.Black)
+                return args.RowScheme;
+
+            ColorScheme scheme = new();
+            scheme.Normal = new Terminal.Gui.Attribute(newColor, args.RowScheme.Normal.Background);
+            scheme.HotFocus = new Terminal.Gui.Attribute(newColor, args.RowScheme.HotFocus.Background);
+            scheme.HotNormal = new Terminal.Gui.Attribute(newColor, args.RowScheme.HotNormal.Background);
+            return scheme;
         }
 
         private void UpdateCardFrame(Scryfall.Card card)
