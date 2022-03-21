@@ -2,29 +2,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "CLI_2 (terminal)",
+            "name": "Terminal UI",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build cli2",
-            "program": "${workspaceFolder}/cli2/bin/Debug/net6.0/cli2.dll",
+            "preLaunchTask": "build term",
+            "program": "${workspaceFolder}/term/bin/Debug/net6.0/cli2.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/cli2",
+            "cwd": "${workspaceFolder}/term",
             "stopAtEntry": false,
             "console": "externalTerminal",
             "env": {
                 "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\mtg-inventory-main-service-account.json"
             }
-        },
-        {
-            "name": "CLI (terminal)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build cli",
-            "program": "${workspaceFolder}/cli/bin/Debug/net6.0/MTG-CLI.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/cli",
-            "stopAtEntry": false,
-            "console": "integratedTerminal"
         },
         {
             "command": "npm start",
