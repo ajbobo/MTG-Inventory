@@ -1,3 +1,4 @@
+using System.Text;
 using Google.Cloud.Firestore;
 using Newtonsoft.Json;
 
@@ -49,14 +50,24 @@ namespace MTG_CLI
             _inventory[curCard.SetCode].Add(curCard.CollectorNumber, curCard);
         }
 
-        public int GetTotalCardCount(string setCode, string collectorNumber)
+        public MTG_Card? GetCard(string setCode, string collectorNumber)
         {
             if (!_inventory.ContainsKey(setCode) || !_inventory[setCode].ContainsKey(collectorNumber))
-                return 0;
+                return null;
 
-            MTG_Card curCard = _inventory[setCode][collectorNumber];
-            // Calcuate the total from CTCs - FINISH ME
-            return 1;
+            return _inventory[setCode][collectorNumber];
+        }
+
+        public int GetTotalCardCount(string setCode, string collectorNumber)
+        {
+            MTG_Card? curCard = GetCard(setCode, collectorNumber);
+            return curCard?.GetTotalCount() ?? 0;
+        }
+
+        public string GetCardCountDisplay(string setCode, string collectorNumber)
+        {
+            MTG_Card? curCard = GetCard(setCode, collectorNumber);
+            return String.Format("{0}{1}{2}", curCard?.GetTotalCount() ?? 0, (curCard?.HasAttr("foil") ?? false ? "✶" : ""), (curCard?.HasOtherAttr("foil") ?? false ? "Ω" : ""));
         }
     }
 }

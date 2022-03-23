@@ -100,7 +100,7 @@ namespace MTG_CLI
             {
                 DataRow row = table.NewRow();
                 row["#"] = card.collector_number;
-                row["Cnt"] = _inventory.GetTotalCardCount(_curSetCode, card.collector_number);
+                row["Cnt"] = _inventory.GetCardCountDisplay(_curSetCode, card.collector_number);
                 row["Rarity"] = card.rarity.ToUpper()[0];
                 row["Name"] = card.name;
                 row["Color"] = String.Join("", card.color_identity?.ToArray() ?? new string[] { });
@@ -152,6 +152,13 @@ namespace MTG_CLI
             _curCardFrame.RemoveAll();
 
             _curCardFrame.Title = $"{card.collector_number} - {card.name}";
+
+            MTG_Card? curCard = _inventory.GetCard(_curSetCode, card.collector_number);
+            curCard?.SortCTCs();
+            for (int x = 0; x < (curCard?.Counts.Count ?? 0); x++)
+            {
+                _curCardFrame.Add(new Label(curCard?.Counts[x].ToString() ?? "") {X = 0, Y = x, Width = Dim.Fill()});
+            }
 
             if (!_mainWindow.Subviews.Contains(_curCardFrame))
                 _mainWindow.Add(_curCardFrame);
