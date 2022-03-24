@@ -219,17 +219,28 @@ namespace MTG_CLI
 
         private void UpdateCardFrame(Scryfall.Card card)
         {
-            _curCardFrame.RemoveAll();
-
-            _curCardFrame.Title = $"{card.collector_number} - {card.name}";
-
             MTG_Card? curCard = _inventory.GetCard(_curSetCode, card.collector_number);
             if (curCard != null)
+            {
                 UpdateCardFrame(curCard);
+            }
+            else
+            {
+                _curCardFrame.RemoveAll();
+
+                _curCardFrame.Title = $"{card.collector_number} - {card.name}";
+
+                if (!_mainWindow.Subviews.Contains(_curCardFrame))
+                    _mainWindow.Add(_curCardFrame);
+            }
         }
 
         private void UpdateCardFrame(MTG_Card card)
         {
+            _curCardFrame.RemoveAll();
+
+            _curCardFrame.Title = $"{card.CollectorNumber} - {card.Name}";
+
             card.SortCTCs();
             for (int x = 0; x < card.Counts.Count; x++)
             {
