@@ -17,18 +17,38 @@ namespace MTG_CLI
             this.Count = 0;
         }
 
-        public override string ToString()
+        public void AdjustCount(int val)
+        {
+            Count += val;
+            if (Count < 0)
+                Count = 0;
+        }
+
+        public string GetAttrs()
         {
             StringBuilder builder = new();
             foreach (string attr in Attrs)
             {
                 if (builder.Length > 0)
                     builder.Append(" | ");
-                builder.AppendFormat("{0}", attr);
+                builder.AppendFormat("{0}", Capitalize(attr));
             }
             if (builder.Length == 0)
-                builder.Append("standard");
-            return string.Format("{0} - {1}", Count, builder.ToString());
+                builder.Append("Standard");
+            return builder.ToString();
+        }
+
+        private string Capitalize(string str)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(char.ToUpper(str[0]));
+            builder.Append(str.Substring(1));
+            return builder.ToString();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} - {1}", Count, GetAttrs());
         }
 
         public int CompareTo(CardTypeCount? other)

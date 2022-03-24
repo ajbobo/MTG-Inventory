@@ -67,6 +67,11 @@ namespace MTG_CLI
         public string GetCardCountDisplay(string setCode, string collectorNumber)
         {
             MTG_Card? curCard = GetCard(setCode, collectorNumber);
+            return GetCardCountDisplay(curCard);
+        }
+
+        public string GetCardCountDisplay(MTG_Card? curCard)
+        {
             return String.Format("{0}{1}{2}", curCard?.GetTotalCount() ?? 0, (curCard?.HasAttr("foil") ?? false ? "✶" : ""), (curCard?.HasOtherAttr("foil") ?? false ? "Ω" : ""));
         }
     }

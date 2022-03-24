@@ -9,11 +9,14 @@ namespace MTG_CLI
         private MenuBar _menu;
         private StatusBar _statusBar;
         private FrameView _curSetFrame;
+        private TableView _cardTable;
         private FrameView _curCardFrame;
 
         private Inventory _inventory;
         private string _curSetCode = "";
         public List<Scryfall.Set> SetList { get; set; } = new();
+        private MTG_Card? _curCard;
+        private bool _isDirty = false;
 
         public event Action<Scryfall.Set>? SelectedSetChanged;
 
@@ -42,6 +45,7 @@ namespace MTG_CLI
             });
 
             _curSetFrame = new FrameView() { X = 0, Y = 0, Width = Dim.Percent(75), Height = Dim.Fill() };
+            _cardTable = new TableView() { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             _curCardFrame = new FrameView() { X = Pos.Right(_curSetFrame), Y = Pos.Top(_curSetFrame) + 3, Width = Dim.Fill(), Height = Dim.Fill() };
         }
 
@@ -88,7 +92,7 @@ namespace MTG_CLI
         {
             _curSetFrame.RemoveAll();
 
-            DataTable table = new DataTable();
+            DataTable table = new();
             table.Columns.Add(new DataColumn("#"));
             table.Columns.Add(new DataColumn("Cnt"));
             table.Columns.Add(new DataColumn("Rarity"));
@@ -108,21 +112,87 @@ namespace MTG_CLI
                 table.Rows.Add(row);
             }
 
-            var cardTable = new TableView(table) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
-            cardTable.FullRowSelect = true;
-            cardTable.Style.AlwaysShowHeaders = true;
-            cardTable.Style.ExpandLastColumn = false;
-            cardTable.Style.ColumnStyles.Add(table.Columns["#"], new TableView.ColumnStyle() { MaxWidth = 5, MinWidth = 5 });
-            cardTable.Style.ColumnStyles.Add(table.Columns["Cnt"], new TableView.ColumnStyle() { MaxWidth = 3, MinWidth = 3 });
-            cardTable.Style.ColumnStyles.Add(table.Columns["Rarity"], new TableView.ColumnStyle() { MinWidth = 2, MaxWidth = 2 });
-            cardTable.Style.ColumnStyles.Add(table.Columns["Name"], new TableView.ColumnStyle() { MinWidth = 15 });
-            cardTable.Style.ColumnStyles.Add(table.Columns["Color"], new TableView.ColumnStyle() { MaxWidth = 5, MinWidth = 5 });
-            cardTable.SelectedCellChanged += (args) => UpdateCardFrame(cardList[args.NewRow]);
+            _cardTable = new(table) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
+            _cardTable.FullRowSelect = true;
+            _cardTable.Style.AlwaysShowHeaders = true;
+            _cardTable.Style.ExpandLastColumn = false;
+            _cardTable.Style.ColumnStyles.Add(table.Columns["#"], new() { MaxWidth = 5, MinWidth = 5 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["Cnt"], new() { MaxWidth = 3, MinWidth = 3 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["Rarity"], new() { MinWidth = 2, MaxWidth = 2 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["Name"], new() { MinWidth = 15 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["Color"], new() { MaxWidth = 5, MinWidth = 5 });
+            _cardTable.SelectedCellChanged += (args) => UpdateCardFrame(cardList[args.NewRow]);
 
-            _curSetFrame.Add(cardTable);
-            cardTable.SetFocus();
+            _curSetFrame.Add(_cardTable);
+            _cardTable.SetFocus();
+            _cardTable.CellActivated += (args) =>
+            {
+                DataTable table = args.Table;
+                string collectorNumber = table.Rows[args.Row]["#"]?.ToString() ?? "";
+                EditCard(cardList[args.Row], _curSetCode);
+            };
 
             UpdateCardFrame(cardList[0]);
+        }
+
+        private void UpdateCardTableRow()
+        {
+            if (_curCard == null)
+                return;
+
+            int row = _cardTable.SelectedRow;
+            _cardTable.Table.Rows[row]["Cnt"] = _inventory.GetCardCountDisplay(_curCard);
+            UpdateCardFrame(_curCard);
+        }
+
+        private void EditCard(Scryfall.Card curCard, string curSetCode)
+        {
+            MTG_Card? mtgCard = _inventory.GetCard(curSetCode, curCard.collector_number);
+            _curCard = mtgCard;
+            if (mtgCard == null) // The card isn't in Inventory right now - It may need to be added later - FINISH ME
+                return;
+
+            Button ok = new("OK");
+            ok.Clicked += () => Application.RequestStop();
+
+            Dialog editDialog = new(string.Format("Edit - {0}", mtgCard.Name), ok) { Width = 55, Height = mtgCard.Counts.Count + 5 };
+            for (int x = 0; x < mtgCard.Counts.Count; x++)
+            {
+                CardTypeCount ctc = mtgCard.Counts[x];
+
+                Label ctcName = new(ctc.ToString()) { X = 0, Y = x, Width = 25, Height = 1 };
+
+                Button addOne = new("+1") { X = Pos.Right(ctcName) + 1, Y = x };
+                addOne.Clicked += () => { ctc.AdjustCount(1); ctcName.Text = ctc.ToString(); _isDirty = true; };
+
+                Button subOne = new("-1") { X = Pos.Right(addOne) + 1, Y = x };
+                subOne.Clicked += () => { ctc.AdjustCount(-1); ctcName.Text = ctc.ToString(); _isDirty = true; };
+
+                Button setFour = new("=4") { X = Pos.Right(subOne) + 1, Y = x };
+                setFour.Clicked += () => { ctc.Count = 4; ctcName.Text = ctc.ToString(); _isDirty = true; };
+
+                Button delete = new("X") { X = Pos.Right(setFour) + 1, Y = x };
+                delete.Clicked += () => { MessageBox.Query("Delete", "Not implemented yet", "OK"); };
+
+                editDialog.Add(ctcName, addOne, subOne, setFour, delete);
+                if (x == 0)
+                    addOne.SetFocus();
+            }
+            Button newCTC = new("New Card Type") { X = Pos.Center(), Y = mtgCard.Counts.Count };
+            newCTC.Clicked += () => { MessageBox.Query("New CTC", "Add a new CTC now", "OK"); };
+            editDialog.Add(newCTC);
+
+            editDialog.Closed += (args) =>
+                {
+                    if (_isDirty)
+                    {
+                        MessageBox.Query("Dirty Data", "Database updates here", "OK");
+                        _isDirty = false;
+                        UpdateCardTableRow();
+                    }
+                };
+
+            Application.Run(editDialog);
         }
 
         // To color the Rarity column, assign this as the ColorGetter to the column's ColumnStyle
@@ -154,10 +224,16 @@ namespace MTG_CLI
             _curCardFrame.Title = $"{card.collector_number} - {card.name}";
 
             MTG_Card? curCard = _inventory.GetCard(_curSetCode, card.collector_number);
-            curCard?.SortCTCs();
-            for (int x = 0; x < (curCard?.Counts.Count ?? 0); x++)
+            if (curCard != null)
+                UpdateCardFrame(curCard);
+        }
+
+        private void UpdateCardFrame(MTG_Card card)
+        {
+            card.SortCTCs();
+            for (int x = 0; x < card.Counts.Count; x++)
             {
-                _curCardFrame.Add(new Label(curCard?.Counts[x].ToString() ?? "") {X = 0, Y = x, Width = Dim.Fill()});
+                _curCardFrame.Add(new Label(card.Counts[x].ToString()) { X = 0, Y = x, Width = Dim.Fill() });
             }
 
             if (!_mainWindow.Subviews.Contains(_curCardFrame))
