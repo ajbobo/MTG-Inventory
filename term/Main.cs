@@ -19,7 +19,7 @@ namespace MTG_CLI
             {
                 string respStr = await msg.Content.ReadAsStringAsync();
                 Scryfall.SetListResponse resp = JsonConvert.DeserializeObject<Scryfall.SetListResponse>(respStr) ?? new();
-                foreach (Scryfall.Set curSet in resp.data)
+                foreach (Scryfall.Set curSet in resp.Data)
                 {
                     if (curSet.Set_Type == Scryfall.Set.SetType.CORE || 
                         curSet.Set_Type == Scryfall.Set.SetType.EXPANSION ||
@@ -47,10 +47,10 @@ namespace MTG_CLI
                 {
                     string respStr = await msg.Content.ReadAsStringAsync();
                     Scryfall.CardListResponse resp = JsonConvert.DeserializeObject<Scryfall.CardListResponse>(respStr) ?? new();
-                    foreach (Scryfall.Card curCard in resp.data)
+                    foreach (Scryfall.Card curCard in resp.Data)
                         _cardList.Add(curCard);
 
-                    if (resp.has_more)
+                    if (resp.Has_More)
                         page++;
                     else
                         done = true;

@@ -50,42 +50,40 @@ namespace MTG_CLI
             _inventory[curCard.SetCode].Add(curCard.CollectorNumber, curCard);
         }
 
-        public MTG_Card AddCard(Scryfall.Card curCard, CardTypeCount ctc, string setCode /*should be able to remove this when I add setCode and setName to Scryfall.Card*/)
+        public void AddCard(Scryfall.Card curCard, CardTypeCount ctc)
         {
+            string setCode = curCard.SetCode;
+            
             if (!_inventory.ContainsKey(setCode))
                 _inventory.Add(setCode, new());
-            else if (_inventory[setCode].ContainsKey(curCard.collector_number)) // The card is in inventory already - no need to add it
-                return _inventory[setCode][curCard.collector_number];
+            else if (_inventory[setCode].ContainsKey(curCard.CollectorNumber)) // The card is in inventory already - no need to add it
+                return;
 
             MTG_Card newCard = new() {
-                Name = curCard.name,
-                CollectorNumber = curCard.collector_number,
+                Name = curCard.Name,
+                CollectorNumber = curCard.CollectorNumber,
                 SetCode = setCode,
+                Set = curCard.SetName
             };
             newCard.Counts.Add(ctc);
 
-            _inventory[setCode].Add(curCard.collector_number, newCard);
-
-            return newCard;
+            _inventory[setCode].Add(curCard.CollectorNumber, newCard);
         }
 
-        public MTG_Card? GetCard(string setCode, string collectorNumber)
+        public MTG_Card? GetCard(Scryfall.Card card)
         {
+            string setCode = card.SetCode;
+            string collectorNumber = card.CollectorNumber;
+
             if (!_inventory.ContainsKey(setCode) || !_inventory[setCode].ContainsKey(collectorNumber))
                 return null;
 
             return _inventory[setCode][collectorNumber];
         }
 
-        public int GetTotalCardCount(string setCode, string collectorNumber)
+        public string GetCardCountDisplay(Scryfall.Card card)
         {
-            MTG_Card? curCard = GetCard(setCode, collectorNumber);
-            return curCard?.GetTotalCount() ?? 0;
-        }
-
-        public string GetCardCountDisplay(string setCode, string collectorNumber)
-        {
-            MTG_Card? curCard = GetCard(setCode, collectorNumber);
+            MTG_Card? curCard = GetCard(card);
             return GetCardCountDisplay(curCard);
         }
 

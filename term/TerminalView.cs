@@ -13,11 +13,10 @@ namespace MTG_CLI
         private FrameView _curCardFrame;
 
         private Inventory _inventory;
-        private string _curSetCode = "";
-        public List<Scryfall.Set> SetList { get; set; } = new();
-        private MTG_Card? _curCard;
         private bool _isDirty = false;
 
+        public List<Scryfall.Set> SetList { get; set; } = new();
+        
         public event Action<Scryfall.Set>? SelectedSetChanged;
 
         public TerminalView(Inventory inventory)
@@ -78,8 +77,6 @@ namespace MTG_CLI
 
         public void SetCurrentSet(Scryfall.Set curSet)
         {
-            _curSetCode = curSet.Code;
-
             _curSetFrame.Title = curSet.Name;
             _curSetFrame.RemoveAll();
             _curSetFrame.Add(new Label("Loading cards...") { X = Pos.Center(), Y = 0 });
@@ -96,19 +93,19 @@ namespace MTG_CLI
             table.Columns.Add(new DataColumn("#"));
             table.Columns.Add(new DataColumn("Cnt"));
             table.Columns.Add(new DataColumn("Rarity"));
-            table.Columns.Add(new DataColumn("Name"));
+            table.Columns.Add(new DataColumn("Name") { DataType = typeof(Scryfall.Card) }); // Store the actual card reference here, so it's easy to find later
             table.Columns.Add(new DataColumn("Color"));
             table.Columns.Add(new DataColumn("Cost"));
 
             foreach (Scryfall.Card card in cardList)
             {
                 DataRow row = table.NewRow();
-                row["#"] = card.collector_number;
-                row["Cnt"] = _inventory.GetCardCountDisplay(_curSetCode, card.collector_number);
-                row["Rarity"] = card.rarity.ToUpper()[0];
-                row["Name"] = card.name;
-                row["Color"] = String.Join("", card.color_identity?.ToArray() ?? new string[] { });
-                row["Cost"] = card.mana_cost;
+                row["#"] = card.CollectorNumber;
+                row["Cnt"] = _inventory.GetCardCountDisplay(card);
+                row["Rarity"] = card.Rarity.ToUpper()[0];
+                row["Name"] = card; //card.Name;
+                row["Color"] = String.Join("", card.ColorIdentity?.ToArray() ?? new string[] { });
+                row["Cost"] = card.ManaCost;
                 table.Rows.Add(row);
             }
 
@@ -137,17 +134,15 @@ namespace MTG_CLI
 
         private void UpdateCardTableRow()
         {
-            if (_curCard == null)
-                return;
-
-            int row = _cardTable.SelectedRow;
-            _cardTable.Table.Rows[row]["Cnt"] = _inventory.GetCardCountDisplay(_curCard);
-            UpdateCardFrame(_curCard);
+            var row = _cardTable.Table.Rows[_cardTable.SelectedRow];
+            Scryfall.Card selectedCard = (Scryfall.Card)row["Name"];
+            row["Cnt"] = _inventory.GetCardCountDisplay(selectedCard);
+            UpdateCardFrame(selectedCard);
         }
 
         private void EditCard(Scryfall.Card selectedCard)
         {
-            MTG_Card? mtgCard = _inventory.GetCard(_curSetCode, selectedCard.collector_number);
+            MTG_Card? mtgCard = _inventory.GetCard(selectedCard);
             List<CardTypeCount> ctcList = mtgCard?.Counts ?? new();
             if (ctcList.Count == 0) // The card isn't in Inventory right now, so it needs a standard CTC
                 ctcList.Add(new CardTypeCount());
@@ -155,7 +150,7 @@ namespace MTG_CLI
             Button ok = new("OK");
             ok.Clicked += () => Application.RequestStop();
 
-            Dialog editDialog = new(string.Format("Edit - {0}", selectedCard.name), ok) { Width = 55, Height = ctcList.Count + 5 };
+            Dialog editDialog = new(string.Format("Edit - {0}", selectedCard.Name), ok) { Width = 55, Height = ctcList.Count + 5 };
             for (int x = 0; x < ctcList.Count; x++)
             {
                 CardTypeCount ctc = ctcList[x];
@@ -197,7 +192,7 @@ namespace MTG_CLI
 
         private void updateInventoryAndState(Scryfall.Card selectedCard, CardTypeCount ctc)
         {
-             _curCard = _inventory.AddCard(selectedCard, ctc, _curSetCode); 
+             _inventory.AddCard(selectedCard, ctc); 
              _isDirty = true;
         }
 
@@ -225,7 +220,7 @@ namespace MTG_CLI
 
         private void UpdateCardFrame(Scryfall.Card card)
         {
-            MTG_Card? curCard = _inventory.GetCard(_curSetCode, card.collector_number);
+            MTG_Card? curCard = _inventory.GetCard(card);
             if (curCard != null)
             {
                 UpdateCardFrame(curCard);
@@ -234,7 +229,7 @@ namespace MTG_CLI
             {
                 _curCardFrame.RemoveAll();
 
-                _curCardFrame.Title = $"{card.collector_number} - {card.name}";
+                _curCardFrame.Title = $"{card.CollectorNumber} - {card.Name}";
 
                 if (!_mainWindow.Subviews.Contains(_curCardFrame))
                     _mainWindow.Add(_curCardFrame);
