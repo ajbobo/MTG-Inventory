@@ -25,9 +25,9 @@ namespace MTG_CLI
 
             Application.Init();
 
-            _mainWindow = new Window("Magic: The Gathering -- Collection Inventory") { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
+            _mainWindow = new("Magic: The Gathering -- Collection Inventory") { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
 
-            _menu = new MenuBar(new MenuBarItem[] {
+            _menu = new(new MenuBarItem[] {
                 new MenuBarItem("_File", new MenuItem[] {
                     new MenuItem("E_xit", "", () => Application.RequestStop())
                 }),
@@ -37,15 +37,15 @@ namespace MTG_CLI
                 }),
             });
 
-            _statusBar = new StatusBar(new StatusItem[]{
+            _statusBar = new(new StatusItem[]{
                 new StatusItem(Key.F, "Filters (~Shift-F~)", ChooseFilters ),
                 new StatusItem(Key.S, "Choose Set (~Shift-S~)", ChooseSet ),
                 new StatusItem(Key.G, "Goto Card (~Shift-G~)", FindCard ),
             });
 
-            _curSetFrame = new FrameView() { X = 0, Y = 0, Width = Dim.Percent(75), Height = Dim.Fill() };
-            _cardTable = new TableView() { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
-            _curCardFrame = new FrameView() { X = Pos.Right(_curSetFrame), Y = Pos.Top(_curSetFrame) + 3, Width = Dim.Fill(), Height = Dim.Fill() };
+            _curSetFrame = new() { X = 0, Y = 0, Width = Dim.Percent(75), Height = Dim.Fill() };
+            _cardTable = new() { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
+            _curCardFrame = new() { X = Pos.Right(_curSetFrame), Y = Pos.Top(_curSetFrame) + 3, Width = Dim.Fill(), Height = Dim.Fill() };
         }
 
         private void FindCard()
@@ -60,9 +60,9 @@ namespace MTG_CLI
 
         private void ChooseSet()
         {
-            var selectSetDlg = new Dialog("Select a Set");
+            Dialog selectSetDlg = new("Select a Set");
 
-            var setListView = new ListView(SetList ?? new List<Scryfall.Set>()) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
+            ListView setListView = new(SetList ?? new List<Scryfall.Set>()) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             setListView.OpenSelectedItem += (args) =>
                 {
                     Scryfall.Set selectedSet = (Scryfall.Set)args.Value;
@@ -103,7 +103,7 @@ namespace MTG_CLI
                 row["#"] = card.CollectorNumber;
                 row["Cnt"] = _inventory.GetCardCountDisplay(card);
                 row["Rarity"] = card.Rarity.ToUpper()[0];
-                row["Name"] = card; //card.Name;
+                row["Name"] = card; 
                 row["Color"] = String.Join("", card.ColorIdentity?.ToArray() ?? new string[] { });
                 row["Cost"] = card.ManaCost;
                 table.Rows.Add(row);
@@ -125,8 +125,7 @@ namespace MTG_CLI
             _cardTable.CellActivated += (args) =>
             {
                 DataTable table = args.Table;
-                string collectorNumber = table.Rows[args.Row]["#"]?.ToString() ?? "";
-                EditCard(cardList[args.Row]);
+                EditCard((Scryfall.Card)table.Rows[args.Row]["Name"]);
             };
 
             UpdateCardFrame(cardList[0]);
@@ -144,7 +143,7 @@ namespace MTG_CLI
         {
             MTG_Card? mtgCard = _inventory.GetCard(selectedCard);
             List<CardTypeCount> ctcList = mtgCard?.Counts ?? new();
-            if (ctcList.Count == 0) // The card isn't in Inventory right now, so it needs a standard CTC
+            if (ctcList.Count == 0) // If the card doesn't have any CTCs, it needs a standard one
                 ctcList.Add(new CardTypeCount());
 
             Button ok = new("OK");
