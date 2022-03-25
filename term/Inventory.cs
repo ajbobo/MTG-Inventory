@@ -50,6 +50,25 @@ namespace MTG_CLI
             _inventory[curCard.SetCode].Add(curCard.CollectorNumber, curCard);
         }
 
+        public MTG_Card AddCard(Scryfall.Card curCard, CardTypeCount ctc, string setCode /*should be able to remove this when I add setCode and setName to Scryfall.Card*/)
+        {
+            if (!_inventory.ContainsKey(setCode))
+                _inventory.Add(setCode, new());
+            else if (_inventory[setCode].ContainsKey(curCard.collector_number)) // The card is in inventory already - no need to add it
+                return _inventory[setCode][curCard.collector_number];
+
+            MTG_Card newCard = new() {
+                Name = curCard.name,
+                CollectorNumber = curCard.collector_number,
+                SetCode = setCode,
+            };
+            newCard.Counts.Add(ctc);
+
+            _inventory[setCode].Add(curCard.collector_number, newCard);
+
+            return newCard;
+        }
+
         public MTG_Card? GetCard(string setCode, string collectorNumber)
         {
             if (!_inventory.ContainsKey(setCode) || !_inventory[setCode].ContainsKey(collectorNumber))

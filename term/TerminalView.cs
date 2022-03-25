@@ -129,7 +129,7 @@ namespace MTG_CLI
             {
                 DataTable table = args.Table;
                 string collectorNumber = table.Rows[args.Row]["#"]?.ToString() ?? "";
-                EditCard(cardList[args.Row], _curSetCode);
+                EditCard(cardList[args.Row]);
             };
 
             UpdateCardFrame(cardList[0]);
@@ -145,31 +145,31 @@ namespace MTG_CLI
             UpdateCardFrame(_curCard);
         }
 
-        private void EditCard(Scryfall.Card curCard, string curSetCode)
+        private void EditCard(Scryfall.Card selectedCard)
         {
-            MTG_Card? mtgCard = _inventory.GetCard(curSetCode, curCard.collector_number);
-            _curCard = mtgCard;
-            if (mtgCard == null) // The card isn't in Inventory right now - It may need to be added later - FINISH ME
-                return;
+            MTG_Card? mtgCard = _inventory.GetCard(_curSetCode, selectedCard.collector_number);
+            List<CardTypeCount> ctcList = mtgCard?.Counts ?? new();
+            if (ctcList.Count == 0) // The card isn't in Inventory right now, so it needs a standard CTC
+                ctcList.Add(new CardTypeCount());
 
             Button ok = new("OK");
             ok.Clicked += () => Application.RequestStop();
 
-            Dialog editDialog = new(string.Format("Edit - {0}", mtgCard.Name), ok) { Width = 55, Height = mtgCard.Counts.Count + 5 };
-            for (int x = 0; x < mtgCard.Counts.Count; x++)
+            Dialog editDialog = new(string.Format("Edit - {0}", selectedCard.name), ok) { Width = 55, Height = ctcList.Count + 5 };
+            for (int x = 0; x < ctcList.Count; x++)
             {
-                CardTypeCount ctc = mtgCard.Counts[x];
+                CardTypeCount ctc = ctcList[x];
 
                 Label ctcName = new(ctc.ToString()) { X = 0, Y = x, Width = 25, Height = 1 };
 
                 Button addOne = new("+1") { X = Pos.Right(ctcName) + 1, Y = x };
-                addOne.Clicked += () => { ctc.AdjustCount(1); ctcName.Text = ctc.ToString(); _isDirty = true; };
+                addOne.Clicked += () => { ctc.AdjustCount(1); updateInventoryAndState(selectedCard, ctc); ctcName.Text = ctc.ToString(); };
 
                 Button subOne = new("-1") { X = Pos.Right(addOne) + 1, Y = x };
-                subOne.Clicked += () => { ctc.AdjustCount(-1); ctcName.Text = ctc.ToString(); _isDirty = true; };
+                subOne.Clicked += () => { ctc.AdjustCount(-1); updateInventoryAndState(selectedCard, ctc); ctcName.Text = ctc.ToString(); };
 
                 Button setFour = new("=4") { X = Pos.Right(subOne) + 1, Y = x };
-                setFour.Clicked += () => { ctc.Count = 4; ctcName.Text = ctc.ToString(); _isDirty = true; };
+                setFour.Clicked += () => { ctc.Count = 4; updateInventoryAndState(selectedCard, ctc); ctcName.Text = ctc.ToString(); };
 
                 Button delete = new("X") { X = Pos.Right(setFour) + 1, Y = x };
                 delete.Clicked += () => { MessageBox.Query("Delete", "Not implemented yet", "OK"); };
@@ -178,7 +178,7 @@ namespace MTG_CLI
                 if (x == 0)
                     addOne.SetFocus();
             }
-            Button newCTC = new("New Card Type") { X = Pos.Center(), Y = mtgCard.Counts.Count };
+            Button newCTC = new("New Card Type") { X = Pos.Center(), Y = ctcList.Count };
             newCTC.Clicked += () => { MessageBox.Query("New CTC", "Add a new CTC now", "OK"); };
             editDialog.Add(newCTC);
 
@@ -193,6 +193,12 @@ namespace MTG_CLI
                 };
 
             Application.Run(editDialog);
+        }
+
+        private void updateInventoryAndState(Scryfall.Card selectedCard, CardTypeCount ctc)
+        {
+             _curCard = _inventory.AddCard(selectedCard, ctc, _curSetCode); 
+             _isDirty = true;
         }
 
         // To color the Rarity column, assign this as the ColorGetter to the column's ColumnStyle
