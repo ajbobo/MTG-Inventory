@@ -13,7 +13,6 @@ namespace MTG_CLI
         private FrameView _curCardFrame;
 
         private Inventory _inventory;
-        private bool _isDirty = false;
 
         public List<Scryfall.Set> SetList { get; set; } = new();
         
@@ -125,7 +124,12 @@ namespace MTG_CLI
             _cardTable.CellActivated += (args) =>
             {
                 DataTable table = args.Table;
-                EditCard((Scryfall.Card)table.Rows[args.Row]["Name"]);
+                var dlg = new EditCardDialog(_inventory);
+                dlg.DataChanged += () => {
+                    MessageBox.Query("Dirty Data", "Database updates here", "OK");
+                    UpdateCardTableRow(); 
+                };
+                dlg.EditCard((Scryfall.Card)table.Rows[args.Row]["Name"]);
             };
 
             UpdateCardFrame(cardList[0]);
@@ -137,62 +141,6 @@ namespace MTG_CLI
             Scryfall.Card selectedCard = (Scryfall.Card)row["Name"];
             row["Cnt"] = _inventory.GetCardCountDisplay(selectedCard);
             UpdateCardFrame(selectedCard);
-        }
-
-        private void EditCard(Scryfall.Card selectedCard)
-        {
-            MTG_Card? mtgCard = _inventory.GetCard(selectedCard);
-            List<CardTypeCount> ctcList = mtgCard?.Counts ?? new();
-            if (ctcList.Count == 0) // If the card doesn't have any CTCs, it needs a standard one
-                ctcList.Add(new CardTypeCount());
-
-            Button ok = new("OK");
-            ok.Clicked += () => Application.RequestStop();
-
-            Dialog editDialog = new(string.Format("Edit - {0}", selectedCard.Name), ok) { Width = 55, Height = ctcList.Count + 5 };
-            for (int x = 0; x < ctcList.Count; x++)
-            {
-                CardTypeCount ctc = ctcList[x];
-
-                Label ctcName = new(ctc.ToString()) { X = 0, Y = x, Width = 25, Height = 1 };
-
-                Button addOne = new("+1") { X = Pos.Right(ctcName) + 1, Y = x };
-                addOne.Clicked += () => { ctc.AdjustCount(1); updateInventoryAndState(selectedCard, ctc); ctcName.Text = ctc.ToString(); };
-
-                Button subOne = new("-1") { X = Pos.Right(addOne) + 1, Y = x };
-                subOne.Clicked += () => { ctc.AdjustCount(-1); updateInventoryAndState(selectedCard, ctc); ctcName.Text = ctc.ToString(); };
-
-                Button setFour = new("=4") { X = Pos.Right(subOne) + 1, Y = x };
-                setFour.Clicked += () => { ctc.Count = 4; updateInventoryAndState(selectedCard, ctc); ctcName.Text = ctc.ToString(); };
-
-                Button delete = new("X") { X = Pos.Right(setFour) + 1, Y = x };
-                delete.Clicked += () => { MessageBox.Query("Delete", "Not implemented yet", "OK"); };
-
-                editDialog.Add(ctcName, addOne, subOne, setFour, delete);
-                if (x == 0)
-                    addOne.SetFocus();
-            }
-            Button newCTC = new("New Card Type") { X = Pos.Center(), Y = ctcList.Count };
-            newCTC.Clicked += () => { MessageBox.Query("New CTC", "Add a new CTC now", "OK"); };
-            editDialog.Add(newCTC);
-
-            editDialog.Closed += (args) =>
-                {
-                    if (_isDirty)
-                    {
-                        MessageBox.Query("Dirty Data", "Database updates here", "OK");
-                        _isDirty = false;
-                        UpdateCardTableRow();
-                    }
-                };
-
-            Application.Run(editDialog);
-        }
-
-        private void updateInventoryAndState(Scryfall.Card selectedCard, CardTypeCount ctc)
-        {
-             _inventory.AddCard(selectedCard, ctc); 
-             _isDirty = true;
         }
 
         // To color the Rarity column, assign this as the ColorGetter to the column's ColumnStyle
