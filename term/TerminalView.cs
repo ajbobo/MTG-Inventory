@@ -11,11 +11,12 @@ namespace MTG_CLI
         private FrameView _curSetFrame;
         private TableView _cardTable;
         private FrameView _curCardFrame;
+        private FindCardDialog _findCardDlg;
 
         private Inventory _inventory;
 
         public List<Scryfall.Set> SetList { get; set; } = new();
-        
+
         public event Action<Scryfall.Set>? SelectedSetChanged;
 
         public TerminalView(Inventory inventory)
@@ -47,11 +48,21 @@ namespace MTG_CLI
             _curSetFrame = new() { X = 0, Y = 0, Width = Dim.Percent(75), Height = Dim.Fill() };
             _cardTable = new() { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             _curCardFrame = new() { X = Pos.Right(_curSetFrame), Y = Pos.Top(_curSetFrame) + 3, Width = Dim.Fill(), Height = Dim.Fill() };
+            _findCardDlg = new();
         }
 
         private void FindCard()
         {
-            MessageBox.Query("Res", "You get to type a card name", "ok");
+            _findCardDlg.FindCard();
+        }
+
+        private void FoundCard(Scryfall.Card card)
+        {
+            DataRow? cardRow = _cardTable.Table.Rows.Find(card.CollectorNumber);
+            _cardTable.SelectedRow = _cardTable.Table.Rows.IndexOf(cardRow);
+            _cardTable.EnsureSelectedCellIsVisible();
+
+            UpdateCardFrame(card);
         }
 
         private void ChooseFilters()
@@ -88,6 +99,9 @@ namespace MTG_CLI
 
         public void SetCardList(List<Scryfall.Card> cardList)
         {
+            _findCardDlg = new(cardList);
+            _findCardDlg.CardSelected += FoundCard;
+
             _curSetFrame.RemoveAll();
 
             DataTable table = new();
@@ -98,13 +112,15 @@ namespace MTG_CLI
             table.Columns.Add(new DataColumn("Color"));
             table.Columns.Add(new DataColumn("Cost"));
 
+            table.PrimaryKey = new DataColumn[]{ table.Columns?["#"] ?? new() };
+
             foreach (Scryfall.Card card in cardList)
             {
                 DataRow row = table.NewRow();
                 row["#"] = card.CollectorNumber;
                 row["Cnt"] = _inventory.GetCardCountDisplay(card);
                 row["Rarity"] = card.Rarity.ToUpper()[0];
-                row["Name"] = card; 
+                row["Name"] = card;
                 row["Color"] = String.Join("", card.ColorIdentity?.ToArray() ?? new string[] { });
                 row["Cost"] = card.ManaCost;
                 table.Rows.Add(row);
@@ -127,9 +143,10 @@ namespace MTG_CLI
             {
                 DataTable table = args.Table;
                 EditCardDialog dlg = new(_inventory);
-                dlg.DataChanged += () => {
+                dlg.DataChanged += () =>
+                {
                     MessageBox.Query("Dirty Data", "Database updates here", "OK");
-                    UpdateCardTableRow(); 
+                    UpdateCardTableRow();
                 };
                 dlg.EditCard((Scryfall.Card)table.Rows[args.Row]["Name"]);
             };
