@@ -43,12 +43,40 @@ namespace MTG_CLI
                 new StatusItem(Key.F, "Filters (~Shift-F~)", ChooseFilters ),
                 new StatusItem(Key.S, "Choose Set (~Shift-S~)", ChooseSet ),
                 new StatusItem(Key.G, "Goto Card (~Shift-G~)", FindCard ),
+                new StatusItem(Key.N, "Find Next (~Shift-N~)", FindNext ),
             });
 
             _curSetFrame = new() { X = 0, Y = 0, Width = Dim.Percent(75), Height = Dim.Fill() };
             _cardTable = new() { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             _curCardFrame = new() { X = Pos.Right(_curSetFrame), Y = Pos.Top(_curSetFrame) + 3, Width = Dim.Fill(), Height = Dim.Fill() };
             _findCardDlg = new();
+        }
+
+        private void FindNext()
+        {
+            DataRow row = _cardTable.Table.Rows[_cardTable.SelectedRow];
+            Scryfall.Card selectedCard = (Scryfall.Card)row["Name"];
+            string selectedName = selectedCard.Name;
+
+            // Starting after the current row, find the next one with the same Name
+            int index = _cardTable.SelectedRow + 1;
+            while (true) // Loop until a card is found, wrap back around if needed, stops when it finds the same card again
+            {
+                DataRow nextRow = _cardTable.Table.Rows[index];
+                Scryfall.Card nextCard = (Scryfall.Card)nextRow["Name"];
+                if (nextCard.Name.Equals(selectedName))
+                {
+                    _cardTable.SelectedRow = index;
+                    _cardTable.EnsureSelectedCellIsVisible();
+                    UpdateCardFrame(nextCard);
+                    return;
+                }
+
+                // Advance to the next row, wrap around if needed
+                index++;
+                if (index >= _cardTable.Table.Rows.Count)
+                    index = 0;
+            }
         }
 
         private void FindCard()
