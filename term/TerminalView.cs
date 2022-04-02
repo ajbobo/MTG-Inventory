@@ -40,10 +40,10 @@ namespace MTG_CLI
             });
 
             _statusBar = new(new StatusItem[]{
-                new StatusItem(Key.F, "Filters (~Shift-F~)", ChooseFilters ),
-                new StatusItem(Key.S, "Choose Set (~Shift-S~)", ChooseSet ),
-                new StatusItem(Key.G, "Goto Card (~Shift-G~)", FindCard ),
-                new StatusItem(Key.N, "Find Next (~Shift-N~)", FindNext ),
+                // new StatusItem(Key.I, "Filters (~Shift-F~)", ChooseFilters ),
+                new StatusItem(Key.S | Key.CtrlMask, "~Ctrl-S~ Choose Set", ChooseSet ),
+                new StatusItem(Key.F | Key.CtrlMask, "~Ctrl-F~ Find Card", FindCard ),
+                new StatusItem(Key.N | Key.CtrlMask, "~Ctrl-N~ Find Next", FindNext ),
             });
 
             _curSetFrame = new() { X = 0, Y = 0, Width = Dim.Percent(75), Height = Dim.Fill() };
