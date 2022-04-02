@@ -105,14 +105,12 @@ namespace MTG_CLI
             _curSetFrame.RemoveAll();
 
             DataTable table = new();
-            table.Columns.Add(new DataColumn("#"));
-            table.Columns.Add(new DataColumn("Cnt"));
-            table.Columns.Add(new DataColumn("Rarity"));
-            table.Columns.Add(new DataColumn("Name") { DataType = typeof(Scryfall.Card) }); // Store the actual card reference here, so it's easy to find later
-            table.Columns.Add(new DataColumn("Color"));
-            table.Columns.Add(new DataColumn("Cost"));
-
-            table.PrimaryKey = new DataColumn[]{ table.Columns?["#"] ?? new() };
+            table.PrimaryKey = new[] { table.Columns.Add("#") };
+            table.Columns.Add("Cnt");
+            table.Columns.Add("Rarity");
+            table.Columns.Add("Name", typeof(Scryfall.Card)); // Store the actual card reference here, so it's easy to find later
+            table.Columns.Add("Color");
+            table.Columns.Add("Cost");
 
             foreach (Scryfall.Card card in cardList)
             {
