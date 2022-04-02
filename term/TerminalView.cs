@@ -124,7 +124,7 @@ namespace MTG_CLI
             _cardTable.CellActivated += (args) =>
             {
                 DataTable table = args.Table;
-                var dlg = new EditCardDialog(_inventory);
+                EditCardDialog dlg = new(_inventory);
                 dlg.DataChanged += () => {
                     MessageBox.Query("Dirty Data", "Database updates here", "OK");
                     UpdateCardTableRow(); 
