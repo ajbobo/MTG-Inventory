@@ -4,6 +4,8 @@ namespace MTG_CLI
 {
     abstract class RefreshableDialog
     {
+        static int cnt = 0;
+
         protected void ClearTmpViews(Dialog dlg)
         {
             if (dlg.Visible)
@@ -20,6 +22,13 @@ namespace MTG_CLI
                     dlg.Subviews[0].Remove(view);
                 dlg.SetNeedsDisplay();
             }
+        }
+
+        protected T tmpView<T>(T view) where T : View
+        {
+            view.Id = "tmp" + cnt;
+            cnt++;
+            return view;
         }
     }
 
@@ -80,23 +89,18 @@ namespace MTG_CLI
             {
                 CardTypeCount ctc = _ctcList?[x] ?? new();
 
-                Label ctcName = new(ctc.ToString()) { X = 0, Y = x, Width = 25, Height = 1 };
-                ctcName.Id = "tmpName" + x;
+                Label ctcName = tmpView<Label>(new(ctc.ToString()) { X = 0, Y = x, Width = 25, Height = 1 });
 
-                Button addOne = new("+1") { X = Pos.Right(ctcName) + 1, Y = x };
-                addOne.Id = "tmpAdd" + x;
+                Button addOne = tmpView<Button>(new("+1") { X = Pos.Right(ctcName) + 1, Y = x });
                 addOne.Clicked += () => { ctc.AdjustCount(1); UpdateInventory(_selectedCard, ctc); ctcName.Text = ctc.ToString(); };
 
-                Button subOne = new("-1") { X = Pos.Right(addOne) + 1, Y = x };
-                subOne.Id = "tmpSub" + x;
+                Button subOne = tmpView<Button>(new("-1") { X = Pos.Right(addOne) + 1, Y = x });
                 subOne.Clicked += () => { ctc.AdjustCount(-1); UpdateInventory(_selectedCard, ctc); ctcName.Text = ctc.ToString(); };
 
-                Button setFour = new("=4") { X = Pos.Right(subOne) + 1, Y = x };
-                setFour.Id = "tmpFour" + x;
+                Button setFour = tmpView<Button>(new("=4") { X = Pos.Right(subOne) + 1, Y = x });
                 setFour.Clicked += () => { ctc.Count = 4; UpdateInventory(_selectedCard, ctc); ctcName.Text = ctc.ToString(); };
 
-                Button delete = new("X") { X = Pos.Right(setFour) + 1, Y = x };
-                delete.Id = "tmpDel" + x;
+                Button delete = tmpView<Button>(new("X") { X = Pos.Right(setFour) + 1, Y = x });
                 delete.Clicked += () => { MessageBox.Query("Delete", "Not implemented yet", "OK"); };
 
                 editDialog.Add(ctcName, addOne, subOne, setFour, delete);
@@ -104,8 +108,7 @@ namespace MTG_CLI
                     addOne.SetFocus();
             }
 
-            Button newCTC = new("New Card Type") { X = Pos.Center(), Y = (_ctcList?.Count ?? 0) };
-            newCTC.Id = "tmpNew";
+            Button newCTC = tmpView<Button>(new("New Card Type") { X = Pos.Center(), Y = (_ctcList?.Count ?? 0) });
             newCTC.Clicked += () =>
             {
                 EditCTCDialog ctcDialog = new();
@@ -154,9 +157,8 @@ namespace MTG_CLI
 
             for (int x = 0; x < _attrList.Count; x++)
             {
-                TextField txt = new() { X = 0, Y = x, Width = 15 };
+                TextField txt = tmpView<TextField>(new() { X = 0, Y = x, Width = 15 });
                 txt.Data = x;
-                txt.Id = "tmp" + x.ToString();
                 txt.Text = _attrList[x];
                 txt.TextChanged += (str) =>
                 {
@@ -166,16 +168,14 @@ namespace MTG_CLI
                 ctcDialog.Add(txt);
             }
 
-            Button add = new("Add") { X = 0, Y = _attrList.Count };
-            add.Id = "tmpAdd";
+            Button add = tmpView<Button>(new("Add") { X = 0, Y = _attrList.Count });
             add.Clicked += () =>
             {
                 _attrList.Add(_attrList.Count < ATTRS.Length ? ATTRS[_attrList.Count] : "");
                 RefreshDialog(ctcDialog);
             };
 
-            Button sub = new("Sub") { X = Pos.Right(add), Y = _attrList.Count };
-            sub.Id = "tmpSub";
+            Button sub = tmpView<Button>(new("Sub") { X = Pos.Right(add), Y = _attrList.Count });
             sub.Clicked += () =>
             {
                 if (_attrList.Count > 0)
