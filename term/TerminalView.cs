@@ -25,6 +25,8 @@ namespace MTG_CLI
             Application.Init();
 
             _mainWindow = new("Magic: The Gathering -- Collection Inventory") { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
+            Label lbl = new("Press Shift-S to choose a Set") { X = Pos.Center(), Y = Pos.Center() };
+            _mainWindow.Add(lbl);
 
             _menu = new(new MenuBarItem[] {
                 new MenuBarItem("_File", new MenuItem[] {
@@ -59,7 +61,7 @@ namespace MTG_CLI
 
         private void ChooseSet()
         {
-            Dialog selectSetDlg = new("Select a Set");
+            Dialog selectSetDlg = new("Select a Set") { Width = 45 };
 
             ListView setListView = new(SetList ?? new List<Scryfall.Set>()) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             setListView.OpenSelectedItem += (args) =>
