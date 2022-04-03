@@ -8,12 +8,14 @@ namespace MTG_CLI
         private Window _mainWindow;
         private MenuBar _menu;
         private StatusBar _statusBar;
+        private StatusItem _autoStatus;
         private FrameView _curSetFrame;
         private TableView _cardTable;
         private FrameView _curCardFrame;
         private FindCardDialog _findCardDlg;
 
         private Inventory _inventory;
+        private bool _autoFind = true;
 
         public List<Scryfall.Set> SetList { get; set; } = new();
 
@@ -26,7 +28,7 @@ namespace MTG_CLI
             Application.Init();
 
             _mainWindow = new("Magic: The Gathering -- Collection Inventory") { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
-            Label lbl = new("Press Shift-S to choose a Set") { X = Pos.Center(), Y = Pos.Center() };
+            Label lbl = new("Press Ctrl-S to choose a Set") { X = Pos.Center(), Y = Pos.Center() };
             _mainWindow.Add(lbl);
 
             _menu = new(new MenuBarItem[] {
@@ -39,7 +41,10 @@ namespace MTG_CLI
                 }),
             });
 
+            _autoStatus = new(Key.A | Key.CtrlMask, "~Ctrl-A~ Auto On", ToggleAutoAdvance);
+
             _statusBar = new(new StatusItem[]{
+                _autoStatus,
                 // new StatusItem(Key.I, "Filters (~Shift-F~)", ChooseFilters ),
                 new StatusItem(Key.S | Key.CtrlMask, "~Ctrl-S~ Choose Set", ChooseSet ),
                 new StatusItem(Key.F | Key.CtrlMask, "~Ctrl-F~ Find Card", FindCard ),
@@ -52,8 +57,18 @@ namespace MTG_CLI
             _findCardDlg = new();
         }
 
+        private void ToggleAutoAdvance()
+        {
+            _autoFind = !_autoFind;
+            _autoStatus.Title = string.Format("~Ctrl-A~ Auto {0}", (_autoFind ? "On" : "Off"));
+            _statusBar.SetNeedsDisplay();
+        }
+
         private void FindNext()
         {
+            if (_cardTable == null || _cardTable.Table == null)
+                return;
+
             DataRow row = _cardTable.Table.Rows[_cardTable.SelectedRow];
             Scryfall.Card selectedCard = (Scryfall.Card)row["Name"];
             string selectedName = selectedCard.Name;
@@ -154,6 +169,7 @@ namespace MTG_CLI
 
             _cardTable = new(table) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             _cardTable.FullRowSelect = true;
+            _cardTable.MultiSelect = false;
             _cardTable.Style.AlwaysShowHeaders = true;
             _cardTable.Style.ExpandLastColumn = false;
             _cardTable.Style.ColumnStyles.Add(table.Columns["#"], new() { MaxWidth = 5, MinWidth = 5 });
@@ -173,8 +189,19 @@ namespace MTG_CLI
                 {
                     MessageBox.Query("Dirty Data", "Database updates here", "OK");
                     UpdateCardTableRow();
+                    if (_autoFind)
+                        FindCard();
                 };
                 dlg.EditCard((Scryfall.Card)table.Rows[args.Row]["Name"]);
+            };
+            _cardTable.KeyDown += (args) =>
+            {
+                if (args.KeyEvent.Key == (Key.A | Key.CtrlMask))
+                {
+                    // I can't find another way to keep the TableView from treating Ctrl-A as Select All
+                    ToggleAutoAdvance();
+                    args.Handled = true;
+                }
             };
 
             UpdateCardFrame(cardList[0]);
