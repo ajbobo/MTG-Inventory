@@ -9,8 +9,8 @@ namespace MTG_CLI
     [FirestoreData]
     public class CardTypeCount : IComparable<CardTypeCount>
     {
-        public int Count { get; set; } = 0;
-        public List<string> Attrs { get; set; } = new();
+        [FirestoreProperty] public int Count { get; set; } = 0;
+        [FirestoreProperty] public List<string> Attrs { get; set; } = new();
 
         public CardTypeCount()
         {
