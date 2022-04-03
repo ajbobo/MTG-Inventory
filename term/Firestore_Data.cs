@@ -75,6 +75,7 @@ namespace MTG_CLI
         [FirestoreProperty] public string SetCode { get; set; } = "unk";
         [FirestoreProperty] public string Set { get; set; } = "unk";
         [FirestoreProperty] public string CollectorNumber { get; set; } = "0";
+        public string UUID { get; set; } = "";
 
         public MTG_Card()
         {

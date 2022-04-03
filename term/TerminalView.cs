@@ -185,9 +185,9 @@ namespace MTG_CLI
             {
                 DataTable table = args.Table;
                 EditCardDialog dlg = new(_inventory);
-                dlg.DataChanged += () =>
+                dlg.DataChanged += async (card) =>
                 {
-                    MessageBox.Query("Dirty Data", "Database updates here", "OK");
+                    await _inventory.WriteToFirebase(card);
                     UpdateCardTableRow();
                     if (_autoFind)
                         FindCard();

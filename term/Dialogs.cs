@@ -34,7 +34,7 @@ namespace MTG_CLI
 
     class EditCardDialog : RefreshableDialog
     {
-        public event Action? DataChanged;
+        public event Action<MTG_Card>? DataChanged;
 
         private Inventory _inventory;
         private bool _isDirty;
@@ -71,7 +71,9 @@ namespace MTG_CLI
                 if (_isDirty)
                 {
                     _isDirty = false;
-                    DataChanged?.Invoke();
+                    MTG_Card? card = _inventory.GetCard(_selectedCard);
+                    if (card != null)
+                        DataChanged?.Invoke(card);
                 }
             };
 

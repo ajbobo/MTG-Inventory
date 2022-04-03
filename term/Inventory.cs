@@ -24,6 +24,7 @@ namespace MTG_CLI
             foreach (DocumentSnapshot doc in snapshot)
             {
                 MTG_Card curCard = doc.ConvertTo<MTG_Card>();
+                curCard.UUID = doc.Id;
                 AddCardToInventory(curCard);
             }
         }
@@ -53,13 +54,14 @@ namespace MTG_CLI
         public void AddCard(Scryfall.Card curCard, CardTypeCount ctc)
         {
             string setCode = curCard.SetCode;
-            
+
             if (!_inventory.ContainsKey(setCode))
                 _inventory.Add(setCode, new());
             else if (_inventory[setCode].ContainsKey(curCard.CollectorNumber)) // The card is in inventory already - no need to add it
                 return;
 
-            MTG_Card newCard = new() {
+            MTG_Card newCard = new()
+            {
                 Name = curCard.Name,
                 CollectorNumber = curCard.CollectorNumber,
                 SetCode = setCode,
@@ -90,6 +92,20 @@ namespace MTG_CLI
         public string GetCardCountDisplay(MTG_Card? curCard)
         {
             return String.Format("{0}{1}{2}", curCard?.GetTotalCount() ?? 0, (curCard?.HasAttr("foil") ?? false ? "✶" : ""), (curCard?.HasOtherAttr("foil") ?? false ? "Ω" : ""));
+        }
+
+        async public Task WriteToFirebase(MTG_Card card)
+        {
+            CollectionReference collection = _db.Collection("user_inventory");
+            if (card.UUID.Length > 0)
+            {
+                await collection.Document(card.UUID).SetAsync(card);
+            }
+            else
+            {
+                DocumentReference doc = await collection.AddAsync(card);
+                card.UUID = doc.Id;
+            }
         }
     }
 }
