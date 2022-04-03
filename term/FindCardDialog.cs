@@ -39,7 +39,7 @@ namespace MTG_CLI
             cancel.Clicked += () => Application.RequestStop();
 
             Dialog dlg = new("Find Card by Name", ok, cancel) { Width = 50, Height = 6 };
-            dlg.Closed += (topLevel) => 
+            dlg.Closed += (topLevel) =>
             {
                 if (_cardSelected)
                     OnCardSelected();
@@ -47,9 +47,22 @@ namespace MTG_CLI
             };
 
             Label lbl = new("Card Name: ") { X = 0, Y = 0 };
+            Label predictedText = new() { X = 11, Y = 0 };
             TextValidateField editName = new(_validator) { X = Pos.Right(lbl), Y = Pos.Y(lbl), Width = Dim.Fill() };
-            editName.KeyPress += (args) =>
+            predictedText.ColorScheme = new()
             {
+                Normal = new Terminal.Gui.Attribute(Color.BrightCyan, Color.DarkGray)
+            };
+            editName.KeyUp += (args) =>
+            {
+                // This updates a label with the predicted (but untyped) text in a different color
+                predictedText.Clear();
+                string fullText = _validator.DisplayText?.ToString() ?? "";
+                string typed = _validator.Text?.ToString() ?? "";
+                predictedText.Text = fullText.Substring(typed.Length);
+                predictedText.X = 11 + typed.Length;
+                editName.SetNeedsDisplay();
+
                 if (args.KeyEvent.Key == Key.Enter)
                 {
                     args.Handled = true;
@@ -58,7 +71,7 @@ namespace MTG_CLI
                 }
             };
 
-            dlg.Add(lbl, editName);
+            dlg.Add(lbl, editName, predictedText);
             editName.SetFocus();
 
             Application.Run(dlg);
@@ -109,7 +122,7 @@ namespace MTG_CLI
 
         public ustring Text
         {
-            get => FindClosestWord();
+            get => _typed.ToString();
             set => InsertWord(value.ToString());
         }
 

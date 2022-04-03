@@ -87,8 +87,8 @@ namespace MTG_CLI
             await GetSetData();
 
             Console.WriteLine("Reading Inventory data");
-            await _inventory.ReadFromFirebase();
-            // _inventory.ReadFromJson();
+            // await _inventory.ReadFromFirebase();
+            _inventory.ReadFromJson();
 
             StartTerminalView();
         }
