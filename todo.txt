@@ -1,22 +1,37 @@
-Should I change EditCTC into a React object instead of a group of functions?
-
-Add filters for Foil, Prerelease, etc.
-
-Add filters for card type
-
-Include column for card type
-
-Card panel doesn't scroll when 2 sides are shown and they overflow the bottom of the window
-
-Add a panel of set information
-    Number of cards in the set
-    Cards collected
-    Percentage collected
-    Adjust values based on current filters
-
+--- General ---
 Can I update the database to have fewer documents?
     Would that reduce the number of reads/writes against the quota?
     Maybe a document for each set, which has an array of cards
 
 collector_number from Deckbox and from Scryfall don't match for old sets
     I fixed this in my spreadsheet, but I'll have to do something about it here, too
+
+
+--- Term ---
+Can I change the colors in the TextValidateField to highlight what has been typed vs. predicted?
+Add panel with set information (see Web UI notes)
+Add filters:
+    Color
+    Rarity
+    Type
+    Count (=0, 1+, <4, 4+)
+    CTC attributes (Foil, Prerelease, etc)
+    Name
+Add WriteToJson option
+Can I use a local Json file as a cache so I don't have to read from Firebase too often?
+Create Docker image where it can run?
+    Can I host that image on Heroku, and log into it via SSH (or some other way)?
+
+
+--- Web UI ---
+Should I change EditCTC into a React object instead of a group of functions?
+Add filters for Foil, Prerelease, etc.
+Add filters for card type
+Include column for card type
+Card panel doesn't scroll when 2 sides are shown and they overflow the bottom of the window
+Add a panel of set information
+    Number of cards in the set
+    Cards collected
+    Percentage collected
+    Adjust values based on current filters
+
