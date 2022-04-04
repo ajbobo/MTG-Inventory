@@ -188,6 +188,7 @@ namespace MTG_CLI
                 dlg.DataChanged += async (card) =>
                 {
                     await _inventory.WriteToFirebase(card);
+                    _inventory.WriteToJsonBackup();
                     UpdateCardTableRow();
                     if (_autoFind)
                         FindCard();
@@ -274,6 +275,10 @@ namespace MTG_CLI
         public void Start()
         {
             Application.Top.Add(_menu, _mainWindow, _statusBar);
+            Application.Top.Closing += (args) =>
+            {
+                _inventory.WriteToJsonBackup();
+            };
             Application.Run();
         }
     }

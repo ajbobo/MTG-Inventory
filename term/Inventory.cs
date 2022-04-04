@@ -1,4 +1,3 @@
-using System.Text;
 using Google.Cloud.Firestore;
 using Newtonsoft.Json;
 
@@ -6,6 +5,9 @@ namespace MTG_CLI
 {
     public class Inventory
     {
+        private const string CACHE_FILE = "inventory_cache.json";
+        private readonly TimeSpan CACHE_TIMEOUT = new(0, 15, 0); // 15 minutes
+
         private FirestoreDb _db;
 
         // Inventory structure: _inventory[SetCode][CardNum] = Card
@@ -14,6 +16,26 @@ namespace MTG_CLI
         public Inventory()
         {
             _db = FirestoreDb.Create("mtg-inventory-9d4ca");
+        }
+
+        public async Task ReadData()
+        {
+            // Check the cache, if it is too old, read from Firebase
+            bool readCache = false;
+            if (File.Exists(CACHE_FILE))
+            {
+                DateTime lastCacheWrite = File.GetLastWriteTime(CACHE_FILE);
+                TimeSpan diff = DateTime.Now - lastCacheWrite;
+                Console.WriteLine("Cache Age: {0}", diff);
+                if (diff < CACHE_TIMEOUT)
+                    readCache = true;
+                Console.WriteLine("Reading from cache: {0}", readCache);
+            }
+
+            if (readCache)
+                ReadFromJsonCache();
+            else
+                await ReadFromFirebase();
         }
 
         public async Task ReadFromFirebase()
@@ -29,16 +51,22 @@ namespace MTG_CLI
             }
         }
 
-        public void ReadFromJson()
+        public void ReadFromJsonCache()
         {
             Console.WriteLine("Local Json data");
-            using (StreamReader reader = new StreamReader("C:\\Dev\\Misc\\MTG-Inventory\\web-ui\\src\\data\\hard_coded.js"))
+            using (StreamReader reader = new StreamReader(CACHE_FILE))
             {
                 string json = reader.ReadToEnd();
-                List<MTG_Card> theList = JsonConvert.DeserializeObject<List<MTG_Card>>(json) ?? new();
-                foreach (MTG_Card curCard in theList)
-                    AddCardToInventory(curCard);
+                _inventory = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, MTG_Card>>>(json) ?? new();
             }
+        }
+
+        public void WriteToJsonBackup()
+        {
+            JsonSerializerSettings settings = new();
+            settings.Formatting = Formatting.Indented;
+
+            File.WriteAllText("inventory_cache.json", JsonConvert.SerializeObject(_inventory, settings));
         }
 
         private void AddCardToInventory(MTG_Card curCard)
