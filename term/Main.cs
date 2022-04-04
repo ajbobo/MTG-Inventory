@@ -25,6 +25,7 @@ namespace MTG_CLI
                         curSet.Set_Type == Scryfall.Set.SetType.EXPANSION ||
                         curSet.Set_Type == Scryfall.Set.SetType.MASTERPIECE ||
                         curSet.Set_Type == Scryfall.Set.SetType.MASTERS ||
+                        curSet.Set_Type == Scryfall.Set.SetType.COMMANDER ||
                         // To limit the number of funny sets to ones that are (mostly) actually collectable, I needed to add some more filters
                         (curSet.Set_Type == Scryfall.Set.SetType.FUNNY && curSet.Block_Code.Length == 0 && curSet.Parent_Set_Code.Length == 0))
                         _setList.Add(curSet);
@@ -87,8 +88,8 @@ namespace MTG_CLI
             await GetSetData();
 
             Console.WriteLine("Reading Inventory data");
-            // await _inventory.ReadFromFirebase();
-            _inventory.ReadFromJson();
+            await _inventory.ReadFromFirebase();
+            // _inventory.ReadFromJson();
 
             StartTerminalView();
         }
