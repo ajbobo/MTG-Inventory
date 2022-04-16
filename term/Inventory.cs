@@ -53,6 +53,9 @@ namespace MTG_CLI
 
         public void ReadFromJsonCache()
         {
+            // The cache cuts down on reads from Firebase
+            // If you write to it while Firebase isn't available, it won't sync
+            //    That would be nice, though
             Console.WriteLine("Local Json data");
             using (StreamReader reader = new StreamReader(CACHE_FILE))
             {

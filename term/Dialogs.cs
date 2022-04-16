@@ -65,7 +65,7 @@ namespace MTG_CLI
             ok.Clicked += () => Application.RequestStop();
 
             Dialog dlg = new(string.Format("Edit - {0}", selectedCard.Name), ok) { Width = 55, Height = _ctcList.Count + 5 };
-            RefreshDialog(dlg);
+            RefreshDialog(dlg, ok);
             dlg.Closed += (args) =>
             {
                 if (_isDirty)
@@ -80,7 +80,7 @@ namespace MTG_CLI
             Application.Run(dlg);
         }
 
-        protected void RefreshDialog(Dialog editDialog)
+        protected void RefreshDialog(Dialog editDialog, Button ok)
         {
             if (_selectedCard == null || _ctcList == null)
                 return;
@@ -94,13 +94,13 @@ namespace MTG_CLI
                 Label ctcName = tmpView<Label>(new(ctc.ToString()) { X = 0, Y = x, Width = 25, Height = 1 });
 
                 Button addOne = tmpView<Button>(new("+1") { X = Pos.Right(ctcName) + 1, Y = x });
-                addOne.Clicked += () => { ctc.AdjustCount(1); UpdateInventory(_selectedCard, ctc); ctcName.Text = ctc.ToString(); };
+                addOne.Clicked += () => { ctc.AdjustCount(1); UpdateInventory(_selectedCard, ctc); ctcName.Text = ctc.ToString(); ok.SetFocus(); };
 
                 Button subOne = tmpView<Button>(new("-1") { X = Pos.Right(addOne) + 1, Y = x });
-                subOne.Clicked += () => { ctc.AdjustCount(-1); UpdateInventory(_selectedCard, ctc); ctcName.Text = ctc.ToString(); };
+                subOne.Clicked += () => { ctc.AdjustCount(-1); UpdateInventory(_selectedCard, ctc); ctcName.Text = ctc.ToString(); ok.SetFocus(); };
 
                 Button setFour = tmpView<Button>(new("=4") { X = Pos.Right(subOne) + 1, Y = x });
-                setFour.Clicked += () => { ctc.Count = 4; UpdateInventory(_selectedCard, ctc); ctcName.Text = ctc.ToString(); };
+                setFour.Clicked += () => { ctc.Count = 4; UpdateInventory(_selectedCard, ctc); ctcName.Text = ctc.ToString(); ok.SetFocus(); };
 
                 Button delete = tmpView<Button>(new("X") { X = Pos.Right(setFour) + 1, Y = x });
                 delete.Clicked += () => { MessageBox.Query("Delete", "Not implemented yet", "OK"); };
@@ -114,7 +114,7 @@ namespace MTG_CLI
             newCTC.Clicked += () =>
             {
                 EditCTCDialog ctcDialog = new();
-                ctcDialog.DataChanged += (ctc) => { _ctcList?.Add(ctc); UpdateInventory(_selectedCard, ctc); RefreshDialog(editDialog); };
+                ctcDialog.DataChanged += (ctc) => { _ctcList?.Add(ctc); UpdateInventory(_selectedCard, ctc); RefreshDialog(editDialog, ok); };
                 ctcDialog.NewCTC();
             };
 
