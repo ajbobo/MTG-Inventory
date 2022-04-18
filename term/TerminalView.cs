@@ -216,7 +216,8 @@ namespace MTG_CLI
                 }
             };
 
-            UpdateCardFrame((Scryfall.Card)table.Rows[0]["Name"]);
+            if (table.Rows.Count > 0)
+                UpdateCardFrame((Scryfall.Card)table.Rows[0]["Name"]);
         }
 
         private void UpdateCardTableRow()
