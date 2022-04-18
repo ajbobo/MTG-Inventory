@@ -18218,14 +18218,14 @@
     "19": {
       "Counts": [
         {
-          "Count": 4,
-          "Attrs": []
-        },
-        {
           "Count": 1,
           "Attrs": [
             "foil"
           ]
+        },
+        {
+          "Count": 4,
+          "Attrs": []
         }
       ],
       "Name": "Gideon's Reproach",
@@ -18379,14 +18379,14 @@
     "17": {
       "Counts": [
         {
-          "Count": 3,
-          "Attrs": []
-        },
-        {
           "Count": 1,
           "Attrs": [
             "foil"
           ]
+        },
+        {
+          "Count": 3,
+          "Attrs": []
         }
       ],
       "Name": "Excavation Elephant",
@@ -19987,14 +19987,14 @@
     "50": {
       "Counts": [
         {
-          "Count": 3,
-          "Attrs": []
-        },
-        {
           "Count": 1,
           "Attrs": [
             "foil"
           ]
+        },
+        {
+          "Count": 3,
+          "Attrs": []
         }
       ],
       "Name": "Deep Freeze",
@@ -29998,13 +29998,13 @@
       "Counts": [
         {
           "Count": 1,
-          "Attrs": []
-        },
-        {
-          "Count": 1,
           "Attrs": [
             "foil"
           ]
+        },
+        {
+          "Count": 1,
+          "Attrs": []
         }
       ],
       "Name": "Grafted Growth",
@@ -30426,13 +30426,13 @@
       "Counts": [
         {
           "Count": 1,
-          "Attrs": []
-        },
-        {
-          "Count": 1,
           "Attrs": [
             "foil"
           ]
+        },
+        {
+          "Count": 1,
+          "Attrs": []
         }
       ],
       "Name": "Armguard Familiar",
