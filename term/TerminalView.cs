@@ -14,7 +14,9 @@ namespace MTG_CLI
         private FrameView _curCardFrame;
         private FindCardDialog _findCardDlg;
 
+        private List<Scryfall.Card> _cardList;
         private Inventory _inventory;
+        private FilterSettings _filterSettings;
         private bool _autoFind = true;
 
         public List<Scryfall.Set> SetList { get; set; } = new();
@@ -24,6 +26,8 @@ namespace MTG_CLI
         public TerminalView(Inventory inventory)
         {
             _inventory = inventory;
+            _filterSettings = new(_inventory);
+            _cardList = new();
 
             Application.Init();
 
@@ -110,7 +114,9 @@ namespace MTG_CLI
 
         private void ChooseFilters()
         {
-            MessageBox.Query("Res", "You chose Filters", "ok");
+            EditFiltersDialog dlg = new(_filterSettings);
+            dlg.OnClose += () => { SetCardList(_cardList); };
+            dlg.EditFilters();
         }
 
         private void ChooseSet()
@@ -142,6 +148,8 @@ namespace MTG_CLI
 
         public void SetCardList(List<Scryfall.Card> cardList)
         {
+            _cardList = cardList;
+
             _findCardDlg = new(cardList);
             _findCardDlg.CardSelected += FoundCard;
 
@@ -157,6 +165,9 @@ namespace MTG_CLI
 
             foreach (Scryfall.Card card in cardList)
             {
+                if (!_filterSettings.MatchesFilter(card))
+                    continue;
+
                 DataRow row = table.NewRow();
                 row["#"] = card.CollectorNumber;
                 row["Cnt"] = _inventory.GetCardCountDisplay(card);
@@ -177,7 +188,7 @@ namespace MTG_CLI
             _cardTable.Style.ColumnStyles.Add(table.Columns["Rarity"], new() { MinWidth = 2, MaxWidth = 2 });
             _cardTable.Style.ColumnStyles.Add(table.Columns["Name"], new() { MinWidth = 15 });
             _cardTable.Style.ColumnStyles.Add(table.Columns["Color"], new() { MaxWidth = 5, MinWidth = 5 });
-            _cardTable.SelectedCellChanged += (args) => UpdateCardFrame(cardList[args.NewRow]);
+            _cardTable.SelectedCellChanged += (args) => UpdateCardFrame((Scryfall.Card)table.Rows[args.NewRow]["Name"]);
 
             _curSetFrame.Add(_cardTable);
             _cardTable.SetFocus();
@@ -205,7 +216,7 @@ namespace MTG_CLI
                 }
             };
 
-            UpdateCardFrame(cardList[0]);
+            UpdateCardFrame((Scryfall.Card)table.Rows[0]["Name"]);
         }
 
         private void UpdateCardTableRow()
