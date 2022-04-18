@@ -5,7 +5,7 @@ namespace MTG_CLI
 {
     class TerminalView
     {
-        private Window _mainWindow;
+        private Toplevel _top;
         private MenuBar _menu;
         private StatusBar _statusBar;
         private StatusItem _autoStatus;
@@ -13,6 +13,7 @@ namespace MTG_CLI
         private TableView _cardTable;
         private FrameView _curCardFrame;
         private FindCardDialog _findCardDlg;
+        private EditFiltersDialog _editFilters;
 
         private List<Scryfall.Card> _cardList;
         private Inventory _inventory;
@@ -31,16 +32,18 @@ namespace MTG_CLI
 
             Application.Init();
 
-            _mainWindow = new("Magic: The Gathering -- Collection Inventory") { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
+            _top = Application.Top;
+            _top.ColorScheme = Colors.ColorSchemes["Base"];
+
             Label lbl = new("Press Ctrl-S to choose a Set") { X = Pos.Center(), Y = Pos.Center() };
-            _mainWindow.Add(lbl);
+            _top.Add(lbl);
 
             _menu = new(new MenuBarItem[] {
                 new MenuBarItem("_File", new MenuItem[] {
                     new MenuItem("E_xit", "", () => Application.RequestStop())
                 }),
                 new MenuBarItem("_Options", new MenuItem[] {
-                    new MenuItem("Choose _Filters", "", ChooseFilters),
+                    new MenuItem("Choose F_ilters", "", ChooseFilters),
                     new MenuItem("Choose _Set", "", ChooseSet),
                 }),
             });
@@ -49,16 +52,18 @@ namespace MTG_CLI
 
             _statusBar = new(new StatusItem[]{
                 _autoStatus,
-                // new StatusItem(Key.I, "Filters (~Shift-F~)", ChooseFilters ),
                 new StatusItem(Key.S | Key.CtrlMask, "~Ctrl-S~ Choose Set", ChooseSet ),
                 new StatusItem(Key.F | Key.CtrlMask, "~Ctrl-F~ Find Card", FindCard ),
                 new StatusItem(Key.N | Key.CtrlMask, "~Ctrl-N~ Find Next", FindNext ),
+                new StatusItem(Key.I | Key.CtrlMask, "~Ctrl-I~ Edit Filters", ChooseFilters ),
             });
 
-            _curSetFrame = new() { X = 0, Y = 0, Width = Dim.Percent(75), Height = Dim.Fill() };
+            _curSetFrame = new() { X = 0, Y = 1, Width = Dim.Percent(75), Height = Dim.Fill() - 1 };
             _cardTable = new() { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
-            _curCardFrame = new() { X = Pos.Right(_curSetFrame), Y = Pos.Top(_curSetFrame) + 3, Width = Dim.Fill(), Height = Dim.Fill() };
+            _curCardFrame = new() { X = Pos.Right(_curSetFrame), Y = Pos.Top(_curSetFrame) + 3, Width = Dim.Fill(), Height = Dim.Fill() - 1 };
             _findCardDlg = new();
+            _editFilters = new(_filterSettings);
+            _editFilters.OnClose += () => { SetCardList(_cardList); };
         }
 
         private void ToggleAutoAdvance()
@@ -114,9 +119,7 @@ namespace MTG_CLI
 
         private void ChooseFilters()
         {
-            EditFiltersDialog dlg = new(_filterSettings);
-            dlg.OnClose += () => { SetCardList(_cardList); };
-            dlg.EditFilters();
+            _editFilters.EditFilters();
         }
 
         private void ChooseSet()
@@ -142,8 +145,8 @@ namespace MTG_CLI
             _curSetFrame.RemoveAll();
             _curSetFrame.Add(new Label("Loading cards...") { X = Pos.Center(), Y = 0 });
 
-            if (!_mainWindow.Subviews.Contains(_curSetFrame))
-                _mainWindow.Add(_curSetFrame);
+            if (!_top.Subviews.Contains(_curSetFrame))
+                _top.Add(_curSetFrame);
         }
 
         public void SetCardList(List<Scryfall.Card> cardList)
@@ -263,8 +266,8 @@ namespace MTG_CLI
 
                 _curCardFrame.Title = $"{card.CollectorNumber} - {card.Name}";
 
-                if (!_mainWindow.Subviews.Contains(_curCardFrame))
-                    _mainWindow.Add(_curCardFrame);
+                if (!_top.Subviews.Contains(_curCardFrame))
+                    _top.Add(_curCardFrame);
             }
         }
 
@@ -280,13 +283,13 @@ namespace MTG_CLI
                 _curCardFrame.Add(new Label(card.Counts[x].ToString()) { X = 0, Y = x, Width = Dim.Fill() });
             }
 
-            if (!_mainWindow.Subviews.Contains(_curCardFrame))
-                _mainWindow.Add(_curCardFrame);
+            if (!_top.Subviews.Contains(_curCardFrame))
+                _top.Add(_curCardFrame);
         }
 
         public void Start()
         {
-            Application.Top.Add(_menu, _mainWindow, _statusBar);
+            Application.Top.Add(_menu, _statusBar);
             Application.Top.Closing += (args) =>
             {
                 _inventory.WriteToJsonBackup();

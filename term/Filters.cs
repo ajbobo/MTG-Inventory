@@ -32,17 +32,10 @@ namespace MTG_CLI
         public FilterSettings(Inventory inventory)
         {
             _inventory = inventory;
-            _filterList.Add(Filter.CNT_ALL);
         }
 
         public void ToggleFilter(Filter filter, bool enable)
         {
-            if (!enable && _filterList.Contains(filter))
-                _filterList.Remove(filter);
-
-            if (enable && !_filterList.Contains(filter))
-                _filterList.Add(filter);
-
             if (filter == Filter.CNT_ALL) // Disable all Count filters
             {
                 ToggleFilter(Filter.CNT_ZERO, false);
@@ -51,15 +44,21 @@ namespace MTG_CLI
                 ToggleFilter(Filter.CNT_FOUR_PLUS, false);
                 return;
             }
+
+            if (!enable && _filterList.Contains(filter))
+                _filterList.Remove(filter);
+
+            if (enable && !_filterList.Contains(filter))
+                _filterList.Add(filter);
         }
 
         public bool MatchesFilter(Scryfall.Card card)
         {
-            // A card only has to match one of the selected filters
+            // TODO: This doesn't always work the right way when using Count filters -- Rebuild it based on the WebUI version
             List<string> colorIdentity = card.ColorIdentity;
             string rarity = card.Rarity.ToLower();
             int count = _inventory.getCardCount(card);
-            
+
             // First, are there any filters to apply?
             if (_filterList.Count == 0)
                 return true;
@@ -74,29 +73,31 @@ namespace MTG_CLI
             else if (HasFilter(Filter.CNT_LESS_THAN_FOUR) && count >= 4)
                 return false;
 
-            // Third, if the card does not match a selected filter, filter it out
-            if (HasFilter(Filter.WHITE) && !colorIdentity.Contains("W"))
-                return false;
-            else if (HasFilter(Filter.BLUE) && !colorIdentity.Contains("U"))
-                return false;
-            else if (HasFilter(Filter.BLACK) && !colorIdentity.Contains("B"))
-                return false;
-            else if (HasFilter(Filter.RED) && !colorIdentity.Contains("R"))
-                return false;
-            else if (HasFilter(Filter.GREEEN) && !colorIdentity.Contains("G"))
-                return false;
-            else if (HasFilter(Filter.COLORLESS) && colorIdentity.Count != 0)
-                return false;
-            else if (HasFilter(Filter.COMMON) && !rarity.Equals("common"))
-                return false;
-            else if (HasFilter(Filter.UNCOMMON) && !rarity.Equals("uncommon"))
-                return false;
-            else if (HasFilter(Filter.RARE) && !rarity.Equals("rare"))
-                return false;
-            else if (HasFilter(Filter.MYTHIC) && !rarity.Equals("mythic"))
-                return false;
-            
-            return true;
+            // Third, if the card matches any color filter, keep it
+            if (HasFilter(Filter.WHITE) && colorIdentity.Contains("W"))
+                return true;
+            else if (HasFilter(Filter.BLUE) && colorIdentity.Contains("U"))
+                return true;
+            else if (HasFilter(Filter.BLACK) && colorIdentity.Contains("B"))
+                return true;
+            else if (HasFilter(Filter.RED) && colorIdentity.Contains("R"))
+                return true;
+            else if (HasFilter(Filter.GREEEN) && colorIdentity.Contains("G"))
+                return true;
+            else if (HasFilter(Filter.COLORLESS) && colorIdentity.Count == 0)
+                return true;
+
+            // Fourth, if the card's rarity is selected, keep it
+            if (HasFilter(Filter.COMMON) && rarity.Equals("common"))
+                return true;
+            else if (HasFilter(Filter.UNCOMMON) && rarity.Equals("uncommon"))
+                return true;
+            else if (HasFilter(Filter.RARE) && rarity.Equals("rare"))
+                return true;
+            else if (HasFilter(Filter.MYTHIC) && rarity.Equals("mythic"))
+                return true;
+
+            return false;
         }
 
         public bool HasFilter(Filter filter)
@@ -116,34 +117,33 @@ namespace MTG_CLI
             this._filterSettings = filterSettings;
         }
 
+        private void AddFilterCheckBoxes(View frame, Filter[] filters)
+        {
+            List<View> views = new();
+            foreach (Filter filter in filters)
+            {
+                CheckBox checkBox = new(filter.ToString(), _filterSettings.HasFilter(filter)) { X = 0, Y = views.Count, Width = Dim.Fill() };
+                checkBox.Toggled += (enabled) => _filterSettings.ToggleFilter(filter, !enabled);
+                views.Add(checkBox);
+            }
+            frame.Add(views.ToArray());
+        }
+
         public void EditFilters()
         {
             Button ok = new("OK");
-            ok.Clicked += () => { Application.RequestStop(); };
+            ok.Clicked += () => Application.RequestStop(); 
 
             Dialog dlg = new("Edit Filters", ok);
 
             FrameView colorFrame = new("Color") { X = 0, Y = 0, Width = Dim.Percent(33.3f), Height = Dim.Fill() - 1 };
             Filter[] colors = { Filter.WHITE, Filter.BLUE, Filter.BLACK, Filter.RED, Filter.COLORLESS };
-            List<View> views = new();
-            foreach (Filter color in colors)
-            {
-                CheckBox checkBox = new(color.ToString(), _filterSettings.HasFilter(color)) { X = 0, Y = views.Count, Width = Dim.Fill() };
-                checkBox.Toggled += (enabled) => _filterSettings.ToggleFilter(color, !enabled);
-                views.Add(checkBox);
-            }
-            colorFrame.Add(views.ToArray());
+            AddFilterCheckBoxes(colorFrame, colors);
+
 
             FrameView rarityFrame = new("Rarity") { X = Pos.Right(colorFrame) + 1, Y = 0, Width = Dim.Percent(33.3f), Height = Dim.Fill() - 1 };
             Filter[] rarities = { Filter.COMMON, Filter.UNCOMMON, Filter.RARE, Filter.MYTHIC };
-            views.Clear();
-            foreach (Filter rarity in rarities)
-            {
-                CheckBox checkBox = new(rarity.ToString(), _filterSettings.HasFilter(rarity)) { X = 0, Y = views.Count, Width = Dim.Fill() };
-                checkBox.Toggled += (enabled) => _filterSettings.ToggleFilter(rarity, !enabled);
-                views.Add(checkBox);
-            }
-            rarityFrame.Add(views.ToArray());
+            AddFilterCheckBoxes(rarityFrame, rarities);
 
             FrameView countFrame = new("Count") { X = Pos.Right(rarityFrame) + 1, Y = 0, Width = Dim.Percent(33.3f), Height = Dim.Fill() - 1 };
             Filter[] filters = { Filter.CNT_ALL, Filter.CNT_ZERO, Filter.CNT_ONE_PLUS, Filter.CNT_LESS_THAN_FOUR, Filter.CNT_FOUR_PLUS };
