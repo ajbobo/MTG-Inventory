@@ -43,7 +43,7 @@ namespace MTG_CLI
                     new MenuItem("E_xit", "", () => Application.RequestStop())
                 }),
                 new MenuBarItem("_Options", new MenuItem[] {
-                    new MenuItem("Choose F_ilters", "", ChooseFilters),
+                    new MenuItem("_Edit Filters", "", ChooseFilters),
                     new MenuItem("Choose _Set", "", ChooseSet),
                 }),
             });
@@ -55,7 +55,7 @@ namespace MTG_CLI
                 new StatusItem(Key.S | Key.CtrlMask, "~Ctrl-S~ Choose Set", ChooseSet ),
                 new StatusItem(Key.F | Key.CtrlMask, "~Ctrl-F~ Find Card", FindCard ),
                 new StatusItem(Key.N | Key.CtrlMask, "~Ctrl-N~ Find Next", FindNext ),
-                new StatusItem(Key.I | Key.CtrlMask, "~Ctrl-I~ Edit Filters", ChooseFilters ),
+                new StatusItem(Key.E | Key.CtrlMask, "~Ctrl-E~ Edit Filters", ChooseFilters ),
             });
 
             _curSetFrame = new() { X = 0, Y = 1, Width = Dim.Percent(75), Height = Dim.Fill() - 1 };
