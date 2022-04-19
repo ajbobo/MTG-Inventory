@@ -88,7 +88,7 @@ namespace MTG_CLI
             await GetSetData();
 
             Console.WriteLine("Reading Inventory data");
-            await _inventory.ReadData();
+            // await _inventory.ReadData();
 
             StartTerminalView();
         }
