@@ -8,17 +8,11 @@ collector_number from Deckbox and from Scryfall don't match for old sets
 
 
 --- Term ---
-Can I change the colors in the TextValidateField to highlight what has been typed vs. predicted?
 Add panel with set information (see Web UI notes)
 Add filters:
-    Color
-    Rarity
     Type
-    Count (=0, 1+, <4, 4+)
     CTC attributes (Foil, Prerelease, etc)
     Name
-Add WriteToJson option
-Can I use a local Json file as a cache so I don't have to read from Firebase too often?
 Create Docker image where it can run?
     Can I host that image on Heroku, and log into it via SSH (or some other way)?
 
