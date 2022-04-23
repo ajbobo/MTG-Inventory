@@ -7,6 +7,7 @@ namespace MTG_CLI
     {
         private const string CACHE_FILE = "inventory_cache.json";
         private readonly TimeSpan CACHE_TIMEOUT = new(0, 15, 0); // 15 minutes
+        private readonly TimeSpan NEW_CACHE_TIME = new(0, 0, 10); // 10 seconds
 
         private FirestoreDb _db;
 
@@ -27,7 +28,7 @@ namespace MTG_CLI
                 DateTime lastCacheWrite = File.GetLastWriteTime(CACHE_FILE);
                 TimeSpan diff = DateTime.Now - lastCacheWrite;
                 Console.WriteLine("Cache Age: {0}", diff);
-                if (diff < CACHE_TIMEOUT)
+                if (diff > NEW_CACHE_TIME && diff < CACHE_TIMEOUT)
                     readCache = true;
                 Console.WriteLine("Reading from cache: {0}", readCache);
             }
