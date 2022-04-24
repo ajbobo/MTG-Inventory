@@ -15,6 +15,7 @@ Add filters:
     Name
 Create Docker image where it can run?
     Can I host that image on Heroku, and log into it via SSH (or some other way)?
+Add a view (column or cardPanel) that shows the Scryfall price
 
 
 --- Web UI ---
