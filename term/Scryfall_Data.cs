@@ -69,10 +69,19 @@ namespace Scryfall
         [JsonProperty("collector_number")] public string CollectorNumber { get; set; } = "0";
         [JsonProperty("set_name")] public string SetName {get; set;} = "";
         [JsonProperty("set")] public string SetCode { get; set; } = "";
+        [JsonProperty("type_line")] public string TypeLine { get; set; } = "";
+        [JsonProperty("oracle_text")] public string Text { get; set; } = "";
+        [JsonProperty("card_faces")] public List<CardFace> Faces { get; set; } = new();
 
         public override string ToString()
         {
             return Name;
         }
+    }
+
+    public class CardFace
+    {
+        [JsonProperty("name")] public string Name { get; set; } = "";
+        [JsonProperty("oracle_text")] public string Text { get; set; } = "";
     }
 }

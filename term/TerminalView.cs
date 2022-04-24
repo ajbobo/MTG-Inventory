@@ -1,5 +1,6 @@
 using System.Data;
 using Terminal.Gui;
+using Terminal.Gui.Views;
 
 namespace MTG_CLI
 {
@@ -258,20 +259,21 @@ namespace MTG_CLI
             MTG_Card? curCard = _inventory.GetCard(card);
             if (curCard != null)
             {
-                UpdateCardFrame(curCard);
+                UpdateCardFrame(curCard, card);
             }
             else
             {
                 _curCardFrame.RemoveAll();
 
                 _curCardFrame.Title = $"{card.CollectorNumber} - {card.Name}";
+                InsertCardDetails(card, _curCardFrame, 0);
 
                 if (!_top.Subviews.Contains(_curCardFrame))
                     _top.Add(_curCardFrame);
             }
         }
 
-        private void UpdateCardFrame(MTG_Card card)
+        private void UpdateCardFrame(MTG_Card card, Scryfall.Card fullCard)
         {
             _curCardFrame.RemoveAll();
 
@@ -282,9 +284,33 @@ namespace MTG_CLI
             {
                 _curCardFrame.Add(new Label(card.Counts[x].ToString()) { X = 0, Y = x, Width = Dim.Fill() });
             }
+            _curCardFrame.Add(new LineView() { X = 0, Y = card.Counts.Count, Width = Dim.Fill() });
+
+            InsertCardDetails(fullCard, _curCardFrame, card.Counts.Count + 1);
 
             if (!_top.Subviews.Contains(_curCardFrame))
                 _top.Add(_curCardFrame);
+        }
+
+        private void InsertCardDetails(Scryfall.Card card, FrameView frame, int StartingY)
+        {
+            frame.Add(new Label(card.TypeLine) { X = 0, Y = StartingY, Width = Dim.Fill() });
+            TextView text = new() { X = 0, Y = StartingY + 2, Width = Dim.Fill(), Height = Dim.Fill() };
+            text.ReadOnly = true;
+            text.WordWrap = true;
+            text.Multiline = true;
+            try
+            {
+                if (card.Text.Length > 0)
+                    text.Text = card.Text;
+                else if (card.Faces.Count > 0)
+                    text.Text = card.Faces[0].Text;
+            }
+            catch (Exception)
+            {
+                // An exception is thrown when the text is first set - ignore it
+            }
+            frame.Add(text);
         }
 
         public void Start()
