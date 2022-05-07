@@ -41,24 +41,28 @@ namespace MTG_CLI
             Label lbl = new("Press Ctrl-S to choose a Set") { X = Pos.Center(), Y = Pos.Center() };
             _top.Add(lbl);
 
+            Label cacheStatus = new($"Using Cache: {_inventory.UsingCache}") { X = Pos.Center(), Y = Pos.Bottom(lbl) + 2 };
+            _top.Add(cacheStatus);
+
             _menu = new(new MenuBarItem[] {
                 new MenuBarItem("_File", new MenuItem[] {
                     new MenuItem("E_xit", "", () => Application.RequestStop())
                 }),
                 new MenuBarItem("_Options", new MenuItem[] {
-                    new MenuItem("_Edit Filters", "", ChooseFilters),
                     new MenuItem("Choose _Set", "", ChooseSet),
+                    new MenuItem("_Edit Filters", "", ChooseFilters),
+                    new MenuItem("_Find a Card", "", FindCard),
                 }),
             });
 
             _autoStatus = new(Key.A | Key.CtrlMask, "~Ctrl-A~ Auto On", ToggleAutoAdvance);
 
             _statusBar = new(new StatusItem[]{
-                _autoStatus,
                 new StatusItem(Key.S | Key.CtrlMask, "~Ctrl-S~ Choose Set", ChooseSet ),
+                new StatusItem(Key.E | Key.CtrlMask, "~Ctrl-E~ Edit Filters", ChooseFilters ),
                 new StatusItem(Key.F | Key.CtrlMask, "~Ctrl-F~ Find Card", FindCard ),
                 new StatusItem(Key.N | Key.CtrlMask, "~Ctrl-N~ Find Next", FindNext ),
-                new StatusItem(Key.E | Key.CtrlMask, "~Ctrl-E~ Edit Filters", ChooseFilters ),
+                _autoStatus,
             });
 
             _curSetFrame = new() { X = 0, Y = 1, Width = Dim.Percent(75), Height = Dim.Fill() - 1 };
