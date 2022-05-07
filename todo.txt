@@ -8,7 +8,6 @@ collector_number from Deckbox and from Scryfall don't match for old sets
 
 
 --- Term ---
-Add panel with set information (see Web UI notes)
 Add filters:
     Type
     CTC attributes (Foil, Prerelease, etc)
@@ -16,6 +15,7 @@ Add filters:
 Create Docker image where it can run?
     Can I host that image on Heroku, and log into it via SSH (or some other way)?
 Add a view (column or cardPanel) that shows the Scryfall price
+Add a way to open the card image? (Probably in a separate app, but if I can imbed it, that would be cool)
 
 
 --- Web UI ---
