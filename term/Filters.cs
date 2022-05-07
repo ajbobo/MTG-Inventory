@@ -112,7 +112,7 @@ namespace MTG_CLI
             if (_countList.Count == 0)
                 return true;
 
-            int count = _inventory.getCardCount(card);
+            int count = _inventory.GetCardCount(card);
             if ((_countList.Contains(CountFilter.CNT_ZERO) && count == 0) ||
                 (_countList.Contains(CountFilter.CNT_ONE_PLUS) && count >= 1) ||
                 (_countList.Contains(CountFilter.CNT_LESS_THAN_FOUR) && count < 4) ||
@@ -153,7 +153,7 @@ namespace MTG_CLI
         {
             List<string> colorIdentity = card.ColorIdentity;
             string rarity = card.Rarity.ToLower();
-            int count = _inventory.getCardCount(card);
+            int count = _inventory.GetCardCount(card);
 
             if (!MatchesRarity(card))
                 return false;

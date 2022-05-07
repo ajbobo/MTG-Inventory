@@ -126,7 +126,7 @@ namespace MTG_CLI
             return String.Format("{0}{1}{2}", curCard?.GetTotalCount() ?? 0, (curCard?.HasAttr("foil") ?? false ? "✶" : ""), (curCard?.HasOtherAttr("foil") ?? false ? "Ω" : ""));
         }
 
-        public int getCardCount(Scryfall.Card card)
+        public int GetCardCount(Scryfall.Card card)
         {
             MTG_Card? curCard = GetCard(card);
             return getCardCount(curCard);

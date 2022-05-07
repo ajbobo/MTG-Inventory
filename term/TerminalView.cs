@@ -11,12 +11,14 @@ namespace MTG_CLI
         private StatusBar _statusBar;
         private StatusItem _autoStatus;
         private FrameView _curSetFrame;
+        private FrameView _curStatsFrame;
         private TableView _cardTable;
         private FrameView _curCardFrame;
         private FindCardDialog _findCardDlg;
         private EditFiltersDialog _editFilters;
 
         private List<Scryfall.Card> _cardList;
+        private int _collectedCount;
         private Inventory _inventory;
         private FilterSettings _filterSettings;
         private bool _autoFind = true;
@@ -60,8 +62,9 @@ namespace MTG_CLI
             });
 
             _curSetFrame = new() { X = 0, Y = 1, Width = Dim.Percent(75), Height = Dim.Fill() - 1 };
+            _curStatsFrame = new() { X = Pos.Right(_curSetFrame), Y = Pos.Top(_curSetFrame), Width = Dim.Fill(), Height = 5 };
+            _curCardFrame = new() { X = Pos.Right(_curSetFrame), Y = Pos.Bottom(_curStatsFrame), Width = Dim.Fill(), Height = Dim.Fill() - 1 };
             _cardTable = new() { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
-            _curCardFrame = new() { X = Pos.Right(_curSetFrame), Y = Pos.Top(_curSetFrame) + 3, Width = Dim.Fill(), Height = Dim.Fill() - 1 };
             _findCardDlg = new();
             _editFilters = new(_filterSettings);
             _editFilters.OnClose += () => { SetCardList(_cardList); };
@@ -153,6 +156,7 @@ namespace MTG_CLI
         public void SetCardList(List<Scryfall.Card> cardList)
         {
             _cardList = cardList;
+            _collectedCount = 0;
 
             _findCardDlg = new(cardList);
             _findCardDlg.CardSelected += FoundCard;
@@ -180,6 +184,9 @@ namespace MTG_CLI
                 row["Color"] = String.Join("", card.ColorIdentity?.ToArray() ?? new string[] { });
                 row["Cost"] = card.ManaCost;
                 table.Rows.Add(row);
+
+                if (_inventory.GetCardCount(card) > 0)
+                    _collectedCount++;
             }
 
             _cardTable = new(table) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
@@ -222,6 +229,23 @@ namespace MTG_CLI
 
             if (table.Rows.Count > 0)
                 UpdateCardFrame((Scryfall.Card)table.Rows[0]["Name"]);
+
+            UpdateStatsFrame();
+        }
+
+        private void UpdateStatsFrame()
+        {
+            _curStatsFrame.RemoveAll();
+
+            _curStatsFrame.Title = "Statistics";
+            int totalCards = _cardTable.Table.Rows.Count;
+            int percent = (int)((float)_collectedCount / totalCards * 100);
+            Label lblCount = new($"Card Count: {_collectedCount} / {totalCards}  {percent}%") { X = 0, Y = 0, Width = Dim.Fill(), Height = 1 };
+
+            _curStatsFrame.Add(lblCount);
+
+            if (!_top.Subviews.Contains(_curStatsFrame))
+                _top.Add(_curStatsFrame);
         }
 
         private void UpdateCardTableRow()
