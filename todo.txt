@@ -30,3 +30,7 @@ Add a panel of set information
     Percentage collected
     Adjust values based on current filters
 
+--- New Web UI ---
+Migrate from Bootstrap to TailwindCSS and HeadlessUI?
+    https://tailwindcss.com/
+    https://headlessui.dev/
