@@ -34,3 +34,9 @@ Add a panel of set information
 Migrate from Bootstrap to TailwindCSS and HeadlessUI?
     https://tailwindcss.com/
     https://headlessui.dev/
+
+--- V2.0 ---
+Can I create an API (hosted in Firebase) that does all the real work?
+    Firebase Functions requires a paid account, so I'd need to find another way. Heroku? Hosted web-app?
+    Then I could create a UI or commandline app that drives it
+    https://betterprogramming.pub/building-an-api-with-firebase-109041721f77

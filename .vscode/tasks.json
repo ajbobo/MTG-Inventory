@@ -2,6 +2,19 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "build testdb",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "${workspaceFolder}/TestDB/TestDB.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        },
+        {
             "label": "build term",
             "command": "dotnet",
             "type": "process",
@@ -22,7 +35,7 @@
                 "clean",
                 "${workspaceFolder}/term/term.csproj",
             ],
-            "problemMatcher":"$msCompile",
+            "problemMatcher": "$msCompile",
             "group": "none"
         },
         {
@@ -49,7 +62,9 @@
             "netCore": {
                 "appProject": "${workspaceFolder}/term/term.csproj"
             },
-            "dependsOn": ["docker build"],
+            "dependsOn": [
+                "docker build"
+            ],
             "group": "build"
         },
         {

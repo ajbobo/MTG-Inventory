@@ -2,6 +2,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "TestDB",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build testdb",
+            "program": "${workspaceFolder}/TestDB/bin/Debug/net6.0/TestDB.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/TestDB",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "env": {
+                "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\TestDB\\TestDB-service-account.json"
+            }
+        },
+        {
             "name": "Terminal UI",
             "type": "coreclr",
             "request": "launch",
@@ -23,7 +37,7 @@
             "cwd": "${workspaceFolder}/web-ui",
             "env": {
                 "PORT": "3005" // Set the port that Node will use (3000 is the default, but something is using it on my PC)
-            } 
+            }
         },
         {
             "name": "Upload-Inventory (console)",
