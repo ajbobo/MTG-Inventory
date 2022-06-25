@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using Google.Cloud.Firestore;
 using Newtonsoft.Json;
 
 namespace TestDB
@@ -30,7 +31,8 @@ namespace TestDB
         public async static Task<List<Inv_Set>> CreateInvData(OldData old)
         {
             List<Inv_Set> inv_SetList = new();
-            foreach (string curCode in old.Data.Keys)
+            //foreach (string curCode in old.Data.Keys)
+            string curCode = "xln";
             {
                 Console.WriteLine($"Getting Set: {curCode}");
 
@@ -48,25 +50,6 @@ namespace TestDB
             }
 
             return inv_SetList;
-        }
-
-        private static void CopyCardCounts(Inv_Set inv_set, OldData old)
-        {
-            Dictionary<string, MTG_Card> oldCards = old.Data[inv_set.Code];
-            foreach (Inv_Card card in inv_set.Cards)
-            {
-                if (oldCards.ContainsKey(card.CollectorNumber))
-                {
-                    MTG_Card oldCard = oldCards[card.CollectorNumber];
-                    card.Counts.Clear();
-                    foreach (CardTypeCount ctc in oldCard.Counts)
-                    {
-                        string attrs = ctc.GetAttrs();
-                        int count = ctc.Count;
-                        card.Counts.Add(new Inv_CardTypeCount() { Attrs = attrs, Count = count });
-                    }
-                }
-            }
         }
 
         public async static Task<Inv_Set> PopulateInvCards(Scryfall.Set curSet)
@@ -102,12 +85,61 @@ namespace TestDB
             return inv_set;
         }
 
-        public static void WriteInv(List<Inv_Set> inventory)
+        private static void CopyCardCounts(Inv_Set inv_set, OldData old)
+        {
+            Dictionary<string, MTG_Card> oldCards = old.Data[inv_set.Code];
+            foreach (Inv_Card card in inv_set.Cards)
+            {
+                if (oldCards.ContainsKey(card.CollectorNumber))
+                {
+                    MTG_Card oldCard = oldCards[card.CollectorNumber];
+                    card.Counts.Clear();
+                    foreach (CardTypeCount ctc in oldCard.Counts)
+                    {
+                        string attrs = ctc.GetAttrs();
+                        int count = ctc.Count;
+                        card.Counts.Add(new Inv_CardTypeCount() { Attrs = attrs, Count = count });
+                    }
+                }
+            }
+        }
+
+        public static void WriteInv_Json(List<Inv_Set> inventory)
         {
             JsonSerializerSettings settings = new();
             settings.Formatting = Formatting.Indented;
 
             File.WriteAllText("updated_inventory.json", JsonConvert.SerializeObject(inventory, settings));
+        }
+
+        public async static Task WriteInv_Firebase(List<Inv_Set> inventory)
+        {
+            Console.WriteLine("Writing to Firestore DB");
+            FirestoreDb db = FirestoreDb.Create("testdb-8448b");
+
+            int cnt = 0;
+            CollectionReference user = db.Collection("User_Inv");
+            //foreach (Inv_Set curSet in inventory)
+            Inv_Set curSet = inventory[0];
+            {
+                Console.WriteLine($"Writing set {curSet.Code}");
+                DocumentReference set = user.Document(curSet.Code.ToUpper());
+                await set.SetAsync(curSet);
+
+                CollectionReference cardList = set.Collection("Cards");
+                foreach (Inv_Card curCard in curSet.Cards)
+                {
+                    cnt++;
+
+                    if (cnt % 50 == 0)
+                        Console.WriteLine("{0} written", cnt);
+
+                    await cardList.Document(curCard.CollectorNumber).SetAsync(curCard);
+
+                    // foreach (Inv_CardTypeCount ctc in curCard.Counts)
+                        // await cardList.Document(curCard.CollectorNumber).Collection("Counts").Document().SetAsync(ctc);
+                }
+            }
         }
 
         public async static Task Main()
@@ -116,7 +148,15 @@ namespace TestDB
 
             List<Inv_Set> inv = await CreateInvData(old);
 
-            WriteInv(inv);
+            WriteInv_Json(inv);
+            try
+            {
+                await WriteInv_Firebase(inv);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
     }
 }

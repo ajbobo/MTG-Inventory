@@ -1,13 +1,17 @@
 using System;
+using Google.Cloud.Firestore;
 using Newtonsoft.Json;
 
 namespace TestDB
 {
+    [FirestoreData]
     public class Inv_Set
     {
-        [JsonProperty("name")] public string Name { get; set; } = "";
-        [JsonProperty("code")] public string Code { get; set; } = "";
+        [FirestoreProperty][JsonProperty("name")] public string Name { get; set; } = "";
+        [FirestoreProperty][JsonProperty("code")] public string Code { get; set; } = "";
         [JsonProperty("cards")] public List<Inv_Card> Cards { get; set; } = new();
+
+        public Inv_Set() { }
 
         public Inv_Set(Scryfall.Set set)
         {
@@ -16,17 +20,20 @@ namespace TestDB
         }
     }
 
+    [FirestoreData]
     public class Inv_Card
     {
-        [JsonProperty("color_identity")] public List<string> ColorIdentity { get; set; } = new();
-        [JsonProperty("mana_cost")] public string ManaCost { get; set; } = "";
-        [JsonProperty("name")] public string Name { get; set; } = "<unknown>";
-        [JsonProperty("rarity")] public string Rarity { get; set; } = "";
-        [JsonProperty("collector_number")] public string CollectorNumber { get; set; } = "0";
-        [JsonProperty("type_line")] public string TypeLine { get; set; } = "";
-        [JsonProperty("oracle_text")] public string Text { get; set; } = "";
-        [JsonProperty("card_faces")] public List<Inv_CardFace> Faces { get; set; } = new();
-        [JsonProperty("counts")] public List<Inv_CardTypeCount> Counts { get; set; } = new();
+        [FirestoreProperty][JsonProperty("color_identity")] public List<string> ColorIdentity { get; set; } = new();
+        [FirestoreProperty][JsonProperty("mana_cost")] public string ManaCost { get; set; } = "";
+        [FirestoreProperty][JsonProperty("name")] public string Name { get; set; } = "<unknown>";
+        [FirestoreProperty][JsonProperty("rarity")] public string Rarity { get; set; } = "";
+        [FirestoreProperty][JsonProperty("collector_number")] public string CollectorNumber { get; set; } = "0";
+        [FirestoreProperty][JsonProperty("type_line")] public string TypeLine { get; set; } = "";
+        [FirestoreProperty][JsonProperty("oracle_text")] public string Text { get; set; } = "";
+        [FirestoreProperty][JsonProperty("card_faces")] public List<Inv_CardFace> Faces { get; set; } = new();
+        [FirestoreProperty(ConverterType = typeof(CountsConverter))][JsonProperty("counts")] public List<Inv_CardTypeCount> Counts { get; set; } = new();
+
+        public Inv_Card() { }
 
         public Inv_Card(Scryfall.Card card)
         {
@@ -40,25 +47,58 @@ namespace TestDB
             this.Rarity = card.Rarity;
             this.TypeLine = card.TypeLine;
             this.Counts.Add(new());
+            this.Text = card.Text;
         }
     }
 
+    public class CountsConverter : IFirestoreConverter<List<Inv_CardTypeCount>>
+    {
+        public object ToFirestore(List<Inv_CardTypeCount> value)
+        {
+            List<Inv_CardTypeCount> list = new();
+
+            int total = 0;
+            foreach (Inv_CardTypeCount ctc in value)
+            {
+                total += ctc.Count;
+                list.Add(ctc.Clone());
+            }
+            list.Add(new Inv_CardTypeCount() { Attrs = "Total", Count = total });
+
+            return list;            
+        }
+
+        List<Inv_CardTypeCount> IFirestoreConverter<List<Inv_CardTypeCount>>.FromFirestore(object value)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    [FirestoreData]
     public class Inv_CardFace
     {
-        [JsonProperty("name")] public string Name { get; set; } = "";
-        [JsonProperty("oracle_text")] public string Text { get; set; } = "";
+        [FirestoreProperty][JsonProperty("name")] public string Name { get; set; } = "";
+        [FirestoreProperty][JsonProperty("oracle_text")] public string Text { get; set; } = "";
+
+        public Inv_CardFace() { }
 
         public Inv_CardFace(Scryfall.CardFace face)
         {
             this.Name = face.Name;
             this.Text = face.Text;
         }
-    } 
+    }
 
+    [FirestoreData]
     public class Inv_CardTypeCount
     {
-        [JsonProperty("count")] public int Count { get; set; } = 0;
-        [JsonProperty("attrs")] public string Attrs { get; set; } = "Standard";
+        [FirestoreProperty][JsonProperty("count")] public int Count { get; set; } = 0;
+        [FirestoreProperty][JsonProperty("attrs")] public string Attrs { get; set; } = "Standard";
+
+        public Inv_CardTypeCount Clone()
+        {
+            return new Inv_CardTypeCount() { Count = this.Count, Attrs = this.Attrs };
+        }
     }
 
 }
