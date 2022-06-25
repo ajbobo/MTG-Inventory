@@ -56006,7 +56006,7 @@
     "149": {
       "Counts": [
         {
-          "Count": 2,
+          "Count": 3,
           "Attrs": []
         },
         {
@@ -56050,6 +56050,19 @@
       "CollectorNumber": "142",
       "UUID": "3d3Ev6lTsHaPdHbjsgD5"
     },
+    "43": {
+      "Counts": [
+        {
+          "Count": 3,
+          "Attrs": []
+        }
+      ],
+      "Name": "Expendable Lackey",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "43",
+      "UUID": "5cz8gUY25aNf1IYAU3lK"
+    },
     "277": {
       "Counts": [
         {
@@ -56062,6 +56075,32 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "277",
       "UUID": "5qn3Y7pTJseEE2bNoRQw"
+    },
+    "50": {
+      "Counts": [
+        {
+          "Count": 2,
+          "Attrs": []
+        }
+      ],
+      "Name": "Obscura Initiate",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "50",
+      "UUID": "61osI2scOXaNtuZFns4v"
+    },
+    "224": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Spara's Adjudicators",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "224",
+      "UUID": "6XfaV2eMwSISXlgrgGeY"
     },
     "58": {
       "Counts": [
@@ -56076,11 +56115,30 @@
       "CollectorNumber": "58",
       "UUID": "6YBlU7D1K9BuC9YN0iXk"
     },
+    "326": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Queza, Augur of Agonies",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "326",
+      "UUID": "6YWU4AmolNhvUVpYZlJJ"
+    },
     "196": {
       "Counts": [
         {
           "Count": 1,
           "Attrs": []
+        },
+        {
+          "Count": 1,
+          "Attrs": [
+            "foil"
+          ]
         }
       ],
       "Name": "Lagrella, the Magpie",
@@ -56114,6 +56172,19 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "71",
       "UUID": "7nJMZEK3wY5wxJ2gwkYT"
+    },
+    "320": {
+      "Counts": [
+        {
+          "Count": 2,
+          "Attrs": []
+        }
+      ],
+      "Name": "Mr. Orfeo, the Boulder",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "320",
+      "UUID": "7szPhhW1CASaEBYFtKdw"
     },
     "245": {
       "Counts": [
@@ -56171,13 +56242,13 @@
       "Counts": [
         {
           "Count": 1,
-          "Attrs": []
-        },
-        {
-          "Count": 1,
           "Attrs": [
             "foil"
           ]
+        },
+        {
+          "Count": 1,
+          "Attrs": []
         }
       ],
       "Name": "Out of the Way",
@@ -56240,10 +56311,23 @@
       "CollectorNumber": "302",
       "UUID": "CaqqoagYKgNm9UJTdJAL"
     },
+    "207": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Obscura Ascendancy",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "207",
+      "UUID": "CtpWoE8OUaYGfyQxW76L"
+    },
     "85": {
       "Counts": [
         {
-          "Count": 3,
+          "Count": 4,
           "Attrs": []
         }
       ],
@@ -56318,10 +56402,36 @@
       "CollectorNumber": "266",
       "UUID": "FNyuwIjjnfCi6ARHt4bM"
     },
-    "177": {
+    "319": {
       "Counts": [
         {
           "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Masked Bandits",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "319",
+      "UUID": "Fo0cpcVMsbidgDBFc1zE"
+    },
+    "171": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Brokers Charm",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "171",
+      "UUID": "FpyzK4pFWTodc0ZPMbbm"
+    },
+    "177": {
+      "Counts": [
+        {
+          "Count": 2,
           "Attrs": []
         }
       ],
@@ -56373,7 +56483,7 @@
     "121": {
       "Counts": [
         {
-          "Count": 1,
+          "Count": 2,
           "Attrs": []
         }
       ],
@@ -56382,6 +56492,32 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "121",
       "UUID": "HRPt4Wd2BbklNySvpuXO"
+    },
+    "271": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Forest",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "271",
+      "UUID": "HUsov8Iah2mnwWP8NEtS"
+    },
+    "225": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Stimulus Package",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "225",
+      "UUID": "HdkBl6ImfGLk4GhnJ0BM"
     },
     "190": {
       "Counts": [
@@ -56435,6 +56571,19 @@
       "CollectorNumber": "268",
       "UUID": "IEDSIlzQYHWpqyBvMQzE"
     },
+    "258": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Tramway Station",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "258",
+      "UUID": "INNMZxOAU9oZGUP1Qg26"
+    },
     "165": {
       "Counts": [
         {
@@ -56478,14 +56627,14 @@
       "Counts": [
         {
           "Count": 1,
-          "Attrs": []
-        },
-        {
-          "Count": 1,
           "Attrs": [
             "foil",
             "prerelease"
           ]
+        },
+        {
+          "Count": 1,
+          "Attrs": []
         }
       ],
       "Name": "Unleash the Inferno",
@@ -56546,6 +56695,19 @@
       "CollectorNumber": "140",
       "UUID": "KgCiLOD92Y8TmoTPSIGF"
     },
+    "79": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Fake Your Own Death",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "79",
+      "UUID": "KyuSBx1OTnE1vuYQA1hz"
+    },
     "201": {
       "Counts": [
         {
@@ -56562,7 +56724,7 @@
     "256": {
       "Counts": [
         {
-          "Count": 1,
+          "Count": 2,
           "Attrs": []
         }
       ],
@@ -56611,6 +56773,38 @@
       "CollectorNumber": "46",
       "UUID": "LzuPHQ5hiXyIH0a90NNw"
     },
+    "143": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Elegant Entourage",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "143",
+      "UUID": "MD1b6ba3U8voBwesjHzc"
+    },
+    "265": {
+      "Counts": [
+        {
+          "Count": 2,
+          "Attrs": []
+        },
+        {
+          "Count": 1,
+          "Attrs": [
+            "foil"
+          ]
+        }
+      ],
+      "Name": "Island",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "265",
+      "UUID": "MDGmFNh5MwlTkumaje9g"
+    },
     "228": {
       "Counts": [
         {
@@ -56637,6 +56831,32 @@
       "CollectorNumber": "303",
       "UUID": "NNJ5kla50PXncTrK33ZM"
     },
+    "216": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Riveteers Ascendancy",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "216",
+      "UUID": "Nbk283mVLsxZlIkg1oBc"
+    },
+    "6": {
+      "Counts": [
+        {
+          "Count": 2,
+          "Attrs": []
+        }
+      ],
+      "Name": "Buy Your Silence",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "6",
+      "UUID": "NrBQWLXr4SO1YyQZeOZZ"
+    },
     "356": {
       "Counts": [
         {
@@ -56649,6 +56869,19 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "356",
       "UUID": "O1T8w3Dci1K0asWfn98v"
+    },
+    "269": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Mountain",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "269",
+      "UUID": "O1k0lBVExbteXGLrj1zW"
     },
     "20": {
       "Counts": [
@@ -56663,10 +56896,23 @@
       "CollectorNumber": "20",
       "UUID": "OT4kXikBapTOw7FOg73w"
     },
+    "13": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Gathering Throng",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "13",
+      "UUID": "OXwe1SQAkldk8klxzoRY"
+    },
     "36": {
       "Counts": [
         {
-          "Count": 4,
+          "Count": 3,
           "Attrs": []
         }
       ],
@@ -56698,7 +56944,7 @@
     "176": {
       "Counts": [
         {
-          "Count": 3,
+          "Count": 4,
           "Attrs": []
         }
       ],
@@ -56707,6 +56953,19 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "176",
       "UUID": "OoNeknV2zXUoiQjE0ffM"
+    },
+    "82": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Grisly Sigil",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "82",
+      "UUID": "OrfQ4V8YNNlNrKPViGD6"
     },
     "131": {
       "Counts": [
@@ -56721,10 +56980,36 @@
       "CollectorNumber": "131",
       "UUID": "Psfvx2TMg4YQt1HRNsFf"
     },
-    "109": {
+    "217": {
+      "Counts": [
+        {
+          "Count": 2,
+          "Attrs": []
+        }
+      ],
+      "Name": "Riveteers Charm",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "217",
+      "UUID": "QF7WNf0PtF7j9g8NHWF7"
+    },
+    "147": {
       "Counts": [
         {
           "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Freelance Muscle",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "147",
+      "UUID": "R75ll0G3Sh5Qmi2CwkOn"
+    },
+    "109": {
+      "Counts": [
+        {
+          "Count": 2,
           "Attrs": []
         }
       ],
@@ -56808,7 +57093,7 @@
     "242": {
       "Counts": [
         {
-          "Count": 3,
+          "Count": 4,
           "Attrs": []
         }
       ],
@@ -56817,6 +57102,19 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "242",
       "UUID": "TMldDEZdnFzc18a5KV7l"
+    },
+    "133": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Attended Socialite",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "133",
+      "UUID": "UBeDfPNfkjza8aO4rM23"
     },
     "54": {
       "Counts": [
@@ -56844,6 +57142,45 @@
       "CollectorNumber": "163",
       "UUID": "UGps4VpZ55kqljrcoyPP"
     },
+    "237": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Getaway Car",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "237",
+      "UUID": "UKDi3s61jDk14CxPopjN"
+    },
+    "161": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Venom Connoisseur",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "161",
+      "UUID": "VGO1qC7xxonZZxJfr5gF"
+    },
+    "235": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Cement Shoes",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "235",
+      "UUID": "WfXiqumLeNGjsJH3Vowq"
+    },
     "262": {
       "Counts": [
         {
@@ -56860,7 +57197,7 @@
     "98": {
       "Counts": [
         {
-          "Count": 3,
+          "Count": 4,
           "Attrs": []
         }
       ],
@@ -56873,7 +57210,7 @@
     "264": {
       "Counts": [
         {
-          "Count": 1,
+          "Count": 2,
           "Attrs": []
         }
       ],
@@ -56882,6 +57219,21 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "264",
       "UUID": "XDPNlt0D3OfUPkambO1W"
+    },
+    "239": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": [
+            "foil"
+          ]
+        }
+      ],
+      "Name": "Halo Scarab",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "239",
+      "UUID": "YNGtef3vnGWUzR3rPzd3"
     },
     "111": {
       "Counts": [
@@ -56896,10 +57248,36 @@
       "CollectorNumber": "111",
       "UUID": "YZMSBRXx0i2Yn6NiCBkI"
     },
-    "137": {
+    "174": {
+      "Counts": [
+        {
+          "Count": 2,
+          "Attrs": []
+        }
+      ],
+      "Name": "Celestial Regulator",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "174",
+      "UUID": "ZKmJm0sLDLxejEwhgGUI"
+    },
+    "33": {
       "Counts": [
         {
           "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Swooping Protector",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "33",
+      "UUID": "Zoxph0rC4ToC68EPyw7p"
+    },
+    "137": {
+      "Counts": [
+        {
+          "Count": 2,
           "Attrs": []
         }
       ],
@@ -56925,7 +57303,7 @@
     "16": {
       "Counts": [
         {
-          "Count": 1,
+          "Count": 2,
           "Attrs": []
         }
       ],
@@ -56948,11 +57326,30 @@
       "CollectorNumber": "134",
       "UUID": "aHGBWAXqhTulb82atQzZ"
     },
-    "218": {
+    "101": {
       "Counts": [
         {
           "Count": 1,
           "Attrs": []
+        }
+      ],
+      "Name": "Arcane Bombardment",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "101",
+      "UUID": "aUPQfbr08rbBCEjsJol3"
+    },
+    "218": {
+      "Counts": [
+        {
+          "Count": 2,
+          "Attrs": []
+        },
+        {
+          "Count": 1,
+          "Attrs": [
+            "foil"
+          ]
         }
       ],
       "Name": "Rocco, Cabaretti Caterer",
@@ -56974,10 +57371,36 @@
       "CollectorNumber": "187",
       "UUID": "b2lAE1BwG8dpuv6V2207"
     },
+    "15": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Halo Fountain",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "15",
+      "UUID": "b7ddee3YGLC2sYSNOhxq"
+    },
+    "227": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Tainted Indulgence",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "227",
+      "UUID": "bRXosGAfXCppZo8CQxsd"
+    },
     "124": {
       "Counts": [
         {
-          "Count": 3,
+          "Count": 4,
           "Attrs": []
         }
       ],
@@ -56999,6 +57422,19 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "59",
       "UUID": "bf0tTpddzCPoF5qAEMQl"
+    },
+    "127": {
+      "Counts": [
+        {
+          "Count": 2,
+          "Attrs": []
+        }
+      ],
+      "Name": "Torch Breath",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "127",
+      "UUID": "bfFDxw7ydudB9SpxgeSJ"
     },
     "62": {
       "Counts": [
@@ -57041,6 +57477,19 @@
       "CollectorNumber": "102",
       "UUID": "c3rHx7ruoE8kNzg2KCoV"
     },
+    "220": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Security Rhox",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "220",
+      "UUID": "c9uqpabm2KiEy8JzhcJ5"
+    },
     "128": {
       "Counts": [
         {
@@ -57057,7 +57506,7 @@
     "259": {
       "Counts": [
         {
-          "Count": 1,
+          "Count": 2,
           "Attrs": []
         }
       ],
@@ -57119,6 +57568,45 @@
       "CollectorNumber": "333",
       "UUID": "dYdzI8Pn1e4W6hoatFvy"
     },
+    "276": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Swamp",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "276",
+      "UUID": "dfDr1F5Nec0YL1ex6dG2"
+    },
+    "321": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Nimble Larcenist",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "321",
+      "UUID": "dyuOKOwlowG7Dlkc8E1I"
+    },
+    "1": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Angelic Observer",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "1",
+      "UUID": "e2WXBVEPEKG1b1GndHX0"
+    },
     "73": {
       "Counts": [
         {
@@ -57131,6 +57619,19 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "73",
       "UUID": "e8zvMTYI3t8gF2B7hADq"
+    },
+    "96": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Tavern Swindler",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "96",
+      "UUID": "eRpQHEsS36CbKqouDYhH"
     },
     "309": {
       "Counts": [
@@ -57148,7 +57649,7 @@
     "203": {
       "Counts": [
         {
-          "Count": 1,
+          "Count": 3,
           "Attrs": []
         }
       ],
@@ -57215,7 +57716,7 @@
     "153": {
       "Counts": [
         {
-          "Count": 2,
+          "Count": 3,
           "Attrs": []
         }
       ],
@@ -57224,6 +57725,19 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "153",
       "UUID": "g5k5SwtJ2kicailU0EzW"
+    },
+    "350": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Botanical Plaza",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "350",
+      "UUID": "gN6CM49KPBgkLN0yxLkx"
     },
     "51": {
       "Counts": [
@@ -57276,6 +57790,19 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "44",
       "UUID": "hUH7fmOuUEMQUhOtZz00"
+    },
+    "317": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Maestros Charm",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "317",
+      "UUID": "hUsj9Bo4H3idqQxIfryU"
     },
     "92": {
       "Counts": [
@@ -57345,7 +57872,7 @@
     "76": {
       "Counts": [
         {
-          "Count": 3,
+          "Count": 4,
           "Attrs": []
         }
       ],
@@ -57397,7 +57924,7 @@
     "252": {
       "Counts": [
         {
-          "Count": 2,
+          "Count": 3,
           "Attrs": []
         }
       ],
@@ -57406,6 +57933,32 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "252",
       "UUID": "l6N5VQOvKq5OzBEc99yz"
+    },
+    "313": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Jinnie Fay, Jetmir's Second",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "313",
+      "UUID": "lTWYJJpAoIH9rERdYFjh"
+    },
+    "150": {
+      "Counts": [
+        {
+          "Count": 2,
+          "Attrs": []
+        }
+      ],
+      "Name": "High-Rise Sawjack",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "150",
+      "UUID": "mpIMgUwpsu1fP3OfYSah"
     },
     "236": {
       "Counts": [
@@ -57433,6 +57986,19 @@
       "CollectorNumber": "250",
       "UUID": "nkSbfonllcWz1IGVvhvf"
     },
+    "57": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Rooftop Nuisance",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "57",
+      "UUID": "nm3Sm7VtgLR3FL0YOTGb"
+    },
     "69": {
       "Counts": [
         {
@@ -57446,10 +58012,36 @@
       "CollectorNumber": "69",
       "UUID": "nvvHQnTfo2FPW6RUeMIH"
     },
+    "32": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Speakeasy Server",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "32",
+      "UUID": "oGsHHnKFQKWuP3HkAVWG"
+    },
+    "272": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Plains",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "272",
+      "UUID": "oX0HkcIgqSADiN7iqaCf"
+    },
     "146": {
       "Counts": [
         {
-          "Count": 2,
+          "Count": 3,
           "Attrs": []
         }
       ],
@@ -57458,6 +58050,19 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "146",
       "UUID": "oc3zPYitOrjrWtgILpa6"
+    },
+    "178": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Corpse Appraiser",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "178",
+      "UUID": "oz3KkLfSDg1wAqs1OAsX"
     },
     "4": {
       "Counts": [
@@ -57527,7 +58132,7 @@
     "238": {
       "Counts": [
         {
-          "Count": 3,
+          "Count": 4,
           "Attrs": []
         }
       ],
@@ -57536,6 +58141,19 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "238",
       "UUID": "s5LIa2MeGPeWVlqRhKRO"
+    },
+    "135": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Bouncer's Beatdown",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "135",
+      "UUID": "s743gvJWbtea37bgHLdf"
     },
     "100": {
       "Counts": [
@@ -57550,10 +58168,29 @@
       "CollectorNumber": "100",
       "UUID": "sEEbbDr07PEmeABULXvW"
     },
-    "114": {
+    "94": {
       "Counts": [
         {
           "Count": 1,
+          "Attrs": [
+            "foil"
+          ]
+        },
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Shadow of Mortality",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "94",
+      "UUID": "sK3GWdHESL0X4mF0La3y"
+    },
+    "114": {
+      "Counts": [
+        {
+          "Count": 2,
           "Attrs": []
         }
       ],
@@ -57592,7 +58229,7 @@
     "86": {
       "Counts": [
         {
-          "Count": 1,
+          "Count": 2,
           "Attrs": []
         }
       ],
@@ -57601,6 +58238,19 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "86",
       "UUID": "udNTh0ckAb7D0erKv44x"
+    },
+    "40": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Echo Inspector",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "40",
+      "UUID": "v1ynxKvXJyACUkMYiW9u"
     },
     "342": {
       "Counts": [
@@ -57627,6 +58277,19 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "117",
       "UUID": "vrkO2oZUE4IJgz7981MW"
+    },
+    "141": {
+      "Counts": [
+        {
+          "Count": 2,
+          "Attrs": []
+        }
+      ],
+      "Name": "Cleanup Crew",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "141",
+      "UUID": "vyeZCxrj7ZTAOtJUycAK"
     },
     "81": {
       "Counts": [
@@ -57657,7 +58320,7 @@
     "53": {
       "Counts": [
         {
-          "Count": 1,
+          "Count": 3,
           "Attrs": []
         }
       ],
@@ -57667,10 +58330,23 @@
       "CollectorNumber": "53",
       "UUID": "xB0iRh372VWXdhC1ofkA"
     },
+    "357": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Waterfront District",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "357",
+      "UUID": "xO6y5ec2nLGbUxJfOM26"
+    },
     "49": {
       "Counts": [
         {
-          "Count": 3,
+          "Count": 4,
           "Attrs": []
         }
       ],
@@ -57679,6 +58355,32 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "49",
       "UUID": "yVbHcboshQochJTGcaVC"
+    },
+    "152": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Luxurious Libation",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "152",
+      "UUID": "z697Cbjr1KzAwt1oi7ra"
+    },
+    "120": {
+      "Counts": [
+        {
+          "Count": 2,
+          "Attrs": []
+        }
+      ],
+      "Name": "Riveteers Initiate",
+      "SetCode": "snc",
+      "Set": "Streets of New Capenna",
+      "CollectorNumber": "120",
+      "UUID": "z8SSbHb5JYFbqlqcG5Wy"
     },
     "189": {
       "Counts": [
@@ -57696,7 +58398,7 @@
     "31": {
       "Counts": [
         {
-          "Count": 1,
+          "Count": 2,
           "Attrs": []
         }
       ],
@@ -57735,7 +58437,7 @@
     "331": {
       "Counts": [
         {
-          "Count": 1,
+          "Count": 0,
           "Attrs": []
         }
       ],
@@ -57744,177 +58446,6 @@
       "Set": "Streets of New Capenna",
       "CollectorNumber": "331",
       "UUID": "zwcjVRxXBYcSICaJ1VAs"
-    },
-    "235": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Cement Shoes",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "235",
-      "UUID": "WfXiqumLeNGjsJH3Vowq"
-    },
-    "227": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Tainted Indulgence",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "227",
-      "UUID": "bRXosGAfXCppZo8CQxsd"
-    },
-    "237": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Getaway Car",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "237",
-      "UUID": "UKDi3s61jDk14CxPopjN"
-    },
-    "94": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": [
-            "foil"
-          ]
-        }
-      ],
-      "Name": "Shadow of Mortality",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "94",
-      "UUID": "sK3GWdHESL0X4mF0La3y"
-    },
-    "265": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Island",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "265",
-      "UUID": "MDGmFNh5MwlTkumaje9g"
-    },
-    "120": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Riveteers Initiate",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "120",
-      "UUID": "z8SSbHb5JYFbqlqcG5Wy"
-    },
-    "150": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "High-Rise Sawjack",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "150",
-      "UUID": "mpIMgUwpsu1fP3OfYSah"
-    },
-    "50": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Obscura Initiate",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "50",
-      "UUID": "61osI2scOXaNtuZFns4v"
-    },
-    "6": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Buy Your Silence",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "6",
-      "UUID": "NrBQWLXr4SO1YyQZeOZZ"
-    },
-    "57": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Rooftop Nuisance",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "57",
-      "UUID": "nm3Sm7VtgLR3FL0YOTGb"
-    },
-    "127": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Torch Breath",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "127",
-      "UUID": "bfFDxw7ydudB9SpxgeSJ"
-    },
-    "321": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Nimble Larcenist",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "321",
-      "UUID": "dyuOKOwlowG7Dlkc8E1I"
-    },
-    "207": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Obscura Ascendancy",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "207",
-      "UUID": "CtpWoE8OUaYGfyQxW76L"
     },
     "278": {
       "Counts": [
@@ -57929,174 +58460,70 @@
       "CollectorNumber": "278",
       "UUID": "zzYaLi5QdCEk6U2CVeoQ"
     },
-    "32": {
+    "108": {
       "Counts": [
         {
           "Count": 1,
           "Attrs": []
         }
       ],
-      "Name": "Speakeasy Server",
+      "Name": "Goldhound",
       "SetCode": "snc",
       "Set": "Streets of New Capenna",
-      "CollectorNumber": "32",
-      "UUID": "oGsHHnKFQKWuP3HkAVWG"
+      "CollectorNumber": "108",
+      "UUID": "QXTZ800iLTc8ZyDwPFp0"
     },
-    "133": {
+    "75": {
       "Counts": [
         {
           "Count": 1,
           "Attrs": []
         }
       ],
-      "Name": "Attended Socialite",
+      "Name": "Demon's Due",
       "SetCode": "snc",
       "Set": "Streets of New Capenna",
-      "CollectorNumber": "133",
-      "UUID": "UBeDfPNfkjza8aO4rM23"
+      "CollectorNumber": "75",
+      "UUID": "bAdf7i4nwa4lnWigwItX"
     },
-    "79": {
+    "247": {
       "Counts": [
         {
           "Count": 1,
           "Attrs": []
         }
       ],
-      "Name": "Fake Your Own Death",
+      "Name": "Botanical Plaza",
       "SetCode": "snc",
       "Set": "Streets of New Capenna",
-      "CollectorNumber": "79",
-      "UUID": "KyuSBx1OTnE1vuYQA1hz"
+      "CollectorNumber": "247",
+      "UUID": "XoIgIpfv7r1pp9ElCSlk"
     },
-    "258": {
+    "234": {
       "Counts": [
         {
           "Count": 1,
           "Attrs": []
         }
       ],
-      "Name": "Tramway Station",
+      "Name": "Brass Knuckles",
       "SetCode": "snc",
       "Set": "Streets of New Capenna",
-      "CollectorNumber": "258",
-      "UUID": "INNMZxOAU9oZGUP1Qg26"
+      "CollectorNumber": "234",
+      "UUID": "rDyyVmW6YXawPRP4EU7c"
     },
-    "217": {
+    "166": {
       "Counts": [
         {
           "Count": 1,
           "Attrs": []
         }
       ],
-      "Name": "Riveteers Charm",
+      "Name": "Aven Heartstabber",
       "SetCode": "snc",
       "Set": "Streets of New Capenna",
-      "CollectorNumber": "217",
-      "UUID": "QF7WNf0PtF7j9g8NHWF7"
-    },
-    "152": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Luxurious Libation",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "152",
-      "UUID": "z697Cbjr1KzAwt1oi7ra"
-    },
-    "269": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Mountain",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "269",
-      "UUID": "O1k0lBVExbteXGLrj1zW"
-    },
-    "43": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Expendable Lackey",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "43",
-      "UUID": "5cz8gUY25aNf1IYAU3lK"
-    },
-    "319": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Masked Bandits",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "319",
-      "UUID": "Fo0cpcVMsbidgDBFc1zE"
-    },
-    "171": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Brokers Charm",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "171",
-      "UUID": "FpyzK4pFWTodc0ZPMbbm"
-    },
-    "96": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Tavern Swindler",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "96",
-      "UUID": "eRpQHEsS36CbKqouDYhH"
-    },
-    "141": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Cleanup Crew",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "141",
-      "UUID": "vyeZCxrj7ZTAOtJUycAK"
-    },
-    "15": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Halo Fountain",
-      "SetCode": "snc",
-      "Set": "Streets of New Capenna",
-      "CollectorNumber": "15",
-      "UUID": "b7ddee3YGLC2sYSNOhxq"
+      "CollectorNumber": "166",
+      "UUID": "qnl1Yxa6tDJy3SvIJfNW"
     }
   },
   "rna": {
@@ -73512,6 +73939,19 @@
       "CollectorNumber": "473",
       "UUID": "60Zc3zVR3OEodH5kW5NT"
     },
+    "550": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Master of the Wild Hunt",
+      "SetCode": "plist",
+      "Set": "The List",
+      "CollectorNumber": "550",
+      "UUID": "H0h3LeCZ33lzoGPtWmmW"
+    },
     "120": {
       "Counts": [
         {
@@ -73870,6 +74310,34 @@
       "Set": "Eighth Edition",
       "CollectorNumber": "268",
       "UUID": "7pme85fgkJ5MG5tytrAG"
+    }
+  },
+  "ncc": {
+    "93": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Threefold Signal",
+      "SetCode": "ncc",
+      "Set": "New Capenna Commander",
+      "CollectorNumber": "93",
+      "UUID": "8CoOQPUB4P5T3zncXP1a"
+    },
+    "86": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Bennie Bracks, Zoologist",
+      "SetCode": "ncc",
+      "Set": "New Capenna Commander",
+      "CollectorNumber": "86",
+      "UUID": "jf3dOg0EsEpMcVWa7nr8"
     }
   },
   "scg": {
@@ -74443,6 +74911,19 @@
       "Set": "Universes Within",
       "CollectorNumber": "2",
       "UUID": "UzW5AvUVGrVn7lJrBaRZ"
+    },
+    "4": {
+      "Counts": [
+        {
+          "Count": 1,
+          "Attrs": []
+        }
+      ],
+      "Name": "Elmar, Ulvenwald Informant",
+      "SetCode": "slx",
+      "Set": "Universes Within",
+      "CollectorNumber": "4",
+      "UUID": "kQRwdDaATRVyDjNrzYch"
     }
   },
   "leb": {
@@ -74691,21 +75172,6 @@
       "Set": "Urza's Legacy",
       "CollectorNumber": "81",
       "UUID": "yrR7FiJpMxsOiSZt4bSX"
-    }
-  },
-  "ncc": {
-    "86": {
-      "Counts": [
-        {
-          "Count": 1,
-          "Attrs": []
-        }
-      ],
-      "Name": "Bennie Bracks, Zoologist",
-      "SetCode": "ncc",
-      "Set": "New Capenna Commander",
-      "CollectorNumber": "86",
-      "UUID": "jf3dOg0EsEpMcVWa7nr8"
     }
   },
   "nph": {
