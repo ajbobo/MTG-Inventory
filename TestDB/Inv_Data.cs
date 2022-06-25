@@ -4,6 +4,15 @@ using Newtonsoft.Json;
 
 namespace TestDB
 {
+    // This will be serialized to FirestoreDB as an integer - Do not change the order
+    public enum CardRarity
+    {
+        Common,
+        Uncommon,
+        Rare,
+        Mythic
+    }
+
     [FirestoreData]
     public class Inv_Set
     {
@@ -23,10 +32,10 @@ namespace TestDB
     [FirestoreData]
     public class Inv_Card
     {
-        [FirestoreProperty][JsonProperty("color_identity")] public List<string> ColorIdentity { get; set; } = new();
+        [FirestoreProperty][JsonProperty("color_identity")] public string ColorIdentity { get; set; } = "";
         [FirestoreProperty][JsonProperty("mana_cost")] public string ManaCost { get; set; } = "";
         [FirestoreProperty][JsonProperty("name")] public string Name { get; set; } = "<unknown>";
-        [FirestoreProperty][JsonProperty("rarity")] public string Rarity { get; set; } = "";
+        [FirestoreProperty][JsonProperty("rarity")] public CardRarity Rarity { get; set; } = CardRarity.Common;
         [FirestoreProperty][JsonProperty("collector_number")] public string CollectorNumber { get; set; } = "0";
         [FirestoreProperty][JsonProperty("type_line")] public string TypeLine { get; set; } = "";
         [FirestoreProperty][JsonProperty("oracle_text")] public string Text { get; set; } = "";
@@ -38,7 +47,7 @@ namespace TestDB
         public Inv_Card(Scryfall.Card card)
         {
             this.CollectorNumber = card.CollectorNumber;
-            this.ColorIdentity = card.ColorIdentity;
+            this.ColorIdentity = String.Join("", card.ColorIdentity.ToArray());
             this.Faces = new();
             foreach (Scryfall.CardFace face in card.Faces)
                 this.Faces.Add(new Inv_CardFace(face));

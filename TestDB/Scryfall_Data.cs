@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Scryfall
 {
@@ -12,10 +13,6 @@ namespace Scryfall
     {
         public string Code { get; set; } = "";
         public string Name { get; set; } = "<unknown>";
-        // public SetType Set_Type { get; set; } = SetType.NONE;
-        // public bool Digital { get; set; } = false;
-        // public string Block_Code { get; set; } = "";
-        // public string Parent_Set_Code { get; set; } = "";
 
         override public string ToString()
         {
@@ -65,10 +62,8 @@ namespace Scryfall
         [JsonProperty("color_identity")] public List<string> ColorIdentity { get; set; } = new();
         [JsonProperty("mana_cost")] public string ManaCost { get; set; } = "";
         [JsonProperty("name")] public string Name { get; set; } = "<unknown>";
-        [JsonProperty("rarity")] public string Rarity { get; set; } = "";
+        [JsonProperty("rarity")][JsonConverter(typeof(StringEnumConverter))] public TestDB.CardRarity Rarity { get; set; } = TestDB.CardRarity.Common;
         [JsonProperty("collector_number")] public string CollectorNumber { get; set; } = "0";
-        // [JsonProperty("set_name")] public string SetName {get; set;} = "";
-        // [JsonProperty("set")] public string SetCode { get; set; } = "";
         [JsonProperty("type_line")] public string TypeLine { get; set; } = "";
         [JsonProperty("oracle_text")] public string Text { get; set; } = "";
         [JsonProperty("card_faces")] public List<CardFace> Faces { get; set; } = new();
