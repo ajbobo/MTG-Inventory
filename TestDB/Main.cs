@@ -11,7 +11,7 @@ namespace TestDB
 
         public class OldData
         {
-            public Dictionary<string, Dictionary<string, MTG_Card>> Data { get; set; } = new();
+            public Dictionary<string, Dictionary<string, Json_Card>> Data { get; set; } = new();
         }
 
         public static OldData GetJsonData()
@@ -23,7 +23,7 @@ namespace TestDB
             {
                 string json = reader.ReadToEnd();
                 OldData data = new OldData();
-                data.Data = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, MTG_Card>>>(json) ?? new();
+                data.Data = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Json_Card>>>(json) ?? new();
                 return data;
             }
         }
@@ -87,14 +87,14 @@ namespace TestDB
 
         private static void CopyCardCounts(Inv_Set inv_set, OldData old)
         {
-            Dictionary<string, MTG_Card> oldCards = old.Data[inv_set.Code];
+            Dictionary<string, Json_Card> oldCards = old.Data[inv_set.Code];
             foreach (Inv_Card card in inv_set.Cards)
             {
                 if (oldCards.ContainsKey(card.CollectorNumber))
                 {
-                    MTG_Card oldCard = oldCards[card.CollectorNumber];
+                    Json_Card oldCard = oldCards[card.CollectorNumber];
                     card.Counts.Clear();
-                    foreach (CardTypeCount ctc in oldCard.Counts)
+                    foreach (Json_CardTypeCount ctc in oldCard.Counts)
                     {
                         string attrs = ctc.GetAttrs();
                         int count = ctc.Count;

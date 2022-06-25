@@ -5,14 +5,12 @@ using Google.Cloud.Firestore;
 
 namespace TestDB
 {
-
-    [FirestoreData]
-    public class CardTypeCount : IComparable<CardTypeCount>
+    public class Json_CardTypeCount
     {
-        [FirestoreProperty] public int Count { get; set; } = 0;
-        [FirestoreProperty] public List<string> Attrs { get; set; } = new();
+        public int Count { get; set; } = 0;
+        public List<string> Attrs { get; set; } = new();
 
-        public CardTypeCount()
+        public Json_CardTypeCount()
         {
             this.Count = 0;
         }
@@ -35,34 +33,18 @@ namespace TestDB
         {
             return string.Format("{0} - {1}", Count, GetAttrs());
         }
-
-        public int CompareTo(CardTypeCount? other)
-        {
-            int cnt1 = this.Attrs.Count;
-            int cnt2 = other?.Attrs.Count ?? 0;
-
-            if (cnt1 < cnt2)
-                return -1;
-            else if (cnt1 == cnt2)
-                return 0;
-            else if (cnt1 > cnt2)
-                return 1;
-
-            return 0;
-        }
     }
 
-    [FirestoreData]
-    public class MTG_Card
+    public class Json_Card
     {
-        [FirestoreProperty] public List<CardTypeCount> Counts { get; private set; }
-        [FirestoreProperty] public string Name { get; set; } = "";
-        [FirestoreProperty] public string SetCode { get; set; } = "unk";
-        [FirestoreProperty] public string Set { get; set; } = "unk";
-        [FirestoreProperty] public string CollectorNumber { get; set; } = "0";
+        public List<Json_CardTypeCount> Counts { get; private set; }
+        public string Name { get; set; } = "";
+        public string SetCode { get; set; } = "unk";
+        public string Set { get; set; } = "unk";
+        public string CollectorNumber { get; set; } = "0";
         public string UUID { get; set; } = "";
 
-        public MTG_Card()
+        public Json_Card()
         {
             Counts = new();
         }
