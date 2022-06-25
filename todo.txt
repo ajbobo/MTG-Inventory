@@ -3,11 +3,14 @@ Can I update the database to have fewer documents?
     Would that reduce the number of reads/writes against the quota?
     Maybe a document for each set, which has an array of cards
 
+Can I create queries for filters in migrated data structure?
+
 collector_number from Deckbox and from Scryfall don't match for old sets
     I fixed this in my spreadsheet, but I'll have to do something about it here, too
 
 
 --- Term ---
+Mana_Cost isn't populated for double-sided cards (VOW #198 - "Dormant Grove // Gnarled Grovestrider")
 Add filters:
     Type
     CTC attributes (Foil, Prerelease, etc)

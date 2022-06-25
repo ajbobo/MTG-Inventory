@@ -32,7 +32,7 @@ namespace TestDB
         {
             List<Inv_Set> inv_SetList = new();
             //foreach (string curCode in old.Data.Keys)
-            string curCode = "xln";
+            string curCode = "vow";
             {
                 Console.WriteLine($"Getting Set: {curCode}");
 

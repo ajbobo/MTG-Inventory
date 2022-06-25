@@ -2,17 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "TestDB",
+            "name": "Migrator",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build testdb",
-            "program": "${workspaceFolder}/TestDB/bin/Debug/net6.0/TestDB.dll",
+            "preLaunchTask": "build migrator",
+            "program": "${workspaceFolder}/Migrator/bin/Debug/net6.0/Migrator.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/TestDB",
+            "cwd": "${workspaceFolder}/Migrator",
             "stopAtEntry": false,
             "console": "internalConsole",
             "env": {
-                "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\TestDB\\TestDB-service-account.json"
+                "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\Migrator\\Migrator-service-account.json"
             }
         },
         {
