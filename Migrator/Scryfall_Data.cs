@@ -62,7 +62,7 @@ namespace Scryfall
         [JsonProperty("color_identity")] public List<string> ColorIdentity { get; set; } = new();
         [JsonProperty("mana_cost")] public string ManaCost { get; set; } = "";
         [JsonProperty("name")] public string Name { get; set; } = "<unknown>";
-        [JsonProperty("rarity")][JsonConverter(typeof(StringEnumConverter))] public TestDB.CardRarity Rarity { get; set; } = TestDB.CardRarity.Common;
+        [JsonProperty("rarity")][JsonConverter(typeof(StringEnumConverter))] public Migrator.CardRarity Rarity { get; set; } = Migrator.CardRarity.Common;
         [JsonProperty("collector_number")] public string CollectorNumber { get; set; } = "0";
         [JsonProperty("type_line")] public string TypeLine { get; set; } = "";
         [JsonProperty("oracle_text")] public string Text { get; set; } = "";

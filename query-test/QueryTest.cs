@@ -2,7 +2,7 @@ using System;
 using Xunit;
 using Google.Cloud.Firestore;
 
-namespace TestDB
+namespace Migrator
 {
     public class QueryTest
     {

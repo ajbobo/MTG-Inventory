@@ -2,7 +2,7 @@ using System;
 using Google.Cloud.Firestore;
 using Newtonsoft.Json;
 
-namespace TestDB
+namespace Migrator
 {
     // This will be serialized to FirestoreDB as an integer - Do not change the order
     public enum CardRarity
