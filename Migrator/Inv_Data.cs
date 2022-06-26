@@ -33,6 +33,7 @@ namespace Migrator
     [FirestoreData]
     public class Inv_Card
     {
+        [FirestoreProperty][JsonProperty("sort_number")] public int SortNumber { get; set; } = 0;
         [FirestoreProperty][JsonProperty("color_identity")] public string ColorIdentity { get; set; } = "";
         [FirestoreProperty][JsonProperty("mana_cost")] public string ManaCost { get; set; } = "";
         [FirestoreProperty][JsonProperty("name")] public string Name { get; set; } = "<unknown>";

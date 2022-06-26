@@ -20,8 +20,8 @@ namespace Migrator
         }
 
         [Theory]
-        [InlineData("DOM")]
         [InlineData("SNC")]
+        [InlineData("VOW")]
         public async Task GetCardsForSet(string setCode)
         {
             FirestoreDb db = FirestoreDb.Create("testdb-8448b");
@@ -31,7 +31,7 @@ namespace Migrator
             DocumentSnapshot snap = await setDoc.GetSnapshotAsync();
             string setName = snap.GetValue<string>("Name");
             string dbCode = snap.GetValue<string>("Code");
-            Console.WriteLine($"{setName}({dbCode})");
+            Console.WriteLine($"{setName} ({dbCode})");
 
             CollectionReference cards = setDoc.Collection("Cards");
             await foreach (DocumentReference card in cards.ListDocumentsAsync())
@@ -43,7 +43,7 @@ namespace Migrator
             }
         }
 
-        public void PrintSnapshotCards(QuerySnapshot snap)
+        protected void PrintSnapshotCards(QuerySnapshot snap)
         {
             foreach (DocumentSnapshot card in snap.Documents)
             {
@@ -55,14 +55,15 @@ namespace Migrator
         }
 
         [Theory]
-        [InlineData("DOM")]
+        [InlineData("VOW")]
+        [InlineData("WAR")]
         public async Task GetCardCounts(string setCode)
         {
             Console.WriteLine($"Getting card counts for {setCode}");
 
             FirestoreDb db = FirestoreDb.Create("testdb-8448b");
 
-            Query query = db.Collection($"User_Inv/{setCode}/Cards");
+            Query query = db.Collection($"User_Inv/{setCode}/Cards").OrderBy("SortNumber");
             QuerySnapshot snap = await query.GetSnapshotAsync();
             PrintSnapshotCards(snap);
         }

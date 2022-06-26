@@ -64,6 +64,7 @@ namespace Migrator
 
             int page = 1;
             bool done = false;
+            int sortNum = 1;
             while (!done)
             {
                 HttpResponseMessage msg = await httpClient.GetAsync($"https://api.scryfall.com/cards/search?q=set:{curSet.Code} and game:paper&order=set&unique=prints&page={page}");
@@ -72,7 +73,10 @@ namespace Migrator
                     string respStr = await msg.Content.ReadAsStringAsync();
                     Scryfall.CardListResponse resp = JsonConvert.DeserializeObject<Scryfall.CardListResponse>(respStr) ?? new();
                     foreach (Scryfall.Card curCard in resp.Data)
-                        inv_set.Cards.Add(new Inv_Card(curCard));
+                    {
+                        inv_set.Cards.Add(new Inv_Card(curCard) { SortNumber = sortNum });
+                        sortNum++; // Use sortNum to order the cards the same way Scryfall does (helpful when collectorNumbers are weird - ie: WAR Planeswalkers)
+                    }
 
                     if (resp.Has_More)
                         page++;
@@ -146,7 +150,7 @@ namespace Migrator
             OldData old = GetJsonData();
 
             // List<Inv_Set> inv = await CreateInvData(old); // Migrate them all
-            List<Inv_Set> inv = await CreateInvData(new string[] { "snc" }, old); // Migrate certain sets
+            List<Inv_Set> inv = await CreateInvData(new string[] { "snc", "war", "vow" }, old); // Migrate certain sets
 
             WriteInv_Json(inv);
             try
