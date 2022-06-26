@@ -31,8 +31,7 @@ namespace TestDB
         public async static Task<List<Inv_Set>> CreateInvData(OldData old)
         {
             List<Inv_Set> inv_SetList = new();
-            //foreach (string curCode in old.Data.Keys)
-            string curCode = "vow";
+            foreach (string curCode in old.Data.Keys)
             {
                 Console.WriteLine($"Getting Set: {curCode}");
 
@@ -54,7 +53,6 @@ namespace TestDB
 
         public async static Task<Inv_Set> PopulateInvCards(Scryfall.Set curSet)
         {
-            // Get all the cards from Scryfall to start the set
             Console.WriteLine($"Adding cards to {curSet.Code}");
 
             Inv_Set inv_set = new(curSet);
@@ -119,8 +117,7 @@ namespace TestDB
 
             int cnt = 0;
             CollectionReference user = db.Collection("User_Inv");
-            //foreach (Inv_Set curSet in inventory)
-            Inv_Set curSet = inventory[0];
+            foreach (Inv_Set curSet in inventory)
             {
                 Console.WriteLine($"Writing set {curSet.Code}");
                 DocumentReference set = user.Document(curSet.Code.ToUpper());

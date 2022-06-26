@@ -10,7 +10,8 @@ namespace TestDB
         Common,
         Uncommon,
         Rare,
-        Mythic
+        Mythic,
+        Special
     }
 
     [FirestoreData]
