@@ -30,8 +30,13 @@ namespace TestDB
 
         public async static Task<List<Inv_Set>> CreateInvData(OldData old)
         {
+            return await CreateInvData(old.Data.Keys.ToArray(), old);
+        }
+
+        public async static Task<List<Inv_Set>> CreateInvData(string[] sets, OldData old)
+        {
             List<Inv_Set> inv_SetList = new();
-            foreach (string curCode in old.Data.Keys)
+            foreach (string curCode in sets)
             {
                 Console.WriteLine($"Getting Set: {curCode}");
 
@@ -132,9 +137,6 @@ namespace TestDB
                         Console.WriteLine("{0} written", cnt);
 
                     await cardList.Document(curCard.CollectorNumber).SetAsync(curCard);
-
-                    // foreach (Inv_CardTypeCount ctc in curCard.Counts)
-                        // await cardList.Document(curCard.CollectorNumber).Collection("Counts").Document().SetAsync(ctc);
                 }
             }
         }
@@ -143,7 +145,8 @@ namespace TestDB
         {
             OldData old = GetJsonData();
 
-            List<Inv_Set> inv = await CreateInvData(old);
+            // List<Inv_Set> inv = await CreateInvData(old); // Migrate them all
+            List<Inv_Set> inv = await CreateInvData(new string[] { "snc" }, old); // Migrate certain sets
 
             WriteInv_Json(inv);
             try

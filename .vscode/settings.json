@@ -1,0 +1,4 @@
+{
+    "dotnet-test-explorer.testProjectPath": "**/query-test.csproj",
+    "dotnet-test-explorer.testArguments": "-e GOOGLE_APPLICATION_CREDENTIALS=C:\\Dev\\Misc\\MTG-Inventory\\Migrator\\Migrator-service-account.json"
+}

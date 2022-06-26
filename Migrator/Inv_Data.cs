@@ -65,17 +65,17 @@ namespace TestDB
     {
         public object ToFirestore(List<Inv_CardTypeCount> value)
         {
-            List<Inv_CardTypeCount> list = new();
+            Dictionary<string, int> res = new();
 
             int total = 0;
             foreach (Inv_CardTypeCount ctc in value)
             {
                 total += ctc.Count;
-                list.Add(ctc.Clone());
+                res.Add(ctc.Attrs, ctc.Count);
             }
-            list.Add(new Inv_CardTypeCount() { Attrs = "Total", Count = total });
+            res.Add("Total", total);
 
-            return list;            
+            return res;            
         }
 
         List<Inv_CardTypeCount> IFirestoreConverter<List<Inv_CardTypeCount>>.FromFirestore(object value)
@@ -99,16 +99,9 @@ namespace TestDB
         }
     }
 
-    [FirestoreData]
     public class Inv_CardTypeCount
     {
-        [FirestoreProperty][JsonProperty("count")] public int Count { get; set; } = 0;
-        [FirestoreProperty][JsonProperty("attrs")] public string Attrs { get; set; } = "Standard";
-
-        public Inv_CardTypeCount Clone()
-        {
-            return new Inv_CardTypeCount() { Count = this.Count, Attrs = this.Attrs };
-        }
+        [JsonProperty("count")] public int Count { get; set; } = 0;
+        [JsonProperty("attrs")] public string Attrs { get; set; } = "Standard";
     }
-
 }
