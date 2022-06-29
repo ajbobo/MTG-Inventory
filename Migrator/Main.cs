@@ -149,8 +149,8 @@ namespace Migrator
         {
             OldData old = GetJsonData();
 
-            // List<Inv_Set> inv = await CreateInvData(old); // Migrate them all
-            List<Inv_Set> inv = await CreateInvData(new string[] { "snc", "war", "vow" }, old); // Migrate certain sets
+            List<Inv_Set> inv = await CreateInvData(old); // Migrate them all
+            // List<Inv_Set> inv = await CreateInvData(new string[] { "snc", "war", "vow" }, old); // Migrate certain sets
 
             WriteInv_Json(inv);
             try

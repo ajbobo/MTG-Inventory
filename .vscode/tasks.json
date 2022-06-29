@@ -52,35 +52,6 @@
             "group": "none"
         },
         {
-            "label": "docker build",
-            "type": "docker-build",
-            "platform": "netCore",
-            "dockerBuild": {
-                "dockerfile": "${workspaceFolder}/term/Dockerfile",
-                "tag": "mtg-term",
-                "context": "${workspaceFolder}"
-            },
-            "netCore": {
-                "appProject": "${workspaceFolder}/term/term.csproj"
-            },
-            "group": "build"
-        },
-        {
-            "label": "docker run",
-            "type": "docker-run",
-            "dockerRun": {
-                "image": "mtg-term",
-                "remove": false,
-            },
-            "netCore": {
-                "appProject": "${workspaceFolder}/term/term.csproj"
-            },
-            "dependsOn": [
-                "docker build"
-            ],
-            "group": "build"
-        },
-        {
             "label": "build upload-inventory",
             "command": "dotnet",
             "type": "process",
