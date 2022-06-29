@@ -28,24 +28,6 @@ namespace Migrator2
 
         private static async Task PopulateTables(SqliteConnection connection)
         {
-            SqliteCommand com = new() { Connection = connection };
-            com.CommandText =
-            @"
-                INSERT INTO user_inventory (SetCode, CollectorNumber, Name, Attrs, Count)
-                VALUES (
-                    @SetCode,
-                    @CollectorNumber,
-                    @Name,
-                    @Attrs,
-                    @Count
-                );
-            ";
-            com.Parameters.AddWithValue("@SetCode", "");
-            com.Parameters.AddWithValue("@CollectorNumber", "");
-            com.Parameters.AddWithValue("@Name", "");
-            com.Parameters.AddWithValue("@Attrs", "");
-            com.Parameters.AddWithValue("@Count", "");
-
             FirestoreDb db = FirestoreDb.Create("testdb-8448b");
             CollectionReference inventory = db.Collection("User_Inv_2");
             IAsyncEnumerable<DocumentReference> docs = inventory.ListDocumentsAsync();
@@ -62,12 +44,13 @@ namespace Migrator2
                         {
                             Console.WriteLine($"{setSnap.Id} Card# {curCard.CollectorNumber} - Attrs: {ctc.Attrs}");
 
-                            com.Parameters["@SetCode"].Value = setSnap.Id;
-                            com.Parameters["@CollectorNumber"].Value = curCard.CollectorNumber;
-                            com.Parameters["@Name"].Value = curCard.Name;
-                            com.Parameters["@Attrs"].Value = ctc.Attrs;
-                            com.Parameters["@Count"].Value = ctc.Count;
-                            int val = com.ExecuteNonQuery();
+                            int val = SQLManager.CREATE_USER_INVENTORY_TABLE.Execute(connection, 
+                                setSnap.Id, 
+                                curCard.CollectorNumber, 
+                                curCard.Name,
+                                ctc.Attrs,
+                                ctc.Count
+                            );
                             Console.WriteLine($"Inserted {val} row(s)");
                         }
                         catch (Exception ex)
