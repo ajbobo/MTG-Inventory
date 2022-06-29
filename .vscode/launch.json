@@ -2,6 +2,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Migrator 2",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build migrator2",
+            "program": "${workspaceFolder}/migrator2/bin/Debug/net6.0/migrator2.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/migrator2",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "env": {
+                "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\migrator2\\Migrator-service-account.json"
+            }
+        },
+        {
             "name": "Migrator",
             "type": "coreclr",
             "request": "launch",

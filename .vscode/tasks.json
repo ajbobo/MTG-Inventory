@@ -28,6 +28,19 @@
             "group": "build"
         },
         {
+            "label": "build migrator2",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "${workspaceFolder}/migrator2/migrator2.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        },
+        {
             "label": "build term",
             "command": "dotnet",
             "type": "process",

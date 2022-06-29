@@ -147,6 +147,11 @@ namespace Migrator
 
         public async static Task Main()
         {
+            // This migrates the data to a format that has a document per set, and also includes Scryfall data
+            // This includes name, rarity, description, etc.
+            // Cards with an inventory of 0 are included
+            // Most queries/filters would be against this database, with minimal processing in the app
+
             OldData old = GetJsonData();
 
             List<Inv_Set> inv = await CreateInvData(old); // Migrate them all
