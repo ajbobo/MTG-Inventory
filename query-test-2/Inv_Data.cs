@@ -13,15 +13,15 @@ namespace Migrator2
 
         public Inv_Card() { }
 
-        public Inv_Card(Json_Card orig)
-        {
-            this.Name = orig.Name;
-            this.CollectorNumber = orig.CollectorNumber;
-            foreach (Json_CardTypeCount ctc in orig.Counts)
-            {
-                Counts.Add(new() { Attrs = ctc.GetAttrs(), Count = ctc.Count });
-            }
-        }
+        // public Inv_Card(Json_Card orig)
+        // {
+        //     this.Name = orig.Name;
+        //     this.CollectorNumber = orig.CollectorNumber;
+        //     foreach (Json_CardTypeCount ctc in orig.Counts)
+        //     {
+        //         Counts.Add(new() { Attrs = ctc.GetAttrs(), Count = ctc.Count });
+        //     }
+        // }
     }
 
     [FirestoreData]

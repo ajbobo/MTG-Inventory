@@ -3,7 +3,7 @@ using System.Net.Http;
 using Google.Cloud.Firestore;
 using Newtonsoft.Json;
 
-namespace Migrator
+namespace Migrator2
 {
     public class Migrator
     {

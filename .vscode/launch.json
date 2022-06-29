@@ -2,6 +2,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "QueryTest 2",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build query-test-2",
+            "program": "${workspaceFolder}/query-test-2/bin/Debug/net6.0/query-test-2.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/query-test-2",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "env": {
+                "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\migrator2\\Migrator-service-account.json"
+            }
+        },
+        {
             "name": "Migrator 2",
             "type": "coreclr",
             "request": "launch",

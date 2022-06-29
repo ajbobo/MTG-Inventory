@@ -4,6 +4,8 @@
 /*/obj
 mtg-inventory-main-service-account.json
 /term/inventory_cache.json
-Migrator/TestDB-service-account.json
+**/*service-account.json
 Migrator/updated_inventory.json
 Migrator/inventory_cache.json
+Migrator2/inventory_cache.json
+query-test-2/*.db

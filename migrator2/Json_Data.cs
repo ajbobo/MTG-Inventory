@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Google.Cloud.Firestore;
 
-namespace Migrator
+namespace Migrator2
 {
     public class Json_CardTypeCount
     {
