@@ -1,6 +1,7 @@
 ﻿
 using Google.Cloud.Firestore;
 using Microsoft.Data.Sqlite;
+using static Migrator2.SQLManager.InternalQuery;
 
 namespace Migrator2
 {
@@ -8,22 +9,8 @@ namespace Migrator2
     {
         public static void InitializeTables(SqliteConnection connection)
         {
-            SqliteCommand com = new() { Connection = connection };
-
-            com.CommandText = "DROP TABLE IF EXISTS user_inventory";
-            com.ExecuteNonQuery();
-
-            com.CommandText =
-            @"
-                CREATE TABLE user_inventory (
-                    SetCode         varchar(4),
-                    CollectorNumber varchar(3),
-                    Name            varchar(128),
-                    Attrs           varchar(25),
-                    Count           int
-                );
-            ";
-            com.ExecuteNonQuery();
+            SQLManager sql = new(connection);
+            sql.Query(CREATE_USER_INVENTORY).Go();
         }
 
         private static async Task PopulateTables(SqliteConnection connection)
@@ -44,13 +31,14 @@ namespace Migrator2
                         {
                             Console.WriteLine($"{setSnap.Id} Card# {curCard.CollectorNumber} - Attrs: {ctc.Attrs}");
 
-                            int val = SQLManager.CREATE_USER_INVENTORY_TABLE.Execute(connection, 
-                                setSnap.Id, 
-                                curCard.CollectorNumber, 
-                                curCard.Name,
-                                ctc.Attrs,
-                                ctc.Count
-                            );
+                            SQLManager sql = new SQLManager(connection);
+                            int val = sql.Query(ADD_TO_USER_INVENTORY)
+                                         .WithParam("@SetCode", setSnap.Id)
+                                         .WithParam("@CollectorNumber", curCard.CollectorNumber)
+                                         .WithParam("@Name", curCard.Name)
+                                         .WithParam("@Attrs", ctc.Attrs)
+                                         .WithParam("@Count", ctc.Count)
+                                         .Go();
                             Console.WriteLine($"Inserted {val} row(s)");
                         }
                         catch (Exception ex)

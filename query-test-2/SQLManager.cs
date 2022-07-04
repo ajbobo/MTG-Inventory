@@ -2,51 +2,39 @@ using Microsoft.Data.Sqlite;
 
 namespace Migrator2
 {
-    public class SQLManager
+    public partial class SQLManager
     {
-        public static InternalQuery CREATE_USER_INVENTORY_TABLE { get; private set; } = new InternalQuery(
-            @"
-                INSERT INTO user_inventory (SetCode, CollectorNumber, Name, Attrs, Count)
-                VALUES (
-                    @SetCode,
-                    @CollectorNumber,
-                    @Name,
-                    @Attrs,
-                    @Count
-                );
-            ",
-                "@SetCode",
-                "@CollectorNumber",
-                "@Name",
-                "@Attrs",
-                "@Count"
-        );
-
-        public class InternalQuery
+        private SqliteCommand? _command;
+        private SqliteConnection _connection;
+        
+        public SQLManager(SqliteConnection connection)
         {
-            private SqliteCommand _command = new SqliteCommand();
+            _connection = connection;
+        }
 
-            public InternalQuery(string query, params string[] parameters)
-            {
-                _command.CommandText = query;
-                foreach (string param in parameters)
-                {
-                    _command.Parameters.AddWithValue(param, "");
-                }
-            }
+        public SQLManager Query(InternalQuery query)
+        {
+            _command = new SqliteCommand();
+            _command.Connection = _connection;
+            _command.CommandText = _queries[(int)query];
+            return this;
+        }
 
-            public int Execute(SqliteConnection connection, params object?[] parameters)
-            {
-                _command.Connection = connection;
+        public SQLManager WithParam(string param, string value)
+        {
+            _command?.Parameters.AddWithValue(param, value);
+            return this;
+        }
 
-                for (int x = 0; x < parameters.Length; x++)
-                {
-                    _command.Parameters[x].Value = parameters[x];
-                }
+        public SQLManager WithParam(string param, int value)
+        {
+            _command?.Parameters.AddWithValue(param, value.ToString());
+            return this;
+        }
 
-                return _command.ExecuteNonQuery();
-            }
-
+        public int Go()
+        {
+            return _command?.ExecuteNonQuery() ?? 0;
         }
     }
 }
