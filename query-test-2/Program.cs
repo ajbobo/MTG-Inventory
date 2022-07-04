@@ -15,11 +15,17 @@ namespace Migrator2
 
         private static async Task PopulateTables(SqliteConnection connection)
         {
+            Console.WriteLine("Reading inventory from Firebase");
+
             FirestoreDb db = FirestoreDb.Create("testdb-8448b");
             CollectionReference inventory = db.Collection("User_Inv_2");
             IAsyncEnumerable<DocumentReference> docs = inventory.ListDocumentsAsync();
+            int numSets = await docs.CountAsync();
+            int cnt = 1;
             await foreach (DocumentReference setDoc in docs)
             {
+                Console.WriteLine($"Getting set {setDoc.Id} ({cnt}/{numSets})");
+
                 DocumentSnapshot setSnap = await setDoc.GetSnapshotAsync();
                 List<Inv_Card> cardList = setSnap.GetValue<List<Inv_Card>>("Cards");
 
@@ -29,7 +35,7 @@ namespace Migrator2
                     {
                         try
                         {
-                            Console.WriteLine($"{setSnap.Id} Card# {curCard.CollectorNumber} - Attrs: {ctc.Attrs}");
+                            // Console.WriteLine($"{setSnap.Id} Card# {curCard.CollectorNumber} - Attrs: {ctc.Attrs}");
 
                             SQLManager sql = new SQLManager(connection);
                             int val = sql.Query(ADD_TO_USER_INVENTORY)
@@ -39,7 +45,7 @@ namespace Migrator2
                                          .WithParam("@Attrs", ctc.Attrs)
                                          .WithParam("@Count", ctc.Count)
                                          .Go();
-                            Console.WriteLine($"Inserted {val} row(s)");
+                            // Console.WriteLine($"Inserted {val} row(s)");
                         }
                         catch (Exception ex)
                         {
@@ -47,18 +53,62 @@ namespace Migrator2
                         }
                     }
                 }
-            }
 
+                cnt++;
+            }
+        }
+
+        private static void GetCardsFromSet(string setCode, SqliteConnection connection)
+        {
+            SQLManager sql = new(connection);
+            using (SqliteDataReader? reader = sql.Query(GET_SET_UNIQUE_CARDS).WithParam("@SetCode", setCode.ToLower()).Read())
+            {
+                PrintReaderTable(reader);
+            }
+        }
+
+        private static void GetPlaySetsFromSet(string setCode, SqliteConnection connection)
+        {
+            SQLManager sql = new(connection);
+            using (SqliteDataReader? reader = sql.Query(GET_SET_PLAYSETS).WithParam("@SetCode", setCode.ToLower()).Read())
+            {
+                PrintReaderTable(reader);
+            }
+        }
+
+        private static void PrintReaderTable(SqliteDataReader? reader)
+        {
+            if (reader == null)
+                return;
+
+            for (int col = 0; col < reader.FieldCount; col++)
+            {
+                Console.Write($"{reader.GetName(col)}  ");
+            }
+            Console.WriteLine();
+
+            while (reader.Read())
+            {
+                for (int col = 0; col < reader.FieldCount; col++)
+                {
+                    Console.Write($"{reader.GetString(col)}  ");
+                }
+                Console.WriteLine();
+            }
         }
 
         public static async Task Main()
         {
-            using (var connection = new SqliteConnection("Data source=temp.db"))
+            using (var connection = new SqliteConnection("Data source=:memory:"))
             {
                 connection.Open();
 
                 InitializeTables(connection);
                 await PopulateTables(connection);
+
+                // GetCardsFromSet("dom", connection);
+                GetPlaySetsFromSet("dom", connection);
+                GetPlaySetsFromSet("snc", connection);
             }
         }
     }

@@ -36,5 +36,10 @@ namespace Migrator2
         {
             return _command?.ExecuteNonQuery() ?? 0;
         }
+
+        public SqliteDataReader? Read()
+        {
+            return _command?.ExecuteReader() ?? null;
+        }
     }
 }
