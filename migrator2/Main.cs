@@ -50,9 +50,10 @@ namespace Migrator2
         public async static Task WriteInventory_Firebase(Dictionary<string, List<Inv_Card>> inventory)
         {
             Console.WriteLine("Writing Inventory to Firestore DB");
-            FirestoreDb db = FirestoreDb.Create("testdb-8448b");
+            // FirestoreDb db = FirestoreDb.Create("testdb-8448b");
+            FirestoreDb db = FirestoreDb.Create("mtg-inventory-9d4ca");
 
-            CollectionReference topLevel = db.Collection("User_Inv_2");
+            CollectionReference topLevel = db.Collection("User_Inv");
             foreach (string setCode in inventory.Keys)
             {
                 Console.WriteLine($"Writing set {setCode}");
