@@ -48,7 +48,8 @@ namespace MTG_CLI
 
         async private static Task<bool> GetSetCards(Scryfall.Set targetSet)
         {
-            _cardList.Clear();
+            // _cardList.Clear();
+            _sql.Query(CREATE_CARD_TABLE).Go();
 
             int page = 1;
             bool done = false;
@@ -60,7 +61,15 @@ namespace MTG_CLI
                     string respStr = await msg.Content.ReadAsStringAsync();
                     Scryfall.CardListResponse resp = JsonConvert.DeserializeObject<Scryfall.CardListResponse>(respStr) ?? new();
                     foreach (Scryfall.Card curCard in resp.Data)
-                        _cardList.Add(curCard);
+                    {
+                        // _cardList.Add(curCard);
+                        _sql.Query(INSERT_CARD)
+                            .WithParam("@SetCode", curCard.SetCode)
+                            .WithParam("@Collector_Number", curCard.CollectorNumber)
+                            .WithParam("@Name", curCard.Name)
+                            .WithParam("@Rarity", curCard.Rarity)
+                            .Go();
+                    }
 
                     if (resp.Has_More)
                         page++;
@@ -84,8 +93,8 @@ namespace MTG_CLI
             win.SelectedSetChanged += async (newSet) =>
             {
                 win.SetCurrentSet(newSet);
-                // await GetSetCards(newSet);
-                // win.SetCardList(_cardList);
+                await GetSetCards(newSet);
+                win.SetCardList(newSet);
             };
 
             win.Start();

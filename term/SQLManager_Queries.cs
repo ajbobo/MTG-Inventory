@@ -11,9 +11,10 @@ namespace MTG_CLI
             GET_ALL_SETS,
             CREATE_CARD_TABLE,
             INSERT_CARD,
+            GET_SET_CARDS,
+            // These aren't in use for real yet
             CREATE_USER_INVENTORY,
             ADD_TO_USER_INVENTORY,
-            GET_SET_UNIQUE_CARDS,
             GET_SET_PLAYSETS,
         };
 
@@ -28,9 +29,6 @@ namespace MTG_CLI
             AddQuery(InternalQuery.ADD_TO_USER_INVENTORY,
                 @" INSERT INTO user_inventory (SetCode, CollectorNumber, Name, Attrs, Count) 
                    VALUES ( @SetCode, @CollectorNumber, @Name, @Attrs, @Count ); "
-                );
-            AddQuery(InternalQuery.GET_SET_UNIQUE_CARDS,
-                @" SELECT SetCode, CollectorNumber, Name, Attrs, Count FROM user_inventory WHERE SetCode = @SetCode"
                 );
             AddQuery(InternalQuery.GET_SET_PLAYSETS,
                 @" select * FROM (
@@ -50,11 +48,14 @@ namespace MTG_CLI
                 );
             AddQuery(InternalQuery.CREATE_CARD_TABLE,
                 @"  DROP TABLE IF EXISTS cards;
-                    CREATE TABLE cards ( SetCode varchar(4), Collector_Number varchar(4), Name varchar(128)), Rarity varchar(8) )"
+                    CREATE TABLE cards ( SetCode varchar(4), Collector_Number varchar(4), Name varchar(128), Rarity varchar(8) )"
                 );
             AddQuery(InternalQuery.INSERT_CARD,
                 @"  INSERT INTO cards ( SetCode, Collector_Number, Name, Rarity )
                     VALUES ( @SetCode, @Collector_Number, @Name, @Rarity )"
+                );
+            AddQuery(InternalQuery.GET_SET_CARDS,
+                @"  SELECT SetCode, Collector_Number, Name, Rarity FROM cards WHERE SetCode = @SetCode"
                 );
         }
 

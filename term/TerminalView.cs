@@ -2,6 +2,7 @@ using System.Data;
 using Terminal.Gui;
 using Terminal.Gui.Views;
 using Microsoft.Data.Sqlite;
+using static MTG_CLI.SQLManager.InternalQuery;
 
 namespace MTG_CLI
 {
@@ -73,7 +74,7 @@ namespace MTG_CLI
             _cardTable = new() { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             _findCardDlg = new();
             _editFilters = new(_filterSettings);
-            _editFilters.OnClose += () => { SetCardList(_cardList); };
+            // _editFilters.OnClose += () => { SetCardList(_cardList); };
         }
 
         private void ToggleAutoAdvance()
@@ -175,12 +176,15 @@ namespace MTG_CLI
                 _top.Add(_curSetFrame);
         }
 
-        public void SetCardList(List<Scryfall.Card> cardList)
+        public void SetCardList(Scryfall.Set curSet) //List<Scryfall.Card> cardList)
         {
-            _cardList = cardList;
+            // _cardList = cardList;
             _collectedCount = 0;
 
-            _findCardDlg = new(cardList);
+            // TODO: This should be the filtered list of cards
+            SqliteDataReader? reader = _sql.Query(GET_SET_CARDS).WithParam("@SetCode", curSet.Code).Read();
+
+            _findCardDlg = new(new()); //cardList);
             _findCardDlg.CardSelected += FoundCard;
 
             _curSetFrame.RemoveAll();
@@ -189,26 +193,27 @@ namespace MTG_CLI
             table.PrimaryKey = new[] { table.Columns.Add("#") };
             table.Columns.Add("Cnt");
             table.Columns.Add("Rarity");
-            table.Columns.Add("Name", typeof(Scryfall.Card)); // Store the actual card reference here, so it's easy to find later
+            table.Columns.Add("Name"); //, typeof(Scryfall.Card)); // Store the actual card reference here, so it's easy to find later
             table.Columns.Add("Color");
             table.Columns.Add("Cost");
 
-            foreach (Scryfall.Card card in cardList)
+            // foreach (Scryfall.Card card in cardList)
+            while (reader != null && reader.Read())
             {
-                if (!_filterSettings.MatchesFilter(card))
-                    continue;
+                // if (!_filterSettings.MatchesFilter(card))
+                    // continue;
 
                 DataRow row = table.NewRow();
-                row["#"] = card.CollectorNumber;
-                row["Cnt"] = _inventory.GetCardCountDisplay(card);
-                row["Rarity"] = card.Rarity.ToUpper()[0];
-                row["Name"] = card;
-                row["Color"] = String.Join("", card.ColorIdentity?.ToArray() ?? new string[] { });
-                row["Cost"] = card.ManaCost;
+                row["#"] = reader.GetFieldValue<int>("Collector_Number"); // card.CollectorNumber;
+                row["Cnt"] = "tbd"; //_inventory.GetCardCountDisplay(card);
+                row["Rarity"] = reader.GetFieldValue<string>("Rarity").ToUpper()[0];// card.Rarity.ToUpper()[0];
+                row["Name"] = reader.GetFieldValue<string>("Name"); // card;
+                row["Color"] = "tbd"; //String.Join("", card.ColorIdentity?.ToArray() ?? new string[] { });
+                row["Cost"] = "tbd"; //card.ManaCost;
                 table.Rows.Add(row);
 
-                if (_inventory.GetCardCount(card) > 0)
-                    _collectedCount++;
+                // if (_inventory.GetCardCount(card) > 0)
+                    // _collectedCount++;
             }
 
             _cardTable = new(table) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
@@ -221,7 +226,7 @@ namespace MTG_CLI
             _cardTable.Style.ColumnStyles.Add(table.Columns["Rarity"], new() { MinWidth = 2, MaxWidth = 2 });
             _cardTable.Style.ColumnStyles.Add(table.Columns["Name"], new() { MinWidth = 15 });
             _cardTable.Style.ColumnStyles.Add(table.Columns["Color"], new() { MaxWidth = 5, MinWidth = 5 });
-            _cardTable.SelectedCellChanged += (args) => UpdateCardFrame((Scryfall.Card)table.Rows[args.NewRow]["Name"]);
+            // _cardTable.SelectedCellChanged += (args) => UpdateCardFrame((Scryfall.Card)table.Rows[args.NewRow]["Name"]);
 
             _curSetFrame.Add(_cardTable);
             _cardTable.SetFocus();
@@ -249,10 +254,10 @@ namespace MTG_CLI
                 }
             };
 
-            if (table.Rows.Count > 0)
-                UpdateCardFrame((Scryfall.Card)table.Rows[0]["Name"]);
+            // if (table.Rows.Count > 0)
+                // UpdateCardFrame((Scryfall.Card)table.Rows[0]["Name"]);
 
-            UpdateStatsFrame();
+            // UpdateStatsFrame();
         }
 
         private void UpdateStatsFrame()
