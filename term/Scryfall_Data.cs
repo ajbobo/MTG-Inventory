@@ -2,53 +2,14 @@ using Newtonsoft.Json;
 
 namespace Scryfall
 {
-    public class SetListResponse
-    {
-        // There's more in the response, but this is all I care about
-        public List<Set> Data { get; set; } = new();
-    }
-
     public class Set
     {
         public string Code { get; set; } = "";
         public string Name { get; set; } = "<unknown>";
-        public SetType Set_Type { get; set; } = SetType.NONE;
-        public bool Digital { get; set; } = false;
-        public string Block_Code { get; set; } = "";
-        public string Parent_Set_Code { get; set; } = "";
 
         override public string ToString()
         {
             return Name;
-        }
-
-        public static Set NONE = new Set();
-
-        public enum SetType
-        {
-            NONE,
-            CORE,
-            EXPANSION,
-            MASTERS,
-            ALCHEMY,
-            MASTERPIECE,
-            ARSENAL,
-            FROM_THE_VAULT,
-            SPELLBOOK,
-            PREMIUM_DECK,
-            DUEL_DECK,
-            DRAFT_INNOVATION,
-            TREASURE_CHEST,
-            COMMANDER,
-            PLANECHASE,
-            ARCHENEMY,
-            VANGUARD,
-            FUNNY,
-            STARTER,
-            BOX,
-            PROMO,
-            TOKEN,
-            MEMORABILIA
         }
     }
 

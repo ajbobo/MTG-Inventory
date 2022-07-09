@@ -9,34 +9,36 @@ namespace MTG_CLI
         private readonly TimeSpan CACHE_TIMEOUT = new(0, 15, 0); // 15 minutes
 
         private FirestoreDb _db;
+        private SQLManager _sql;
         
         public bool UsingCache { get; private set; }
 
         // Inventory structure: _inventory[SetCode][CardNum] = Card
         private Dictionary<string, Dictionary<string, MTG_Card>> _inventory = new();
 
-        public Inventory()
+        public Inventory(SQLManager sql)
         {
             _db = FirestoreDb.Create("mtg-inventory-9d4ca");
+            _sql = sql;
         }
 
         public async Task ReadData()
         {
             // Check the cache, if it is too old, read from Firebase
             bool readCache = false;
-            if (File.Exists(CACHE_FILE))
-            {
-                DateTime lastCacheWrite = File.GetLastWriteTime(CACHE_FILE);
-                TimeSpan diff = DateTime.Now - lastCacheWrite;
-                Console.WriteLine("Cache Age: {0}", diff);
-                if (diff < CACHE_TIMEOUT)
-                    readCache = true;
-                Console.WriteLine("Reading from cache: {0}", readCache);
-            }
+            // if (File.Exists(CACHE_FILE))
+            // {
+            //     DateTime lastCacheWrite = File.GetLastWriteTime(CACHE_FILE);
+            //     TimeSpan diff = DateTime.Now - lastCacheWrite;
+            //     Console.WriteLine("Cache Age: {0}", diff);
+            //     if (diff < CACHE_TIMEOUT)
+            //         readCache = true;
+            //     Console.WriteLine("Reading from cache: {0}", readCache);
+            // }
 
-            if (readCache)
-                ReadFromJsonCache();
-            else
+            // if (readCache)
+            //     ReadFromJsonCache();
+            // else
                 await ReadFromFirebase();
 
             UsingCache = readCache;

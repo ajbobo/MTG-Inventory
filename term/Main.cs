@@ -1,34 +1,45 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using static MTG_CLI.SQLManager.InternalQuery;
 
 namespace MTG_CLI
 {
     class CLI_Window
     {
-        private static HttpClient httpClient = new HttpClient();
+        private static HttpClient _httpClient = new HttpClient();
+        private static SQLManager _sql = new SQLManager();
 
-        private static Inventory _inventory = new();
+        private static Inventory _inventory = new(_sql);
         private static List<Scryfall.Set> _setList = new();
         private static List<Scryfall.Card> _cardList = new();
 
         async private static Task<bool> GetSetData()
         {
             _setList.Clear();
+            _sql.Query(CREATE_SET_TABLE).Go();
 
-            HttpResponseMessage msg = await httpClient.GetAsync("https://api.scryfall.com/sets");
+            HttpResponseMessage msg = await _httpClient.GetAsync("https://api.scryfall.com/sets");
             if (msg.IsSuccessStatusCode)
             {
                 string respStr = await msg.Content.ReadAsStringAsync();
-                Scryfall.SetListResponse resp = JsonConvert.DeserializeObject<Scryfall.SetListResponse>(respStr) ?? new();
-                foreach (Scryfall.Set curSet in resp.Data)
+
+                // I'm parsing this way so that I don't have to worry about large .NET objects that I won't need much
+                JObject resp = JObject.Parse(respStr);
+                IList<JToken> data = resp["data"]?.Children().ToList() ?? new();
+                foreach (JToken curSet in data)
                 {
-                    if (curSet.Set_Type == Scryfall.Set.SetType.CORE || 
-                        curSet.Set_Type == Scryfall.Set.SetType.EXPANSION ||
-                        curSet.Set_Type == Scryfall.Set.SetType.MASTERPIECE ||
-                        curSet.Set_Type == Scryfall.Set.SetType.MASTERS ||
-                        curSet.Set_Type == Scryfall.Set.SetType.COMMANDER ||
+                    string setType = curSet["set_type"]?.ToString() ?? "";
+                    if (setType.Equals("core") ||
+                        setType.Equals("expansion") ||
+                        setType.Equals("masterpiece") ||
+                        setType.Equals("masters") ||
+                        setType.Equals("commander") ||
                         // To limit the number of funny sets to ones that are (mostly) actually collectable, I needed to add some more filters
-                        (curSet.Set_Type == Scryfall.Set.SetType.FUNNY && curSet.Block_Code.Length == 0 && curSet.Parent_Set_Code.Length == 0))
-                        _setList.Add(curSet);
+                        (setType.Equals("funny") && curSet["block_code"]?.ToString().Length == 0 && curSet["parent_set_code"]?.ToString().Length == 0))
+                        _sql.Query(INSERT_SET)
+                            .WithParam("@SetCode", curSet["code"]?.ToString() ?? "")
+                            .WithParam("@Name", curSet["name"]?.ToString() ?? "")
+                            .Go();
                 }
                 return true;
             }
@@ -43,7 +54,7 @@ namespace MTG_CLI
             bool done = false;
             while (!done)
             {
-                HttpResponseMessage msg = await httpClient.GetAsync($"https://api.scryfall.com/cards/search?q=set:{targetSet.Code} and game:paper&order=set&unique=prints&page={page}");
+                HttpResponseMessage msg = await _httpClient.GetAsync($"https://api.scryfall.com/cards/search?q=set:{targetSet.Code} and game:paper&order=set&unique=prints&page={page}");
                 if (msg.IsSuccessStatusCode)
                 {
                     string respStr = await msg.Content.ReadAsStringAsync();
@@ -68,14 +79,13 @@ namespace MTG_CLI
 
         private static void StartTerminalView()
         {
-            var win = new TerminalView(_inventory);
+            var win = new TerminalView(_inventory, _sql);
 
-            win.SetList = _setList;
             win.SelectedSetChanged += async (newSet) =>
             {
                 win.SetCurrentSet(newSet);
-                await GetSetCards(newSet);
-                win.SetCardList(_cardList);
+                // await GetSetCards(newSet);
+                // win.SetCardList(_cardList);
             };
 
             win.Start();
@@ -84,11 +94,13 @@ namespace MTG_CLI
         async public static Task Main(string[] args)
         {
             Console.Title = "Inventory Terminal";
+
+
             Console.WriteLine("Reading Set data from Scryfall");
             await GetSetData();
 
-            Console.WriteLine("Reading Inventory data");
-            await _inventory.ReadData();
+            // Console.WriteLine("Reading Inventory data");
+            // await _inventory.ReadData();
 
             StartTerminalView();
         }

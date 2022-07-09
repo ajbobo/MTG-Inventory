@@ -1,6 +1,7 @@
 using System.Data;
 using Terminal.Gui;
 using Terminal.Gui.Views;
+using Microsoft.Data.Sqlite;
 
 namespace MTG_CLI
 {
@@ -17,18 +18,19 @@ namespace MTG_CLI
         private FindCardDialog _findCardDlg;
         private EditFiltersDialog _editFilters;
 
+        private SQLManager _sql;
+
         private List<Scryfall.Card> _cardList;
         private int _collectedCount;
         private Inventory _inventory;
         private FilterSettings _filterSettings;
         private bool _autoFind = true;
 
-        public List<Scryfall.Set> SetList { get; set; } = new();
-
         public event Action<Scryfall.Set>? SelectedSetChanged;
 
-        public TerminalView(Inventory inventory)
+        public TerminalView(Inventory inventory, SQLManager sql)
         {
+            _sql = sql;
             _inventory = inventory;
             _filterSettings = new(_inventory);
             _cardList = new();
@@ -130,11 +132,27 @@ namespace MTG_CLI
             _editFilters.EditFilters();
         }
 
+        private List<T> CreateList<T>(params T[] elements)
+        {
+            return new List<T>(elements);
+        }
+
         private void ChooseSet()
         {
             Dialog selectSetDlg = new("Select a Set") { Width = 45 };
 
-            ListView setListView = new(SetList ?? new List<Scryfall.Set>()) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
+            List<Scryfall.Set> SetList = new();
+            SqliteDataReader? reader = _sql.Query(SQLManager.InternalQuery.GET_ALL_SETS).Read();
+            while (reader != null && reader.Read())
+            {
+                SetList.Add(new Scryfall.Set
+                {
+                    Code = reader.GetFieldValue<string>("SetCode"),
+                    Name = reader.GetFieldValue<string>("Name")
+                });
+            }
+
+            ListView setListView = new(SetList) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             setListView.OpenSelectedItem += (args) =>
                 {
                     Scryfall.Set selectedSet = (Scryfall.Set)args.Value;
