@@ -150,6 +150,7 @@ namespace MTG_CLI
                 string code = string.Format("({0})", reader.GetFieldValue<string>("SetCode")); // Format it here as "(code)" so that it can be spaced nicely later
                 SetList.Add(string.Format("{0,-7} {1}", code, name));
             }
+            reader?.Close();
 
             ListView setListView = new(SetList) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             setListView.OpenSelectedItem += (args) =>
@@ -203,7 +204,7 @@ namespace MTG_CLI
                 // continue;
 
                 DataRow row = table.NewRow();
-                row["#"] = reader.GetFieldValue<int>("Collector_Number");
+                row["#"] = reader.GetFieldValue<string>("Collector_Number");
                 row["Cnt"] = "tbd";
                 row["Rarity"] = reader.GetFieldValue<string>("Rarity").ToUpper()[0];
                 row["Name"] = reader.GetFieldValue<string>("Name");
@@ -214,6 +215,7 @@ namespace MTG_CLI
                 // if (_inventory.GetCardCount(card) > 0)
                 // _collectedCount++;
             }
+            reader?.Close();
 
             _cardTable = new(table) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             _cardTable.FullRowSelect = true;
@@ -326,6 +328,7 @@ namespace MTG_CLI
             string typeLine = reader.GetFieldValue<string>("TypeLine");
             InsertCardDetails(typeLine, frontText, _curCardFrame, 2 /*card.Counts.Count + 1*/);
 
+            reader?.Close();
             if (!_top.Subviews.Contains(_curCardFrame))
                 _top.Add(_curCardFrame);
         }
