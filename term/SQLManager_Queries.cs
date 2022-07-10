@@ -14,6 +14,7 @@ namespace MTG_CLI
             CREATE_CARD_TABLE,
             INSERT_CARD,
             GET_SET_CARDS,
+            GET_CARD_DETAILS,
             // These aren't in use for real yet
             CREATE_USER_INVENTORY,
             ADD_TO_USER_INVENTORY,
@@ -64,18 +65,22 @@ namespace MTG_CLI
                         ColorIdentity varchar(5),
                         ManaCost varchar(15),
                         TypeLine varchar(128),
-                        FrontText varchar,
-                        BackText varchar
+                        FrontText varchar
                     )"
                 );
             AddQuery(InternalQuery.INSERT_CARD,
-                @"  INSERT INTO cards ( SetCode, Collector_Number, Name, Rarity, ColorIdentity, ManaCost, TypeLine, FrontText, BackText )
-                    VALUES ( @SetCode, @Collector_Number, @Name, @Rarity, @ColorIdentity, @ManaCost, @TypeLine, @FrontText, @BackText )"
+                @"  INSERT INTO cards ( SetCode, Collector_Number, Name, Rarity, ColorIdentity, ManaCost, TypeLine, FrontText )
+                    VALUES ( @SetCode, @Collector_Number, @Name, @Rarity, @ColorIdentity, @ManaCost, @TypeLine, @FrontText )"
                 );
             AddQuery(InternalQuery.GET_SET_CARDS,
                 @"  SELECT Collector_Number, Name, Rarity, ColorIdentity, ManaCost
                     FROM cards 
                     WHERE SetCode = @SetCode"
+                );
+            AddQuery(InternalQuery.GET_CARD_DETAILS,
+                @"  SELECT Collector_Number, Name, TypeLine, FrontText
+                    FROM cards
+                    WHERE Collector_Number = @Collector_Number"
                 );
         }
 

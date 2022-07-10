@@ -82,12 +82,10 @@ namespace MTG_CLI
                         if (curCard["oracle_text"] != null)
                         {
                             _sql.WithParam("@FrontText", curCard["oracle_text"].AsString());
-                            _sql.WithParam("@BackText", "");
                         }
                         else if (curCard["card_faces"] != null)
                         {
                             _sql.WithParam("@FrontText", curCard["card_faces"]?[0]?["oracle_text"].AsString() ?? "");
-                            _sql.WithParam("@BackText", curCard["card_faces"]?[1]?["oracle_text"].AsString() ?? "");
                         }
                         _sql.Execute();
                     }

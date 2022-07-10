@@ -103,7 +103,7 @@ namespace MTG_CLI
                 {
                     _cardTable.SelectedRow = index;
                     _cardTable.EnsureSelectedCellIsVisible();
-                    UpdateCardFrame(nextCard);
+                    UpdateCardFrame(nextRow["#"]?.ToString() ?? "");
                     return;
                 }
 
@@ -125,7 +125,7 @@ namespace MTG_CLI
             _cardTable.SelectedRow = _cardTable.Table.Rows.IndexOf(cardRow);
             _cardTable.EnsureSelectedCellIsVisible();
 
-            UpdateCardFrame(card);
+            UpdateCardFrame(cardRow?["#"].ToString() ?? "");
         }
 
         private void ChooseFilters()
@@ -147,7 +147,7 @@ namespace MTG_CLI
             while (reader != null && reader.Read())
             {
                 string name = reader.GetFieldValue<string>("Name");
-                string code = string.Format("({0})",reader.GetFieldValue<string>("SetCode")); // Format it here as "(code)" so that it can be spaced nicely later
+                string code = string.Format("({0})", reader.GetFieldValue<string>("SetCode")); // Format it here as "(code)" so that it can be spaced nicely later
                 SetList.Add(string.Format("{0,-7} {1}", code, name));
             }
 
@@ -184,7 +184,7 @@ namespace MTG_CLI
             // TODO: This should be the filtered list of cards
             SqliteDataReader? reader = _sql.Query(GET_SET_CARDS).WithParam("@SetCode", curSetCode).Read();
 
-            _findCardDlg = new(new()); 
+            _findCardDlg = new(new());
             _findCardDlg.CardSelected += FoundCard;
 
             _curSetFrame.RemoveAll();
@@ -193,14 +193,14 @@ namespace MTG_CLI
             table.PrimaryKey = new[] { table.Columns.Add("#") };
             table.Columns.Add("Cnt");
             table.Columns.Add("Rarity");
-            table.Columns.Add("Name"); //, typeof(Scryfall.Card)); // Store the actual card reference here, so it's easy to find later
+            table.Columns.Add("Name");
             table.Columns.Add("Color");
             table.Columns.Add("Cost");
 
             while (reader != null && reader.Read())
             {
                 // if (!_filterSettings.MatchesFilter(card))
-                    // continue;
+                // continue;
 
                 DataRow row = table.NewRow();
                 row["#"] = reader.GetFieldValue<int>("Collector_Number");
@@ -212,7 +212,7 @@ namespace MTG_CLI
                 table.Rows.Add(row);
 
                 // if (_inventory.GetCardCount(card) > 0)
-                    // _collectedCount++;
+                // _collectedCount++;
             }
 
             _cardTable = new(table) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
@@ -225,7 +225,7 @@ namespace MTG_CLI
             _cardTable.Style.ColumnStyles.Add(table.Columns["Rarity"], new() { MinWidth = 2, MaxWidth = 2 });
             _cardTable.Style.ColumnStyles.Add(table.Columns["Name"], new() { MinWidth = 15 });
             _cardTable.Style.ColumnStyles.Add(table.Columns["Color"], new() { MaxWidth = 5, MinWidth = 5 });
-            // _cardTable.SelectedCellChanged += (args) => UpdateCardFrame((Scryfall.Card)table.Rows[args.NewRow]["Name"]);
+            _cardTable.SelectedCellChanged += (args) => UpdateCardFrame(table.Rows[args.NewRow]["#"]?.ToString() ?? "");
 
             _curSetFrame.Add(_cardTable);
             _cardTable.SetFocus();
@@ -241,7 +241,7 @@ namespace MTG_CLI
                     if (_autoFind)
                         FindCard();
                 };
-                dlg.EditCard((Scryfall.Card)table.Rows[args.Row]["Name"]);
+                // dlg.EditCard((Scryfall.Card)table.Rows[args.Row]["Name"]);
             };
             _cardTable.KeyDown += (args) =>
             {
@@ -253,10 +253,10 @@ namespace MTG_CLI
                 }
             };
 
-            // if (table.Rows.Count > 0)
-                // UpdateCardFrame((Scryfall.Card)table.Rows[0]["Name"]);
+            if (table.Rows.Count > 0)
+                UpdateCardFrame(table.Rows[0]["#"]?.ToString() ?? "");
 
-            // UpdateStatsFrame();
+            UpdateStatsFrame();
         }
 
         private void UpdateStatsFrame()
@@ -264,11 +264,11 @@ namespace MTG_CLI
             _curStatsFrame.RemoveAll();
 
             _curStatsFrame.Title = "Statistics";
-            int totalCards = _cardTable.Table.Rows.Count;
-            int percent = (int)((float)_collectedCount / totalCards * 100);
-            Label lblCount = new($"Card Count: {_collectedCount} / {totalCards}  {percent}%") { X = 0, Y = 0, Width = Dim.Fill(), Height = 1 };
+            // int totalCards = _cardTable.Table.Rows.Count;
+            // int percent = (int)((float)_collectedCount / totalCards * 100);
+            // Label lblCount = new($"Card Count: {_collectedCount} / {totalCards}  {percent}%") { X = 0, Y = 0, Width = Dim.Fill(), Height = 1 };
 
-            _curStatsFrame.Add(lblCount);
+            // _curStatsFrame.Add(lblCount);
 
             if (!_top.Subviews.Contains(_curStatsFrame))
                 _top.Add(_curStatsFrame);
@@ -279,7 +279,7 @@ namespace MTG_CLI
             var row = _cardTable.Table.Rows[_cardTable.SelectedRow];
             Scryfall.Card selectedCard = (Scryfall.Card)row["Name"];
             row["Cnt"] = _inventory.GetCardCountDisplay(selectedCard);
-            UpdateCardFrame(selectedCard);
+            UpdateCardFrame(row["#"]?.ToString() ?? "");
         }
 
         // To color the Rarity column, assign this as the ColorGetter to the column's ColumnStyle
@@ -304,57 +304,42 @@ namespace MTG_CLI
             return scheme;
         }
 
-        private void UpdateCardFrame(Scryfall.Card card)
-        {
-            MTG_Card? curCard = _inventory.GetCard(card);
-            if (curCard != null)
-            {
-                UpdateCardFrame(curCard, card);
-            }
-            else
-            {
-                _curCardFrame.RemoveAll();
-
-                _curCardFrame.Title = $"{card.CollectorNumber} - {card.Name}";
-                InsertCardDetails(card, _curCardFrame, 0);
-
-                if (!_top.Subviews.Contains(_curCardFrame))
-                    _top.Add(_curCardFrame);
-            }
-        }
-
-        private void UpdateCardFrame(MTG_Card card, Scryfall.Card fullCard)
+        private void UpdateCardFrame(string cardNumber) //MTG_Card card, Scryfall.Card fullCard)
         {
             _curCardFrame.RemoveAll();
 
-            _curCardFrame.Title = $"{card.CollectorNumber} - {card.Name}";
+            SqliteDataReader? reader = _sql.Query(GET_CARD_DETAILS).WithParam("@Collector_Number", cardNumber).Read();
+            if (reader == null)
+                return;
 
-            card.SortCTCs();
-            for (int x = 0; x < card.Counts.Count; x++)
-            {
-                _curCardFrame.Add(new Label(card.Counts[x].ToString()) { X = 0, Y = x, Width = Dim.Fill() });
-            }
-            _curCardFrame.Add(new LineView() { X = 0, Y = card.Counts.Count, Width = Dim.Fill() });
+            reader.Read();
+            _curCardFrame.Title = $"{reader.GetFieldValue<string>("Collector_Number")} - {reader.GetFieldValue<string>("Name")}";
 
-            InsertCardDetails(fullCard, _curCardFrame, card.Counts.Count + 1);
+            // card.SortCTCs();
+            // for (int x = 0; x < card.Counts.Count; x++)
+            // {
+            //     _curCardFrame.Add(new Label(card.Counts[x].ToString()) { X = 0, Y = x, Width = Dim.Fill() });
+            // }
+            _curCardFrame.Add(new LineView() { X = 0, Y = 2 /*card.Counts.Count*/, Width = Dim.Fill() });
+
+            string frontText = reader.GetFieldValue<string>("FrontText");
+            string typeLine = reader.GetFieldValue<string>("TypeLine");
+            InsertCardDetails(typeLine, frontText, _curCardFrame, 2 /*card.Counts.Count + 1*/);
 
             if (!_top.Subviews.Contains(_curCardFrame))
                 _top.Add(_curCardFrame);
         }
 
-        private void InsertCardDetails(Scryfall.Card card, FrameView frame, int StartingY)
+        private void InsertCardDetails(string typeLine, string frontText, FrameView frame, int StartingY)
         {
-            frame.Add(new Label(card.TypeLine) { X = 0, Y = StartingY, Width = Dim.Fill() });
+            frame.Add(new Label(typeLine) { X = 0, Y = StartingY, Width = Dim.Fill() });
             TextView text = new() { X = 0, Y = StartingY + 2, Width = Dim.Fill(), Height = Dim.Fill() };
             text.ReadOnly = true;
             text.WordWrap = true;
             text.Multiline = true;
             try
             {
-                if (card.Text.Length > 0)
-                    text.Text = card.Text;
-                else if (card.Faces.Count > 0)
-                    text.Text = card.Faces[0].Text;
+                text.Text = frontText;
             }
             catch (Exception)
             {
