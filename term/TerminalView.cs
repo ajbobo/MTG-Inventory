@@ -207,8 +207,8 @@ namespace MTG_CLI
                 row["Cnt"] = "tbd";
                 row["Rarity"] = reader.GetFieldValue<string>("Rarity").ToUpper()[0];
                 row["Name"] = reader.GetFieldValue<string>("Name");
-                row["Color"] = "tbd";
-                row["Cost"] = "tbd";
+                row["Color"] = reader.GetFieldValue<string>("ColorIdentity");
+                row["Cost"] = reader.GetFieldValue<string>("ManaCost");
                 table.Rows.Add(row);
 
                 // if (_inventory.GetCardCount(card) > 0)

@@ -56,14 +56,26 @@ namespace MTG_CLI
             );
             AddQuery(InternalQuery.CREATE_CARD_TABLE,
                 @"  DROP TABLE IF EXISTS cards;
-                    CREATE TABLE cards ( SetCode varchar(4), Collector_Number varchar(4), Name varchar(128), Rarity varchar(8) )"
+                    CREATE TABLE cards ( 
+                        SetCode varchar(4), 
+                        Collector_Number varchar(4), 
+                        Name varchar(64), 
+                        Rarity varchar(8),
+                        ColorIdentity varchar(5),
+                        ManaCost varchar(15),
+                        TypeLine varchar(128),
+                        FrontText varchar,
+                        BackText varchar
+                    )"
                 );
             AddQuery(InternalQuery.INSERT_CARD,
-                @"  INSERT INTO cards ( SetCode, Collector_Number, Name, Rarity )
-                    VALUES ( @SetCode, @Collector_Number, @Name, @Rarity )"
+                @"  INSERT INTO cards ( SetCode, Collector_Number, Name, Rarity, ColorIdentity, ManaCost, TypeLine, FrontText, BackText )
+                    VALUES ( @SetCode, @Collector_Number, @Name, @Rarity, @ColorIdentity, @ManaCost, @TypeLine, @FrontText, @BackText )"
                 );
             AddQuery(InternalQuery.GET_SET_CARDS,
-                @"  SELECT SetCode, Collector_Number, Name, Rarity FROM cards WHERE SetCode = @SetCode"
+                @"  SELECT Collector_Number, Name, Rarity, ColorIdentity, ManaCost
+                    FROM cards 
+                    WHERE SetCode = @SetCode"
                 );
         }
 

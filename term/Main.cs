@@ -66,18 +66,33 @@ namespace MTG_CLI
                 if (msg.IsSuccessStatusCode)
                 {
                     string respStr = await msg.Content.ReadAsStringAsync();
-                    Scryfall.CardListResponse resp = JsonConvert.DeserializeObject<Scryfall.CardListResponse>(respStr) ?? new();
-                    foreach (Scryfall.Card curCard in resp.Data)
+                    JObject resp = JObject.Parse(respStr);
+                    JEnumerable<JToken> data = resp["data"]?.Children() ?? new();
+                    foreach (JToken curCard in data)
                     {
                         _sql.Query(INSERT_CARD)
-                            .WithParam("@SetCode", curCard.SetCode)
-                            .WithParam("@Collector_Number", curCard.CollectorNumber)
-                            .WithParam("@Name", curCard.Name)
-                            .WithParam("@Rarity", curCard.Rarity)
-                            .Execute();
+                            .WithParam("@SetCode", curCard["set"].AsString())
+                            .WithParam("@Collector_Number", curCard["collector_number"].AsString())
+                            .WithParam("@Name", curCard["name"].AsString())
+                            .WithParam("@Rarity", curCard["rarity"].AsString())
+                            .WithParam("@ColorIdentity", curCard["color_identity"].CompressArray())
+                            .WithParam("@ManaCost", curCard["mana_cost"].AsString())
+                            .WithParam("@TypeLine", curCard["type_line"].AsString());
+
+                        if (curCard["oracle_text"] != null)
+                        {
+                            _sql.WithParam("@FrontText", curCard["oracle_text"].AsString());
+                            _sql.WithParam("@BackText", "");
+                        }
+                        else if (curCard["card_faces"] != null)
+                        {
+                            _sql.WithParam("@FrontText", curCard["card_faces"]?[0]?["oracle_text"].AsString() ?? "");
+                            _sql.WithParam("@BackText", curCard["card_faces"]?[1]?["oracle_text"].AsString() ?? "");
+                        }
+                        _sql.Execute();
                     }
 
-                    if (resp.Has_More)
+                    if (resp["has_more"]?.Value<bool>() ?? false)
                         page++;
                     else
                         done = true;
