@@ -2,17 +2,6 @@ using Newtonsoft.Json;
 
 namespace Scryfall
 {
-    public class Set
-    {
-        public string Code { get; set; } = "";
-        public string Name { get; set; } = "<unknown>";
-
-        override public string ToString()
-        {
-            return Name;
-        }
-    }
-
     public class CardListResponse
     {
         public bool Has_More { get; set; } = false;

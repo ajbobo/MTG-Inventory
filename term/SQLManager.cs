@@ -33,7 +33,7 @@ namespace MTG_CLI
             return this;
         }
 
-        public int Go()
+        public int Execute()
         {
             return _command?.ExecuteNonQuery() ?? 0;
         }
@@ -41,6 +41,13 @@ namespace MTG_CLI
         public SqliteDataReader? Read()
         {
             return _command?.ExecuteReader() ?? null;
+        }
+
+        public T? ExecuteScalar<T>()
+        {
+            object? res = _command?.ExecuteScalar() ?? null;
+
+            return (res != null ? (T)res : default(T));
         }
     }
 }

@@ -27,7 +27,7 @@ namespace MTG_CLI
         private FilterSettings _filterSettings;
         private bool _autoFind = true;
 
-        public event Action<Scryfall.Set>? SelectedSetChanged;
+        public event Action<string>? SelectedSetChanged;
 
         public TerminalView(Inventory inventory, SQLManager sql)
         {
@@ -142,22 +142,21 @@ namespace MTG_CLI
         {
             Dialog selectSetDlg = new("Select a Set") { Width = 45 };
 
-            List<Scryfall.Set> SetList = new();
+            List<string> SetList = new();
             SqliteDataReader? reader = _sql.Query(SQLManager.InternalQuery.GET_ALL_SETS).Read();
             while (reader != null && reader.Read())
             {
-                SetList.Add(new Scryfall.Set
-                {
-                    Code = reader.GetFieldValue<string>("SetCode"),
-                    Name = reader.GetFieldValue<string>("Name")
-                });
+                string name = reader.GetFieldValue<string>("Name");
+                string code = string.Format("({0})",reader.GetFieldValue<string>("SetCode")); // Format it here as "(code)" so that it can be spaced nicely later
+                SetList.Add(string.Format("{0,-7} {1}", code, name));
             }
 
             ListView setListView = new(SetList) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             setListView.OpenSelectedItem += (args) =>
                 {
-                    Scryfall.Set selectedSet = (Scryfall.Set)args.Value;
-                    SelectedSetChanged?.Invoke(selectedSet);
+                    string selectedItem = (string)args.Value;
+                    string setCode = selectedItem.Substring(1, selectedItem.IndexOf(')') - 1); // The item is "(code) Name" - get the value between ( and )
+                    SelectedSetChanged?.Invoke(setCode);
                     Application.RequestStop();
                 };
 
@@ -166,9 +165,11 @@ namespace MTG_CLI
             Application.Run(selectSetDlg);
         }
 
-        public void SetCurrentSet(Scryfall.Set curSet)
+        public void SetCurrentSet(string setCode)
         {
-            _curSetFrame.Title = curSet.Name;
+            string setName = _sql.Query(GET_SET_NAME).WithParam("@SetCode", setCode).ExecuteScalar<string>() ?? "<unknown>";
+
+            _curSetFrame.Title = setName;
             _curSetFrame.RemoveAll();
             _curSetFrame.Add(new Label("Loading cards...") { X = Pos.Center(), Y = 0 });
 
@@ -176,15 +177,14 @@ namespace MTG_CLI
                 _top.Add(_curSetFrame);
         }
 
-        public void SetCardList(Scryfall.Set curSet) //List<Scryfall.Card> cardList)
+        public void SetCardList(string curSetCode)
         {
-            // _cardList = cardList;
             _collectedCount = 0;
 
             // TODO: This should be the filtered list of cards
-            SqliteDataReader? reader = _sql.Query(GET_SET_CARDS).WithParam("@SetCode", curSet.Code).Read();
+            SqliteDataReader? reader = _sql.Query(GET_SET_CARDS).WithParam("@SetCode", curSetCode).Read();
 
-            _findCardDlg = new(new()); //cardList);
+            _findCardDlg = new(new()); 
             _findCardDlg.CardSelected += FoundCard;
 
             _curSetFrame.RemoveAll();
@@ -197,19 +197,18 @@ namespace MTG_CLI
             table.Columns.Add("Color");
             table.Columns.Add("Cost");
 
-            // foreach (Scryfall.Card card in cardList)
             while (reader != null && reader.Read())
             {
                 // if (!_filterSettings.MatchesFilter(card))
                     // continue;
 
                 DataRow row = table.NewRow();
-                row["#"] = reader.GetFieldValue<int>("Collector_Number"); // card.CollectorNumber;
-                row["Cnt"] = "tbd"; //_inventory.GetCardCountDisplay(card);
-                row["Rarity"] = reader.GetFieldValue<string>("Rarity").ToUpper()[0];// card.Rarity.ToUpper()[0];
-                row["Name"] = reader.GetFieldValue<string>("Name"); // card;
-                row["Color"] = "tbd"; //String.Join("", card.ColorIdentity?.ToArray() ?? new string[] { });
-                row["Cost"] = "tbd"; //card.ManaCost;
+                row["#"] = reader.GetFieldValue<int>("Collector_Number");
+                row["Cnt"] = "tbd";
+                row["Rarity"] = reader.GetFieldValue<string>("Rarity").ToUpper()[0];
+                row["Name"] = reader.GetFieldValue<string>("Name");
+                row["Color"] = "tbd";
+                row["Cost"] = "tbd";
                 table.Rows.Add(row);
 
                 // if (_inventory.GetCardCount(card) > 0)

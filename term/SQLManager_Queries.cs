@@ -9,6 +9,8 @@ namespace MTG_CLI
             CREATE_SET_TABLE,
             INSERT_SET,
             GET_ALL_SETS,
+            GET_SET_NAME,
+            GET_SET_CODE,
             CREATE_CARD_TABLE,
             INSERT_CARD,
             GET_SET_CARDS,
@@ -46,6 +48,12 @@ namespace MTG_CLI
             AddQuery(InternalQuery.GET_ALL_SETS,
                 @"  SELECT Name, SetCode FROM sets "
                 );
+            AddQuery(InternalQuery.GET_SET_NAME,
+                @"  SELECT Name FROM sets WHERE SetCode = @SetCode "
+                );
+            AddQuery(InternalQuery.GET_SET_CODE,
+                @"  SELECT SetCode FROM sets WHERE name = @Name "
+            );
             AddQuery(InternalQuery.CREATE_CARD_TABLE,
                 @"  DROP TABLE IF EXISTS cards;
                     CREATE TABLE cards ( SetCode varchar(4), Collector_Number varchar(4), Name varchar(128), Rarity varchar(8) )"
