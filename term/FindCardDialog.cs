@@ -27,8 +27,8 @@ namespace MTG_CLI
 
         public void FindCard()
         {
-            if (_cardList.Count == 0)
-                return;
+            // if (_cardList.Count == 0)
+                // return;
 
             _validator.Text = "";
 

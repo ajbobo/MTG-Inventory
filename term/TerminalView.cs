@@ -90,20 +90,19 @@ namespace MTG_CLI
                 return;
 
             DataRow row = _cardTable.Table.Rows[_cardTable.SelectedRow];
-            Scryfall.Card selectedCard = (Scryfall.Card)row["Name"];
-            string selectedName = selectedCard.Name;
+            string selectedName = row["Name"].ToString() ?? ""; //selectedCard.Name;
 
             // Starting after the current row, find the next one with the same Name
             int index = _cardTable.SelectedRow + 1;
             while (true) // Loop until a card is found, wrap back around if needed, stops when it finds the same card again
             {
                 DataRow nextRow = _cardTable.Table.Rows[index];
-                Scryfall.Card nextCard = (Scryfall.Card)nextRow["Name"];
-                if (nextCard.Name.Equals(selectedName))
+                string nextName = nextRow["Name"].ToString() ?? "";
+                if (nextName.Equals(selectedName))
                 {
                     _cardTable.SelectedRow = index;
                     _cardTable.EnsureSelectedCellIsVisible();
-                    UpdateCardFrame(nextRow["#"]?.ToString() ?? "");
+                    UpdateCardFrame(nextRow["#"].ToString() ?? "");
                     return;
                 }
 
@@ -204,7 +203,8 @@ namespace MTG_CLI
                 // continue;
 
                 DataRow row = table.NewRow();
-                row["#"] = reader.GetFieldValue<string>("Collector_Number");
+                string cardNumber = reader.GetFieldValue<string>("Collector_Number");
+                row["#"] = cardNumber;
                 row["Cnt"] = "tbd";
                 row["Rarity"] = reader.GetFieldValue<string>("Rarity").ToUpper()[0];
                 row["Name"] = reader.GetFieldValue<string>("Name");
@@ -212,8 +212,8 @@ namespace MTG_CLI
                 row["Cost"] = reader.GetFieldValue<string>("ManaCost");
                 table.Rows.Add(row);
 
-                // if (_inventory.GetCardCount(card) > 0)
-                // _collectedCount++;
+                if (_inventory.GetCardCount(cardNumber) > 0)
+                    _collectedCount++;
             }
             reader?.Close();
 
@@ -227,22 +227,22 @@ namespace MTG_CLI
             _cardTable.Style.ColumnStyles.Add(table.Columns["Rarity"], new() { MinWidth = 2, MaxWidth = 2 });
             _cardTable.Style.ColumnStyles.Add(table.Columns["Name"], new() { MinWidth = 15 });
             _cardTable.Style.ColumnStyles.Add(table.Columns["Color"], new() { MaxWidth = 5, MinWidth = 5 });
-            _cardTable.SelectedCellChanged += (args) => UpdateCardFrame(table.Rows[args.NewRow]["#"]?.ToString() ?? "");
+            _cardTable.SelectedCellChanged += (args) => UpdateCardFrame(table.Rows[args.NewRow]["#"].ToString() ?? "");
 
             _curSetFrame.Add(_cardTable);
             _cardTable.SetFocus();
             _cardTable.CellActivated += (args) =>
             {
-                DataTable table = args.Table;
-                EditCardDialog dlg = new(_inventory);
-                dlg.DataChanged += async (card) =>
-                {
-                    await _inventory.WriteToFirebase(card);
-                    _inventory.WriteToJsonBackup();
-                    UpdateCardTableRow();
-                    if (_autoFind)
-                        FindCard();
-                };
+                // DataTable table = args.Table;
+                // EditCardDialog dlg = new(_inventory);
+                // dlg.DataChanged += async (card) =>
+                // {
+                //     await _inventory.WriteToFirebase(card);
+                //     _inventory.WriteToJsonBackup();
+                //     UpdateCardTableRow();
+                //     if (_autoFind)
+                //         FindCard();
+                // };
                 // dlg.EditCard((Scryfall.Card)table.Rows[args.Row]["Name"]);
             };
             _cardTable.KeyDown += (args) =>
@@ -256,7 +256,7 @@ namespace MTG_CLI
             };
 
             if (table.Rows.Count > 0)
-                UpdateCardFrame(table.Rows[0]["#"]?.ToString() ?? "");
+                UpdateCardFrame(table.Rows[0]["#"].ToString() ?? "");
 
             UpdateStatsFrame();
         }
@@ -266,11 +266,11 @@ namespace MTG_CLI
             _curStatsFrame.RemoveAll();
 
             _curStatsFrame.Title = "Statistics";
-            // int totalCards = _cardTable.Table.Rows.Count;
-            // int percent = (int)((float)_collectedCount / totalCards * 100);
-            // Label lblCount = new($"Card Count: {_collectedCount} / {totalCards}  {percent}%") { X = 0, Y = 0, Width = Dim.Fill(), Height = 1 };
+            int totalCards = _cardTable.Table.Rows.Count;
+            int percent = (int)((float)_collectedCount / totalCards * 100);
+            Label lblCount = new($"Card Count: {_collectedCount} / {totalCards}  {percent}%") { X = 0, Y = 0, Width = Dim.Fill(), Height = 1 };
 
-            // _curStatsFrame.Add(lblCount);
+            _curStatsFrame.Add(lblCount);
 
             if (!_top.Subviews.Contains(_curStatsFrame))
                 _top.Add(_curStatsFrame);
@@ -281,7 +281,7 @@ namespace MTG_CLI
             var row = _cardTable.Table.Rows[_cardTable.SelectedRow];
             Scryfall.Card selectedCard = (Scryfall.Card)row["Name"];
             row["Cnt"] = _inventory.GetCardCountDisplay(selectedCard);
-            UpdateCardFrame(row["#"]?.ToString() ?? "");
+            UpdateCardFrame(row["#"].ToString() ?? "");
         }
 
         // To color the Rarity column, assign this as the ColorGetter to the column's ColumnStyle
