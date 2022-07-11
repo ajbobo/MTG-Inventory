@@ -2,8 +2,9 @@
 Import Inventory data from Firebase
 Add Inventory count (with marks for Foil & Other) to Card Table
 Remove uses of Scryfall.Card
-    Find Card dialog
-    Others
+    Inventory object
+    EditCardDialog
+    TerminalView
 Replace filters with SQL queries
 
 --- General ---

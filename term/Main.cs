@@ -11,7 +11,6 @@ namespace MTG_CLI
         private static SQLManager _sql = new SQLManager();
 
         private static Inventory _inventory = new(_sql);
-        private static List<Scryfall.Card> _cardList = new();
 
         private static bool IsCollectableSetType(string setType, string block, string parent)
         {

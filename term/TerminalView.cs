@@ -21,7 +21,6 @@ namespace MTG_CLI
 
         private SQLManager _sql;
 
-        private List<Scryfall.Card> _cardList;
         private int _collectedCount;
         private Inventory _inventory;
         private FilterSettings _filterSettings;
@@ -34,7 +33,6 @@ namespace MTG_CLI
             _sql = sql;
             _inventory = inventory;
             _filterSettings = new(_inventory);
-            _cardList = new();
 
             Application.Init();
 
@@ -118,13 +116,15 @@ namespace MTG_CLI
             _findCardDlg.FindCard();
         }
 
-        private void FoundCard(Scryfall.Card card)
+        private void FoundCard(string cardName)
         {
-            DataRow? cardRow = _cardTable.Table.Rows.Find(card.CollectorNumber);
+            string cardNumber = _sql.Query(GET_CARD_NUMBER).WithParam("@Name", cardName).ExecuteScalar<string>() ?? "";
+
+            DataRow? cardRow = _cardTable.Table.Rows.Find(cardNumber);
             _cardTable.SelectedRow = _cardTable.Table.Rows.IndexOf(cardRow);
             _cardTable.EnsureSelectedCellIsVisible();
 
-            UpdateCardFrame(cardRow?["#"].ToString() ?? "");
+            UpdateCardFrame(cardNumber);
         }
 
         private void ChooseFilters()
@@ -199,9 +199,6 @@ namespace MTG_CLI
 
             while (reader != null && reader.Read())
             {
-                // if (!_filterSettings.MatchesFilter(card))
-                // continue;
-
                 DataRow row = table.NewRow();
                 string cardNumber = reader.GetFieldValue<string>("Collector_Number");
                 row["#"] = cardNumber;
@@ -279,8 +276,8 @@ namespace MTG_CLI
         private void UpdateCardTableRow()
         {
             var row = _cardTable.Table.Rows[_cardTable.SelectedRow];
-            Scryfall.Card selectedCard = (Scryfall.Card)row["Name"];
-            row["Cnt"] = _inventory.GetCardCountDisplay(selectedCard);
+            // Scryfall.Card selectedCard = (Scryfall.Card)row["Name"];
+            // row["Cnt"] = _inventory.GetCardCountDisplay(selectedCard);
             UpdateCardFrame(row["#"].ToString() ?? "");
         }
 
@@ -306,7 +303,7 @@ namespace MTG_CLI
             return scheme;
         }
 
-        private void UpdateCardFrame(string cardNumber) //MTG_Card card, Scryfall.Card fullCard)
+        private void UpdateCardFrame(string cardNumber)
         {
             _curCardFrame.RemoveAll();
 

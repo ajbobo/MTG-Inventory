@@ -15,6 +15,8 @@ namespace MTG_CLI
             INSERT_CARD,
             GET_SET_CARDS,
             GET_CARD_DETAILS,
+            GET_CARD_NAMES,
+            GET_CARD_NUMBER,
             // These aren't in use for real yet
             CREATE_USER_INVENTORY,
             ADD_TO_USER_INVENTORY,
@@ -81,6 +83,14 @@ namespace MTG_CLI
                 @"  SELECT Collector_Number, Name, TypeLine, FrontText
                     FROM cards
                     WHERE Collector_Number = @Collector_Number"
+                );
+            AddQuery(InternalQuery.GET_CARD_NAMES,
+                @"  SELECT DISTINCT Name FROM cards "
+                );
+            AddQuery(InternalQuery.GET_CARD_NUMBER,
+                @"  SELECT Collector_Number 
+                    FROM cards 
+                    WHERE Name = @Name"
                 );
         }
 
