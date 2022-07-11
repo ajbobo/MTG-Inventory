@@ -1,13 +1,10 @@
 --- New DB structure ---
-Migrate term to use new Firestore structure
-
-Single document per set - Only holds inventory information
-Scryfall data still comes from Scryfall API, but is stored in SQL tables in memory
-Inventory & Scryfall tables can be joined to get all interesting information
-Use an in-memory database to store it all (eg: SQLlite)
-    Use SQL queries to perform filter operations
-This would probably be good for standalone apps, could it work with a .NET web app?
-
+Import Inventory data from Firebase
+Add Inventory count (with marks for Foil & Other) to Card Table
+Remove uses of Scryfall.Card
+    Find Card dialog
+    Others
+Replace filters with SQL queries
 
 --- General ---
 collector_number from Deckbox and from Scryfall don't match for old sets
