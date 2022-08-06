@@ -29,7 +29,7 @@ namespace MTG_CLI
         {
             AddQuery(InternalQuery.CREATE_USER_INVENTORY,
                 @" DROP TABLE IF EXISTS user_inventory;
-                   CREATE TABLE user_inventory (SetCode varchar(4), CollectorNumber varchar(3), Name varchar(128), Attrs varchar(25), Count int );"
+                   CREATE TABLE user_inventory (SetCode varchar(5), CollectorNumber varchar(3), Name varchar(128), Attrs varchar(25), Count int );"
                 );
             AddQuery(InternalQuery.ADD_TO_USER_INVENTORY,
                 @" INSERT INTO user_inventory (SetCode, CollectorNumber, Name, Attrs, Count) 
@@ -60,7 +60,7 @@ namespace MTG_CLI
             AddQuery(InternalQuery.CREATE_CARD_TABLE,
                 @"  DROP TABLE IF EXISTS cards;
                     CREATE TABLE cards ( 
-                        SetCode varchar(4), 
+                        SetCode varchar(5), 
                         Collector_Number varchar(4), 
                         Name varchar(64), 
                         Rarity varchar(8),
