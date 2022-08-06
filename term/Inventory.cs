@@ -1,5 +1,6 @@
 using Google.Cloud.Firestore;
 using Newtonsoft.Json;
+using static MTG_CLI.SQLManager.InternalQuery;
 
 namespace MTG_CLI
 {
@@ -10,7 +11,7 @@ namespace MTG_CLI
 
         private FirestoreDb _db;
         private SQLManager _sql;
-        
+
         public bool UsingCache { get; private set; }
 
         // Inventory structure: _inventory[SetCode][CardNum] = Card
@@ -22,7 +23,7 @@ namespace MTG_CLI
             _sql = sql;
         }
 
-        public async Task ReadData()
+        public async Task ReadData(string setCode)
         {
             // Check the cache, if it is too old, read from Firebase
             bool readCache = false;
@@ -39,21 +40,37 @@ namespace MTG_CLI
             // if (readCache)
             //     ReadFromJsonCache();
             // else
-                await ReadFromFirebase();
+            await ReadFromFirebase(setCode);
 
             UsingCache = readCache;
         }
 
-        public async Task ReadFromFirebase()
+        public async Task ReadFromFirebase(string setCode)
         {
             Console.WriteLine("Firebase data");
-            Query userInventoryQuery = _db.Collection("user_inventory");
-            QuerySnapshot snapshot = await userInventoryQuery.GetSnapshotAsync();
-            foreach (DocumentSnapshot doc in snapshot)
+            
+            _sql.Query(CREATE_USER_INVENTORY).Execute();
+
+            DocumentSnapshot setDoc = await _db.Collection("User_Inv").Document(setCode).GetSnapshotAsync();
+            Dictionary<string, object>[] setData;
+            setDoc.TryGetValue<Dictionary<string,object>[]>("Cards", out setData);
+            foreach (Dictionary<string, object> curCard in setData)
             {
-                MTG_Card curCard = doc.ConvertTo<MTG_Card>();
-                curCard.UUID = doc.Id;
-                AddCardToInventory(curCard);
+                string collectorNumber = curCard["CollectorNumber"].ToString() ?? "0";
+                string name = curCard["Name"].ToString() ?? "";
+                List<object> counts = (List<object>)curCard["Counts"];
+                foreach (Dictionary<string, object> curCTC in counts)
+                {
+                    string attrs = curCTC["Attrs"].ToString() ?? "Standard";
+                    long count = (long)curCTC["Count"];
+                    _sql.Query(ADD_TO_USER_INVENTORY)
+                        .WithParam("@SetCode", setCode)
+                        .WithParam("@CollectorNumber", collectorNumber)
+                        .WithParam("@Name", name)
+                        .WithParam("@Attrs", attrs)
+                        .WithParam("@Count", count)
+                        .Execute();
+                }
             }
         }
 
@@ -118,34 +135,6 @@ namespace MTG_CLI
                 return null;
 
             return _inventory[setCode][collectorNumber];
-        }
-
-        public string GetCardCountDisplay(Scryfall.Card card)
-        {
-            MTG_Card? curCard = GetCard(card);
-            return GetCardCountDisplay(curCard);
-        }
-
-        public string GetCardCountDisplay(MTG_Card? curCard)
-        {
-            return String.Format("{0}{1}{2}", curCard?.GetTotalCount() ?? 0, (curCard?.HasAttr("foil") ?? false ? "✶" : ""), (curCard?.HasOtherAttr("foil") ?? false ? "Ω" : ""));
-        }
-
-        public int GetCardCount(string cardNumber)
-        {
-            // PLACEHOLDER FUNCTION FOR NOW
-            return 0;
-        }
-
-        public int GetCardCount(Scryfall.Card card)
-        {
-            MTG_Card? curCard = GetCard(card);
-            return getCardCount(curCard);
-        }
-
-        public int getCardCount(MTG_Card? curCard)
-        {
-            return curCard?.GetTotalCount() ?? 0;
         }
 
         async public Task WriteToFirebase(MTG_Card card)

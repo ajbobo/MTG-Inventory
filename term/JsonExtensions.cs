@@ -10,6 +10,11 @@ namespace ExtensionMethods
            return (token != null ? token.ToString() : "");
         }
 
+        public static int AsInt(this JToken? token)
+        {
+           return (token != null ? (int)token : 0);
+        }
+
         public static string CompressArray(this JToken? token)
         {
             if (token?.Type != JTokenType.Array)

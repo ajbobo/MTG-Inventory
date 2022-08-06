@@ -17,9 +17,9 @@ namespace MTG_CLI
             GET_CARD_DETAILS,
             GET_CARD_NAMES,
             GET_CARD_NUMBER,
-            // These aren't in use for real yet
             CREATE_USER_INVENTORY,
             ADD_TO_USER_INVENTORY,
+            // These aren't in use for real yet
             GET_SET_PLAYSETS,
         };
 
@@ -75,9 +75,29 @@ namespace MTG_CLI
                     VALUES ( @SetCode, @Collector_Number, @Name, @Rarity, @ColorIdentity, @ManaCost, @TypeLine, @FrontText )"
                 );
             AddQuery(InternalQuery.GET_SET_CARDS,
-                @"  SELECT Collector_Number, Name, Rarity, ColorIdentity, ManaCost
-                    FROM cards 
-                    WHERE SetCode = @SetCode"
+                @"  SELECT cds.Collector_Number,
+                           ifnull(inv.Total || IFNULL(foil.Symbol, '') || IFNULL(other.Symbol, ''), 0) AS Cnt,
+                           cds.Name,
+                           cds.Rarity,
+                           cds.ColorIdentity,
+                           cds.ManaCost
+                    FROM cards cds
+                            LEFT JOIN (SELECT CollectorNumber, CAST(SUM(Count) as TEXT) AS Total
+                                        FROM user_inventory
+                                        GROUP BY CollectorNumber) inv
+                                    ON cds.Collector_Number = inv.CollectorNumber
+                            LEFT JOIN (SELECT CollectorNumber, '*' AS Symbol
+                                        FROM user_inventory
+                                        WHERE attrs LIKE '%foil%'
+                                        GROUP BY CollectorNumber) foil
+                                    ON cds.Collector_Number = foil.CollectorNumber
+                            LEFT JOIN (SELECT CollectorNumber, 'Ω' AS Symbol
+                                        FROM user_inventory
+                                        WHERE attrs <> 'Standard'
+                                        AND attrs <> 'foil'
+                                        GROUP BY CollectorNumber) other
+                                    ON cds.Collector_Number = other.CollectorNumber
+                    ORDER BY cds.ROWID"
                 );
             AddQuery(InternalQuery.GET_CARD_DETAILS,
                 @"  SELECT Collector_Number, Name, TypeLine, FrontText

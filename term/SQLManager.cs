@@ -27,6 +27,12 @@ namespace MTG_CLI
             return this;
         }
 
+        public SQLManager WithParam(string param, long value)
+        {
+            _command?.Parameters.AddWithValue(param, value);
+            return this;
+        }
+
         public SQLManager WithParam(string param, int value)
         {
             _command?.Parameters.AddWithValue(param, value.ToString());

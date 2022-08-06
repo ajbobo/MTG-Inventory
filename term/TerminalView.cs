@@ -200,16 +200,16 @@ namespace MTG_CLI
             while (reader != null && reader.Read())
             {
                 DataRow row = table.NewRow();
-                string cardNumber = reader.GetFieldValue<string>("Collector_Number");
-                row["#"] = cardNumber;
-                row["Cnt"] = "tbd";
+                row["#"] = reader.GetFieldValue<string>("Collector_Number");
+                string cnt = reader.GetFieldValue<string>("Cnt");
+                row["Cnt"] = cnt;
                 row["Rarity"] = reader.GetFieldValue<string>("Rarity").ToUpper()[0];
                 row["Name"] = reader.GetFieldValue<string>("Name");
                 row["Color"] = reader.GetFieldValue<string>("ColorIdentity");
                 row["Cost"] = reader.GetFieldValue<string>("ManaCost");
                 table.Rows.Add(row);
 
-                if (_inventory.GetCardCount(cardNumber) > 0)
+                if (!cnt.Equals("0"))
                     _collectedCount++;
             }
             reader?.Close();
@@ -276,31 +276,7 @@ namespace MTG_CLI
         private void UpdateCardTableRow()
         {
             var row = _cardTable.Table.Rows[_cardTable.SelectedRow];
-            // Scryfall.Card selectedCard = (Scryfall.Card)row["Name"];
-            // row["Cnt"] = _inventory.GetCardCountDisplay(selectedCard);
             UpdateCardFrame(row["#"].ToString() ?? "");
-        }
-
-        // To color the Rarity column, assign this as the ColorGetter to the column's ColumnStyle
-        ColorScheme GetRarityColor(TableView.CellColorGetterArgs args)
-        {
-            string rarity = (string)args.CellValue;
-            Color newColor = rarity switch
-            {
-                "C" => Color.White,
-                "U" => Color.BrightBlue,
-                "R" => Color.Red,
-                "M" => Color.Magenta,
-                _ => Color.Black
-            };
-            if (newColor == Color.Black)
-                return args.RowScheme;
-
-            ColorScheme scheme = new();
-            scheme.Normal = new Terminal.Gui.Attribute(newColor, args.RowScheme.Normal.Background);
-            scheme.HotFocus = new Terminal.Gui.Attribute(newColor, args.RowScheme.HotFocus.Background);
-            scheme.HotNormal = new Terminal.Gui.Attribute(newColor, args.RowScheme.HotNormal.Background);
-            return scheme;
         }
 
         private void UpdateCardFrame(string cardNumber)

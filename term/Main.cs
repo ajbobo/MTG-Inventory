@@ -23,7 +23,7 @@ namespace MTG_CLI
                     (setType.Equals("funny") && block.Length == 0 && parent.Length == 0));
         }
 
-        async private static Task<bool> GetSetData()
+        async private static Task<bool> GetSetList()
         {
             _sql.Query(CREATE_SET_TABLE).Execute();
 
@@ -111,7 +111,13 @@ namespace MTG_CLI
             win.SelectedSetChanged += async (newSet) =>
             {
                 win.SetCurrentSet(newSet);
+
+                Console.WriteLine("Getting cards for set: {0}", newSet);
                 await GetSetCards(newSet);
+
+                Console.WriteLine("Getting inventory for {0}", newSet);
+                await _inventory.ReadData(newSet);
+
                 win.SetCardList(newSet);
             };
 
@@ -124,10 +130,7 @@ namespace MTG_CLI
 
 
             Console.WriteLine("Reading Set data from Scryfall");
-            await GetSetData();
-
-            // Console.WriteLine("Reading Inventory data");
-            // await _inventory.ReadData();
+            await GetSetList();
 
             StartTerminalView();
         }
