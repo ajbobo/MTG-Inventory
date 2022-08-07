@@ -88,7 +88,7 @@ namespace MTG_CLI
                 return;
 
             DataRow row = _cardTable.Table.Rows[_cardTable.SelectedRow];
-            string selectedName = row["Name"].ToString() ?? ""; //selectedCard.Name;
+            string selectedName = row["Name"].ToString() ?? ""; 
 
             // Starting after the current row, find the next one with the same Name
             int index = _cardTable.SelectedRow + 1;
@@ -288,20 +288,27 @@ namespace MTG_CLI
                 return;
 
             reader.Read();
-            _curCardFrame.Title = $"{reader.GetFieldValue<string>("Collector_Number")} - {reader.GetFieldValue<string>("Name")}";
-
-            // card.SortCTCs();
-            // for (int x = 0; x < card.Counts.Count; x++)
-            // {
-            //     _curCardFrame.Add(new Label(card.Counts[x].ToString()) { X = 0, Y = x, Width = Dim.Fill() });
-            // }
-            _curCardFrame.Add(new LineView() { X = 0, Y = 2 /*card.Counts.Count*/, Width = Dim.Fill() });
-
+            string title = $"{reader.GetFieldValue<string>("Collector_Number")} - {reader.GetFieldValue<string>("Name")}";
             string frontText = reader.GetFieldValue<string>("FrontText");
             string typeLine = reader.GetFieldValue<string>("TypeLine");
-            InsertCardDetails(typeLine, frontText, _curCardFrame, 2 /*card.Counts.Count + 1*/);
-
             reader?.Close();
+
+            _curCardFrame.Title = title;
+
+            reader = _sql.Query(GET_CARD_CTCS).WithParam("@Collector_Number", cardNumber).Read();
+            int cnt = 0;
+            while (reader?.Read() ?? false)
+            {
+                string ctc = $"{reader.GetFieldValue<int>("Count")} - {reader.GetFieldValue<string>("Attrs")}";
+                _curCardFrame.Add(new Label(ctc) { X = 0, Y = cnt, Width = Dim.Fill() });
+                cnt++;
+            }
+            reader?.Close();
+
+            _curCardFrame.Add(new LineView() { X = 0, Y = cnt, Width = Dim.Fill() });
+
+            InsertCardDetails(typeLine, frontText, _curCardFrame, cnt + 1);
+
             if (!_top.Subviews.Contains(_curCardFrame))
                 _top.Add(_curCardFrame);
         }

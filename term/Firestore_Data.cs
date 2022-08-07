@@ -82,11 +82,6 @@ namespace MTG_CLI
             Counts = new();
         }
 
-        public void SortCTCs()
-        {
-            Counts.Sort();
-        }
-
         public int GetTotalCount()
         {
             int total = 0;

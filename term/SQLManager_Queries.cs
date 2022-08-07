@@ -19,6 +19,7 @@ namespace MTG_CLI
             GET_CARD_NUMBER,
             CREATE_USER_INVENTORY,
             ADD_TO_USER_INVENTORY,
+            GET_CARD_CTCS,
             // These aren't in use for real yet
             GET_SET_PLAYSETS,
         };
@@ -56,7 +57,7 @@ namespace MTG_CLI
                 );
             AddQuery(InternalQuery.GET_SET_CODE,
                 @"  SELECT SetCode FROM sets WHERE name = @Name "
-            );
+                );
             AddQuery(InternalQuery.CREATE_CARD_TABLE,
                 @"  DROP TABLE IF EXISTS cards;
                     CREATE TABLE cards ( 
@@ -104,6 +105,12 @@ namespace MTG_CLI
                     FROM cards
                     WHERE Collector_Number = @Collector_Number"
                 );
+            AddQuery(InternalQuery.GET_CARD_CTCS,
+                @"  SELECT Attrs, Count
+                    FROM user_inventory
+                    WHERE CollectorNumber = @Collector_Number
+                    order by Attrs
+                ");
             AddQuery(InternalQuery.GET_CARD_NAMES,
                 @"  SELECT DISTINCT Name FROM cards "
                 );

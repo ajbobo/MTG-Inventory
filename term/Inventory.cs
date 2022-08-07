@@ -54,6 +54,9 @@ namespace MTG_CLI
             DocumentSnapshot setDoc = await _db.Collection("User_Inv").Document(setCode).GetSnapshotAsync();
             Dictionary<string, object>[] setData;
             setDoc.TryGetValue<Dictionary<string,object>[]>("Cards", out setData);
+            if (setData == null)
+                return;
+
             foreach (Dictionary<string, object> curCard in setData)
             {
                 string collectorNumber = curCard["CollectorNumber"].ToString() ?? "0";
