@@ -1,6 +1,6 @@
 --- New DB structure ---
-Import Inventory data from Firebase
-Add Inventory count (with marks for Foil & Other) to Card Table
+Reenable editing card counts
+Write card changes back to Firebase
 Remove uses of Scryfall.Card
     Inventory object
     EditCardDialog
