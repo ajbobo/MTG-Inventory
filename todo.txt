@@ -1,10 +1,5 @@
 --- New DB structure ---
-Reenable editing card counts
 Write card changes back to Firebase
-Remove uses of Scryfall.Card
-    Inventory object
-    EditCardDialog
-    TerminalView
 Replace filters with SQL queries
 
 --- General ---
@@ -41,7 +36,7 @@ Migrate from Bootstrap to TailwindCSS and HeadlessUI?
 
 --- V2.0 ---
 Can I create an API (hosted in Firebase) that does all the real work?
-    Firebase Functions requires a paid account, so I'd need to find another way. Heroku? Hosted web-app?
+    Firebase Functions requires a paid account, so I'd need to find another way. Heroku? Hosted web-app? Microsft Azure has a free tier that includes Azure Functions
     Then I could create a UI or commandline app that drives it
     https://betterprogramming.pub/building-an-api-with-firebase-109041721f77
 

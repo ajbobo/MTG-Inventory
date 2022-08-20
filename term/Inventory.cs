@@ -15,7 +15,7 @@ namespace MTG_CLI
         public bool UsingCache { get; private set; }
 
         // Inventory structure: _inventory[SetCode][CardNum] = Card
-        private Dictionary<string, Dictionary<string, MTG_Card>> _inventory = new();
+        // private Dictionary<string, Dictionary<string, MTG_Card>> _inventory = new();
 
         public Inventory(SQLManager sql)
         {
@@ -82,12 +82,13 @@ namespace MTG_CLI
             // The cache cuts down on reads from Firebase
             // If you write to it while Firebase isn't available, it won't sync
             //    That would be nice, though
-            Console.WriteLine("Local Json data");
-            using (StreamReader reader = new StreamReader(CACHE_FILE))
-            {
-                string json = reader.ReadToEnd();
-                _inventory = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, MTG_Card>>>(json) ?? new();
-            }
+
+            // Console.WriteLine("Local Json data");
+            // using (StreamReader reader = new StreamReader(CACHE_FILE))
+            // {
+            //     string json = reader.ReadToEnd();
+            //     _inventory = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, MTG_Card>>>(json) ?? new();
+            // }
         }
 
         public void WriteToJsonBackup()
@@ -96,48 +97,6 @@ namespace MTG_CLI
             // settings.Formatting = Formatting.Indented;
 
             // File.WriteAllText("inventory_cache.json", JsonConvert.SerializeObject(_inventory, settings));
-        }
-
-        private void AddCardToInventory(MTG_Card curCard)
-        {
-            // Console.WriteLine($"{curCard.SetCode} {curCard.CollectorNumber} - {curCard.Name}");
-
-            if (!_inventory.ContainsKey(curCard.SetCode))
-                _inventory.Add(curCard.SetCode, new());
-
-            _inventory[curCard.SetCode].Add(curCard.CollectorNumber, curCard);
-        }
-
-        public void AddCard(Scryfall.Card curCard, CardTypeCount ctc)
-        {
-            string setCode = curCard.SetCode;
-
-            if (!_inventory.ContainsKey(setCode))
-                _inventory.Add(setCode, new());
-            else if (_inventory[setCode].ContainsKey(curCard.CollectorNumber)) // The card is in inventory already - no need to add it
-                return;
-
-            MTG_Card newCard = new()
-            {
-                Name = curCard.Name,
-                CollectorNumber = curCard.CollectorNumber,
-                SetCode = setCode,
-                Set = curCard.SetName
-            };
-            newCard.Counts.Add(ctc);
-
-            _inventory[setCode].Add(curCard.CollectorNumber, newCard);
-        }
-
-        public MTG_Card? GetCard(Scryfall.Card card)
-        {
-            string setCode = card.SetCode;
-            string collectorNumber = card.CollectorNumber;
-
-            if (!_inventory.ContainsKey(setCode) || !_inventory[setCode].ContainsKey(collectorNumber))
-                return null;
-
-            return _inventory[setCode][collectorNumber];
         }
 
         async public Task WriteToFirebase() //MTG_Card card)
