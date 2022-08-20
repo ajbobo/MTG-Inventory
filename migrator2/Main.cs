@@ -77,7 +77,7 @@ namespace Migrator2
 
             try
             {
-                await WriteInventory_Firebase(inventory, "snc");
+                await WriteInventory_Firebase(inventory);
             }
             catch (Exception ex)
             {
