@@ -14,12 +14,14 @@ namespace MTG_CLI
             CREATE_CARD_TABLE,
             INSERT_CARD,
             GET_SET_CARDS,
+            GET_SINGLE_CARD_COUNT,
             GET_CARD_DETAILS,
             GET_CARD_NAMES,
             GET_CARD_NUMBER,
             CREATE_USER_INVENTORY,
             ADD_TO_USER_INVENTORY,
             GET_CARD_CTCS,
+            UPDATE_CARD_CTC,
             // These aren't in use for real yet
             GET_SET_PLAYSETS,
         };
@@ -30,8 +32,9 @@ namespace MTG_CLI
         {
             AddQuery(InternalQuery.CREATE_USER_INVENTORY,
                 @" DROP TABLE IF EXISTS user_inventory;
-                   CREATE TABLE user_inventory (SetCode varchar(5), CollectorNumber varchar(3), Name varchar(128), Attrs varchar(25), Count int );"
-                );
+                   CREATE TABLE user_inventory (SetCode varchar(5), CollectorNumber varchar(3), Name varchar(128), Attrs varchar(25), Count int );
+                   CREATE UNIQUE INDEX idx_CollectorNumber_Attrs ON user_inventory (CollectorNumber, Attrs);
+                ");
             AddQuery(InternalQuery.ADD_TO_USER_INVENTORY,
                 @" INSERT INTO user_inventory (SetCode, CollectorNumber, Name, Attrs, Count) 
                    VALUES ( @SetCode, @CollectorNumber, @Name, @Attrs, @Count ); "
@@ -90,26 +93,63 @@ namespace MTG_CLI
                             LEFT JOIN (SELECT CollectorNumber, '*' AS Symbol
                                         FROM user_inventory
                                         WHERE attrs LIKE '%foil%'
+                                          AND Count > 0
                                         GROUP BY CollectorNumber) foil
                                     ON cds.Collector_Number = foil.CollectorNumber
                             LEFT JOIN (SELECT CollectorNumber, 'Ω' AS Symbol
                                         FROM user_inventory
                                         WHERE attrs <> 'Standard'
-                                        AND attrs <> 'foil'
+                                          AND attrs <> 'foil'
+                                          AND Count > 0
                                         GROUP BY CollectorNumber) other
                                     ON cds.Collector_Number = other.CollectorNumber
-                    ORDER BY cds.ROWID"
-                );
+                    ORDER BY cds.ROWID
+                ");
+            AddQuery(InternalQuery.GET_SINGLE_CARD_COUNT,
+                @"  SELECT ifnull(inv.Total || IFNULL(foil.Symbol, '') || IFNULL(other.Symbol, ''), 0) AS Cnt
+                    FROM cards cds
+                            LEFT JOIN (SELECT CollectorNumber, CAST(SUM(Count) as TEXT) AS Total
+                                        FROM user_inventory
+                                        GROUP BY CollectorNumber) inv
+                                    ON cds.Collector_Number = inv.CollectorNumber
+                            LEFT JOIN (SELECT CollectorNumber, '*' AS Symbol
+                                        FROM user_inventory
+                                        WHERE attrs LIKE '%foil%'
+                                           AND Count > 0
+                                        GROUP BY CollectorNumber) foil
+                                    ON cds.Collector_Number = foil.CollectorNumber
+                            LEFT JOIN (SELECT CollectorNumber, 'Ω' AS Symbol
+                                        FROM user_inventory
+                                        WHERE attrs <> 'Standard'
+                                          AND attrs <> 'foil'
+                                          AND Count > 0
+                                        GROUP BY CollectorNumber) other
+                                    ON cds.Collector_Number = other.CollectorNumber
+                    WHERE cds.Collector_Number = @Collector_Number
+                ");
             AddQuery(InternalQuery.GET_CARD_DETAILS,
                 @"  SELECT Collector_Number, Name, TypeLine, FrontText
                     FROM cards
                     WHERE Collector_Number = @Collector_Number"
                 );
-            AddQuery(InternalQuery.GET_CARD_CTCS,
-                @"  SELECT Attrs, Count
-                    FROM user_inventory
-                    WHERE CollectorNumber = @Collector_Number
-                    order by Attrs
+            AddQuery(InternalQuery.GET_CARD_CTCS, // This needs the join to get the name of cards that don't have any CTCs
+                @"  SELECT cds.Name, inv.Attrs, inv.Count
+                    FROM cards cds
+                            LEFT JOIN user_inventory inv
+                                    ON cds.Collector_Number = inv.CollectorNumber
+                    WHERE cds.Collector_Number = @Collector_Number
+                    ORDER BY Attrs
+                ");
+            AddQuery(InternalQuery.UPDATE_CARD_CTC,
+                @"  INSERT INTO user_inventory (SetCode, CollectorNumber, Name, Attrs, Count)
+                    VALUES (
+                        (SELECT SetCode FROM user_inventory LIMIT 1), 
+                        @Collector_Number, 
+                        (SELECT Name FROM cards WHERE Collector_Number = @Collector_Number), 
+                        @Attrs, 
+                        @Count
+                        )
+                    ON CONFLICT DO UPDATE SET Count = @Count
                 ");
             AddQuery(InternalQuery.GET_CARD_NAMES,
                 @"  SELECT DISTINCT Name FROM cards "
@@ -117,8 +157,8 @@ namespace MTG_CLI
             AddQuery(InternalQuery.GET_CARD_NUMBER,
                 @"  SELECT Collector_Number 
                     FROM cards 
-                    WHERE Name = @Name"
-                );
+                    WHERE Name = @Name
+                ");
         }
 
         private static void AddQuery(InternalQuery id, string query)

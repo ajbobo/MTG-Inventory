@@ -1,4 +1,7 @@
+using System.Text;
+using Microsoft.Data.Sqlite;
 using Terminal.Gui;
+using static MTG_CLI.SQLManager.InternalQuery;
 
 namespace MTG_CLI
 {
@@ -34,87 +37,129 @@ namespace MTG_CLI
 
     class EditCardDialog : RefreshableDialog
     {
-        public event Action<MTG_Card>? DataChanged;
+        public event Action? DataChanged;
 
         private Inventory _inventory;
         private bool _isDirty;
-        private Scryfall.Card? _selectedCard;
-        private List<CardTypeCount>? _ctcList;
+        private string _curCollectorNumber = "";
+        private string _curCardName = "";
+        private Dictionary<string, int> _ctcList = new();
+        private SQLManager _sql;
 
-        public EditCardDialog(Inventory inventory)
+        public EditCardDialog(Inventory inventory, SQLManager sql)
         {
             _inventory = inventory;
             _isDirty = false;
+            _sql = sql;
         }
 
-        private void UpdateInventory(Scryfall.Card card, CardTypeCount ctc)
+        private void UpdateInventory(string collector_number, string attrs, int count)
         {
-            _inventory.AddCard(card, ctc);
+            _sql.Query(UPDATE_CARD_CTC)
+                .WithParam("@Collector_Number", collector_number)
+                .WithParam("@Attrs", attrs)
+                .WithParam("@Count", count)
+                .Execute();
             _isDirty = true;
         }
 
-        public void EditCard(Scryfall.Card selectedCard)
+        public void EditCard(string collector_number)
         {
-            _selectedCard = selectedCard;
-            MTG_Card? mtgCard = _inventory.GetCard(selectedCard);
-            _ctcList = mtgCard?.Counts ?? new();
-            if (_ctcList.Count == 0) // If the card doesn't have any CTCs, it needs a standard one
-                _ctcList.Add(new CardTypeCount());
+            _curCollectorNumber = collector_number;
+
+            SqliteDataReader? reader = _sql.Query(GET_CARD_CTCS).WithParam("@Collector_Number", collector_number).Read();
+            _ctcList.Clear();
+            _ctcList.Add("Standard", 0);
+            while (reader?.Read() ?? false)
+            {
+                _curCardName = _sql.SafeRead<string>(reader, "Name", "");
+                string attrs = _sql.SafeRead<string>(reader, "Attrs", "");
+                int cnt = _sql.SafeRead<int>(reader, "Count", 0);
+
+                if (attrs.Length > 0 && !_ctcList.ContainsKey(attrs))
+                    _ctcList.Add(attrs, cnt);
+                else if (_ctcList.ContainsKey(attrs))
+                    _ctcList[attrs] = cnt;
+            }
+
 
             Button ok = new("OK");
             ok.Clicked += () => Application.RequestStop();
 
-            Dialog dlg = new(string.Format("Edit - {0}", selectedCard.Name), ok) { Width = 55, Height = _ctcList.Count + 5 };
+            Dialog dlg = new(string.Format("Edit - {0}", _curCardName), ok) { Width = 55, Height = _ctcList.Count + 5 };
             RefreshDialog(dlg, ok);
             dlg.Closed += (args) =>
             {
                 if (_isDirty)
                 {
                     _isDirty = false;
-                    MTG_Card? card = _inventory.GetCard(_selectedCard);
-                    if (card != null)
-                        DataChanged?.Invoke(card);
+                    DataChanged?.Invoke();
                 }
             };
 
             Application.Run(dlg);
         }
 
+        protected string FormatCTC(string attrs, int count)
+        {
+            return string.Format("{0} - {1}", count, attrs);
+        }
+
+        protected void AdjustCount(string attrs, int newCount, Label label, Button newFocus)
+        {
+            _ctcList[attrs] = newCount;
+            UpdateInventory(_curCollectorNumber, attrs, newCount);
+            label.Text = FormatCTC(attrs, newCount);
+            newFocus.SetFocus();
+        }
+
         protected void RefreshDialog(Dialog editDialog, Button ok)
         {
-            if (_selectedCard == null || _ctcList == null)
+            if (_ctcList == null)
                 return;
 
             ClearTmpViews(editDialog);
 
-            for (int x = 0; x < (_ctcList?.Count ?? 0); x++)
+            int x = 0;
+            foreach (string attrs in _ctcList.Keys)
             {
-                CardTypeCount ctc = _ctcList?[x] ?? new();
+                if (!attrs.Equals("Standard") && _ctcList[attrs] <= 0)
+                    continue;
 
-                Label ctcName = tmpView<Label>(new(ctc.ToString()) { X = 0, Y = x, Width = 25, Height = 1 });
+                Label ctcName = tmpView<Label>(new(FormatCTC(attrs, _ctcList[attrs])) { X = 0, Y = x, Width = 25, Height = 1 });
 
                 Button addOne = tmpView<Button>(new("+1") { X = Pos.Right(ctcName) + 1, Y = x });
-                addOne.Clicked += () => { ctc.AdjustCount(1); UpdateInventory(_selectedCard, ctc); ctcName.Text = ctc.ToString(); ok.SetFocus(); };
+                addOne.Clicked += () => { AdjustCount(attrs, _ctcList[attrs] + 1, ctcName, ok); };
 
                 Button subOne = tmpView<Button>(new("-1") { X = Pos.Right(addOne) + 1, Y = x });
-                subOne.Clicked += () => { ctc.AdjustCount(-1); UpdateInventory(_selectedCard, ctc); ctcName.Text = ctc.ToString(); ok.SetFocus(); };
+                subOne.Clicked += () => { AdjustCount(attrs, _ctcList[attrs] - 1, ctcName, ok); };
 
                 Button setFour = tmpView<Button>(new("=4") { X = Pos.Right(subOne) + 1, Y = x });
-                setFour.Clicked += () => { ctc.Count = 4; UpdateInventory(_selectedCard, ctc); ctcName.Text = ctc.ToString(); ok.SetFocus(); };
+                setFour.Clicked += () => { AdjustCount(attrs, 4, ctcName, ok); };
 
                 Button delete = tmpView<Button>(new("X") { X = Pos.Right(setFour) + 1, Y = x });
-                delete.Clicked += () => { MessageBox.Query("Delete", "Not implemented yet", "OK"); };
+                delete.Clicked += () => { AdjustCount(attrs, 0, ctcName, ok); };
 
                 editDialog.Add(ctcName, addOne, subOne, setFour, delete);
                 if (x == 0)
                     addOne.SetFocus();
+
+                x++;
             }
 
             Button newCTC = tmpView<Button>(new("New Card Type") { X = Pos.Center(), Y = (_ctcList?.Count ?? 0) });
             newCTC.Clicked += () =>
             {
                 EditCTCDialog ctcDialog = new();
-                ctcDialog.DataChanged += (ctc) => { _ctcList?.Add(ctc); UpdateInventory(_selectedCard, ctc); RefreshDialog(editDialog, ok); };
+                ctcDialog.DataChanged += (attrs, count) =>
+                {
+                    if (!_ctcList?.ContainsKey(attrs) ?? false)
+                        _ctcList?.Add(attrs, count);
+                    else if (_ctcList?.ContainsKey(attrs) ?? false)
+                        _ctcList[attrs] = count;
+                    UpdateInventory(_curCollectorNumber, attrs, count);
+                    RefreshDialog(editDialog, ok);
+                };
                 ctcDialog.NewCTC();
             };
 
@@ -126,7 +171,7 @@ namespace MTG_CLI
 
     class EditCTCDialog : RefreshableDialog
     {
-        public event Action<CardTypeCount>? DataChanged;
+        public event Action<string, int>? DataChanged;
 
         private static readonly string[] ATTRS = { "Foil", "Prerelease", "Spanish", "Alt Art" };
 
@@ -191,12 +236,15 @@ namespace MTG_CLI
 
         private void UpdateCTC()
         {
-            CardTypeCount ctc = new();
+            StringBuilder builder = new();
             foreach (string attr in _attrList)
-                ctc.Attrs.Add(attr.ToLower());
-            ctc.Count = 1;
+            {
+                if (builder.Length > 0)
+                    builder.Append(" | ");
+                builder.Append(attr.ToLower());
+            }
 
-            DataChanged?.Invoke(ctc);
+            DataChanged?.Invoke(builder.ToString(), 1);
         }
     }
 }

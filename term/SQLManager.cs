@@ -1,3 +1,4 @@
+using System.Data;
 using Microsoft.Data.Sqlite;
 
 namespace MTG_CLI
@@ -54,6 +55,14 @@ namespace MTG_CLI
             object? res = _command?.ExecuteScalar() ?? null;
 
             return (res != null ? (T)res : default(T));
+        }
+
+        public T SafeRead<T>(SqliteDataReader? reader, string fieldName, T fallback)
+        {
+            if (reader == null || reader.IsDBNull(fieldName))
+                return fallback;
+
+            return reader.GetFieldValue<T>(fieldName);
         }
     }
 }

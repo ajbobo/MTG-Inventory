@@ -92,10 +92,10 @@ namespace MTG_CLI
 
         public void WriteToJsonBackup()
         {
-            JsonSerializerSettings settings = new();
-            settings.Formatting = Formatting.Indented;
+            // JsonSerializerSettings settings = new();
+            // settings.Formatting = Formatting.Indented;
 
-            File.WriteAllText("inventory_cache.json", JsonConvert.SerializeObject(_inventory, settings));
+            // File.WriteAllText("inventory_cache.json", JsonConvert.SerializeObject(_inventory, settings));
         }
 
         private void AddCardToInventory(MTG_Card curCard)
@@ -140,18 +140,18 @@ namespace MTG_CLI
             return _inventory[setCode][collectorNumber];
         }
 
-        async public Task WriteToFirebase(MTG_Card card)
+        async public Task WriteToFirebase() //MTG_Card card)
         {
-            CollectionReference collection = _db.Collection("user_inventory");
-            if (card.UUID.Length > 0)
-            {
-                await collection.Document(card.UUID).SetAsync(card);
-            }
-            else
-            {
-                DocumentReference doc = await collection.AddAsync(card);
-                card.UUID = doc.Id;
-            }
+            // CollectionReference collection = _db.Collection("user_inventory");
+            // if (card.UUID.Length > 0)
+            // {
+            //     await collection.Document(card.UUID).SetAsync(card);
+            // }
+            // else
+            // {
+            //     DocumentReference doc = await collection.AddAsync(card);
+            //     card.UUID = doc.Id;
+            // }
         }
     }
 }

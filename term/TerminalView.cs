@@ -51,7 +51,7 @@ namespace MTG_CLI
                 }),
                 new MenuBarItem("_Options", new MenuItem[] {
                     new MenuItem("Choose _Set", "", ChooseSet),
-                    new MenuItem("_Edit Filters", "", ChooseFilters),
+                    // new MenuItem("_Edit Filters", "", ChooseFilters),
                     new MenuItem("_Find a Card", "", FindCard),
                 }),
             });
@@ -60,7 +60,7 @@ namespace MTG_CLI
 
             _statusBar = new(new StatusItem[]{
                 new StatusItem(Key.S | Key.CtrlMask, "~Ctrl-S~ Choose Set", ChooseSet ),
-                new StatusItem(Key.E | Key.CtrlMask, "~Ctrl-E~ Edit Filters", ChooseFilters ),
+                // new StatusItem(Key.E | Key.CtrlMask, "~Ctrl-E~ Edit Filters", ChooseFilters ),
                 new StatusItem(Key.F | Key.CtrlMask, "~Ctrl-F~ Find Card", FindCard ),
                 new StatusItem(Key.N | Key.CtrlMask, "~Ctrl-N~ Find Next", FindNext ),
                 _autoStatus,
@@ -88,7 +88,7 @@ namespace MTG_CLI
                 return;
 
             DataRow row = _cardTable.Table.Rows[_cardTable.SelectedRow];
-            string selectedName = row["Name"].ToString() ?? ""; 
+            string selectedName = row["Name"].ToString() ?? "";
 
             // Starting after the current row, find the next one with the same Name
             int index = _cardTable.SelectedRow + 1;
@@ -145,8 +145,8 @@ namespace MTG_CLI
             SqliteDataReader? reader = _sql.Query(SQLManager.InternalQuery.GET_ALL_SETS).Read();
             while (reader != null && reader.Read())
             {
-                string name = reader.GetFieldValue<string>("Name");
-                string code = string.Format("({0})", reader.GetFieldValue<string>("SetCode")); // Format it here as "(code)" so that it can be spaced nicely later
+                string name = _sql.SafeRead<string>(reader, "Name", "");
+                string code = string.Format("({0})", _sql.SafeRead<string>(reader, "SetCode", "")); // Format it here as "(code)" so that it can be spaced nicely later
                 SetList.Add(string.Format("{0,-7} {1}", code, name));
             }
             reader?.Close();
@@ -200,13 +200,13 @@ namespace MTG_CLI
             while (reader != null && reader.Read())
             {
                 DataRow row = table.NewRow();
-                row["#"] = reader.GetFieldValue<string>("Collector_Number");
-                string cnt = reader.GetFieldValue<string>("Cnt");
+                row["#"] = _sql.SafeRead<string>(reader, "Collector_Number", "");
+                string cnt = _sql.SafeRead<string>(reader, "Cnt", "");
                 row["Cnt"] = cnt;
-                row["Rarity"] = reader.GetFieldValue<string>("Rarity").ToUpper()[0];
-                row["Name"] = reader.GetFieldValue<string>("Name");
-                row["Color"] = reader.GetFieldValue<string>("ColorIdentity");
-                row["Cost"] = reader.GetFieldValue<string>("ManaCost");
+                row["Rarity"] = _sql.SafeRead<string>(reader, "Rarity", "").ToUpper()[0];
+                row["Name"] = _sql.SafeRead<string>(reader, "Name", "");
+                row["Color"] = _sql.SafeRead<string>(reader, "ColorIdentity", "");
+                row["Cost"] = _sql.SafeRead<string>(reader, "ManaCost", "");
                 table.Rows.Add(row);
 
                 if (!cnt.Equals("0"))
@@ -230,17 +230,17 @@ namespace MTG_CLI
             _cardTable.SetFocus();
             _cardTable.CellActivated += (args) =>
             {
-                // DataTable table = args.Table;
-                // EditCardDialog dlg = new(_inventory);
-                // dlg.DataChanged += async (card) =>
-                // {
-                //     await _inventory.WriteToFirebase(card);
-                //     _inventory.WriteToJsonBackup();
-                //     UpdateCardTableRow();
-                //     if (_autoFind)
-                //         FindCard();
-                // };
-                // dlg.EditCard((Scryfall.Card)table.Rows[args.Row]["Name"]);
+                DataTable table = args.Table;
+                EditCardDialog dlg = new(_inventory, _sql);
+                dlg.DataChanged += async () =>
+                {
+                    await _inventory.WriteToFirebase();
+                    _inventory.WriteToJsonBackup();
+                    UpdateCardTableRow();
+                    if (_autoFind)
+                        FindCard();
+                };
+                dlg.EditCard(table.Rows[args.Row]["#"]?.ToString() ?? "");
             };
             _cardTable.KeyDown += (args) =>
             {
@@ -276,7 +276,12 @@ namespace MTG_CLI
         private void UpdateCardTableRow()
         {
             var row = _cardTable.Table.Rows[_cardTable.SelectedRow];
-            UpdateCardFrame(row["#"].ToString() ?? "");
+
+            string cardNum = row["#"].ToString() ?? "";
+            UpdateCardFrame(cardNum);
+
+            string newCount = _sql.Query(GET_SINGLE_CARD_COUNT).WithParam("@Collector_Number", cardNum).ExecuteScalar<string>() ?? "0";
+            row["Cnt"] = newCount;
         }
 
         private void UpdateCardFrame(string cardNumber)
@@ -288,9 +293,9 @@ namespace MTG_CLI
                 return;
 
             reader.Read();
-            string title = $"{reader.GetFieldValue<string>("Collector_Number")} - {reader.GetFieldValue<string>("Name")}";
-            string frontText = reader.GetFieldValue<string>("FrontText");
-            string typeLine = reader.GetFieldValue<string>("TypeLine");
+            string title = $"{_sql.SafeRead<string>(reader, "Collector_Number", "")} - {_sql.SafeRead<string>(reader, "Name", "")}";
+            string frontText = _sql.SafeRead<string>(reader, "FrontText", "");
+            string typeLine = _sql.SafeRead<string>(reader, "TypeLine", "");
             reader?.Close();
 
             _curCardFrame.Title = title;
@@ -299,9 +304,13 @@ namespace MTG_CLI
             int cnt = 0;
             while (reader?.Read() ?? false)
             {
-                string ctc = $"{reader.GetFieldValue<int>("Count")} - {reader.GetFieldValue<string>("Attrs")}";
-                _curCardFrame.Add(new Label(ctc) { X = 0, Y = cnt, Width = Dim.Fill() });
-                cnt++;
+                int count = _sql.SafeRead<int>(reader, "Count", 0);
+                if (count > 0)
+                {
+                    string ctc = $"{count} - {_sql.SafeRead<string>(reader, "Attrs", "")}";
+                    _curCardFrame.Add(new Label(ctc) { X = 0, Y = cnt, Width = Dim.Fill() });
+                    cnt++;
+                }
             }
             reader?.Close();
 
