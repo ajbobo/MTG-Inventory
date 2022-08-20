@@ -20,6 +20,7 @@ namespace MTG_CLI
             GET_CARD_NUMBER,
             CREATE_USER_INVENTORY,
             ADD_TO_USER_INVENTORY,
+            GET_USER_INVENTORY,
             GET_CARD_CTCS,
             UPDATE_CARD_CTC,
             // These aren't in use for real yet
@@ -172,6 +173,12 @@ namespace MTG_CLI
                 @"  SELECT CollectorNumber 
                     FROM cards 
                     WHERE Name = @Name
+                ");
+            AddQuery(InternalQuery.GET_USER_INVENTORY,
+                @"  SELECT SetCode, CollectorNumber, Name, Attrs, Count
+                    FROM user_inventory
+                    WHERE Count > 0
+                    ORDER BY CollectorNumber, Attrs
                 ");
         }
 

@@ -1,5 +1,4 @@
 --- New DB structure ---
-Write card changes back to Firebase
 Replace filters with SQL queries
 
 --- General ---
