@@ -1,35 +1,30 @@
-using NStack;
+using System.Text;
 using Terminal.Gui;
 using Terminal.Gui.TextValidateProviders;
-using System.Text;
+using NStack;
+using static MTG_CLI.SQLManager.InternalQuery;
 
 namespace MTG_CLI
 {
     class FindCardDialog
     {
-        public event Action<Scryfall.Card>? CardSelected;
+        public event Action<string>? CardSelected;
 
-        private List<Scryfall.Card> _cardList;
         private CardNameValidator _validator;
         private bool _cardSelected = false;
 
         public FindCardDialog()
         {
-            _cardList = new();
-            _validator = new(_cardList);
+            _validator = new(new SQLManager());
         }
 
-        public FindCardDialog(List<Scryfall.Card> cardList)
+        public FindCardDialog(SQLManager sql)
         {
-            _cardList = cardList;
-            _validator = new CardNameValidator(cardList);
+            _validator = new CardNameValidator(sql);
         }
 
         public void FindCard()
         {
-            if (_cardList.Count == 0)
-                return;
-
             _validator.Text = "";
 
             Button ok = new("OK");
@@ -79,23 +74,30 @@ namespace MTG_CLI
 
         protected void OnCardSelected()
         {
-            Scryfall.Card? card = _validator.SelectedCard;
+            string? cardName = _validator.SelectedCard;
 
-            if (card != null)
-                CardSelected?.Invoke(card);
+            if (cardName != null)
+                CardSelected?.Invoke(cardName);
         }
 
     }
 
     class CardNameValidator : ITextValidateProvider
     {
-        private List<Scryfall.Card> _cardList;
+        private List<string> _cardNames;
 
-        public Scryfall.Card? SelectedCard { get; protected set; }
+        public string? SelectedCard { get; protected set; }
 
-        public CardNameValidator(List<Scryfall.Card> cardList)
+        public CardNameValidator(SQLManager sql)
         {
-            _cardList = cardList;
+            _cardNames = new();
+
+            sql.Query(GET_CARD_NAMES).Read();
+            while (sql.ReadNext())
+            {
+                _cardNames.Add(sql.ReadValue<string>("Name", ""));
+            }
+            sql.Close();
         }
 
         private StringBuilder _typed = new StringBuilder();
@@ -103,13 +105,13 @@ namespace MTG_CLI
         private string FindClosestWord()
         {
             string typedName = _typed.ToString().ToLower();
-            foreach (Scryfall.Card card in _cardList)
+            foreach (string name in _cardNames)
             {
-                string cardName = card.Name.ToLower();
+                string cardName = name.ToLower();
                 if (typedName.Length > 0 && cardName.StartsWith(typedName))
                 {
-                    SelectedCard = card;
-                    return card.Name;
+                    SelectedCard = name;
+                    return name;
                 }
             }
             SelectedCard = null;

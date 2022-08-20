@@ -1,57 +1,95 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using ExtensionMethods;
+using static MTG_CLI.SQLManager.InternalQuery;
 
 namespace MTG_CLI
 {
     class CLI_Window
     {
-        private static HttpClient httpClient = new HttpClient();
+        private static HttpClient _httpClient = new HttpClient();
+        private static SQLManager _sql = new SQLManager();
 
-        private static Inventory _inventory = new();
-        private static List<Scryfall.Set> _setList = new();
-        private static List<Scryfall.Card> _cardList = new();
+        private static Inventory _inventory = new(_sql);
 
-        async private static Task<bool> GetSetData()
+        private static bool IsCollectableSetType(string setType, string block, string parent)
         {
-            _setList.Clear();
+            return (setType.Equals("core") ||
+                    setType.Equals("expansion") ||
+                    setType.Equals("masterpiece") ||
+                    setType.Equals("masters") ||
+                    setType.Equals("commander") ||
+                    // To limit the number of funny sets to ones that are (mostly) actually collectable, I needed to add some more filters
+                    (setType.Equals("funny") && block.Length == 0 && parent.Length == 0));
+        }
 
-            HttpResponseMessage msg = await httpClient.GetAsync("https://api.scryfall.com/sets");
+        async private static Task<bool> GetSetList()
+        {
+            _sql.Query(CREATE_SET_TABLE).Execute();
+
+            HttpResponseMessage msg = await _httpClient.GetAsync("https://api.scryfall.com/sets");
             if (msg.IsSuccessStatusCode)
             {
                 string respStr = await msg.Content.ReadAsStringAsync();
-                Scryfall.SetListResponse resp = JsonConvert.DeserializeObject<Scryfall.SetListResponse>(respStr) ?? new();
-                foreach (Scryfall.Set curSet in resp.Data)
+
+                // I'm parsing this way so that I don't have to worry about large .NET objects that I won't need later
+                JObject resp = JObject.Parse(respStr);
+                JEnumerable<JToken> data = resp["data"]?.Children() ?? new();
+                foreach (JToken curSet in data)
                 {
-                    if (curSet.Set_Type == Scryfall.Set.SetType.CORE || 
-                        curSet.Set_Type == Scryfall.Set.SetType.EXPANSION ||
-                        curSet.Set_Type == Scryfall.Set.SetType.MASTERPIECE ||
-                        curSet.Set_Type == Scryfall.Set.SetType.MASTERS ||
-                        curSet.Set_Type == Scryfall.Set.SetType.COMMANDER ||
-                        // To limit the number of funny sets to ones that are (mostly) actually collectable, I needed to add some more filters
-                        (curSet.Set_Type == Scryfall.Set.SetType.FUNNY && curSet.Block_Code.Length == 0 && curSet.Parent_Set_Code.Length == 0))
-                        _setList.Add(curSet);
+                    string type = curSet["set_type"].AsString();
+                    string block = curSet["block_code"].AsString();
+                    string parent = curSet["parent_set_code"].AsString();
+                    if (IsCollectableSetType(type, block, parent))
+                    {
+                        _sql.Query(INSERT_SET)
+                            .WithParam("@SetCode", curSet["code"].AsString())
+                            .WithParam("@Name", curSet["name"].AsString())
+                            .Execute();
+                    }
                 }
                 return true;
             }
             return false;
         }
 
-        async private static Task<bool> GetSetCards(Scryfall.Set targetSet)
+        async private static Task<bool> GetSetCards(string targetSetCode)
         {
-            _cardList.Clear();
+            _sql.Query(CREATE_CARD_TABLE).Execute();
 
             int page = 1;
             bool done = false;
             while (!done)
             {
-                HttpResponseMessage msg = await httpClient.GetAsync($"https://api.scryfall.com/cards/search?q=set:{targetSet.Code} and game:paper&order=set&unique=prints&page={page}");
+                HttpResponseMessage msg = await _httpClient.GetAsync($"https://api.scryfall.com/cards/search?q=set:{targetSetCode} and game:paper&order=set&unique=prints&page={page}");
                 if (msg.IsSuccessStatusCode)
                 {
                     string respStr = await msg.Content.ReadAsStringAsync();
-                    Scryfall.CardListResponse resp = JsonConvert.DeserializeObject<Scryfall.CardListResponse>(respStr) ?? new();
-                    foreach (Scryfall.Card curCard in resp.Data)
-                        _cardList.Add(curCard);
+                    JObject resp = JObject.Parse(respStr);
+                    JEnumerable<JToken> data = resp["data"]?.Children() ?? new();
+                    foreach (JToken curCard in data)
+                    {
+                        _sql.Query(INSERT_CARD)
+                            .WithParam("@SetCode", curCard["set"].AsString())
+                            .WithParam("@CollectorNumber", curCard["collector_number"].AsString()) // Scryfall uses "collector_number", but I don't want the underscore anywhere else
+                            .WithParam("@Name", curCard["name"].AsString())
+                            .WithParam("@Rarity", curCard["rarity"].AsString())
+                            .WithParam("@ColorIdentity", curCard["color_identity"].CompressArray())
+                            .WithParam("@ManaCost", curCard["mana_cost"].AsString())
+                            .WithParam("@TypeLine", curCard["type_line"].AsString());
 
-                    if (resp.Has_More)
+                        if (curCard["oracle_text"] != null)
+                        {
+                            _sql.WithParam("@FrontText", curCard["oracle_text"].AsString());
+                        }
+                        else if (curCard["card_faces"] != null)
+                        {
+                            _sql.WithParam("@FrontText", curCard["card_faces"]?[0]?["oracle_text"].AsString() ?? "");
+                        }
+                        _sql.Execute();
+                    }
+
+                    if (resp["has_more"]?.Value<bool>() ?? false)
                         page++;
                     else
                         done = true;
@@ -68,14 +106,19 @@ namespace MTG_CLI
 
         private static void StartTerminalView()
         {
-            var win = new TerminalView(_inventory);
+            var win = new TerminalView(_inventory, _sql);
 
-            win.SetList = _setList;
             win.SelectedSetChanged += async (newSet) =>
             {
                 win.SetCurrentSet(newSet);
+
+                Console.WriteLine("Getting cards for set: {0}", newSet);
                 await GetSetCards(newSet);
-                win.SetCardList(_cardList);
+
+                Console.WriteLine("Getting inventory for {0}", newSet);
+                await _inventory.ReadData(newSet);
+
+                win.SetCardList(newSet);
             };
 
             win.Start();
@@ -84,11 +127,10 @@ namespace MTG_CLI
         async public static Task Main(string[] args)
         {
             Console.Title = "Inventory Terminal";
-            Console.WriteLine("Reading Set data from Scryfall");
-            await GetSetData();
 
-            Console.WriteLine("Reading Inventory data");
-            await _inventory.ReadData();
+
+            Console.WriteLine("Reading Set data from Scryfall");
+            await GetSetList();
 
             StartTerminalView();
         }

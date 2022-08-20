@@ -1,6 +1,7 @@
 using System.Data;
 using Terminal.Gui;
 using Terminal.Gui.Views;
+using static MTG_CLI.SQLManager.InternalQuery;
 
 namespace MTG_CLI
 {
@@ -17,21 +18,20 @@ namespace MTG_CLI
         private FindCardDialog _findCardDlg;
         private EditFiltersDialog _editFilters;
 
-        private List<Scryfall.Card> _cardList;
+        private SQLManager _sql;
+
         private int _collectedCount;
         private Inventory _inventory;
         private FilterSettings _filterSettings;
         private bool _autoFind = true;
 
-        public List<Scryfall.Set> SetList { get; set; } = new();
+        public event Action<string>? SelectedSetChanged;
 
-        public event Action<Scryfall.Set>? SelectedSetChanged;
-
-        public TerminalView(Inventory inventory)
+        public TerminalView(Inventory inventory, SQLManager sql)
         {
+            _sql = sql;
             _inventory = inventory;
             _filterSettings = new(_inventory);
-            _cardList = new();
 
             Application.Init();
 
@@ -41,16 +41,13 @@ namespace MTG_CLI
             Label lbl = new("Press Ctrl-S to choose a Set") { X = Pos.Center(), Y = Pos.Center() };
             _top.Add(lbl);
 
-            Label cacheStatus = new($"Using Cache: {_inventory.UsingCache}") { X = Pos.Center(), Y = Pos.Bottom(lbl) + 2 };
-            _top.Add(cacheStatus);
-
             _menu = new(new MenuBarItem[] {
                 new MenuBarItem("_File", new MenuItem[] {
                     new MenuItem("E_xit", "", () => Application.RequestStop())
                 }),
                 new MenuBarItem("_Options", new MenuItem[] {
                     new MenuItem("Choose _Set", "", ChooseSet),
-                    new MenuItem("_Edit Filters", "", ChooseFilters),
+                    // new MenuItem("_Edit Filters", "", ChooseFilters),
                     new MenuItem("_Find a Card", "", FindCard),
                 }),
             });
@@ -59,7 +56,7 @@ namespace MTG_CLI
 
             _statusBar = new(new StatusItem[]{
                 new StatusItem(Key.S | Key.CtrlMask, "~Ctrl-S~ Choose Set", ChooseSet ),
-                new StatusItem(Key.E | Key.CtrlMask, "~Ctrl-E~ Edit Filters", ChooseFilters ),
+                // new StatusItem(Key.E | Key.CtrlMask, "~Ctrl-E~ Edit Filters", ChooseFilters ),
                 new StatusItem(Key.F | Key.CtrlMask, "~Ctrl-F~ Find Card", FindCard ),
                 new StatusItem(Key.N | Key.CtrlMask, "~Ctrl-N~ Find Next", FindNext ),
                 _autoStatus,
@@ -71,7 +68,7 @@ namespace MTG_CLI
             _cardTable = new() { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             _findCardDlg = new();
             _editFilters = new(_filterSettings);
-            _editFilters.OnClose += () => { SetCardList(_cardList); };
+            // _editFilters.OnClose += () => { SetCardList(_cardList); };
         }
 
         private void ToggleAutoAdvance()
@@ -87,20 +84,19 @@ namespace MTG_CLI
                 return;
 
             DataRow row = _cardTable.Table.Rows[_cardTable.SelectedRow];
-            Scryfall.Card selectedCard = (Scryfall.Card)row["Name"];
-            string selectedName = selectedCard.Name;
+            string selectedName = row["Name"].ToString() ?? "";
 
             // Starting after the current row, find the next one with the same Name
             int index = _cardTable.SelectedRow + 1;
             while (true) // Loop until a card is found, wrap back around if needed, stops when it finds the same card again
             {
                 DataRow nextRow = _cardTable.Table.Rows[index];
-                Scryfall.Card nextCard = (Scryfall.Card)nextRow["Name"];
-                if (nextCard.Name.Equals(selectedName))
+                string nextName = nextRow["Name"].ToString() ?? "";
+                if (nextName.Equals(selectedName))
                 {
                     _cardTable.SelectedRow = index;
                     _cardTable.EnsureSelectedCellIsVisible();
-                    UpdateCardFrame(nextCard);
+                    UpdateCardFrame(nextRow["#"].ToString() ?? "");
                     return;
                 }
 
@@ -116,13 +112,15 @@ namespace MTG_CLI
             _findCardDlg.FindCard();
         }
 
-        private void FoundCard(Scryfall.Card card)
+        private void FoundCard(string cardName)
         {
-            DataRow? cardRow = _cardTable.Table.Rows.Find(card.CollectorNumber);
+            string cardNumber = _sql.Query(GET_CARD_NUMBER).WithParam("@Name", cardName).ExecuteScalar<string>() ?? "";
+
+            DataRow? cardRow = _cardTable.Table.Rows.Find(cardNumber);
             _cardTable.SelectedRow = _cardTable.Table.Rows.IndexOf(cardRow);
             _cardTable.EnsureSelectedCellIsVisible();
 
-            UpdateCardFrame(card);
+            UpdateCardFrame(cardNumber);
         }
 
         private void ChooseFilters()
@@ -134,11 +132,22 @@ namespace MTG_CLI
         {
             Dialog selectSetDlg = new("Select a Set") { Width = 45 };
 
-            ListView setListView = new(SetList ?? new List<Scryfall.Set>()) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
+            List<string> SetList = new();
+            _sql.Query(SQLManager.InternalQuery.GET_ALL_SETS).Read();
+            while (_sql.ReadNext())
+            {
+                string name = _sql.ReadValue<string>( "Name", "");
+                string code = string.Format("({0})", _sql.ReadValue<string>("SetCode", "")); // Format it here as "(code)" so that it can be spaced nicely later
+                SetList.Add(string.Format("{0,-7} {1}", code, name));
+            }
+            _sql.Close();
+
+            ListView setListView = new(SetList) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             setListView.OpenSelectedItem += (args) =>
                 {
-                    Scryfall.Set selectedSet = (Scryfall.Set)args.Value;
-                    SelectedSetChanged?.Invoke(selectedSet);
+                    string selectedItem = (string)args.Value;
+                    string setCode = selectedItem.Substring(1, selectedItem.IndexOf(')') - 1); // The item is "(code) Name" - get the value between ( and )
+                    SelectedSetChanged?.Invoke(setCode);
                     Application.RequestStop();
                 };
 
@@ -147,9 +156,11 @@ namespace MTG_CLI
             Application.Run(selectSetDlg);
         }
 
-        public void SetCurrentSet(Scryfall.Set curSet)
+        public void SetCurrentSet(string setCode)
         {
-            _curSetFrame.Title = curSet.Name;
+            string setName = _sql.Query(GET_SET_NAME).WithParam("@SetCode", setCode).ExecuteScalar<string>() ?? "<unknown>";
+
+            _curSetFrame.Title = setName;
             _curSetFrame.RemoveAll();
             _curSetFrame.Add(new Label("Loading cards...") { X = Pos.Center(), Y = 0 });
 
@@ -157,12 +168,14 @@ namespace MTG_CLI
                 _top.Add(_curSetFrame);
         }
 
-        public void SetCardList(List<Scryfall.Card> cardList)
+        public void SetCardList(string curSetCode)
         {
-            _cardList = cardList;
             _collectedCount = 0;
 
-            _findCardDlg = new(cardList);
+            // TODO: This should be the filtered list of cards
+            _sql.Query(GET_SET_CARDS).WithParam("@SetCode", curSetCode).Read();
+
+            _findCardDlg = new(new());
             _findCardDlg.CardSelected += FoundCard;
 
             _curSetFrame.RemoveAll();
@@ -171,27 +184,26 @@ namespace MTG_CLI
             table.PrimaryKey = new[] { table.Columns.Add("#") };
             table.Columns.Add("Cnt");
             table.Columns.Add("Rarity");
-            table.Columns.Add("Name", typeof(Scryfall.Card)); // Store the actual card reference here, so it's easy to find later
+            table.Columns.Add("Name");
             table.Columns.Add("Color");
             table.Columns.Add("Cost");
 
-            foreach (Scryfall.Card card in cardList)
+            while (_sql.ReadNext())
             {
-                if (!_filterSettings.MatchesFilter(card))
-                    continue;
-
                 DataRow row = table.NewRow();
-                row["#"] = card.CollectorNumber;
-                row["Cnt"] = _inventory.GetCardCountDisplay(card);
-                row["Rarity"] = card.Rarity.ToUpper()[0];
-                row["Name"] = card;
-                row["Color"] = String.Join("", card.ColorIdentity?.ToArray() ?? new string[] { });
-                row["Cost"] = card.ManaCost;
+                row["#"] = _sql.ReadValue<string>("CollectorNumber", "");
+                string cnt = _sql.ReadValue<string>("Cnt", "");
+                row["Cnt"] = cnt;
+                row["Rarity"] = _sql.ReadValue<string>("Rarity", "").ToUpper()[0];
+                row["Name"] = _sql.ReadValue<string>("Name", "");
+                row["Color"] = _sql.ReadValue<string>("ColorIdentity", "");
+                row["Cost"] = _sql.ReadValue<string>("ManaCost", "");
                 table.Rows.Add(row);
 
-                if (_inventory.GetCardCount(card) > 0)
+                if (!cnt.Equals("0"))
                     _collectedCount++;
             }
+            _sql.Close();
 
             _cardTable = new(table) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             _cardTable.FullRowSelect = true;
@@ -203,23 +215,22 @@ namespace MTG_CLI
             _cardTable.Style.ColumnStyles.Add(table.Columns["Rarity"], new() { MinWidth = 2, MaxWidth = 2 });
             _cardTable.Style.ColumnStyles.Add(table.Columns["Name"], new() { MinWidth = 15 });
             _cardTable.Style.ColumnStyles.Add(table.Columns["Color"], new() { MaxWidth = 5, MinWidth = 5 });
-            _cardTable.SelectedCellChanged += (args) => UpdateCardFrame((Scryfall.Card)table.Rows[args.NewRow]["Name"]);
+            _cardTable.SelectedCellChanged += (args) => UpdateCardFrame(table.Rows[args.NewRow]["#"].ToString() ?? "");
 
             _curSetFrame.Add(_cardTable);
             _cardTable.SetFocus();
             _cardTable.CellActivated += (args) =>
             {
                 DataTable table = args.Table;
-                EditCardDialog dlg = new(_inventory);
-                dlg.DataChanged += async (card) =>
+                EditCardDialog dlg = new(_inventory, _sql);
+                dlg.DataChanged += async () =>
                 {
-                    await _inventory.WriteToFirebase(card);
-                    _inventory.WriteToJsonBackup();
+                    await _inventory.WriteToFirebase();
                     UpdateCardTableRow();
                     if (_autoFind)
                         FindCard();
                 };
-                dlg.EditCard((Scryfall.Card)table.Rows[args.Row]["Name"]);
+                dlg.EditCard(table.Rows[args.Row]["#"]?.ToString() ?? "");
             };
             _cardTable.KeyDown += (args) =>
             {
@@ -232,7 +243,7 @@ namespace MTG_CLI
             };
 
             if (table.Rows.Count > 0)
-                UpdateCardFrame((Scryfall.Card)table.Rows[0]["Name"]);
+                UpdateCardFrame(table.Rows[0]["#"].ToString() ?? "");
 
             UpdateStatsFrame();
         }
@@ -255,84 +266,62 @@ namespace MTG_CLI
         private void UpdateCardTableRow()
         {
             var row = _cardTable.Table.Rows[_cardTable.SelectedRow];
-            Scryfall.Card selectedCard = (Scryfall.Card)row["Name"];
-            row["Cnt"] = _inventory.GetCardCountDisplay(selectedCard);
-            UpdateCardFrame(selectedCard);
+
+            string cardNum = row["#"].ToString() ?? "";
+            UpdateCardFrame(cardNum);
+
+            string newCount = _sql.Query(GET_SINGLE_CARD_COUNT).WithParam("@CollectorNumber", cardNum).ExecuteScalar<string>() ?? "0";
+            row["Cnt"] = newCount;
         }
 
-        // To color the Rarity column, assign this as the ColorGetter to the column's ColumnStyle
-        ColorScheme GetRarityColor(TableView.CellColorGetterArgs args)
-        {
-            string rarity = (string)args.CellValue;
-            Color newColor = rarity switch
-            {
-                "C" => Color.White,
-                "U" => Color.BrightBlue,
-                "R" => Color.Red,
-                "M" => Color.Magenta,
-                _ => Color.Black
-            };
-            if (newColor == Color.Black)
-                return args.RowScheme;
-
-            ColorScheme scheme = new();
-            scheme.Normal = new Terminal.Gui.Attribute(newColor, args.RowScheme.Normal.Background);
-            scheme.HotFocus = new Terminal.Gui.Attribute(newColor, args.RowScheme.HotFocus.Background);
-            scheme.HotNormal = new Terminal.Gui.Attribute(newColor, args.RowScheme.HotNormal.Background);
-            return scheme;
-        }
-
-        private void UpdateCardFrame(Scryfall.Card card)
-        {
-            MTG_Card? curCard = _inventory.GetCard(card);
-            if (curCard != null)
-            {
-                UpdateCardFrame(curCard, card);
-            }
-            else
-            {
-                _curCardFrame.RemoveAll();
-
-                _curCardFrame.Title = $"{card.CollectorNumber} - {card.Name}";
-                InsertCardDetails(card, _curCardFrame, 0);
-
-                if (!_top.Subviews.Contains(_curCardFrame))
-                    _top.Add(_curCardFrame);
-            }
-        }
-
-        private void UpdateCardFrame(MTG_Card card, Scryfall.Card fullCard)
+        private void UpdateCardFrame(string cardNumber)
         {
             _curCardFrame.RemoveAll();
 
-            _curCardFrame.Title = $"{card.CollectorNumber} - {card.Name}";
+            _sql.Query(GET_CARD_DETAILS).WithParam("@CollectorNumber", cardNumber).Read();
+            if (!_sql.HasReader())
+                return;
 
-            card.SortCTCs();
-            for (int x = 0; x < card.Counts.Count; x++)
+            _sql.ReadNext();
+            string title = $"{_sql.ReadValue<string>("CollectorNumber", "")} - {_sql.ReadValue<string>("Name", "")}";
+            string frontText = _sql.ReadValue<string>("FrontText", "");
+            string typeLine = _sql.ReadValue<string>("TypeLine", "");
+            _sql.Close();
+
+            _curCardFrame.Title = title;
+
+            _sql.Query(GET_CARD_CTCS).WithParam("@CollectorNumber", cardNumber).Read();
+            int cnt = 0;
+            while (_sql.ReadNext())
             {
-                _curCardFrame.Add(new Label(card.Counts[x].ToString()) { X = 0, Y = x, Width = Dim.Fill() });
+                int count = _sql.ReadValue<int>("Count", 0);
+                if (count > 0)
+                {
+                    string ctc = $"{count} - {_sql.ReadValue<string>("Attrs", "")}";
+                    _curCardFrame.Add(new Label(ctc) { X = 0, Y = cnt, Width = Dim.Fill() });
+                    cnt++;
+                }
             }
-            _curCardFrame.Add(new LineView() { X = 0, Y = card.Counts.Count, Width = Dim.Fill() });
+            _sql.Close();
 
-            InsertCardDetails(fullCard, _curCardFrame, card.Counts.Count + 1);
+            _curCardFrame.Add(new LineView() { X = 0, Y = cnt, Width = Dim.Fill() });
+
+            InsertCardDetails(typeLine, frontText, _curCardFrame, cnt + 1);
 
             if (!_top.Subviews.Contains(_curCardFrame))
                 _top.Add(_curCardFrame);
         }
 
-        private void InsertCardDetails(Scryfall.Card card, FrameView frame, int StartingY)
+        private void InsertCardDetails(string typeLine, string frontText, FrameView frame, int StartingY)
         {
-            frame.Add(new Label(card.TypeLine) { X = 0, Y = StartingY, Width = Dim.Fill() });
+            frame.Add(new Label(typeLine) { X = 0, Y = StartingY, Width = Dim.Fill() });
             TextView text = new() { X = 0, Y = StartingY + 2, Width = Dim.Fill(), Height = Dim.Fill() };
             text.ReadOnly = true;
             text.WordWrap = true;
             text.Multiline = true;
             try
             {
-                if (card.Text.Length > 0)
-                    text.Text = card.Text;
-                else if (card.Faces.Count > 0)
-                    text.Text = card.Faces[0].Text;
+                text.Text = frontText;
             }
             catch (Exception)
             {
@@ -344,10 +333,6 @@ namespace MTG_CLI
         public void Start()
         {
             Application.Top.Add(_menu, _statusBar);
-            Application.Top.Closing += (args) =>
-            {
-                _inventory.WriteToJsonBackup();
-            };
             Application.Run();
         }
     }

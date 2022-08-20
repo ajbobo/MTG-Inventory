@@ -2,20 +2,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "QueryTest 2",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build query-test-2",
-            "program": "${workspaceFolder}/query-test-2/bin/Debug/net6.0/query-test-2.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/query-test-2",
-            "stopAtEntry": false,
-            "console": "internalConsole",
-            "env": {
-                "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\migrator2\\Migrator-service-account.json"
-            }
-        },
-        {
             "name": "Migrator 2",
             "type": "coreclr",
             "request": "launch",
@@ -28,20 +14,6 @@
             "env": {
                 // "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\migrator2\\Migrator-service-account.json"
                 "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\mtg-inventory-main-service-account.json"
-            }
-        },
-        {
-            "name": "Migrator",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build migrator",
-            "program": "${workspaceFolder}/Migrator/bin/Debug/net6.0/Migrator.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/Migrator",
-            "stopAtEntry": false,
-            "console": "internalConsole",
-            "env": {
-                "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\Migrator\\Migrator-service-account.json"
             }
         },
         {
@@ -60,26 +32,12 @@
         },
         {
             "command": "npm start",
-            "name": "Run npm start",
+            "name": "Run WebUI server",
             "request": "launch",
             "type": "node-terminal",
             "cwd": "${workspaceFolder}/web-ui",
             "env": {
                 "PORT": "3005" // Set the port that Node will use (3000 is the default, but something is using it on my PC)
-            }
-        },
-        {
-            "name": "Upload-Inventory (console)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build upload-inventory",
-            "program": "${workspaceFolder}/upload-inventory/bin/Debug/net5.0/upload-inventory.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/upload-inventory",
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "env": {
-                "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\mtg-inventory-main-service-account.json"
             }
         }
     ]

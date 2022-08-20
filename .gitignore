@@ -1,10 +1,6 @@
-/web-ui/node_modules
-/web2/node_modules
-/*/bin
-/*/obj
-mtg-inventory-main-service-account.json
-/term/inventory_cache.json
+**/bin
+**/obj
+**/node_modules
 **/*service-account.json
-Migrator/updated_inventory.json
 **/inventory_cache.json
-query-test-2/*.db
+**/*.db

@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "2db1ed31-e603-4a65-831a-0fd94bdf0f87",
+    "colName": "MTG - Official API",
+    "created": "2022-08-11T04:18:42.042Z",
+    "sortNum": 20000,
+    "folders": []
+  },
+  {
+    "_id": "4c1bf337-248f-4d6c-b960-f15c8b5acf99",
+    "colName": "Scryfall",
+    "created": "2022-08-11T04:19:23.157Z",
+    "sortNum": 10000,
+    "folders": []
+  }
+]

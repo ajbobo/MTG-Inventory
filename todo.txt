@@ -1,16 +1,8 @@
 --- New DB structure ---
-Migrate term to use new Firestore structure
-
-Single document per set - Only holds inventory information
-Scryfall data still comes from Scryfall API, but is stored in SQL tables in memory
-Inventory & Scryfall tables can be joined to get all interesting information
-Use an in-memory database to store it all (eg: SQLlite)
-    Use SQL queries to perform filter operations
-This would probably be good for standalone apps, could it work with a .NET web app?
-
+Replace filters with SQL queries
 
 --- General ---
-collector_number from Deckbox and from Scryfall don't match for old sets
+collectorNumber from Deckbox and from Scryfall don't match for old sets
     I fixed this in my spreadsheet, but I'll have to do something about it here, too
 
 
@@ -43,7 +35,7 @@ Migrate from Bootstrap to TailwindCSS and HeadlessUI?
 
 --- V2.0 ---
 Can I create an API (hosted in Firebase) that does all the real work?
-    Firebase Functions requires a paid account, so I'd need to find another way. Heroku? Hosted web-app?
+    Firebase Functions requires a paid account, so I'd need to find another way. Heroku? Hosted web-app? Microsft Azure has a free tier that includes Azure Functions
     Then I could create a UI or commandline app that drives it
     https://betterprogramming.pub/building-an-api-with-firebase-109041721f77
 

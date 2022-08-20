@@ -1,157 +1,102 @@
 using Google.Cloud.Firestore;
 using Newtonsoft.Json;
+using static MTG_CLI.SQLManager.InternalQuery;
 
 namespace MTG_CLI
 {
     public class Inventory
     {
-        private const string CACHE_FILE = "inventory_cache.json";
-        private readonly TimeSpan CACHE_TIMEOUT = new(0, 15, 0); // 15 minutes
-
         private FirestoreDb _db;
-        
-        public bool UsingCache { get; private set; }
+        private SQLManager _sql;
 
-        // Inventory structure: _inventory[SetCode][CardNum] = Card
-        private Dictionary<string, Dictionary<string, MTG_Card>> _inventory = new();
-
-        public Inventory()
+        public Inventory(SQLManager sql)
         {
             _db = FirestoreDb.Create("mtg-inventory-9d4ca");
+            _sql = sql;
         }
 
-        public async Task ReadData()
+        public async Task ReadData(string setCode)
         {
-            // Check the cache, if it is too old, read from Firebase
-            bool readCache = false;
-            if (File.Exists(CACHE_FILE))
-            {
-                DateTime lastCacheWrite = File.GetLastWriteTime(CACHE_FILE);
-                TimeSpan diff = DateTime.Now - lastCacheWrite;
-                Console.WriteLine("Cache Age: {0}", diff);
-                if (diff < CACHE_TIMEOUT)
-                    readCache = true;
-                Console.WriteLine("Reading from cache: {0}", readCache);
-            }
-
-            if (readCache)
-                ReadFromJsonCache();
-            else
-                await ReadFromFirebase();
-
-            UsingCache = readCache;
+            await ReadFromFirebase(setCode);
         }
 
-        public async Task ReadFromFirebase()
+        public async Task ReadFromFirebase(string setCode)
         {
             Console.WriteLine("Firebase data");
-            Query userInventoryQuery = _db.Collection("user_inventory");
-            QuerySnapshot snapshot = await userInventoryQuery.GetSnapshotAsync();
-            foreach (DocumentSnapshot doc in snapshot)
-            {
-                MTG_Card curCard = doc.ConvertTo<MTG_Card>();
-                curCard.UUID = doc.Id;
-                AddCardToInventory(curCard);
-            }
-        }
 
-        public void ReadFromJsonCache()
-        {
-            // The cache cuts down on reads from Firebase
-            // If you write to it while Firebase isn't available, it won't sync
-            //    That would be nice, though
-            Console.WriteLine("Local Json data");
-            using (StreamReader reader = new StreamReader(CACHE_FILE))
-            {
-                string json = reader.ReadToEnd();
-                _inventory = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, MTG_Card>>>(json) ?? new();
-            }
-        }
+            _sql.Query(CREATE_USER_INVENTORY).Execute();
 
-        public void WriteToJsonBackup()
-        {
-            JsonSerializerSettings settings = new();
-            settings.Formatting = Formatting.Indented;
-
-            File.WriteAllText("inventory_cache.json", JsonConvert.SerializeObject(_inventory, settings));
-        }
-
-        private void AddCardToInventory(MTG_Card curCard)
-        {
-            // Console.WriteLine($"{curCard.SetCode} {curCard.CollectorNumber} - {curCard.Name}");
-
-            if (!_inventory.ContainsKey(curCard.SetCode))
-                _inventory.Add(curCard.SetCode, new());
-
-            _inventory[curCard.SetCode].Add(curCard.CollectorNumber, curCard);
-        }
-
-        public void AddCard(Scryfall.Card curCard, CardTypeCount ctc)
-        {
-            string setCode = curCard.SetCode;
-
-            if (!_inventory.ContainsKey(setCode))
-                _inventory.Add(setCode, new());
-            else if (_inventory[setCode].ContainsKey(curCard.CollectorNumber)) // The card is in inventory already - no need to add it
+            DocumentSnapshot setDoc = await _db.Collection("User_Inv").Document(setCode).GetSnapshotAsync();
+            Dictionary<string, object>[] setData;
+            setDoc.TryGetValue<Dictionary<string, object>[]>("Cards", out setData);
+            if (setData == null)
                 return;
 
-            MTG_Card newCard = new()
+            foreach (Dictionary<string, object> curCard in setData)
             {
-                Name = curCard.Name,
-                CollectorNumber = curCard.CollectorNumber,
-                SetCode = setCode,
-                Set = curCard.SetName
+                string collectorNumber = curCard["CollectorNumber"].ToString() ?? "0";
+                string name = curCard["Name"].ToString() ?? "";
+                List<object> counts = (List<object>)curCard["Counts"];
+                foreach (Dictionary<string, object> curCTC in counts)
+                {
+                    string attrs = curCTC["Attrs"].ToString() ?? "Standard";
+                    long count = (long)curCTC["Count"];
+                    _sql.Query(ADD_TO_USER_INVENTORY)
+                        .WithParam("@SetCode", setCode)
+                        .WithParam("@CollectorNumber", collectorNumber)
+                        .WithParam("@Name", name)
+                        .WithParam("@Attrs", attrs)
+                        .WithParam("@Count", count)
+                        .Execute();
+                }
+            }
+        }
+
+        async public Task WriteToFirebase()
+        {
+            // Build the data structure for the entire set - We'll send that to Firebase
+            List<Dictionary<string, object>> fullSet = new();
+
+            _sql.Query(GET_USER_INVENTORY).Read();
+
+            string setCode = "", lastCollectorNumber = "", lastAttrs = "";
+            Dictionary<string, object> curCard = new();
+            while (_sql.ReadNext())
+            {
+                setCode = _sql.ReadValue<string>("SetCode", ""); // This shouldn't change, but we'll set it here anyway
+
+                string collectorNumber = _sql.ReadValue<string>("CollectorNumber", "");
+                string name = _sql.ReadValue<string>("Name", "");
+                string attrs = _sql.ReadValue<string>("Attrs", "");
+                int count = _sql.ReadValue<int>("Count", 0);
+
+                if (!lastCollectorNumber.Equals(collectorNumber)) // We're at a new card in the table, make a new one and add it to the list
+                {
+                    curCard = new();
+                    fullSet.Add(curCard);
+
+                    curCard.Add("CollectorNumber", collectorNumber);
+                    curCard.Add("Name", name);
+                    curCard.Add("Count", new Dictionary<string, object> { { attrs, count } });
+                }
+                else if (!lastAttrs.Equals(attrs)) // New CTC - add it to the last card
+                {
+                    Dictionary<string, object> ctcs = (Dictionary<string, object>)curCard["Count"];
+                    ctcs.Add(attrs, count);
+                }
+
+                lastCollectorNumber = collectorNumber;
+                lastAttrs = attrs;
+            }
+            _sql.Close();
+
+            // Write the full set to Firebase
+            CollectionReference collection = _db.Collection("User_Inv");
+            Dictionary<string, object> cards = new Dictionary<string, object>
+            {
+                {"Cards", fullSet.ToArray()}
             };
-            newCard.Counts.Add(ctc);
-
-            _inventory[setCode].Add(curCard.CollectorNumber, newCard);
-        }
-
-        public MTG_Card? GetCard(Scryfall.Card card)
-        {
-            string setCode = card.SetCode;
-            string collectorNumber = card.CollectorNumber;
-
-            if (!_inventory.ContainsKey(setCode) || !_inventory[setCode].ContainsKey(collectorNumber))
-                return null;
-
-            return _inventory[setCode][collectorNumber];
-        }
-
-        public string GetCardCountDisplay(Scryfall.Card card)
-        {
-            MTG_Card? curCard = GetCard(card);
-            return GetCardCountDisplay(curCard);
-        }
-
-        public string GetCardCountDisplay(MTG_Card? curCard)
-        {
-            return String.Format("{0}{1}{2}", curCard?.GetTotalCount() ?? 0, (curCard?.HasAttr("foil") ?? false ? "✶" : ""), (curCard?.HasOtherAttr("foil") ?? false ? "Ω" : ""));
-        }
-
-        public int GetCardCount(Scryfall.Card card)
-        {
-            MTG_Card? curCard = GetCard(card);
-            return getCardCount(curCard);
-        }
-
-        public int getCardCount(MTG_Card? curCard)
-        {
-            return curCard?.GetTotalCount() ?? 0;
-        }
-
-        async public Task WriteToFirebase(MTG_Card card)
-        {
-            CollectionReference collection = _db.Collection("user_inventory");
-            if (card.UUID.Length > 0)
-            {
-                await collection.Document(card.UUID).SetAsync(card);
-            }
-            else
-            {
-                DocumentReference doc = await collection.AddAsync(card);
-                card.UUID = doc.Id;
-            }
+            await collection.Document(setCode).SetAsync(cards);
         }
     }
 }
