@@ -36,11 +36,10 @@ namespace MTG_CLI
             {
                 string collectorNumber = curCard["CollectorNumber"].ToString() ?? "0";
                 string name = curCard["Name"].ToString() ?? "";
-                List<object> counts = (List<object>)curCard["Counts"];
-                foreach (Dictionary<string, object> curCTC in counts)
+                Dictionary<string, object> counts = (Dictionary<string, object>)curCard["Counts"];
+                foreach (string attrs in counts.Keys)
                 {
-                    string attrs = curCTC["Attrs"].ToString() ?? "Standard";
-                    long count = (long)curCTC["Count"];
+                    long count = (long)counts[attrs];
                     _sql.Query(ADD_TO_USER_INVENTORY)
                         .WithParam("@SetCode", setCode)
                         .WithParam("@CollectorNumber", collectorNumber)
@@ -77,15 +76,12 @@ namespace MTG_CLI
 
                     curCard.Add("CollectorNumber", collectorNumber);
                     curCard.Add("Name", name);
-
-                    List<object> ctcs = new();
-                    ctcs.Add(new Dictionary<string, object> { { "Attrs", attrs}, {"Count", count } });
-                    curCard.Add("Counts", ctcs);
+                    curCard.Add("Counts", new Dictionary<string, int> { { attrs, count } });
                 }
                 else if (!lastAttrs.Equals(attrs)) // New CTC - add it to the last card
                 {
-                    List<object> ctcs = (List<object>)curCard["Counts"];
-                    ctcs.Add(new Dictionary<string, object> { { "Attrs", attrs}, {"Count", count } });
+                    Dictionary<string, int> ctcs = (Dictionary<string, int>)curCard["Counts"];
+                    ctcs.Add(attrs, count);
                 }
 
                 lastCollectorNumber = collectorNumber;

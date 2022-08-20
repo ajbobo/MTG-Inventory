@@ -9,7 +9,7 @@ namespace Migrator2
     {
         [FirestoreProperty] public string Name { get; set; } = "<unknown>";
         [FirestoreProperty] public string CollectorNumber { get; set; } = "0";
-        [FirestoreProperty] public List<Inv_CardTypeCount> Counts { get; set; } = new();
+        [FirestoreProperty] public Dictionary<string, int> Counts { get; set; } = new();
 
         public Inv_Card() { }
 
@@ -19,15 +19,8 @@ namespace Migrator2
             this.CollectorNumber = orig.CollectorNumber;
             foreach (Json_CardTypeCount ctc in orig.Counts)
             {
-                Counts.Add(new() { Attrs = ctc.GetAttrs(), Count = ctc.Count });
+                Counts.Add( ctc.GetAttrs(), ctc.Count );
             }
         }
-    }
-
-    [FirestoreData]
-    public class Inv_CardTypeCount
-    {
-        [FirestoreProperty] public int Count { get; set; } = 0;
-        [FirestoreProperty] public string Attrs { get; set; } = "";
     }
 }
