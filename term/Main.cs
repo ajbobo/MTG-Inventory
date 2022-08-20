@@ -71,7 +71,7 @@ namespace MTG_CLI
                     {
                         _sql.Query(INSERT_CARD)
                             .WithParam("@SetCode", curCard["set"].AsString())
-                            .WithParam("@Collector_Number", curCard["collector_number"].AsString())
+                            .WithParam("@CollectorNumber", curCard["collector_number"].AsString()) // Scryfall uses "collector_number", but I don't want the underscore anywhere else
                             .WithParam("@Name", curCard["name"].AsString())
                             .WithParam("@Rarity", curCard["rarity"].AsString())
                             .WithParam("@ColorIdentity", curCard["color_identity"].CompressArray())

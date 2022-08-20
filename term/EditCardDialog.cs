@@ -22,21 +22,21 @@ namespace MTG_CLI
             _sql = sql;
         }
 
-        private void UpdateInventory(string collector_number, string attrs, int count)
+        private void UpdateInventory(string collectorNumber, string attrs, int count)
         {
             _sql.Query(UPDATE_CARD_CTC)
-                .WithParam("@Collector_Number", collector_number)
+                .WithParam("@CollectorNumber", collectorNumber)
                 .WithParam("@Attrs", attrs)
                 .WithParam("@Count", count)
                 .Execute();
             _isDirty = true;
         }
 
-        public void EditCard(string collector_number)
+        public void EditCard(string collectorNumber)
         {
-            _curCollectorNumber = collector_number;
+            _curCollectorNumber = collectorNumber;
 
-            _sql.Query(GET_CARD_CTCS).WithParam("@Collector_Number", collector_number).Read();
+            _sql.Query(GET_CARD_CTCS).WithParam("@CollectorNumber", collectorNumber).Read();
             _ctcList.Clear();
             _ctcList.Add("Standard", 0);
             while (_sql.ReadNext())

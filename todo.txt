@@ -3,7 +3,7 @@ Write card changes back to Firebase
 Replace filters with SQL queries
 
 --- General ---
-collector_number from Deckbox and from Scryfall don't match for old sets
+collectorNumber from Deckbox and from Scryfall don't match for old sets
     I fixed this in my spreadsheet, but I'll have to do something about it here, too
 
 

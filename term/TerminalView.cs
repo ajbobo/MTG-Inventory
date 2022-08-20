@@ -191,7 +191,7 @@ namespace MTG_CLI
             while (_sql.ReadNext())
             {
                 DataRow row = table.NewRow();
-                row["#"] = _sql.ReadValue<string>("Collector_Number", "");
+                row["#"] = _sql.ReadValue<string>("CollectorNumber", "");
                 string cnt = _sql.ReadValue<string>("Cnt", "");
                 row["Cnt"] = cnt;
                 row["Rarity"] = _sql.ReadValue<string>("Rarity", "").ToUpper()[0];
@@ -270,7 +270,7 @@ namespace MTG_CLI
             string cardNum = row["#"].ToString() ?? "";
             UpdateCardFrame(cardNum);
 
-            string newCount = _sql.Query(GET_SINGLE_CARD_COUNT).WithParam("@Collector_Number", cardNum).ExecuteScalar<string>() ?? "0";
+            string newCount = _sql.Query(GET_SINGLE_CARD_COUNT).WithParam("@CollectorNumber", cardNum).ExecuteScalar<string>() ?? "0";
             row["Cnt"] = newCount;
         }
 
@@ -278,19 +278,19 @@ namespace MTG_CLI
         {
             _curCardFrame.RemoveAll();
 
-            _sql.Query(GET_CARD_DETAILS).WithParam("@Collector_Number", cardNumber).Read();
+            _sql.Query(GET_CARD_DETAILS).WithParam("@CollectorNumber", cardNumber).Read();
             if (!_sql.HasReader())
                 return;
 
             _sql.ReadNext();
-            string title = $"{_sql.ReadValue<string>("Collector_Number", "")} - {_sql.ReadValue<string>("Name", "")}";
+            string title = $"{_sql.ReadValue<string>("CollectorNumber", "")} - {_sql.ReadValue<string>("Name", "")}";
             string frontText = _sql.ReadValue<string>("FrontText", "");
             string typeLine = _sql.ReadValue<string>("TypeLine", "");
             _sql.Close();
 
             _curCardFrame.Title = title;
 
-            _sql.Query(GET_CARD_CTCS).WithParam("@Collector_Number", cardNumber).Read();
+            _sql.Query(GET_CARD_CTCS).WithParam("@CollectorNumber", cardNumber).Read();
             int cnt = 0;
             while (_sql.ReadNext())
             {
