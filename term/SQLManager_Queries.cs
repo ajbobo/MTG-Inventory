@@ -37,30 +37,34 @@ namespace MTG_CLI
                 ");
             AddQuery(InternalQuery.ADD_TO_USER_INVENTORY,
                 @" INSERT INTO user_inventory (SetCode, CollectorNumber, Name, Attrs, Count) 
-                   VALUES ( @SetCode, @CollectorNumber, @Name, @Attrs, @Count ); "
-                );
+                   VALUES ( @SetCode, @CollectorNumber, @Name, @Attrs, @Count ); 
+                ");
             AddQuery(InternalQuery.GET_SET_PLAYSETS,
                 @" select * FROM (
                         SELECT CollectorNumber, Name, Sum(Count) as Total from user_inventory where setCode = @SetCode GROUP BY CollectorNumber
-                    ) WHERE Total >= 4 ORDER BY CollectorNumber"
-                );
+                    ) WHERE Total >= 4 ORDER BY CollectorNumber
+                ");
             AddQuery(InternalQuery.CREATE_SET_TABLE,
                 @"  DROP TABLE IF EXISTS sets;
-                    CREATE TABLE sets ( SetCode varchar(4), Name varchar(128) )"
-                );
+                    CREATE TABLE sets ( SetCode varchar(4), Name varchar(128) )
+                ");
             AddQuery(InternalQuery.INSERT_SET,
                 @"  INSERT INTO sets ( SetCode, Name )
-                    VALUES ( @SetCode, @Name )"
-                );
+                    VALUES ( @SetCode, @Name )
+                ");
             AddQuery(InternalQuery.GET_ALL_SETS,
-                @"  SELECT Name, SetCode FROM sets "
-                );
+                @"  SELECT Name, SetCode 
+                    FROM sets 
+                ");
             AddQuery(InternalQuery.GET_SET_NAME,
-                @"  SELECT Name FROM sets WHERE SetCode = @SetCode "
-                );
+                @"  SELECT Name 
+                    FROM sets 
+                    WHERE SetCode = @SetCode 
+                ");
             AddQuery(InternalQuery.GET_SET_CODE,
-                @"  SELECT SetCode FROM sets WHERE name = @Name "
-                );
+                @"  SELECT SetCode 
+                    FROM sets WHERE name = @Name 
+                ");
             AddQuery(InternalQuery.CREATE_CARD_TABLE,
                 @"  DROP TABLE IF EXISTS cards;
                     CREATE TABLE cards ( 
@@ -72,12 +76,12 @@ namespace MTG_CLI
                         ManaCost varchar(15),
                         TypeLine varchar(128),
                         FrontText varchar
-                    )"
-                );
+                    )
+                ");
             AddQuery(InternalQuery.INSERT_CARD,
                 @"  INSERT INTO cards ( SetCode, Collector_Number, Name, Rarity, ColorIdentity, ManaCost, TypeLine, FrontText )
-                    VALUES ( @SetCode, @Collector_Number, @Name, @Rarity, @ColorIdentity, @ManaCost, @TypeLine, @FrontText )"
-                );
+                    VALUES ( @SetCode, @Collector_Number, @Name, @Rarity, @ColorIdentity, @ManaCost, @TypeLine, @FrontText )
+                ");
             AddQuery(InternalQuery.GET_SET_CARDS,
                 @"  SELECT cds.Collector_Number,
                            ifnull(inv.Total || IFNULL(foil.Symbol, '') || IFNULL(other.Symbol, ''), 0) AS Cnt,
@@ -130,8 +134,8 @@ namespace MTG_CLI
             AddQuery(InternalQuery.GET_CARD_DETAILS,
                 @"  SELECT Collector_Number, Name, TypeLine, FrontText
                     FROM cards
-                    WHERE Collector_Number = @Collector_Number"
-                );
+                    WHERE Collector_Number = @Collector_Number
+                ");
             AddQuery(InternalQuery.GET_CARD_CTCS, // This needs the join to get the name of cards that don't have any CTCs
                 @"  SELECT cds.Name, inv.Attrs, inv.Count
                     FROM cards cds
@@ -152,8 +156,9 @@ namespace MTG_CLI
                     ON CONFLICT DO UPDATE SET Count = @Count
                 ");
             AddQuery(InternalQuery.GET_CARD_NAMES,
-                @"  SELECT DISTINCT Name FROM cards "
-                );
+                @"  SELECT DISTINCT Name 
+                    FROM cards 
+                ");
             AddQuery(InternalQuery.GET_CARD_NUMBER,
                 @"  SELECT Collector_Number 
                     FROM cards 

@@ -1,8 +1,6 @@
-using System.Data;
 using System.Text;
 using Terminal.Gui;
 using Terminal.Gui.TextValidateProviders;
-using Microsoft.Data.Sqlite;
 using NStack;
 using static MTG_CLI.SQLManager.InternalQuery;
 

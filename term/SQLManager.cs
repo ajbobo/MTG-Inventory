@@ -46,6 +46,13 @@ namespace MTG_CLI
             return _command?.ExecuteNonQuery() ?? 0;
         }
 
+        public T? ExecuteScalar<T>()
+        {
+            object? res = _command?.ExecuteScalar() ?? null;
+
+            return (res != null ? (T)res : default(T));
+        }
+
         public void Read()
         {
             _reader = _command?.ExecuteReader() ?? null;
@@ -56,11 +63,9 @@ namespace MTG_CLI
             return _reader != null;
         }
 
-        public T? ExecuteScalar<T>()
+        public bool ReadNext()
         {
-            object? res = _command?.ExecuteScalar() ?? null;
-
-            return (res != null ? (T)res : default(T));
+            return (_reader != null && _reader.Read());
         }
 
         public T ReadValue<T>(string fieldName, T fallback)
@@ -69,11 +74,6 @@ namespace MTG_CLI
                 return fallback;
 
             return _reader.GetFieldValue<T>(fieldName);
-        }
-
-        public bool ReadNext()
-        {
-            return (_reader != null && _reader.Read());
         }
 
         public void Close()

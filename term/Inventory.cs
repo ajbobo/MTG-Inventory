@@ -6,16 +6,8 @@ namespace MTG_CLI
 {
     public class Inventory
     {
-        private const string CACHE_FILE = "inventory_cache.json";
-        private readonly TimeSpan CACHE_TIMEOUT = new(0, 15, 0); // 15 minutes
-
         private FirestoreDb _db;
         private SQLManager _sql;
-
-        public bool UsingCache { get; private set; }
-
-        // Inventory structure: _inventory[SetCode][CardNum] = Card
-        // private Dictionary<string, Dictionary<string, MTG_Card>> _inventory = new();
 
         public Inventory(SQLManager sql)
         {
@@ -25,24 +17,7 @@ namespace MTG_CLI
 
         public async Task ReadData(string setCode)
         {
-            // Check the cache, if it is too old, read from Firebase
-            bool readCache = false;
-            // if (File.Exists(CACHE_FILE))
-            // {
-            //     DateTime lastCacheWrite = File.GetLastWriteTime(CACHE_FILE);
-            //     TimeSpan diff = DateTime.Now - lastCacheWrite;
-            //     Console.WriteLine("Cache Age: {0}", diff);
-            //     if (diff < CACHE_TIMEOUT)
-            //         readCache = true;
-            //     Console.WriteLine("Reading from cache: {0}", readCache);
-            // }
-
-            // if (readCache)
-            //     ReadFromJsonCache();
-            // else
             await ReadFromFirebase(setCode);
-
-            UsingCache = readCache;
         }
 
         public async Task ReadFromFirebase(string setCode)
@@ -75,28 +50,6 @@ namespace MTG_CLI
                         .Execute();
                 }
             }
-        }
-
-        public void ReadFromJsonCache()
-        {
-            // The cache cuts down on reads from Firebase
-            // If you write to it while Firebase isn't available, it won't sync
-            //    That would be nice, though
-
-            // Console.WriteLine("Local Json data");
-            // using (StreamReader reader = new StreamReader(CACHE_FILE))
-            // {
-            //     string json = reader.ReadToEnd();
-            //     _inventory = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, MTG_Card>>>(json) ?? new();
-            // }
-        }
-
-        public void WriteToJsonBackup()
-        {
-            // JsonSerializerSettings settings = new();
-            // settings.Formatting = Formatting.Indented;
-
-            // File.WriteAllText("inventory_cache.json", JsonConvert.SerializeObject(_inventory, settings));
         }
 
         async public Task WriteToFirebase() //MTG_Card card)

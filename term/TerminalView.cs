@@ -1,7 +1,6 @@
 using System.Data;
 using Terminal.Gui;
 using Terminal.Gui.Views;
-using Microsoft.Data.Sqlite;
 using static MTG_CLI.SQLManager.InternalQuery;
 
 namespace MTG_CLI
@@ -41,9 +40,6 @@ namespace MTG_CLI
 
             Label lbl = new("Press Ctrl-S to choose a Set") { X = Pos.Center(), Y = Pos.Center() };
             _top.Add(lbl);
-
-            Label cacheStatus = new($"Using Cache: {_inventory.UsingCache}") { X = Pos.Center(), Y = Pos.Bottom(lbl) + 2 };
-            _top.Add(cacheStatus);
 
             _menu = new(new MenuBarItem[] {
                 new MenuBarItem("_File", new MenuItem[] {
@@ -130,11 +126,6 @@ namespace MTG_CLI
         private void ChooseFilters()
         {
             _editFilters.EditFilters();
-        }
-
-        private List<T> CreateList<T>(params T[] elements)
-        {
-            return new List<T>(elements);
         }
 
         private void ChooseSet()
@@ -235,7 +226,6 @@ namespace MTG_CLI
                 dlg.DataChanged += async () =>
                 {
                     await _inventory.WriteToFirebase();
-                    _inventory.WriteToJsonBackup();
                     UpdateCardTableRow();
                     if (_autoFind)
                         FindCard();
@@ -343,10 +333,6 @@ namespace MTG_CLI
         public void Start()
         {
             Application.Top.Add(_menu, _statusBar);
-            Application.Top.Closing += (args) =>
-            {
-                _inventory.WriteToJsonBackup();
-            };
             Application.Run();
         }
     }
