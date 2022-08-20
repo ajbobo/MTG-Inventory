@@ -76,6 +76,7 @@ namespace MTG_CLI
 
         protected void AdjustCount(string attrs, int newCount, Label label, Button newFocus)
         {
+            newCount = Math.Max(newCount, 0);
             _ctcList[attrs] = newCount;
             UpdateInventory(_curCollectorNumber, attrs, newCount);
             label.Text = FormatCTC(attrs, newCount);
@@ -89,34 +90,34 @@ namespace MTG_CLI
 
             ClearTmpViews(editDialog);
 
-            int x = 0;
+            int ctc_count = 0;
             foreach (string attrs in _ctcList.Keys)
             {
                 if (!attrs.Equals("Standard") && _ctcList[attrs] <= 0)
                     continue;
 
-                Label ctcName = tmpView<Label>(new(FormatCTC(attrs, _ctcList[attrs])) { X = 0, Y = x, Width = 25, Height = 1 });
+                Label ctcName = tmpView<Label>(new(FormatCTC(attrs, _ctcList[attrs])) { X = 0, Y = ctc_count, Width = 25, Height = 1 });
 
-                Button addOne = tmpView<Button>(new("+1") { X = Pos.Right(ctcName) + 1, Y = x });
+                Button addOne = tmpView<Button>(new("+1") { X = Pos.Right(ctcName) + 1, Y = ctc_count });
                 addOne.Clicked += () => { AdjustCount(attrs, _ctcList[attrs] + 1, ctcName, ok); };
 
-                Button subOne = tmpView<Button>(new("-1") { X = Pos.Right(addOne) + 1, Y = x });
+                Button subOne = tmpView<Button>(new("-1") { X = Pos.Right(addOne) + 1, Y = ctc_count });
                 subOne.Clicked += () => { AdjustCount(attrs, _ctcList[attrs] - 1, ctcName, ok); };
 
-                Button setFour = tmpView<Button>(new("=4") { X = Pos.Right(subOne) + 1, Y = x });
+                Button setFour = tmpView<Button>(new("=4") { X = Pos.Right(subOne) + 1, Y = ctc_count });
                 setFour.Clicked += () => { AdjustCount(attrs, 4, ctcName, ok); };
 
-                Button delete = tmpView<Button>(new("X") { X = Pos.Right(setFour) + 1, Y = x });
+                Button delete = tmpView<Button>(new("X") { X = Pos.Right(setFour) + 1, Y = ctc_count });
                 delete.Clicked += () => { AdjustCount(attrs, 0, ctcName, ok); };
 
                 editDialog.Add(ctcName, addOne, subOne, setFour, delete);
-                if (x == 0)
+                if (ctc_count == 0)
                     addOne.SetFocus();
 
-                x++;
+                ctc_count++;
             }
 
-            Button newCTC = tmpView<Button>(new("New Card Type") { X = Pos.Center(), Y = (_ctcList?.Count ?? 0) });
+            Button newCTC = tmpView<Button>(new("New Card Type") { X = Pos.Center(), Y = ctc_count });
             newCTC.Clicked += () =>
             {
                 EditCTCDialog ctcDialog = new();
@@ -133,7 +134,7 @@ namespace MTG_CLI
             };
 
             editDialog.Add(newCTC);
-            editDialog.Height = _ctcList?.Count + 5;
+            editDialog.Height = ctc_count + 5;
             editDialog.LayoutSubviews();
         }
     }
