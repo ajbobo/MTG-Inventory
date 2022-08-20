@@ -67,21 +67,21 @@ namespace MTG_CLI
         {
             _curCollectorNumber = collector_number;
 
-            SqliteDataReader? reader = _sql.Query(GET_CARD_CTCS).WithParam("@Collector_Number", collector_number).Read();
+            _sql.Query(GET_CARD_CTCS).WithParam("@Collector_Number", collector_number).Read();
             _ctcList.Clear();
             _ctcList.Add("Standard", 0);
-            while (reader?.Read() ?? false)
+            while (_sql.ReadNext())
             {
-                _curCardName = _sql.SafeRead<string>(reader, "Name", "");
-                string attrs = _sql.SafeRead<string>(reader, "Attrs", "");
-                int cnt = _sql.SafeRead<int>(reader, "Count", 0);
+                _curCardName = _sql.ReadValue<string>("Name", "");
+                string attrs = _sql.ReadValue<string>("Attrs", "");
+                int cnt = _sql.ReadValue<int>("Count", 0);
 
                 if (attrs.Length > 0 && !_ctcList.ContainsKey(attrs))
                     _ctcList.Add(attrs, cnt);
                 else if (_ctcList.ContainsKey(attrs))
                     _ctcList[attrs] = cnt;
             }
-
+            _sql.Close();
 
             Button ok = new("OK");
             ok.Clicked += () => Application.RequestStop();

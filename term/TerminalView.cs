@@ -142,14 +142,14 @@ namespace MTG_CLI
             Dialog selectSetDlg = new("Select a Set") { Width = 45 };
 
             List<string> SetList = new();
-            SqliteDataReader? reader = _sql.Query(SQLManager.InternalQuery.GET_ALL_SETS).Read();
-            while (reader != null && reader.Read())
+            _sql.Query(SQLManager.InternalQuery.GET_ALL_SETS).Read();
+            while (_sql.ReadNext())
             {
-                string name = _sql.SafeRead<string>(reader, "Name", "");
-                string code = string.Format("({0})", _sql.SafeRead<string>(reader, "SetCode", "")); // Format it here as "(code)" so that it can be spaced nicely later
+                string name = _sql.ReadValue<string>( "Name", "");
+                string code = string.Format("({0})", _sql.ReadValue<string>("SetCode", "")); // Format it here as "(code)" so that it can be spaced nicely later
                 SetList.Add(string.Format("{0,-7} {1}", code, name));
             }
-            reader?.Close();
+            _sql.Close();
 
             ListView setListView = new(SetList) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             setListView.OpenSelectedItem += (args) =>
@@ -182,7 +182,7 @@ namespace MTG_CLI
             _collectedCount = 0;
 
             // TODO: This should be the filtered list of cards
-            SqliteDataReader? reader = _sql.Query(GET_SET_CARDS).WithParam("@SetCode", curSetCode).Read();
+            _sql.Query(GET_SET_CARDS).WithParam("@SetCode", curSetCode).Read();
 
             _findCardDlg = new(new());
             _findCardDlg.CardSelected += FoundCard;
@@ -197,22 +197,22 @@ namespace MTG_CLI
             table.Columns.Add("Color");
             table.Columns.Add("Cost");
 
-            while (reader != null && reader.Read())
+            while (_sql.ReadNext())
             {
                 DataRow row = table.NewRow();
-                row["#"] = _sql.SafeRead<string>(reader, "Collector_Number", "");
-                string cnt = _sql.SafeRead<string>(reader, "Cnt", "");
+                row["#"] = _sql.ReadValue<string>("Collector_Number", "");
+                string cnt = _sql.ReadValue<string>("Cnt", "");
                 row["Cnt"] = cnt;
-                row["Rarity"] = _sql.SafeRead<string>(reader, "Rarity", "").ToUpper()[0];
-                row["Name"] = _sql.SafeRead<string>(reader, "Name", "");
-                row["Color"] = _sql.SafeRead<string>(reader, "ColorIdentity", "");
-                row["Cost"] = _sql.SafeRead<string>(reader, "ManaCost", "");
+                row["Rarity"] = _sql.ReadValue<string>("Rarity", "").ToUpper()[0];
+                row["Name"] = _sql.ReadValue<string>("Name", "");
+                row["Color"] = _sql.ReadValue<string>("ColorIdentity", "");
+                row["Cost"] = _sql.ReadValue<string>("ManaCost", "");
                 table.Rows.Add(row);
 
                 if (!cnt.Equals("0"))
                     _collectedCount++;
             }
-            reader?.Close();
+            _sql.Close();
 
             _cardTable = new(table) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             _cardTable.FullRowSelect = true;
@@ -288,31 +288,31 @@ namespace MTG_CLI
         {
             _curCardFrame.RemoveAll();
 
-            SqliteDataReader? reader = _sql.Query(GET_CARD_DETAILS).WithParam("@Collector_Number", cardNumber).Read();
-            if (reader == null)
+            _sql.Query(GET_CARD_DETAILS).WithParam("@Collector_Number", cardNumber).Read();
+            if (!_sql.HasReader())
                 return;
 
-            reader.Read();
-            string title = $"{_sql.SafeRead<string>(reader, "Collector_Number", "")} - {_sql.SafeRead<string>(reader, "Name", "")}";
-            string frontText = _sql.SafeRead<string>(reader, "FrontText", "");
-            string typeLine = _sql.SafeRead<string>(reader, "TypeLine", "");
-            reader?.Close();
+            _sql.ReadNext();
+            string title = $"{_sql.ReadValue<string>("Collector_Number", "")} - {_sql.ReadValue<string>("Name", "")}";
+            string frontText = _sql.ReadValue<string>("FrontText", "");
+            string typeLine = _sql.ReadValue<string>("TypeLine", "");
+            _sql.Close();
 
             _curCardFrame.Title = title;
 
-            reader = _sql.Query(GET_CARD_CTCS).WithParam("@Collector_Number", cardNumber).Read();
+            _sql.Query(GET_CARD_CTCS).WithParam("@Collector_Number", cardNumber).Read();
             int cnt = 0;
-            while (reader?.Read() ?? false)
+            while (_sql.ReadNext())
             {
-                int count = _sql.SafeRead<int>(reader, "Count", 0);
+                int count = _sql.ReadValue<int>("Count", 0);
                 if (count > 0)
                 {
-                    string ctc = $"{count} - {_sql.SafeRead<string>(reader, "Attrs", "")}";
+                    string ctc = $"{count} - {_sql.ReadValue<string>("Attrs", "")}";
                     _curCardFrame.Add(new Label(ctc) { X = 0, Y = cnt, Width = Dim.Fill() });
                     cnt++;
                 }
             }
-            reader?.Close();
+            _sql.Close();
 
             _curCardFrame.Add(new LineView() { X = 0, Y = cnt, Width = Dim.Fill() });
 

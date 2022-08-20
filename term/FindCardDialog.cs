@@ -94,12 +94,12 @@ namespace MTG_CLI
         {
             _cardNames = new();
 
-            SqliteDataReader? reader = sql.Query(GET_CARD_NAMES).Read();
-            while (null != reader && reader.Read())
+            sql.Query(GET_CARD_NAMES).Read();
+            while (sql.ReadNext())
             {
-                _cardNames.Add(reader.GetFieldValue<string>("Name"));
+                _cardNames.Add(sql.ReadValue<string>("Name", ""));
             }
-            reader?.Close();
+            sql.Close();
         }
 
         private StringBuilder _typed = new StringBuilder();

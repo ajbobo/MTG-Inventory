@@ -7,6 +7,7 @@ namespace MTG_CLI
     {
         private SqliteCommand? _command;
         private SqliteConnection _connection;
+        private SqliteDataReader? _reader;
         
         public SQLManager()
         {
@@ -45,9 +46,14 @@ namespace MTG_CLI
             return _command?.ExecuteNonQuery() ?? 0;
         }
 
-        public SqliteDataReader? Read()
+        public void Read()
         {
-            return _command?.ExecuteReader() ?? null;
+            _reader = _command?.ExecuteReader() ?? null;
+        }
+
+        public bool HasReader()
+        {
+            return _reader != null;
         }
 
         public T? ExecuteScalar<T>()
@@ -57,12 +63,22 @@ namespace MTG_CLI
             return (res != null ? (T)res : default(T));
         }
 
-        public T SafeRead<T>(SqliteDataReader? reader, string fieldName, T fallback)
+        public T ReadValue<T>(string fieldName, T fallback)
         {
-            if (reader == null || reader.IsDBNull(fieldName))
+            if (_reader == null || _reader.IsDBNull(fieldName))
                 return fallback;
 
-            return reader.GetFieldValue<T>(fieldName);
+            return _reader.GetFieldValue<T>(fieldName);
+        }
+
+        public bool ReadNext()
+        {
+            return (_reader != null && _reader.Read());
+        }
+
+        public void Close()
+        {
+            _reader?.Close();
         }
     }
 }
