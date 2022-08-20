@@ -77,12 +77,15 @@ namespace MTG_CLI
 
                     curCard.Add("CollectorNumber", collectorNumber);
                     curCard.Add("Name", name);
-                    curCard.Add("Count", new Dictionary<string, object> { { attrs, count } });
+
+                    List<object> ctcs = new();
+                    ctcs.Add(new Dictionary<string, object> { { "Attrs", attrs}, {"Count", count } });
+                    curCard.Add("Counts", ctcs);
                 }
                 else if (!lastAttrs.Equals(attrs)) // New CTC - add it to the last card
                 {
-                    Dictionary<string, object> ctcs = (Dictionary<string, object>)curCard["Count"];
-                    ctcs.Add(attrs, count);
+                    List<object> ctcs = (List<object>)curCard["Counts"];
+                    ctcs.Add(new Dictionary<string, object> { { "Attrs", attrs}, {"Count", count } });
                 }
 
                 lastCollectorNumber = collectorNumber;

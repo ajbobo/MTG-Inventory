@@ -47,14 +47,15 @@ namespace Migrator2
             return inv;
         }
 
-        public async static Task WriteInventory_Firebase(Dictionary<string, List<Inv_Card>> inventory)
+        public async static Task WriteInventory_Firebase(Dictionary<string, List<Inv_Card>> inventory, params string[] setsToMigrate)
         {
             Console.WriteLine("Writing Inventory to Firestore DB");
             // FirestoreDb db = FirestoreDb.Create("testdb-8448b");
             FirestoreDb db = FirestoreDb.Create("mtg-inventory-9d4ca");
 
             CollectionReference topLevel = db.Collection("User_Inv");
-            foreach (string setCode in inventory.Keys)
+            IEnumerable<string> keys = (setsToMigrate.Length > 0 ? setsToMigrate : inventory.Keys);
+            foreach (string setCode in keys)
             {
                 Console.WriteLine($"Writing set {setCode}");
                 DocumentReference set = topLevel.Document(setCode);
@@ -76,7 +77,7 @@ namespace Migrator2
 
             try
             {
-                await WriteInventory_Firebase(inventory);
+                await WriteInventory_Firebase(inventory, "snc");
             }
             catch (Exception ex)
             {
