@@ -157,7 +157,7 @@ namespace MTG_CLI
             AddQuery(InternalQuery.UPDATE_CARD_CTC,
                 @"  INSERT INTO user_inventory (SetCode, CollectorNumber, Name, Attrs, Count)
                     VALUES (
-                        (SELECT SetCode FROM user_inventory LIMIT 1), 
+                        (SELECT SetCode FROM cards LIMIT 1), 
                         @CollectorNumber, 
                         (SELECT Name FROM cards WHERE CollectorNumber = @CollectorNumber), 
                         @Attrs, 
