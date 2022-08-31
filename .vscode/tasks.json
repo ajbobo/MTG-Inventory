@@ -39,7 +39,7 @@
             "group": "none"
         },
         {
-            "label": "publish term - release",
+            "label": "publish term - release", /* Needs to include Google Firebase creds somehow */
             "command": "dotnet",
             "type": "process",
             "args": [
