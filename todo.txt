@@ -7,6 +7,7 @@ Add filters:
     Name
 Add a view (column or cardPanel) that shows the Scryfall price
 Add a way to open the card image? (Probably in a separate app, but if I can imbed it, that would be cool)
+Add Cancel button to Choose Set dialog
 
 
 --- Web UI ---

@@ -15,7 +15,7 @@ namespace MTG_CLI
 
         public FindCardDialog()
         {
-            _validator = new(new SQLManager());
+            _validator = new();
         }
 
         public FindCardDialog(SQLManager sql)
@@ -87,6 +87,11 @@ namespace MTG_CLI
         private List<string> _cardNames;
 
         public string? SelectedCard { get; protected set; }
+
+        public CardNameValidator()
+        {
+            _cardNames = new();
+        }
 
         public CardNameValidator(SQLManager sql)
         {

@@ -15,7 +15,7 @@
             "group": "build"
         },
         {
-            "label": "build term",
+            "label": "build term - debug",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -28,7 +28,7 @@
             "group": "build"
         },
         {
-            "label": "clean term",
+            "label": "clean term - debug",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -37,6 +37,19 @@
             ],
             "problemMatcher": "$msCompile",
             "group": "none"
+        },
+        {
+            "label": "publish term - release",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/term/term.csproj",
+                "--configuration",
+                "Release"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "none" 
         }
     ]
 }

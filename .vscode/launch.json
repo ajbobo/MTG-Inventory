@@ -20,7 +20,7 @@
             "name": "Terminal UI",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build term",
+            "preLaunchTask": "build term - debug",
             "program": "${workspaceFolder}/term/bin/Debug/net6.0/term.dll",
             "args": [],
             "cwd": "${workspaceFolder}/term",
