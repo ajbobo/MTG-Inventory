@@ -94,7 +94,8 @@ namespace MTG_CLI
                 ");
             AddQuery(InternalQuery.GET_SET_CARDS,
                 @"  SELECT cds.CollectorNumber,
-                           ifnull(inv.Total || IFNULL(foil.Symbol, '') || IFNULL(other.Symbol, ''), 0) AS Cnt,
+                           IFNULL(inv.Total || IFNULL(foil.Symbol, '') || IFNULL(other.Symbol, ''), 0) AS Cnt,
+                           CAST(IFNULL(inv.Total, 0) AS NUM) AS CntNum,
                            cds.Name,
                            cds.Rarity,
                            cds.ColorIdentity,
@@ -117,6 +118,8 @@ namespace MTG_CLI
                                           AND Count > 0
                                         GROUP BY CollectorNumber) other
                                     ON cds.CollectorNumber = other.CollectorNumber
+                    WHERE (CntNum >= @MinCnt AND CntNum <= @MaxCnt)
+                        AND (Rarity IN (@r0, @r1, @r2, @r3))
                     ORDER BY cds.ROWID
                 ");
             AddQuery(InternalQuery.GET_SINGLE_CARD_COUNT,

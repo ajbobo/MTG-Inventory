@@ -3,12 +3,17 @@ using Terminal.Gui;
 namespace MTG_CLI
 {
 
-    abstract class Filter
+    public abstract class Filter
     {
         public string DisplayName { protected set; get; } = "";
+
+        override public string ToString()
+        {
+            return DisplayName;
+        }
     }
 
-    class RarityFilter : Filter
+    public class RarityFilter : Filter
     {
         public static RarityFilter COMMON { get; } = new() { DisplayName = "Common" };
         public static RarityFilter UNCOMMON { get; } = new() { DisplayName = "Uncommon" };
@@ -21,12 +26,15 @@ namespace MTG_CLI
         }
     }
 
-    class CountFilter : Filter
+    public class CountFilter : Filter
     {
-        public static CountFilter CNT_ZERO { get; } = new() { DisplayName = "0" };
-        public static CountFilter CNT_ONE_PLUS { get; } = new() { DisplayName = "1+" };
-        public static CountFilter CNT_FOUR_PLUS { get; } = new() { DisplayName = "4+" };
-        public static CountFilter CNT_LESS_THAN_FOUR { get; } = new() { DisplayName = "<4" };
+        public int Min { private set; get; }
+        public int Max { private set; get; }
+
+        public static CountFilter CNT_ZERO { get; } = new() { DisplayName = "0", Min = 0, Max = 0 };
+        public static CountFilter CNT_ONE_PLUS { get; } = new() { DisplayName = "1+", Min = 1, Max = 1000 };
+        public static CountFilter CNT_FOUR_PLUS { get; } = new() { DisplayName = "4+", Min = 4, Max = 1000 };
+        public static CountFilter CNT_LESS_THAN_FOUR { get; } = new() { DisplayName = "<4", Min = 0, Max = 3 };
         public static CountFilter CNT_ALL { get; } = new() { DisplayName = "<all cards>" };
 
         public static Filter[] GetAllValues()
@@ -35,7 +43,7 @@ namespace MTG_CLI
         }
     }
 
-    class ColorFilter : Filter
+    public class ColorFilter : Filter
     {
         public static ColorFilter WHITE { get; } = new() { DisplayName = "White (W)" };
         public static ColorFilter BLUE { get; } = new() { DisplayName = "Blue (U)" };
@@ -51,7 +59,7 @@ namespace MTG_CLI
     }
 
 
-    class FilterSettings
+    public class FilterSettings
     {
         private List<Filter> _rarityList = new();
         private List<Filter> _countList = new();
@@ -94,6 +102,30 @@ namespace MTG_CLI
         public bool HasFilter(Filter filter)
         {
             return _rarityList.Contains(filter) || _countList.Contains(filter) || _colorList.Contains(filter);
+        }
+
+        public int GetMinCount()
+        {
+            return (_countList.Count > 0 ? ((CountFilter)_countList[0]).Min : 0);
+        }
+
+        public int GetMaxCount()
+        {
+            return (_countList.Count > 0 ? ((CountFilter)_countList[0]).Max : 1000);
+        }
+
+        public string[] GetRarities()
+        {
+            Filter[] allRarities = RarityFilter.GetAllValues();
+            string[] res = new string[allRarities.Count()];
+
+            List<Filter> theList = (_rarityList.Count == 0 ? _rarityList : new(allRarities));
+
+            int cnt = theList.Count;
+            for (int x = 0; x < res.Count(); x++)
+                res[x] = (cnt > x ? (theList[x]?.ToString() ?? "na") : "na");
+
+            return res;
         }
     }
 

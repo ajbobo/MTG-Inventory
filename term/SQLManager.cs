@@ -41,6 +41,18 @@ namespace MTG_CLI
             return this;
         }
 
+        public SQLManager WithFilters(FilterSettings filterSettings)
+        {
+            _command?.Parameters.AddWithValue("@MinCnt", filterSettings.GetMinCount());
+            _command?.Parameters.AddWithValue("@MaxCnt", filterSettings.GetMaxCount());
+
+            string[] rarities = filterSettings.GetRarities();
+            for (int x = 0; x < rarities.Count(); x++)
+                _command?.Parameters.AddWithValue($"@r{x}", rarities[x].ToLower());
+                
+            return this;
+        }
+
         public int Execute()
         {
             return _command?.ExecuteNonQuery() ?? 0;

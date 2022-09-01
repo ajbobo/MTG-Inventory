@@ -118,7 +118,7 @@ namespace MTG_CLI
                 Console.WriteLine("Getting inventory for {0}", newSet);
                 await _inventory.ReadData(newSet);
 
-                win.SetCardList(newSet);
+                win.SetCardList();
             };
 
             win.Start();

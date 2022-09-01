@@ -47,7 +47,7 @@ namespace MTG_CLI
                 }),
                 new MenuBarItem("_Options", new MenuItem[] {
                     new MenuItem("Choose _Set", "", ChooseSet),
-                    // new MenuItem("_Edit Filters", "", ChooseFilters),
+                    new MenuItem("_Edit Filters", "", ChooseFilters),
                     new MenuItem("_Find a Card", "", FindCard),
                 }),
             });
@@ -56,7 +56,7 @@ namespace MTG_CLI
 
             _statusBar = new(new StatusItem[]{
                 new StatusItem(Key.S | Key.CtrlMask, "~Ctrl-S~ Choose Set", ChooseSet ),
-                // new StatusItem(Key.E | Key.CtrlMask, "~Ctrl-E~ Edit Filters", ChooseFilters ),
+                new StatusItem(Key.E | Key.CtrlMask, "~Ctrl-E~ Edit Filters", ChooseFilters ),
                 new StatusItem(Key.F | Key.CtrlMask, "~Ctrl-F~ Find Card", FindCard ),
                 new StatusItem(Key.N | Key.CtrlMask, "~Ctrl-N~ Find Next", FindNext ),
                 _autoStatus,
@@ -68,7 +68,7 @@ namespace MTG_CLI
             _cardTable = new() { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             _findCardDlg = new();
             _editFilters = new(_filterSettings);
-            // _editFilters.OnClose += () => { SetCardList(_cardList); };
+            _editFilters.OnClose += () => { SetCardList(); };
         }
 
         private void ToggleAutoAdvance()
@@ -168,12 +168,12 @@ namespace MTG_CLI
                 _top.Add(_curSetFrame);
         }
 
-        public void SetCardList(string curSetCode)
+        public void SetCardList()
         {
             _collectedCount = 0;
 
-            // TODO: This should be the filtered list of cards
-            _sql.Query(GET_SET_CARDS).WithParam("@SetCode", curSetCode).Read();
+            // This returns the filtered list of cards
+            _sql.Query(GET_SET_CARDS).WithFilters(_filterSettings).Read();
 
             _findCardDlg = new(new());
             _findCardDlg.CardSelected += FoundCard;
