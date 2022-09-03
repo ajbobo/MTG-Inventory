@@ -21,17 +21,16 @@ namespace MTG_CLI
         private SQLManager _sql;
 
         private int _collectedCount;
-        private Inventory _inventory;
         private FilterSettings _filterSettings;
         private bool _autoFind = true;
 
         public event Action<string>? SelectedSetChanged;
+        public event Action? DataChanged;
 
-        public TerminalView(Inventory inventory, SQLManager sql)
+        public TerminalView(SQLManager sql)
         {
             _sql = sql;
-            _inventory = inventory;
-            _filterSettings = new(_inventory);
+            _filterSettings = new();
 
             Application.Init();
 
@@ -130,7 +129,10 @@ namespace MTG_CLI
 
         private void ChooseSet()
         {
-            Dialog selectSetDlg = new("Select a Set") { Width = 45 };
+            Button cancel = new("Cancel");
+            cancel.Clicked += () => Application.RequestStop();
+
+            Dialog selectSetDlg = new("Select a Set", cancel) { Width = 45 };
 
             List<string> SetList = new();
             _sql.Query(SQLManager.InternalQuery.GET_ALL_SETS).Read();
@@ -142,7 +144,7 @@ namespace MTG_CLI
             }
             _sql.Close();
 
-            ListView setListView = new(SetList) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
+            ListView setListView = new(SetList) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() - 2 };
             setListView.OpenSelectedItem += (args) =>
                 {
                     string selectedItem = (string)args.Value;
@@ -222,10 +224,10 @@ namespace MTG_CLI
             _cardTable.CellActivated += (args) =>
             {
                 DataTable table = args.Table;
-                EditCardDialog dlg = new(_inventory, _sql);
-                dlg.DataChanged += async () =>
+                EditCardDialog dlg = new(_sql);
+                dlg.DataChanged += () =>
                 {
-                    await _inventory.WriteToFirebase();
+                    DataChanged?.Invoke();
                     UpdateCardTableRow();
                     if (_autoFind)
                         FindCard();

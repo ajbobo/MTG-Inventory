@@ -1,15 +1,14 @@
 using Google.Cloud.Firestore;
-using Newtonsoft.Json;
 using static MTG_CLI.SQLManager.InternalQuery;
 
 namespace MTG_CLI
 {
-    public class Inventory
+    public class Inventory_Connection
     {
         private FirestoreDb _db;
         private SQLManager _sql;
 
-        public Inventory(SQLManager sql)
+        public Inventory_Connection(SQLManager sql)
         {
             _db = FirestoreDb.Create("mtg-inventory-9d4ca");
             _sql = sql;
@@ -93,7 +92,7 @@ namespace MTG_CLI
             CollectionReference collection = _db.Collection("User_Inv");
             Dictionary<string, object> cards = new Dictionary<string, object>
             {
-                {"Cards", fullSet.ToArray()}
+                { "Cards", fullSet.ToArray() }
             };
             await collection.Document(setCode).SetAsync(cards);
         }

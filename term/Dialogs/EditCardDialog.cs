@@ -8,16 +8,14 @@ namespace MTG_CLI
     {
         public event Action? DataChanged;
 
-        private Inventory _inventory;
         private bool _isDirty;
         private string _curCollectorNumber = "";
         private string _curCardName = "";
         private Dictionary<string, int> _ctcList = new();
         private SQLManager _sql;
 
-        public EditCardDialog(Inventory inventory, SQLManager sql)
+        public EditCardDialog(SQLManager sql)
         {
-            _inventory = inventory;
             _isDirty = false;
             _sql = sql;
         }

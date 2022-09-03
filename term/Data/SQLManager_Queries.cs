@@ -1,5 +1,3 @@
-using Microsoft.Data.Sqlite;
-
 namespace MTG_CLI
 {
     public partial class SQLManager
@@ -22,9 +20,7 @@ namespace MTG_CLI
             ADD_TO_USER_INVENTORY,
             GET_USER_INVENTORY,
             GET_CARD_CTCS,
-            UPDATE_CARD_CTC,
-            // These aren't in use for real yet
-            GET_SET_PLAYSETS,
+            UPDATE_CARD_CTC
         };
 
         private static string[] _queries = new string[Enum.GetNames(typeof(InternalQuery)).Length];
@@ -45,11 +41,6 @@ namespace MTG_CLI
             AddQuery(InternalQuery.ADD_TO_USER_INVENTORY,
                 @" INSERT INTO user_inventory (SetCode, CollectorNumber, Name, Attrs, Count) 
                    VALUES ( @SetCode, @CollectorNumber, @Name, @Attrs, @Count ); 
-                ");
-            AddQuery(InternalQuery.GET_SET_PLAYSETS,
-                @" select * FROM (
-                        SELECT CollectorNumber, Name, Sum(Count) as Total from user_inventory where setCode = @SetCode GROUP BY CollectorNumber
-                    ) WHERE Total >= 4 ORDER BY CollectorNumber
                 ");
             AddQuery(InternalQuery.CREATE_SET_TABLE,
                 @"  DROP TABLE IF EXISTS sets;
