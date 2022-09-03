@@ -119,7 +119,7 @@ namespace MTG_CLI
             Filter[] allRarities = RarityFilter.GetAllValues();
             string[] res = new string[allRarities.Count()];
 
-            List<Filter> theList = (_rarityList.Count == 0 ? _rarityList : new(allRarities));
+            List<Filter> theList = (_rarityList.Count != 0 ? _rarityList : new(allRarities));
 
             int cnt = theList.Count;
             for (int x = 0; x < res.Count(); x++)
