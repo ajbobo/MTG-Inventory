@@ -1,6 +1,4 @@
 --- Term ---
-Mana_Cost isn't populated for double-sided cards (VOW #198 - "Dormant Grove // Gnarled Grovestrider")
-Replace filters with SQL queries
 Add filters:
     Type
     CTC attributes (Foil, Prerelease, etc)

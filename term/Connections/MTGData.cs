@@ -78,16 +78,17 @@ namespace MTG_CLI
                             .WithParam("@Name", curCard["name"].AsString())
                             .WithParam("@Rarity", curCard["rarity"].AsString())
                             .WithParam("@ColorIdentity", curCard["color_identity"].CompressArray())
-                            .WithParam("@ManaCost", curCard["mana_cost"].AsString())
                             .WithParam("@TypeLine", curCard["type_line"].AsString());
 
                         if (curCard["oracle_text"] != null)
                         {
                             _sql.WithParam("@FrontText", curCard["oracle_text"].AsString());
+                            _sql.WithParam("@ManaCost", curCard["mana_cost"].AsString());
                         }
                         else if (curCard["card_faces"] != null)
                         {
                             _sql.WithParam("@FrontText", curCard["card_faces"]?[0]?["oracle_text"].AsString() ?? "");
+                            _sql.WithParam("@ManaCost", curCard["card_faces"]?[0]?["mana_cost"].AsString() ?? "");
                         }
                         _sql.Execute();
                     }
