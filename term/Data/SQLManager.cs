@@ -49,6 +49,12 @@ namespace MTG_CLI
             string[] rarities = filterSettings.GetRarities();
             for (int x = 0; x < rarities.Count(); x++)
                 _command?.Parameters.AddWithValue($"@r{x}", rarities[x].ToLower());
+
+            string colors = filterSettings.GetColors();
+            bool all = (colors.Length == 0);
+            char[] COLOR_LIST = {'W', 'U', 'B', 'R', 'G', 'X'};
+            foreach (char curChar in COLOR_LIST)
+                _command?.Parameters.AddWithValue($"@{curChar}", all || colors.Contains(curChar));
                 
             return this;
         }

@@ -111,6 +111,12 @@ namespace MTG_CLI
                                     ON cds.CollectorNumber = other.CollectorNumber
                     WHERE (CntNum >= @MinCnt AND CntNum <= @MaxCnt)
                         AND (Rarity IN (@r0, @r1, @r2, @r3))
+                        AND ((ColorIdentity LIKE '%W%' and @W) OR 
+                             (ColorIdentity LIKE '%U%' and @U) OR 
+                             (ColorIdentity LIKE '%B%' and @B) OR 
+                             (ColorIdentity LIKE '%R%' and @R) OR
+                             (ColorIdentity LIKE '%G%' and @G) OR
+                             (ColorIdentity =    '' and @X))
                     ORDER BY cds.ROWID
                 ");
             AddQuery(InternalQuery.GET_SINGLE_CARD_COUNT,

@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace MTG_CLI
 {
 
@@ -43,12 +45,14 @@ namespace MTG_CLI
 
     public class ColorFilter : Filter
     {
-        public static ColorFilter WHITE { get; } = new() { DisplayName = "White (W)" };
-        public static ColorFilter BLUE { get; } = new() { DisplayName = "Blue (U)" };
-        public static ColorFilter BLACK { get; } = new() { DisplayName = "Black (B)" };
-        public static ColorFilter RED { get; } = new() { DisplayName = "Red (R)" };
-        public static ColorFilter GREEEN { get; } = new() { DisplayName = "Green (G)" };
-        public static ColorFilter COLORLESS { get; } = new() { DisplayName = "Colorless" };
+        public char Color { private set; get; }
+
+        public static ColorFilter WHITE { get; } = new() { DisplayName = "White (W)", Color = 'W' };
+        public static ColorFilter BLUE { get; } = new() { DisplayName = "Blue (U)", Color = 'U' };
+        public static ColorFilter BLACK { get; } = new() { DisplayName = "Black (B)", Color = 'B' };
+        public static ColorFilter RED { get; } = new() { DisplayName = "Red (R)", Color = 'R' };
+        public static ColorFilter GREEEN { get; } = new() { DisplayName = "Green (G)", Color = 'G' };
+        public static ColorFilter COLORLESS { get; } = new() { DisplayName = "Colorless", Color = 'X' };
 
         public static Filter[] GetAllValues()
         {
@@ -118,6 +122,16 @@ namespace MTG_CLI
                 res[x] = (cnt > x ? (theList[x]?.ToString() ?? "na") : "na");
 
             return res;
+        }
+
+        public string GetColors()
+        {
+            StringBuilder builder = new();
+            foreach (Filter filter in _colorList)
+            {
+                builder.Append(((ColorFilter)filter).Color);
+            }
+            return builder.ToString();
         }
     }
 }
