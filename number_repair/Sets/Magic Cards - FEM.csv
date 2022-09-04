@@ -1,0 +1,189 @@
+Fallen Empires,,,,,,,,
+DeckBox Number,DeckBox Count,Number,Name,Rarity,Color,Artist,1+,4+
+1,2,33a,Armor Thrull,common,Black,Pete Venters,X,
+2,4,33b,Armor Thrull,common,Black,Ron Spencer,X,X
+3,1,33c,Armor Thrull,common,Black,Jeff A. Menges,X,
+4,2,33d,Armor Thrull,common,Black,Scott Kirschner,X,
+5,2,34a,Basal Thrull,common,Black,Kaja Foglio,X,
+6,4,34b,Basal Thrull,common,Black,Phil Foglio,X,X
+7,1,34c,Basal Thrull,common,Black,Richard Kane Ferguson,X,
+8,1,34d,Basal Thrull,common,Black,Christopher Rush,X,
+9,4,35,Breeding Pit,uncommon,Black,Anson Maddocks,X,X
+10,0,36,Derelor,rare,Black,Anson Maddocks,,
+11,0,37,Ebon Praetor,rare,Black,Randy Asplund-Faith,,
+12,3,38a,Hymn to Tourach,common,Black,Susan Van Camp,X,
+13,2,38b,Hymn to Tourach,common,Black,Liz Danforth,X,
+14,1,38c,Hymn to Tourach,common,Black,Quinton Hoover,X,
+15,3,38d,Hymn to Tourach,common,Black,Scott Kirschner,X,
+16,2,39a,Initiates of the Ebon Hand,common,Black,Heather Hudson,X,
+17,4,39b,Initiates of the Ebon Hand,common,Black,Liz Danforth,X,X
+18,3,39c,Initiates of the Ebon Hand,common,Black,Kaja Foglio,X,
+19,4,40a,Mindstab Thrull,common,Black,Richard Kane Ferguson,X,X
+20,4,40b,Mindstab Thrull,common,Black,Heather Hudson,X,X
+21,1,40c,Mindstab Thrull,common,Black,Mark Tedin,X,
+22,4,41a,Necrite,common,Black,Ron Spencer,X,X
+23,4,41b,Necrite,common,Black,Christopher Rush,X,X
+24,4,41c,Necrite,common,Black,Drew Tucker,X,X
+25,0,42a,Order of the Ebon Hand,common,Black,Melissa A. Benson,,
+26,3,42b,Order of the Ebon Hand,common,Black,Christopher Rush,X,
+27,4,42c,Order of the Ebon Hand,common,Black,Ron Spencer,X,X
+28,1,43,Soul Exchange,uncommon,Black,Anthony S. Waters,X,
+29,2,44,Thrull Champion,rare,Black,Daniel Gelon,X,
+30,4,45,Thrull Retainer,uncommon,Black,Ron Spencer,X,X
+31,4,46,Thrull Wizard,uncommon,Black,Anson Maddocks,X,X
+32,1,47,Tourach's Chant,uncommon,Black,Richard Kane Ferguson,X,
+33,0,48,Tourach's Gate,rare,Black,Sandra Everingham,,
+34,4,17,Deep Spawn,uncommon,Blue,Mark Tedin,X,X
+35,0,18a,High Tide,common,Blue,Drew Tucker,,
+36,1,18b,High Tide,common,Blue,Anson Maddocks,X,
+37,4,18c,High Tide,common,Blue,Amy Weber,X,X
+38,1,19a,Homarid,common,Blue,Quinton Hoover,X,
+39,3,19b,Homarid,common,Blue,Heather Hudson,X,
+40,4,19c,Homarid,common,Blue,Mark Tedin,X,X
+41,4,19d,Homarid,common,Blue,Bryon Wackwitz,X,X
+42,2,20,Homarid Shaman,rare,Blue,Amy Weber,X,
+43,3,21,Homarid Spawning Bed,uncommon,Blue,Douglas Shuler,X,
+44,1,22a,Homarid Warrior,common,Blue,Daniel Gelon,X,
+45,4,22b,Homarid Warrior,common,Blue,Randy Asplund-Faith,X,X
+46,4,22c,Homarid Warrior,common,Blue,Douglas Shuler,X,X
+47,4,23a,Merseine,common,Blue,Heather Hudson,X,X
+48,2,23b,Merseine,common,Blue,Margaret Organ-Kean,X,
+49,4,23c,Merseine,common,Blue,Drew Tucker,X,X
+50,4,23d,Merseine,common,Blue,Pete Venters,X,X
+51,0,24,River Merfolk,rare,Blue,Douglas Shuler,,
+52,1,25,Seasinger,uncommon,Blue,Amy Weber,X,
+53,1,26,Svyelunite Priest,uncommon,Blue,Ron Spencer,X,
+54,4,27a,Tidal Flats,common,Blue,Rob Alexander,X,X
+55,4,27b,Tidal Flats,common,Blue,Rob Alexander,X,X
+56,4,27c,Tidal Flats,common,Blue,Sandra Everingham,X,X
+57,3,28,Tidal Influence,uncommon,Blue,Tom W├ñnerstrand,X,
+58,1,29,Vodalian Knights,rare,Blue,Susan Van Camp,X,
+59,4,30a,Vodalian Mage,common,Blue,Susan Van Camp,X,X
+60,0,30b,Vodalian Mage,common,Blue,Mark Poole,,
+61,3,30c,Vodalian Mage,common,Blue,Quinton Hoover,X,
+62,4,31a,Vodalian Soldiers,common,Blue,Melissa A. Benson,X,X
+63,4,31b,Vodalian Soldiers,common,Blue,Jeff A. Menges,X,X
+64,0,31c,Vodalian Soldiers,common,Blue,Richard Kane Ferguson,,
+65,3,31d,Vodalian Soldiers,common,Blue,Susan Van Camp,X,
+66,0,32,Vodalian War Machine,rare,Blue,Amy Weber,,
+67,3,65a,Elven Fortress,common,Green,Pete Venters,X,
+68,4,65b,Elven Fortress,common,Green,Randy Asplund-Faith,X,X
+69,1,65c,Elven Fortress,common,Green,Mark Poole,X,
+70,3,65d,Elven Fortress,common,Green,Tom W├ñnerstrand,X,
+71,0,66,Elvish Farmer,rare,Green,Richard Kane Ferguson,,
+72,0,67a,Elvish Hunter,common,Green,Mark Poole,,
+73,0,67b,Elvish Hunter,common,Green,Anson Maddocks,,
+74,0,67c,Elvish Hunter,common,Green,Susan Van Camp,,
+75,2,68a,Elvish Scout,common,Green,Mark Poole,X,
+76,3,68b,Elvish Scout,common,Green,Pete Venters,X,
+77,4,68c,Elvish Scout,common,Green,Christopher Rush,X,X
+78,2,69,Feral Thallid,uncommon,Green,Rob Alexander,X,
+79,0,70,Fungal Bloom,rare,Green,Daniel Gelon,,
+80,4,71a,Night Soil,common,Green,Sandra Everingham,X,X
+81,4,71b,Night Soil,common,Green,Heather Hudson,X,X
+82,3,71c,Night Soil,common,Green,Drew Tucker,X,
+83,4,72a,Spore Cloud,common,Green,Susan Van Camp,X,X
+84,2,72b,Spore Cloud,common,Green,Jesper Myrfors,X,
+85,2,72c,Spore Cloud,common,Green,Amy Weber,X,
+86,2,73,Spore Flower,uncommon,Green,Margaret Organ-Kean,X,
+87,2,74a,Thallid,common,Green,"Edward P. Beard, Jr.",X,
+88,4,74b,Thallid,common,Green,Jesper Myrfors,X,X
+89,4,74c,Thallid,common,Green,Ron Spencer,X,X
+90,4,74d,Thallid,common,Green,Daniel Gelon,X,X
+91,0,75,Thallid Devourer,uncommon,Green,Ron Spencer,,
+92,2,76,Thelon's Chant,uncommon,Green,Melissa A. Benson,X,
+93,0,77,Thelon's Curse,rare,Green,Pete Venters,,
+94,4,78,Thelonite Druid,uncommon,Green,Margaret Organ-Kean,X,X
+95,0,79,Thelonite Monk,rare,Green,Bryon Wackwitz,,
+96,4,80a,Thorn Thallid,common,Green,Daniel Gelon,X,X
+97,4,80b,Thorn Thallid,common,Green,Heather Hudson,X,X
+98,4,80c,Thorn Thallid,common,Green,Jesper Myrfors,X,X
+99,4,80d,Thorn Thallid,common,Green,Mark Tedin,X,X
+100,4,49a,Brassclaw Orcs,common,Red,Rob Alexander,X,X
+101,2,49b,Brassclaw Orcs,common,Red,Dan Frazier,X,
+102,4,49c,Brassclaw Orcs,common,Red,Rob Alexander,X,X
+103,1,49d,Brassclaw Orcs,common,Red,Heather Hudson,X,
+104,0,50,Dwarven Armorer,rare,Red,Bryon Wackwitz,,
+105,3,51,Dwarven Catapult,uncommon,Red,Jeff A. Menges,X,
+106,2,52,Dwarven Lieutenant,uncommon,Red,Jeff A. Menges,X,
+107,4,53a,Dwarven Soldier,common,Red,Rob Alexander,X,X
+108,4,53b,Dwarven Soldier,common,Red,Randy Asplund-Faith,X,X
+109,4,53c,Dwarven Soldier,common,Red,Douglas Shuler,X,X
+110,4,54a,Goblin Chirurgeon,common,Red,Daniel Gelon,X,X
+111,4,54b,Goblin Chirurgeon,common,Red,Phil Foglio,X,X
+112,4,54c,Goblin Chirurgeon,common,Red,Dan Frazier,X,X
+113,0,55,Goblin Flotilla,rare,Red,Tom W├ñnerstrand,,
+114,1,56a,Goblin Grenade,common,Red,Ron Spencer,X,
+115,0,56b,Goblin Grenade,common,Red,Dan Frazier,,
+116,1,56c,Goblin Grenade,common,Red,Christopher Rush,X,
+117,4,57,Goblin Kites,uncommon,Red,Anson Maddocks,X,X
+118,4,58a,Goblin War Drums,common,Red,Dan Frazier,X,X
+119,2,58b,Goblin War Drums,common,Red,Richard Kane Ferguson,X,
+120,2,58c,Goblin War Drums,common,Red,Heather Hudson,X,
+121,0,58d,Goblin War Drums,common,Red,Jeff A. Menges,,
+122,0,59,Goblin Warrens,rare,Red,Dan Frazier,,
+123,1,60,Orcish Captain,uncommon,Red,Mark Tedin,X,
+124,4,61a,Orcish Spy,common,Red,Susan Van Camp,X,X
+125,4,61b,Orcish Spy,common,Red,Daniel Gelon,X,X
+126,4,61c,Orcish Spy,common,Red,Pete Venters,X,X
+127,0,62a,Orcish Veteran,common,Red,Douglas Shuler,,
+128,1,62b,Orcish Veteran,common,Red,Dan Frazier,X,
+129,3,62c,Orcish Veteran,common,Red,Quinton Hoover,X,
+130,1,62d,Orcish Veteran,common,Red,Melissa A. Benson,X,
+131,1,63,Orgg,rare,Red,Daniel Gelon,X,
+132,2,64,Raiding Party,uncommon,Red,Quinton Hoover,X,
+133,1,1a,Combat Medic,common,White,"Edward P. Beard, Jr.",X,
+134,0,1b,Combat Medic,common,White,Susan Van Camp,,
+135,3,1c,Combat Medic,common,White,Anson Maddocks,X,
+136,0,1d,Combat Medic,common,White,Liz Danforth,,
+137,2,2,Farrel's Mantle,uncommon,White,Anthony S. Waters,X,
+138,5,3a,Farrel's Zealot,common,White,Melissa A. Benson,X,X
+139,2,3b,Farrel's Zealot,common,White,Richard Kane Ferguson,X,
+140,0,3c,Farrel's Zealot,common,White,"Edward P. Beard, Jr.",,
+141,1,4,Farrelite Priest,uncommon,White,Phil Foglio,X,
+142,0,5,Hand of Justice,rare,White,Melissa A. Benson,,
+143,4,6,Heroism,uncommon,White,Mark Poole,X,X
+144,0,7a,Icatian Infantry,common,White,"Edward P. Beard, Jr.",,
+145,2,7b,Icatian Infantry,common,White,Christopher Rush,X,
+146,4,7c,Icatian Infantry,common,White,Douglas Shuler,X,X
+147,0,7d,Icatian Infantry,common,White,Drew Tucker,,
+148,4,8a,Icatian Javelineers,common,White,Melissa A. Benson,X,X
+149,3,8b,Icatian Javelineers,common,White,"Edward P. Beard, Jr.",X,
+150,1,8c,Icatian Javelineers,common,White,Scott Kirschner,X,
+151,1,9,Icatian Lieutenant,rare,White,Pete Venters,X,
+152,1,10a,Icatian Moneychanger,common,White,Drew Tucker,X,
+153,0,10b,Icatian Moneychanger,common,White,"Edward P. Beard, Jr.",,
+154,0,10c,Icatian Moneychanger,common,White,Melissa A. Benson,,
+155,2,11,Icatian Phalanx,uncommon,White,Kaja Foglio,X,
+156,4,12,Icatian Priest,uncommon,White,Drew Tucker,X,X
+157,2,13a,Icatian Scout,common,White,Richard Kane Ferguson,X,
+158,0,13b,Icatian Scout,common,White,Douglas Shuler,,
+159,3,13c,Icatian Scout,common,White,Rob Alexander,X,
+160,2,13d,Icatian Scout,common,White,Phil Foglio,X,
+161,0,14,Icatian Skirmishers,rare,White,Heather Hudson,,
+162,0,15,Icatian Town,rare,White,Tom W├ñnerstrand,,
+163,0,16a,Order of Leitbur,common,White,Bryon Wackwitz,,
+164,4,16b,Order of Leitbur,common,White,Bryon Wackwitz,X,X
+165,4,16c,Order of Leitbur,common,White,Randy Asplund-Faith,X,X
+166,0,81,Aeolipile,rare,,Heather Hudson,,
+167,0,82,Balm of Restoration,rare,,Margaret Organ-Kean,,
+168,0,83,Conch Horn,rare,,Phil Foglio,,
+169,1,84,Delif's Cone,common,,Mark Tedin,X,
+170,0,85,Delif's Cube,rare,,Mark Tedin,,
+171,0,86,Draconian Cylix,rare,,"Edward P. Beard, Jr.",,
+172,0,87,Elven Lyre,rare,,Kaja Foglio,,
+173,0,88,Implements of Sacrifice,rare,,Margaret Organ-Kean,,
+174,0,89,Ring of Renewal,rare,,Douglas Shuler,,
+175,0,90,Spirit Shield,rare,,Scott Kirschner,,
+176,0,91,Zelyon Sword,rare,,Scott Kirschner,,
+177,1,92,Bottomless Vault,rare,,Pat Morrissey,X,
+178,1,93,Dwarven Hold,rare,,Pat Morrissey,X,
+179,4,94,Dwarven Ruins,uncommon,,Mark Poole,X,X
+180,1,95,Ebon Stronghold,uncommon,,Mark Poole,X,
+181,2,96,Havenwood Battleground,uncommon,,Mark Poole,X,
+182,2,97,Hollow Trees,rare,,Pat Morrissey,X,
+183,1,98,Icatian Store,rare,,Pat Morrissey,X,
+184,0,99,Rainbow Vale,rare,,Kaja Foglio,,
+185,2,100,Ruins of Trokair,uncommon,,Mark Poole,X,
+186,1,101,Sand Silos,rare,,Pat Morrissey,X,
+187,3,102,Svyelunite Temple,uncommon,,Mark Poole,X,
