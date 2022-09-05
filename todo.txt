@@ -22,11 +22,6 @@ Add a panel of set information
     Adjust values based on current filters
 
 
---- General ---
-collectorNumber from Deckbox and from Scryfall don't match for old sets
-    I fixed this in my spreadsheet, but I'll have to do something about it here, too
-
-
 --- New Web UI ---
 Migrate from Bootstrap to TailwindCSS and HeadlessUI?
     https://tailwindcss.com/
