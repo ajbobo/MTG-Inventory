@@ -1,9 +1,12 @@
 --- Term ---
+Add a view (column or cardPanel) that shows the Scryfall price
+Add option to ChooseSetDialog to only show sets that are in User_Inv
+    This will need to get the list of Documents in User_Inv
 Add filters:
     Type
     CTC attributes (Foil, Prerelease, etc)
     Name
-Add a view (column or cardPanel) that shows the Scryfall price
+    Price ($1+, $5+, $20+)
 Add a way to open the card image? (Probably in a separate app, but if I can imbed it, that would be cool)
 Published build needs an icon
 Published build needs Google Firebase creds
