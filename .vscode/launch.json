@@ -2,21 +2,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Migrator 2",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build migrator2",
-            "program": "${workspaceFolder}/migrator2/bin/Debug/net6.0/migrator2.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/migrator2",
-            "stopAtEntry": false,
-            "console": "internalConsole",
-            "env": {
-                // "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\migrator2\\Migrator-service-account.json"
-                "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\mtg-inventory-main-service-account.json"
-            }
-        },
-        {
             "name": "Terminal UI",
             "type": "coreclr",
             "request": "launch",
@@ -27,21 +12,6 @@
             "stopAtEntry": false,
             "console": "externalTerminal",
             "env": {
-                "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\mtg-inventory-main-service-account.json"
-            }
-        },
-        {
-            "name": "Number Repair",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build number_repair",
-            "program": "${workspaceFolder}/number_repair/bin/Debug/net6.0/number_repair.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/number_repair",
-            "stopAtEntry": false,
-            "console": "internalConsole",
-            "env": {
-                // "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\migrator2\\Migrator-service-account.json"
                 "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\mtg-inventory-main-service-account.json"
             }
         },
