@@ -10,21 +10,19 @@ namespace MTG_CLI
     {
         public event Action<string>? CardSelected;
 
+        private SQLManager _sql;
         private CardNameValidator _validator;
         private bool _cardSelected = false;
 
-        public FindCardDialog()
-        {
-            _validator = new();
-        }
-
         public FindCardDialog(SQLManager sql)
         {
-            _validator = new CardNameValidator(sql);
+            _sql = sql;
+            _validator = new CardNameValidator(_sql);
         }
 
         public void FindCard()
         {
+            _validator.RefreshNames(_sql);
             _validator.Text = "";
 
             Button ok = new("OK");
@@ -88,14 +86,16 @@ namespace MTG_CLI
 
         public string? SelectedCard { get; protected set; }
 
-        public CardNameValidator()
-        {
-            _cardNames = new();
-        }
-
         public CardNameValidator(SQLManager sql)
         {
             _cardNames = new();
+
+            RefreshNames(sql);
+        }
+
+        public void RefreshNames(SQLManager sql)
+        {
+            _cardNames.Clear();
 
             sql.Query(GET_CARD_NAMES).Read();
             while (sql.ReadNext())

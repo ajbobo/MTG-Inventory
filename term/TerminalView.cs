@@ -17,6 +17,7 @@ namespace MTG_CLI
         private FrameView _curCardFrame;
         private FindCardDialog _findCardDlg;
         private EditFiltersDialog _editFilters;
+        private ChooseSetDialog _chooseSet;
 
         private SQLManager _sql;
 
@@ -65,9 +66,12 @@ namespace MTG_CLI
             _curStatsFrame = new() { X = Pos.Right(_curSetFrame), Y = Pos.Top(_curSetFrame), Width = Dim.Fill(), Height = 5 };
             _curCardFrame = new() { X = Pos.Right(_curSetFrame), Y = Pos.Bottom(_curStatsFrame), Width = Dim.Fill(), Height = Dim.Fill() - 1 };
             _cardTable = new() { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
-            _findCardDlg = new();
+            _findCardDlg = new(sql);
+            _findCardDlg.CardSelected += FoundCard;
             _editFilters = new(_filterSettings);
-            _editFilters.OnClose += () => { SetCardList(); };
+            _editFilters.OnClose += SetCardList;
+            _chooseSet = new(sql);
+            _chooseSet.SetSelected += (setCode) => { SelectedSetChanged?.Invoke(setCode); };
         }
 
         private void ToggleAutoAdvance()
@@ -129,33 +133,7 @@ namespace MTG_CLI
 
         private void ChooseSet()
         {
-            Button cancel = new("Cancel");
-            cancel.Clicked += () => Application.RequestStop();
-
-            Dialog selectSetDlg = new("Select a Set", cancel) { Width = 45 };
-
-            List<string> SetList = new();
-            _sql.Query(SQLManager.InternalQuery.GET_ALL_SETS).Read();
-            while (_sql.ReadNext())
-            {
-                string name = _sql.ReadValue<string>( "Name", "");
-                string code = string.Format("({0})", _sql.ReadValue<string>("SetCode", "")); // Format it here as "(code)" so that it can be spaced nicely later
-                SetList.Add(string.Format("{0,-7} {1}", code, name));
-            }
-            _sql.Close();
-
-            ListView setListView = new(SetList) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() - 2 };
-            setListView.OpenSelectedItem += (args) =>
-                {
-                    string selectedItem = (string)args.Value;
-                    string setCode = selectedItem.Substring(1, selectedItem.IndexOf(')') - 1); // The item is "(code) Name" - get the value between ( and )
-                    SelectedSetChanged?.Invoke(setCode);
-                    Application.RequestStop();
-                };
-
-            selectSetDlg.Add(setListView);
-
-            Application.Run(selectSetDlg);
+            _chooseSet.ChooseSet();
         }
 
         public void SetCurrentSet(string setCode)
@@ -176,9 +154,6 @@ namespace MTG_CLI
 
             // This returns the filtered list of cards
             _sql.Query(GET_SET_CARDS).WithFilters(_filterSettings).Read();
-
-            _findCardDlg = new(new());
-            _findCardDlg.CardSelected += FoundCard;
 
             _curSetFrame.RemoveAll();
 
