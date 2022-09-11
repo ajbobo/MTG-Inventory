@@ -15,6 +15,11 @@ namespace ExtensionMethods
            return (token != null ? (int)token : 0);
         }
 
+        public static bool HasValue(this JToken? token)
+        {
+            return ((token != null && token.Type != JTokenType.Null) ? true : false);
+        }
+
         public static string CompressArray(this JToken? token)
         {
             if (token?.Type != JTokenType.Array)

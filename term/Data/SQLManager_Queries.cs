@@ -76,12 +76,14 @@ namespace MTG_CLI
                         ColorIdentity varchar(5),
                         ManaCost varchar(15),
                         TypeLine varchar(128),
-                        FrontText varchar
+                        FrontText varchar,
+                        Price varchar(10),
+                        PriceFoil varchar(10)
                     )
                 ");
             AddQuery(InternalQuery.INSERT_CARD,
-                @"  INSERT INTO cards ( SetCode, CollectorNumber, Name, Rarity, ColorIdentity, ManaCost, TypeLine, FrontText )
-                    VALUES ( @SetCode, @CollectorNumber, @Name, @Rarity, @ColorIdentity, @ManaCost, @TypeLine, @FrontText )
+                @"  INSERT INTO cards ( SetCode, CollectorNumber, Name, Rarity, ColorIdentity, ManaCost, TypeLine, FrontText, Price, PriceFoil )
+                    VALUES ( @SetCode, @CollectorNumber, @Name, @Rarity, @ColorIdentity, @ManaCost, @TypeLine, @FrontText, @Price, @PriceFoil )
                 ");
             AddQuery(InternalQuery.GET_SET_CARDS,
                 @"  SELECT cds.CollectorNumber,
@@ -90,7 +92,9 @@ namespace MTG_CLI
                            cds.Name,
                            cds.Rarity,
                            cds.ColorIdentity,
-                           cds.ManaCost
+                           cds.ManaCost,
+                           cds.Price,
+                           cds.PriceFoil
                     FROM cards cds
                             LEFT JOIN (SELECT CollectorNumber, CAST(SUM(Count) as TEXT) AS Total
                                         FROM user_inventory

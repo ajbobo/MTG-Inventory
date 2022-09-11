@@ -72,13 +72,17 @@ namespace MTG_CLI
                     JEnumerable<JToken> data = resp["data"]?.Children() ?? new();
                     foreach (JToken curCard in data)
                     {
+                        JToken prices = curCard["prices"] ?? new JObject();
+
                         _sql.Query(INSERT_CARD)
                             .WithParam("@SetCode", curCard["set"].AsString())
                             .WithParam("@CollectorNumber", curCard["collector_number"].AsString()) // Scryfall uses "collector_number", but I don't want the underscore anywhere else
                             .WithParam("@Name", curCard["name"].AsString())
                             .WithParam("@Rarity", curCard["rarity"].AsString())
                             .WithParam("@ColorIdentity", curCard["color_identity"].CompressArray())
-                            .WithParam("@TypeLine", curCard["type_line"].AsString());
+                            .WithParam("@TypeLine", curCard["type_line"].AsString())
+                            .WithParam("@Price", prices["usd"].AsString())
+                            .WithParam("@PriceFoil", (prices["usd_foil"].HasValue() ? prices["usd_foil"].AsString() : prices["usd_etched"].AsString()));
 
                         if (curCard["oracle_text"] != null)
                         {
@@ -90,6 +94,8 @@ namespace MTG_CLI
                             _sql.WithParam("@FrontText", curCard["card_faces"]?[0]?["oracle_text"].AsString() ?? "");
                             _sql.WithParam("@ManaCost", curCard["card_faces"]?[0]?["mana_cost"].AsString() ?? "");
                         }
+
+
                         _sql.Execute();
                     }
 
