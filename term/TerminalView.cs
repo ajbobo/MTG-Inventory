@@ -176,8 +176,11 @@ namespace MTG_CLI
                 row["Name"] = _sql.ReadValue<string>("Name", "");
                 row["Color"] = _sql.ReadValue<string>("ColorIdentity", "");
                 row["Cost"] = _sql.ReadValue<string>("ManaCost", "");
-                string priceCol = (!cnt.Contains('*') ? "Price" : "PriceFoil");
-                row["Price"] = $"${_sql.ReadValue<string>(priceCol, "")}";
+                string price = _sql.ReadValue<string>("Price", "");
+                if (price.Length == 0 || cnt.Contains("*"))
+                    price = _sql.ReadValue<string>("PriceFoil", "");
+                row["Price"] = $"{(price.Length > 0 ? '$' : "")}{price}";
+
                 table.Rows.Add(row);
 
                 if (!cnt.Equals("0"))
@@ -187,6 +190,7 @@ namespace MTG_CLI
 
             _cardTable = new(table) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
             _cardTable.FullRowSelect = true;
+
             _cardTable.MultiSelect = false;
             _cardTable.Style.AlwaysShowHeaders = true;
             _cardTable.Style.ExpandLastColumn = false;
@@ -195,7 +199,7 @@ namespace MTG_CLI
             _cardTable.Style.ColumnStyles.Add(table.Columns["Rarity"], new() { MinWidth = 2, MaxWidth = 2 });
             _cardTable.Style.ColumnStyles.Add(table.Columns["Name"], new() { MinWidth = 15 });
             _cardTable.Style.ColumnStyles.Add(table.Columns["Color"], new() { MaxWidth = 5, MinWidth = 5 });
-            _cardTable.Style.ColumnStyles.Add(table.Columns["Price"], new() { MaxWidth = 8, MinWidth = 5 } );
+            _cardTable.Style.ColumnStyles.Add(table.Columns["Price"], new() { MaxWidth = 8, MinWidth = 5 });
             _cardTable.SelectedCellChanged += (args) => UpdateCardFrame(table.Rows[args.NewRow]["#"].ToString() ?? "");
 
             _curSetFrame.Add(_cardTable);
