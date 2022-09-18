@@ -56,7 +56,8 @@ namespace MTG_CLI
                 predictedText.X = 11 + typed.Length;
                 editName.SetNeedsDisplay();
 
-                if (args.KeyEvent.Key == Key.Enter)
+                // Sometimes a leftover Key.Enter makes it here from EditCardDialog - ignore it
+                if (args.KeyEvent.Key == Key.Enter && typed.Length > 0)
                 {
                     args.Handled = true;
                     _cardSelected = true;
