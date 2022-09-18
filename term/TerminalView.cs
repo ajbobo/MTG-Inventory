@@ -210,7 +210,7 @@ namespace MTG_CLI
                 EditCardDialog dlg = new(_sql);
                 dlg.DataChanged += () =>
                 {
-                    DataChanged?.Invoke();
+                    DataChanged?.Invoke(); 
                     UpdateCardTableRow();
                     if (_autoFind)
                         FindCard();
@@ -291,10 +291,10 @@ namespace MTG_CLI
 
             _curCardFrame.Add(new LineView() { X = 0, Y = cnt, Width = Dim.Fill() });
 
-            InsertCardDetails(typeLine, frontText, _curCardFrame, cnt + 1);
-
             if (!_top.Subviews.Contains(_curCardFrame))
                 _top.Add(_curCardFrame);
+
+            InsertCardDetails(typeLine, frontText, _curCardFrame, cnt + 1);
         }
 
         private void InsertCardDetails(string typeLine, string frontText, FrameView frame, int StartingY)
@@ -302,17 +302,9 @@ namespace MTG_CLI
             frame.Add(new Label(typeLine) { X = 0, Y = StartingY, Width = Dim.Fill() });
             TextView text = new() { X = 0, Y = StartingY + 2, Width = Dim.Fill(), Height = Dim.Fill() };
             text.ReadOnly = true;
-            text.WordWrap = true;
-            text.Multiline = true;
-            try
-            {
-                text.Text = frontText;
-            }
-            catch (Exception)
-            {
-                // An exception is thrown when the text is first set - ignore it
-            }
             frame.Add(text);
+            text.Text = frontText;
+            text.WordWrap = true;
         }
 
         public void Start()
