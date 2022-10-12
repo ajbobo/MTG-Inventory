@@ -31,29 +31,28 @@ namespace MTG_CLI
             _sql.Query(CREATE_SET_TABLE).Execute();
 
             HttpResponseMessage msg = await _httpClient.GetAsync("https://api.scryfall.com/sets");
-            if (msg.IsSuccessStatusCode)
-            {
-                string respStr = await msg.Content.ReadAsStringAsync();
+            if (!msg.IsSuccessStatusCode)
+                return false;
 
-                // I'm parsing this way so that I don't have to worry about large .NET objects that I won't need later
-                JObject resp = JObject.Parse(respStr);
-                JEnumerable<JToken> data = resp["data"]?.Children() ?? new();
-                foreach (JToken curSet in data)
+            string respStr = await msg.Content.ReadAsStringAsync();
+
+            // I'm parsing this way so that I don't have to worry about large .NET objects that I won't need later
+            JObject resp = JObject.Parse(respStr);
+            JEnumerable<JToken> data = resp["data"]?.Children() ?? new();
+            foreach (JToken curSet in data)
+            {
+                string type = curSet["set_type"].AsString();
+                string block = curSet["block_code"].AsString();
+                string parent = curSet["parent_set_code"].AsString();
+                if (IsCollectableSetType(type, block, parent))
                 {
-                    string type = curSet["set_type"].AsString();
-                    string block = curSet["block_code"].AsString();
-                    string parent = curSet["parent_set_code"].AsString();
-                    if (IsCollectableSetType(type, block, parent))
-                    {
-                        _sql.Query(INSERT_SET)
-                            .WithParam("@SetCode", curSet["code"].AsString())
-                            .WithParam("@Name", curSet["name"].AsString())
-                            .Execute();
-                    }
+                    _sql.Query(INSERT_SET)
+                        .WithParam("@SetCode", curSet["code"].AsString())
+                        .WithParam("@Name", curSet["name"].AsString())
+                        .Execute();
                 }
-                return true;
             }
-            return false;
+            return true;
         }
 
         async public Task<bool> GetSetCards(string targetSetCode)
