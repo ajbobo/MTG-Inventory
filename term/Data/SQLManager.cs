@@ -3,19 +3,30 @@ using Microsoft.Data.Sqlite;
 
 namespace MTG_CLI
 {
-    public partial class SQLManager
+    public partial class SQLiteManager : ISQLManager
     {
+        private static SQLiteManager? _instance = null;
+
         private SqliteCommand? _command;
         private SqliteConnection _connection;
         private SqliteDataReader? _reader;
         
-        public SQLManager()
+        private SQLiteManager(string connectionString)
         {
-            _connection = new SqliteConnection("Data source=inv.db");
+            _connection = new SqliteConnection(connectionString);
             _connection.Open();
+            PopulateQueries();
         }
 
-        public SQLManager Query(InternalQuery query)
+        public static SQLiteManager GetInstance(string connectionString)
+        {
+            if (_instance == null)
+                _instance = new SQLiteManager(connectionString);
+
+            return _instance;
+        }
+
+        public ISQLManager Query(InternalQuery query)
         {
             _command = new SqliteCommand();
             _command.Connection = _connection;
@@ -23,25 +34,25 @@ namespace MTG_CLI
             return this;
         }
 
-        public SQLManager WithParam(string param, string value)
+        public ISQLManager WithParam(string param, string value)
         {
             _command?.Parameters.AddWithValue(param, value);
             return this;
         }
 
-        public SQLManager WithParam(string param, long value)
+        public ISQLManager WithParam(string param, long value)
         {
             _command?.Parameters.AddWithValue(param, value);
             return this;
         }
 
-        public SQLManager WithParam(string param, int value)
+        public ISQLManager WithParam(string param, int value)
         {
             _command?.Parameters.AddWithValue(param, value.ToString());
             return this;
         }
 
-        public SQLManager WithFilters(FilterSettings filterSettings)
+        public ISQLManager WithFilters(FilterSettings filterSettings)
         {
             _command?.Parameters.AddWithValue("@MinCnt", filterSettings.GetMinCount());
             _command?.Parameters.AddWithValue("@MaxCnt", filterSettings.GetMaxCount());

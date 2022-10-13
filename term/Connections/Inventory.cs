@@ -1,16 +1,19 @@
+using System.Configuration;
 using Google.Cloud.Firestore;
-using static MTG_CLI.SQLManager.InternalQuery;
 
 namespace MTG_CLI
 {
     public class Inventory_Connection
     {
+        readonly private string _dbName = ConfigurationManager.AppSettings["Firestore_DB"] ?? "";
+        readonly private string _dbCollection = ConfigurationManager.AppSettings["Firestore_Collection"] ?? "";
+        
         private FirestoreDb _db;
-        private SQLManager _sql;
+        private ISQLManager _sql;
 
-        public Inventory_Connection(SQLManager sql)
+        public Inventory_Connection(ISQLManager sql)
         {
-            _db = FirestoreDb.Create("mtg-inventory-9d4ca");
+            _db = FirestoreDb.Create(_dbName);
             _sql = sql;
         }
 
@@ -23,9 +26,9 @@ namespace MTG_CLI
         {
             Console.WriteLine("Firebase data");
 
-            _sql.Query(CREATE_USER_INVENTORY).Execute();
+            _sql.Query(InternalQuery.CREATE_USER_INVENTORY).Execute();
 
-            DocumentSnapshot setDoc = await _db.Collection("User_Inv").Document(setCode).GetSnapshotAsync();
+            DocumentSnapshot setDoc = await _db.Collection(_dbCollection).Document(setCode).GetSnapshotAsync();
             Dictionary<string, object>[] setData;
             setDoc.TryGetValue<Dictionary<string, object>[]>("Cards", out setData);
             if (setData == null)
@@ -39,7 +42,7 @@ namespace MTG_CLI
                 foreach (string attrs in counts.Keys)
                 {
                     long count = (long)counts[attrs];
-                    _sql.Query(ADD_TO_USER_INVENTORY)
+                    _sql.Query(InternalQuery.ADD_TO_USER_INVENTORY)
                         .WithParam("@SetCode", setCode)
                         .WithParam("@CollectorNumber", collectorNumber)
                         .WithParam("@Name", name)
@@ -55,7 +58,7 @@ namespace MTG_CLI
             // Build the data structure for the entire set - We'll send that to Firebase
             List<Dictionary<string, object>> fullSet = new();
 
-            _sql.Query(GET_USER_INVENTORY).Read();
+            _sql.Query(InternalQuery.GET_USER_INVENTORY).Read();
 
             string setCode = "", lastCollectorNumber = "", lastAttrs = "";
             Dictionary<string, object> curCard = new();

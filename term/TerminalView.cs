@@ -1,7 +1,6 @@
 using System.Data;
 using Terminal.Gui;
 using Terminal.Gui.Views;
-using static MTG_CLI.SQLManager.InternalQuery;
 
 namespace MTG_CLI
 {
@@ -19,7 +18,7 @@ namespace MTG_CLI
         private EditFiltersDialog _editFilters;
         private ChooseSetDialog _chooseSet;
 
-        private SQLManager _sql;
+        private ISQLManager _sql;
 
         private int _collectedCount;
         private FilterSettings _filterSettings;
@@ -28,7 +27,7 @@ namespace MTG_CLI
         public event Action<string>? SelectedSetChanged;
         public event Action? DataChanged;
 
-        public TerminalView(SQLManager sql)
+        public TerminalView(ISQLManager sql)
         {
             _sql = sql;
             _filterSettings = new();
@@ -117,7 +116,7 @@ namespace MTG_CLI
 
         private void FoundCard(string cardName)
         {
-            string cardNumber = _sql.Query(GET_CARD_NUMBER).WithParam("@Name", cardName).ExecuteScalar<string>() ?? "";
+            string cardNumber = _sql.Query(InternalQuery.GET_CARD_NUMBER).WithParam("@Name", cardName).ExecuteScalar<string>() ?? "";
 
             DataRow? cardRow = _cardTable.Table.Rows.Find(cardNumber);
             _cardTable.SelectedRow = _cardTable.Table.Rows.IndexOf(cardRow);
@@ -138,7 +137,7 @@ namespace MTG_CLI
 
         public void SetCurrentSet(string setCode)
         {
-            string setName = _sql.Query(GET_SET_NAME).WithParam("@SetCode", setCode).ExecuteScalar<string>() ?? "<unknown>";
+            string setName = _sql.Query(InternalQuery.GET_SET_NAME).WithParam("@SetCode", setCode).ExecuteScalar<string>() ?? "<unknown>";
 
             _curSetFrame.Title = setName;
             _curSetFrame.RemoveAll();
@@ -153,7 +152,7 @@ namespace MTG_CLI
             _collectedCount = 0;
 
             // This returns the filtered list of cards
-            _sql.Query(GET_SET_CARDS).WithFilters(_filterSettings).Read();
+            _sql.Query(InternalQuery.GET_SET_CARDS).WithFilters(_filterSettings).Read();
 
             _curSetFrame.RemoveAll();
 
@@ -255,7 +254,7 @@ namespace MTG_CLI
             string cardNum = row["#"].ToString() ?? "";
             UpdateCardFrame(cardNum);
 
-            string newCount = _sql.Query(GET_SINGLE_CARD_COUNT).WithParam("@CollectorNumber", cardNum).ExecuteScalar<string>() ?? "0";
+            string newCount = _sql.Query(InternalQuery.GET_SINGLE_CARD_COUNT).WithParam("@CollectorNumber", cardNum).ExecuteScalar<string>() ?? "0";
             row["Cnt"] = newCount;
         }
 
@@ -263,7 +262,7 @@ namespace MTG_CLI
         {
             _curCardFrame.RemoveAll();
 
-            _sql.Query(GET_CARD_DETAILS).WithParam("@CollectorNumber", cardNumber).Read();
+            _sql.Query(InternalQuery.GET_CARD_DETAILS).WithParam("@CollectorNumber", cardNumber).Read();
             if (!_sql.HasReader())
                 return;
 
@@ -275,7 +274,7 @@ namespace MTG_CLI
 
             _curCardFrame.Title = title;
 
-            _sql.Query(GET_CARD_CTCS).WithParam("@CollectorNumber", cardNumber).Read();
+            _sql.Query(InternalQuery.GET_CARD_CTCS).WithParam("@CollectorNumber", cardNumber).Read();
             int cnt = 0;
             while (_sql.ReadNext())
             {

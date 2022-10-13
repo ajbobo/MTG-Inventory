@@ -1,31 +1,10 @@
 namespace MTG_CLI
 {
-    public partial class SQLManager
+    public partial class SQLiteManager
     {
-        public enum InternalQuery
-        {
-            CREATE_SET_TABLE,
-            INSERT_SET,
-            GET_ALL_SETS,
-            GET_SET_NAME,
-            GET_SET_CODE,
-            CREATE_CARD_TABLE,
-            INSERT_CARD,
-            GET_SET_CARDS,
-            GET_SINGLE_CARD_COUNT,
-            GET_CARD_DETAILS,
-            GET_CARD_NAMES,
-            GET_CARD_NUMBER,
-            CREATE_USER_INVENTORY,
-            ADD_TO_USER_INVENTORY,
-            GET_USER_INVENTORY,
-            GET_CARD_CTCS,
-            UPDATE_CARD_CTC
-        };
+        private string[] _queries = new string[Enum.GetNames(typeof(InternalQuery)).Length];
 
-        private static string[] _queries = new string[Enum.GetNames(typeof(InternalQuery)).Length];
-
-        static SQLManager()
+        private void PopulateQueries()
         {
             AddQuery(InternalQuery.CREATE_USER_INVENTORY,
                 @"  DROP TABLE IF EXISTS user_inventory;
@@ -186,7 +165,7 @@ namespace MTG_CLI
                 ");
         }
 
-        private static void AddQuery(InternalQuery id, string query)
+        private void AddQuery(InternalQuery id, string query)
         {
             _queries[(int)id] = query;
         }

@@ -1,3 +1,13 @@
+--- SOLID refactor ---
+Guide: https://www.rhyous.com/2022/07/22/developer-training-wheels-for-writing-s-o-l-i-d-code/
+   I'm not 100% sold on all of this, but some of it would be worthwhile
+HttpClient needs Interface
+Add unit tests -- I think this is the most useful thing I can do, some of the SOLID principles make this easier/possible
+Is there another way to inject IHttpClient and ISQLManager? Ninject? .NET dependency injection?
+Split UI logic from actual behavior?
+Split Inventory_Connection so that the Firebase logic could be replaced with a different database?
+
+
 --- Term ---
 Add option to ChooseSetDialog to only show sets that are in User_Inv
     This will need to get the list of Documents in User_Inv

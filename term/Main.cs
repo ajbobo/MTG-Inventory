@@ -1,9 +1,13 @@
-﻿namespace MTG_CLI
+﻿using System.Configuration;
+
+namespace MTG_CLI
 {
     class CLI_Window
     {
+        readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_File"].ConnectionString;
+
         private static HttpClient _httpClient = new HttpClient();
-        private static SQLManager _sql = new SQLManager();
+        private static ISQLManager _sql = SQLiteManager.GetInstance(_sqliteFile);
 
         private static Inventory_Connection _inventory = new(_sql);
         private static MTG_Connection _mtgData = new(_sql, _httpClient);

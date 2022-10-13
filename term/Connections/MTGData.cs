@@ -1,15 +1,15 @@
 using Newtonsoft.Json.Linq;
 using ExtensionMethods;
-using static MTG_CLI.SQLManager.InternalQuery;
+using System.Configuration;
 
 namespace MTG_CLI
 {
     public class MTG_Connection
     {
-        private SQLManager _sql;
+        private ISQLManager _sql;
         private HttpClient _httpClient;
 
-        public MTG_Connection(SQLManager sql, HttpClient httpClient)
+        public MTG_Connection(ISQLManager sql, HttpClient httpClient)
         {
             _httpClient = httpClient;
             _sql = sql;
@@ -28,9 +28,9 @@ namespace MTG_CLI
 
         async public Task<bool> GetSetList()
         {
-            _sql.Query(CREATE_SET_TABLE).Execute();
+            _sql.Query(InternalQuery.CREATE_SET_TABLE).Execute();
 
-            HttpResponseMessage msg = await _httpClient.GetAsync("https://api.scryfall.com/sets");
+            HttpResponseMessage msg = await _httpClient.GetAsync(ConfigurationManager.AppSettings["GetSetList_Url"]);
             if (!msg.IsSuccessStatusCode)
                 return false;
 
@@ -46,7 +46,7 @@ namespace MTG_CLI
                 string parent = curSet["parent_set_code"].AsString();
                 if (IsCollectableSetType(type, block, parent))
                 {
-                    _sql.Query(INSERT_SET)
+                    _sql.Query(InternalQuery.INSERT_SET)
                         .WithParam("@SetCode", curSet["code"].AsString())
                         .WithParam("@Name", curSet["name"].AsString())
                         .Execute();
@@ -57,13 +57,13 @@ namespace MTG_CLI
 
         async public Task<bool> GetSetCards(string targetSetCode)
         {
-            _sql.Query(CREATE_CARD_TABLE).Execute();
+            _sql.Query(InternalQuery.CREATE_CARD_TABLE).Execute();
 
             int page = 1;
             bool done = false;
             while (!done)
             {
-                HttpResponseMessage msg = await _httpClient.GetAsync($"https://api.scryfall.com/cards/search?q=set:{targetSetCode} and game:paper&order=set&unique=prints&page={page}");
+                HttpResponseMessage msg = await _httpClient.GetAsync(string.Format(ConfigurationManager.AppSettings["SetSearch_Url"] ?? "", targetSetCode, page));
                 if (msg.IsSuccessStatusCode)
                 {
                     string respStr = await msg.Content.ReadAsStringAsync();
@@ -73,7 +73,7 @@ namespace MTG_CLI
                     {
                         JToken prices = curCard["prices"] ?? new JObject();
 
-                        _sql.Query(INSERT_CARD)
+                        _sql.Query(InternalQuery.INSERT_CARD)
                             .WithParam("@SetCode", curCard["set"].AsString())
                             .WithParam("@CollectorNumber", curCard["collector_number"].AsString()) // Scryfall uses "collector_number", but I don't want the underscore anywhere else
                             .WithParam("@Name", curCard["name"].AsString())

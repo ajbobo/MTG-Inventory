@@ -2,7 +2,6 @@ using System.Text;
 using Terminal.Gui;
 using Terminal.Gui.TextValidateProviders;
 using NStack;
-using static MTG_CLI.SQLManager.InternalQuery;
 
 namespace MTG_CLI
 {
@@ -10,11 +9,11 @@ namespace MTG_CLI
     {
         public event Action<string>? CardSelected;
 
-        private SQLManager _sql;
+        private ISQLManager _sql;
         private CardNameValidator _validator;
         private bool _cardSelected = false;
 
-        public FindCardDialog(SQLManager sql)
+        public FindCardDialog(ISQLManager sql)
         {
             _sql = sql;
             _validator = new CardNameValidator(_sql);
@@ -87,18 +86,18 @@ namespace MTG_CLI
 
         public string? SelectedCard { get; protected set; }
 
-        public CardNameValidator(SQLManager sql)
+        public CardNameValidator(ISQLManager sql)
         {
             _cardNames = new();
 
             RefreshNames(sql);
         }
 
-        public void RefreshNames(SQLManager sql)
+        public void RefreshNames(ISQLManager sql)
         {
             _cardNames.Clear();
 
-            sql.Query(GET_CARD_NAMES).Read();
+            sql.Query(InternalQuery.GET_CARD_NAMES).Read();
             while (sql.ReadNext())
             {
                 _cardNames.Add(sql.ReadValue<string>("Name", ""));

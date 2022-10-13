@@ -1,6 +1,5 @@
 using System.Text;
 using Terminal.Gui;
-using static MTG_CLI.SQLManager.InternalQuery;
 
 namespace MTG_CLI
 {
@@ -12,9 +11,9 @@ namespace MTG_CLI
         private string _curCollectorNumber = "";
         private string _curCardName = "";
         private Dictionary<string, int> _ctcList = new();
-        private SQLManager _sql;
+        private ISQLManager _sql;
 
-        public EditCardDialog(SQLManager sql)
+        public EditCardDialog(ISQLManager sql)
         {
             _isDirty = false;
             _sql = sql;
@@ -22,7 +21,7 @@ namespace MTG_CLI
 
         private void UpdateInventory(string collectorNumber, string attrs, int count)
         {
-            _sql.Query(UPDATE_CARD_CTC)
+            _sql.Query(InternalQuery.UPDATE_CARD_CTC)
                 .WithParam("@CollectorNumber", collectorNumber)
                 .WithParam("@Attrs", attrs)
                 .WithParam("@Count", count)
@@ -34,7 +33,7 @@ namespace MTG_CLI
         {
             _curCollectorNumber = collectorNumber;
 
-            _sql.Query(GET_CARD_CTCS).WithParam("@CollectorNumber", collectorNumber).Read();
+            _sql.Query(InternalQuery.GET_CARD_CTCS).WithParam("@CollectorNumber", collectorNumber).Read();
             _ctcList.Clear();
             _ctcList.Add("Standard", 0);
             while (_sql.ReadNext())
