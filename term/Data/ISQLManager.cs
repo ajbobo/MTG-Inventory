@@ -2,7 +2,7 @@ namespace MTG_CLI
 {
     public interface ISQLManager
     {
-        public ISQLManager Query(InternalQuery query);
+        public ISQLManager Query(MTGQuery query);
         public ISQLManager WithParam(string param, string value);
         public ISQLManager WithParam(string param, long value);
         public ISQLManager WithParam(string param, int value);

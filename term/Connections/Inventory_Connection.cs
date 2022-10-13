@@ -26,7 +26,7 @@ namespace MTG_CLI
         {
             Console.WriteLine("Firebase data");
 
-            _sql.Query(InternalQuery.CREATE_USER_INVENTORY).Execute();
+            _sql.Query(MTGQuery.CREATE_USER_INVENTORY).Execute();
 
             DocumentSnapshot setDoc = await _db.Collection(_dbCollection).Document(setCode).GetSnapshotAsync();
             Dictionary<string, object>[] setData;
@@ -42,7 +42,7 @@ namespace MTG_CLI
                 foreach (string attrs in counts.Keys)
                 {
                     long count = (long)counts[attrs];
-                    _sql.Query(InternalQuery.ADD_TO_USER_INVENTORY)
+                    _sql.Query(MTGQuery.ADD_TO_USER_INVENTORY)
                         .WithParam("@SetCode", setCode)
                         .WithParam("@CollectorNumber", collectorNumber)
                         .WithParam("@Name", name)
@@ -58,7 +58,7 @@ namespace MTG_CLI
             // Build the data structure for the entire set - We'll send that to Firebase
             List<Dictionary<string, object>> fullSet = new();
 
-            _sql.Query(InternalQuery.GET_USER_INVENTORY).Read();
+            _sql.Query(MTGQuery.GET_USER_INVENTORY).Read();
 
             string setCode = "", lastCollectorNumber = "", lastAttrs = "";
             Dictionary<string, object> curCard = new();

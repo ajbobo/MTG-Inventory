@@ -26,7 +26,7 @@ namespace MTG_CLI
             return _instance;
         }
 
-        public ISQLManager Query(InternalQuery query)
+        public ISQLManager Query(MTGQuery query)
         {
             _command = new SqliteCommand();
             _command.Connection = _connection;

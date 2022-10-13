@@ -2,11 +2,11 @@ namespace MTG_CLI
 {
     public partial class SQLiteManager
     {
-        private string[] _queries = new string[Enum.GetNames(typeof(InternalQuery)).Length];
+        private string[] _queries = new string[Enum.GetNames(typeof(MTGQuery)).Length];
 
         private void PopulateQueries()
         {
-            AddQuery(InternalQuery.CREATE_USER_INVENTORY,
+            AddQuery(MTGQuery.CREATE_USER_INVENTORY,
                 @"  DROP TABLE IF EXISTS user_inventory;
                     CREATE TABLE user_inventory (
                         SetCode varchar(5), 
@@ -17,35 +17,35 @@ namespace MTG_CLI
                     );
                     CREATE UNIQUE INDEX idx_CollectorNumber_Attrs ON user_inventory (CollectorNumber, Attrs);
                 ");
-            AddQuery(InternalQuery.ADD_TO_USER_INVENTORY,
+            AddQuery(MTGQuery.ADD_TO_USER_INVENTORY,
                 @" INSERT INTO user_inventory (SetCode, CollectorNumber, Name, Attrs, Count) 
                    VALUES ( @SetCode, @CollectorNumber, @Name, @Attrs, @Count ); 
                 ");
-            AddQuery(InternalQuery.CREATE_SET_TABLE,
+            AddQuery(MTGQuery.CREATE_SET_TABLE,
                 @"  DROP TABLE IF EXISTS sets;
                     CREATE TABLE sets ( 
                         SetCode varchar(4), 
                         Name varchar(128) 
                     )
                 ");
-            AddQuery(InternalQuery.INSERT_SET,
+            AddQuery(MTGQuery.INSERT_SET,
                 @"  INSERT INTO sets ( SetCode, Name )
                     VALUES ( @SetCode, @Name )
                 ");
-            AddQuery(InternalQuery.GET_ALL_SETS,
+            AddQuery(MTGQuery.GET_ALL_SETS,
                 @"  SELECT Name, SetCode 
                     FROM sets 
                 ");
-            AddQuery(InternalQuery.GET_SET_NAME,
+            AddQuery(MTGQuery.GET_SET_NAME,
                 @"  SELECT Name 
                     FROM sets 
                     WHERE SetCode = @SetCode 
                 ");
-            AddQuery(InternalQuery.GET_SET_CODE,
+            AddQuery(MTGQuery.GET_SET_CODE,
                 @"  SELECT SetCode 
                     FROM sets WHERE name = @Name 
                 ");
-            AddQuery(InternalQuery.CREATE_CARD_TABLE,
+            AddQuery(MTGQuery.CREATE_CARD_TABLE,
                 @"  DROP TABLE IF EXISTS cards;
                     CREATE TABLE cards ( 
                         SetCode varchar(5), 
@@ -60,11 +60,11 @@ namespace MTG_CLI
                         PriceFoil varchar(10)
                     )
                 ");
-            AddQuery(InternalQuery.INSERT_CARD,
+            AddQuery(MTGQuery.INSERT_CARD,
                 @"  INSERT INTO cards ( SetCode, CollectorNumber, Name, Rarity, ColorIdentity, ManaCost, TypeLine, FrontText, Price, PriceFoil )
                     VALUES ( @SetCode, @CollectorNumber, @Name, @Rarity, @ColorIdentity, @ManaCost, @TypeLine, @FrontText, @Price, @PriceFoil )
                 ");
-            AddQuery(InternalQuery.GET_SET_CARDS,
+            AddQuery(MTGQuery.GET_SET_CARDS,
                 @"  SELECT cds.CollectorNumber,
                            IFNULL(inv.Total || IFNULL(foil.Symbol, '') || IFNULL(other.Symbol, ''), 0) AS Cnt,
                            CAST(IFNULL(inv.Total, 0) AS NUM) AS CntNum,
@@ -102,7 +102,7 @@ namespace MTG_CLI
                              (ColorIdentity =    '' and @X))
                     ORDER BY cds.ROWID
                 ");
-            AddQuery(InternalQuery.GET_SINGLE_CARD_COUNT,
+            AddQuery(MTGQuery.GET_SINGLE_CARD_COUNT,
                 @"  SELECT ifnull(inv.Total || IFNULL(foil.Symbol, '') || IFNULL(other.Symbol, ''), 0) AS Cnt
                     FROM cards cds
                             LEFT JOIN (SELECT CollectorNumber, CAST(SUM(Count) as TEXT) AS Total
@@ -124,12 +124,12 @@ namespace MTG_CLI
                                     ON cds.CollectorNumber = other.CollectorNumber
                     WHERE cds.CollectorNumber = @CollectorNumber
                 ");
-            AddQuery(InternalQuery.GET_CARD_DETAILS,
+            AddQuery(MTGQuery.GET_CARD_DETAILS,
                 @"  SELECT CollectorNumber, Name, TypeLine, FrontText
                     FROM cards
                     WHERE CollectorNumber = @CollectorNumber
                 ");
-            AddQuery(InternalQuery.GET_CARD_CTCS, // This needs the join to get the name of cards that don't have any CTCs
+            AddQuery(MTGQuery.GET_CARD_CTCS, // This needs the join to get the name of cards that don't have any CTCs
                 @"  SELECT cds.Name, inv.Attrs, inv.Count
                     FROM cards cds
                             LEFT JOIN user_inventory inv
@@ -137,7 +137,7 @@ namespace MTG_CLI
                     WHERE cds.CollectorNumber = @CollectorNumber
                     ORDER BY Attrs
                 ");
-            AddQuery(InternalQuery.UPDATE_CARD_CTC,
+            AddQuery(MTGQuery.UPDATE_CARD_CTC,
                 @"  INSERT INTO user_inventory (SetCode, CollectorNumber, Name, Attrs, Count)
                     VALUES (
                         (SELECT SetCode FROM cards LIMIT 1), 
@@ -148,16 +148,16 @@ namespace MTG_CLI
                         )
                     ON CONFLICT DO UPDATE SET Count = @Count
                 ");
-            AddQuery(InternalQuery.GET_CARD_NAMES,
+            AddQuery(MTGQuery.GET_CARD_NAMES,
                 @"  SELECT DISTINCT Name 
                     FROM cards 
                 ");
-            AddQuery(InternalQuery.GET_CARD_NUMBER,
+            AddQuery(MTGQuery.GET_CARD_NUMBER,
                 @"  SELECT CollectorNumber 
                     FROM cards 
                     WHERE Name = @Name
                 ");
-            AddQuery(InternalQuery.GET_USER_INVENTORY,
+            AddQuery(MTGQuery.GET_USER_INVENTORY,
                 @"  SELECT SetCode, CollectorNumber, Name, Attrs, Count
                     FROM user_inventory
                     WHERE Count > 0
@@ -165,7 +165,7 @@ namespace MTG_CLI
                 ");
         }
 
-        private void AddQuery(InternalQuery id, string query)
+        private void AddQuery(MTGQuery id, string query)
         {
             _queries[(int)id] = query;
         }

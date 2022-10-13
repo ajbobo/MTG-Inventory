@@ -1,6 +1,6 @@
 namespace MTG_CLI
 {
-    public enum InternalQuery
+    public enum MTGQuery
     {
         CREATE_SET_TABLE,
         INSERT_SET,
