@@ -5,21 +5,23 @@ Guide: https://www.rhyous.com/2022/07/22/developer-training-wheels-for-writing-s
 HttpClient needs Interface
 Add unit tests -- I think this is the most useful thing I can do, some of the SOLID principles make this easier/possible
 Unit tests should create an in-memory DB, and then use the ".read CreateTestDB.sql" to populate it so that tests have clean, real data
-Is there another way to inject IHttpClient and ISQLManager? Ninject? .NET dependency injection?
+Is there another way to inject IHttpClient and ISQLManager other than through constructors? 
+    Ninject? 
+    .NET dependency injection?
 Split UI logic from actual behavior?
     Maybe each Dialog needs a Dialog class and a Data/Behavior class
+Restructure files based on Model/View/Controller?
 Split Inventory_Connection so that the Firebase logic could be replaced with a different database?
-Can I change app.config to be JSON instead of XML?
-    It looks like it can be done, but it's kind of complicated and it wants a strongly-typed configuration class
-    https://code.4noobz.net/read-settings-from-the-appsettings-json/
-    https://andrewlock.net/how-to-use-the-ioptions-pattern-for-configuration-in-asp-net-core-rc2/
-Can I put the SQL queries in app.config?
-Is there a way to protect/hide app.config in release builds?
-    https://learn.microsoft.com/en-us/previous-versions/hh8x3tas(v=vs.140)?redirectedfrom=MSDN
 Can FilterSettings be changed so that adding new types of filters is easier?
 
 
 --- Term ---
+Move SQL queries to app.config
+    Requires custom configuration: https://learn.microsoft.com/en-us/dotnet/api/system.configuration.configurationelementcollection?view=dotnet-plat-ext-6.0
+Can I change app.config to be JSON instead of XML?
+    It looks like it can be done, but it's kind of complicated and it wants a strongly-typed configuration class
+    https://code.4noobz.net/read-settings-from-the-appsettings-json/
+    https://andrewlock.net/how-to-use-the-ioptions-pattern-for-configuration-in-asp-net-core-rc2/
 Add option to ChooseSetDialog to only show sets that are in User_Inv
     This will need to get the list of Documents in User_Inv
 Add filters:
@@ -27,11 +29,13 @@ Add filters:
     CTC attributes (Foil, Prerelease, etc)
     Type
     Name
+Add a way to save decks
+    Should also import them from the DeckBox files
 Add a way to open the card image? (Probably in a separate app, but if I can imbed it, that would be cool)
 Published build needs an icon
 Published build needs Google Firebase creds
-Add a way to save decks
-    Should also import them from the DeckBox files
+Is there a way to protect/hide app.config in release builds?
+    https://learn.microsoft.com/en-us/previous-versions/hh8x3tas(v=vs.140)?redirectedfrom=MSDN
 
 
 --- Web UI ---
