@@ -5,7 +5,12 @@ HttpClient needs Interface
 Add unit tests -- I think this is the most useful thing I can do, some of the SOLID principles make this easier/possible
 Is there another way to inject IHttpClient and ISQLManager? Ninject? .NET dependency injection?
 Split UI logic from actual behavior?
+    Maybe each Dialog needs a Dialog class and a Data/Behavior class
 Split Inventory_Connection so that the Firebase logic could be replaced with a different database?
+Can I change app.config to be JSON instead of XML?
+Can I put the SQL queries in app.config?
+Is there a way to protect/hide app.config in release builds?
+Can FilterSettings be changed so that adding new types of filters is easier?
 
 
 --- Term ---
