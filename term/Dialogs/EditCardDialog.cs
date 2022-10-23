@@ -21,7 +21,7 @@ namespace MTG_CLI
 
         private void UpdateInventory(string collectorNumber, string attrs, int count)
         {
-            _sql.Query(MTGQuery.UPDATE_CARD_CTC)
+            _sql.Query(MTG_Query.UPDATE_CARD_CTC)
                 .WithParam("@CollectorNumber", collectorNumber)
                 .WithParam("@Attrs", attrs)
                 .WithParam("@Count", count)
@@ -33,7 +33,7 @@ namespace MTG_CLI
         {
             _curCollectorNumber = collectorNumber;
 
-            _sql.Query(MTGQuery.GET_CARD_CTCS).WithParam("@CollectorNumber", collectorNumber).OpenToRead();
+            _sql.Query(MTG_Query.GET_CARD_CTCS).WithParam("@CollectorNumber", collectorNumber).OpenToRead();
             _ctcList.Clear();
             _ctcList.Add("Standard", 0);
             while (_sql.ReadNext())

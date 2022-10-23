@@ -2,7 +2,7 @@ namespace MTG_CLI
 {
     public interface ISQL_Connection
     {
-        public ISQL_Connection Query(MTGQuery query);
+        public ISQL_Connection Query(MTG_Query query);
         public ISQL_Connection WithParam(string param, string value);
         public ISQL_Connection WithParam(string param, long value);
         public ISQL_Connection WithParam(string param, int value);

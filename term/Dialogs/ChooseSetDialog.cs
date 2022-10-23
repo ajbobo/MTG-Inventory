@@ -21,7 +21,7 @@ namespace MTG_CLI
             Dialog selectSetDlg = new("Select a Set", cancel) { Width = 45 };
 
             List<string> SetList = new();
-            _sql.Query(MTGQuery.GET_ALL_SETS).OpenToRead();
+            _sql.Query(MTG_Query.GET_ALL_SETS).OpenToRead();
             while (_sql.ReadNext())
             {
                 string name = _sql.ReadValue<string>("Name", "");

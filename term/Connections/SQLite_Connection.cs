@@ -13,14 +13,13 @@ namespace MTG_CLI
         {
             _connection = new SqliteConnection(connectionString);
             _connection.Open();
-            PopulateQueries();
         }
 
-        public ISQL_Connection Query(MTGQuery query)
+        public ISQL_Connection Query(MTG_Query query)
         {
             _command = new SqliteCommand();
             _command.Connection = _connection;
-            _command.CommandText = _queries[(int)query];
+            _command.CommandText = query.Query;
             return this;
         }
 
