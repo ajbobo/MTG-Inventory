@@ -18,7 +18,7 @@ namespace MTG_CLI
         private EditFiltersDialog _editFilters;
         private ChooseSetDialog _chooseSet;
 
-        private ISQLManager _sql;
+        private ISQL_Connection _sql;
 
         private int _collectedCount;
         private FilterSettings _filterSettings;
@@ -27,7 +27,7 @@ namespace MTG_CLI
         public event Action<string>? SelectedSetChanged;
         public event Action? DataChanged;
 
-        public TerminalView(ISQLManager sql)
+        public TerminalView(ISQL_Connection sql)
         {
             _sql = sql;
             _filterSettings = new();
@@ -152,7 +152,7 @@ namespace MTG_CLI
             _collectedCount = 0;
 
             // This returns the filtered list of cards
-            _sql.Query(MTGQuery.GET_SET_CARDS).WithFilters(_filterSettings).Read();
+            _sql.Query(MTGQuery.GET_SET_CARDS).WithFilters(_filterSettings).OpenToRead();
 
             _curSetFrame.RemoveAll();
 
@@ -262,8 +262,8 @@ namespace MTG_CLI
         {
             _curCardFrame.RemoveAll();
 
-            _sql.Query(MTGQuery.GET_CARD_DETAILS).WithParam("@CollectorNumber", cardNumber).Read();
-            if (!_sql.HasReader())
+            _sql.Query(MTGQuery.GET_CARD_DETAILS).WithParam("@CollectorNumber", cardNumber).OpenToRead();
+            if (!_sql.IsReady())
                 return;
 
             _sql.ReadNext();
@@ -274,7 +274,7 @@ namespace MTG_CLI
 
             _curCardFrame.Title = title;
 
-            _sql.Query(MTGQuery.GET_CARD_CTCS).WithParam("@CollectorNumber", cardNumber).Read();
+            _sql.Query(MTGQuery.GET_CARD_CTCS).WithParam("@CollectorNumber", cardNumber).OpenToRead();
             int cnt = 0;
             while (_sql.ReadNext())
             {

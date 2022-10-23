@@ -11,9 +11,9 @@ namespace MTG_CLI
         private string _curCollectorNumber = "";
         private string _curCardName = "";
         private Dictionary<string, int> _ctcList = new();
-        private ISQLManager _sql;
+        private ISQL_Connection _sql;
 
-        public EditCardDialog(ISQLManager sql)
+        public EditCardDialog(ISQL_Connection sql)
         {
             _isDirty = false;
             _sql = sql;
@@ -33,7 +33,7 @@ namespace MTG_CLI
         {
             _curCollectorNumber = collectorNumber;
 
-            _sql.Query(MTGQuery.GET_CARD_CTCS).WithParam("@CollectorNumber", collectorNumber).Read();
+            _sql.Query(MTGQuery.GET_CARD_CTCS).WithParam("@CollectorNumber", collectorNumber).OpenToRead();
             _ctcList.Clear();
             _ctcList.Add("Standard", 0);
             while (_sql.ReadNext())

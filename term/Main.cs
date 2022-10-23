@@ -8,7 +8,7 @@ namespace MTG_CLI
     {
         readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_File"].ConnectionString;
 
-        private static void StartTerminalView(ISQLManager sql, IMTG_Connection mtgData, IInventory_Connection inventory)
+        private static void StartTerminalView(ISQL_Connection sql, IScryfall_Connection mtgData, IFirebase_Connection inventory)
         {
             var win = new TerminalView(sql);
 
@@ -17,7 +17,7 @@ namespace MTG_CLI
                 win.SetCurrentSet(newSet);
 
                 Console.WriteLine("Getting cards for set: {0}", newSet);
-                await mtgData.GetSetCards(newSet);
+                await mtgData.GetCardsInSet(newSet);
 
                 Console.WriteLine("Getting inventory for {0}", newSet);
                 await inventory.ReadData(newSet);
@@ -28,7 +28,7 @@ namespace MTG_CLI
             win.DataChanged += async () =>
             {
                 Console.WriteLine("Writing current inventory to Firebase");
-                await inventory.WriteToFirebase();
+                await inventory.WriteData();
             };
 
             win.Start();
@@ -40,10 +40,10 @@ namespace MTG_CLI
                 .ConfigureServices((_, services) =>
                 {
                     services
-                        .AddSingleton<ISQLManager>(x => ActivatorUtilities.CreateInstance<SQLiteManager>(x, _sqliteFile))
-                        .AddSingleton<IMTG_Connection, MTG_Connection>()
-                        .AddSingleton<IInventory_Connection, Inventory_Connection>();
-                    services.AddHttpClient<IMTG_Connection, MTG_Connection>();
+                        .AddSingleton<ISQL_Connection>(x => ActivatorUtilities.CreateInstance<SQLite_Connection>(x, _sqliteFile))
+                        .AddSingleton<IScryfall_Connection, Scryfall_Connection>()
+                        .AddSingleton<IFirebase_Connection, Firestore_Connection>();
+                    services.AddHttpClient<IScryfall_Connection, Scryfall_Connection>();
                 });
         }
         
@@ -57,11 +57,11 @@ namespace MTG_CLI
 
             Console.WriteLine("Reading Set data from Scryfall");
 
-            IMTG_Connection? mtgData = host.Services.GetService<IMTG_Connection>();
-            await (mtgData?.GetSetList() ?? Task.FromResult<bool>(false));
+            IScryfall_Connection? mtgData = host.Services.GetService<IScryfall_Connection>();
+            await (mtgData?.GetCollectableSets() ?? Task.FromResult<bool>(false));
 
-            ISQLManager? sql = host.Services.GetService<ISQLManager>();
-            IInventory_Connection? inventory = host.Services.GetService<IInventory_Connection>();
+            ISQL_Connection? sql = host.Services.GetService<ISQL_Connection>();
+            IFirebase_Connection? inventory = host.Services.GetService<IFirebase_Connection>();
 
             if (sql == null || mtgData == null || inventory == null)
             {

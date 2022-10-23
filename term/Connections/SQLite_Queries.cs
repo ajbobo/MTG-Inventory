@@ -1,6 +1,6 @@
 namespace MTG_CLI
 {
-    public partial class SQLiteManager
+    public partial class SQLite_Connection
     {
         private string[] _queries = new string[Enum.GetNames(typeof(MTGQuery)).Length];
 

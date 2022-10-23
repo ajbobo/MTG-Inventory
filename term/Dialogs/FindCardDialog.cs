@@ -9,11 +9,11 @@ namespace MTG_CLI
     {
         public event Action<string>? CardSelected;
 
-        private ISQLManager _sql;
+        private ISQL_Connection _sql;
         private CardNameValidator _validator;
         private bool _cardSelected = false;
 
-        public FindCardDialog(ISQLManager sql)
+        public FindCardDialog(ISQL_Connection sql)
         {
             _sql = sql;
             _validator = new CardNameValidator(_sql);
@@ -86,18 +86,18 @@ namespace MTG_CLI
 
         public string? SelectedCard { get; protected set; }
 
-        public CardNameValidator(ISQLManager sql)
+        public CardNameValidator(ISQL_Connection sql)
         {
             _cardNames = new();
 
             RefreshNames(sql);
         }
 
-        public void RefreshNames(ISQLManager sql)
+        public void RefreshNames(ISQL_Connection sql)
         {
             _cardNames.Clear();
 
-            sql.Query(MTGQuery.GET_CARD_NAMES).Read();
+            sql.Query(MTGQuery.GET_CARD_NAMES).OpenToRead();
             while (sql.ReadNext())
             {
                 _cardNames.Add(sql.ReadValue<string>("Name", ""));

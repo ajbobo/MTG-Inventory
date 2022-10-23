@@ -4,13 +4,13 @@ using System.Configuration;
 
 namespace MTG_CLI
 {
-    public class MTG_Connection : IMTG_Connection
+    public class Scryfall_Connection : IScryfall_Connection
     {
-        private readonly ISQLManager _sql;
+        private readonly ISQL_Connection _sql;
         private readonly HttpClient _httpClient;
 
         // This could be called directly, but is being called via dependency injection instead
-        public MTG_Connection(ISQLManager sql, HttpClient httpClient)
+        public Scryfall_Connection(ISQL_Connection sql, HttpClient httpClient)
         {
             _httpClient = httpClient;
             _sql = sql;
@@ -27,7 +27,7 @@ namespace MTG_CLI
                     (setType.Equals("funny") && block.Length == 0 && parent.Length == 0));
         }
 
-        async public Task<bool> GetSetList()
+        async public Task<bool> GetCollectableSets()
         {
             _sql.Query(MTGQuery.CREATE_SET_TABLE).Execute();
 
@@ -56,7 +56,7 @@ namespace MTG_CLI
             return true;
         }
 
-        async public Task<bool> GetSetCards(string targetSetCode)
+        async public Task<bool> GetCardsInSet(string targetSetCode)
         {
             _sql.Query(MTGQuery.CREATE_CARD_TABLE).Execute();
 

@@ -3,27 +3,22 @@ using Google.Cloud.Firestore;
 
 namespace MTG_CLI
 {
-    public class Inventory_Connection : IInventory_Connection
+    public class Firestore_Connection : IFirebase_Connection
     {
         readonly private string _dbName = ConfigurationManager.AppSettings["Firestore_DB"] ?? "";
         readonly private string _dbCollection = ConfigurationManager.AppSettings["Firestore_Collection"] ?? "";
 
         private FirestoreDb _db;
-        private ISQLManager _sql;
+        private ISQL_Connection _sql;
 
         // This could be called directly, but is being called via dependency injection instead
-        public Inventory_Connection(ISQLManager sql)
+        public Firestore_Connection(ISQL_Connection sql)
         {
             _db = FirestoreDb.Create(_dbName);
             _sql = sql;
         }
 
         public async Task ReadData(string setCode)
-        {
-            await ReadFromFirebase(setCode);
-        }
-
-        public async Task ReadFromFirebase(string setCode)
         {
             Console.WriteLine("Firebase data");
 
@@ -54,12 +49,12 @@ namespace MTG_CLI
             }
         }
 
-        async public Task WriteToFirebase()
+        async public Task WriteData()
         {
             // Build the data structure for the entire set - We'll send that to Firebase
             List<Dictionary<string, object>> fullSet = new();
 
-            _sql.Query(MTGQuery.GET_USER_INVENTORY).Read();
+            _sql.Query(MTGQuery.GET_USER_INVENTORY).OpenToRead();
 
             string setCode = "", lastCollectorNumber = "", lastAttrs = "";
             Dictionary<string, object> curCard = new();

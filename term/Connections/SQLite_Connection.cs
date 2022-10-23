@@ -3,20 +3,20 @@ using Microsoft.Data.Sqlite;
 
 namespace MTG_CLI
 {
-    public partial class SQLiteManager : ISQLManager
+    public partial class SQLite_Connection : ISQL_Connection
     {
         private SqliteCommand? _command;
         private SqliteConnection _connection;
         private SqliteDataReader? _reader;
         
-        public SQLiteManager(string connectionString)
+        public SQLite_Connection(string connectionString)
         {
             _connection = new SqliteConnection(connectionString);
             _connection.Open();
             PopulateQueries();
         }
 
-        public ISQLManager Query(MTGQuery query)
+        public ISQL_Connection Query(MTGQuery query)
         {
             _command = new SqliteCommand();
             _command.Connection = _connection;
@@ -24,25 +24,25 @@ namespace MTG_CLI
             return this;
         }
 
-        public ISQLManager WithParam(string param, string value)
+        public ISQL_Connection WithParam(string param, string value)
         {
             _command?.Parameters.AddWithValue(param, value);
             return this;
         }
 
-        public ISQLManager WithParam(string param, long value)
+        public ISQL_Connection WithParam(string param, long value)
         {
             _command?.Parameters.AddWithValue(param, value);
             return this;
         }
 
-        public ISQLManager WithParam(string param, int value)
+        public ISQL_Connection WithParam(string param, int value)
         {
             _command?.Parameters.AddWithValue(param, value.ToString());
             return this;
         }
 
-        public ISQLManager WithFilters(FilterSettings filterSettings)
+        public ISQL_Connection WithFilters(FilterSettings filterSettings)
         {
             _command?.Parameters.AddWithValue("@MinCnt", filterSettings.GetMinCount());
             _command?.Parameters.AddWithValue("@MaxCnt", filterSettings.GetMaxCount());
@@ -72,12 +72,12 @@ namespace MTG_CLI
             return (res != null ? (T)res : default(T));
         }
 
-        public void Read()
+        public void OpenToRead()
         {
             _reader = _command?.ExecuteReader() ?? null;
         }
 
-        public bool HasReader()
+        public bool IsReady()
         {
             return _reader != null;
         }

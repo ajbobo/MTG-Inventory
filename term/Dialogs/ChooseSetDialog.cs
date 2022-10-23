@@ -4,11 +4,11 @@ namespace MTG_CLI
 {
     public class ChooseSetDialog
     {
-        private ISQLManager _sql;
+        private ISQL_Connection _sql;
 
         public event Action<string>? SetSelected;
 
-        public ChooseSetDialog(ISQLManager sql)
+        public ChooseSetDialog(ISQL_Connection sql)
         {
             _sql = sql;
         }
@@ -21,7 +21,7 @@ namespace MTG_CLI
             Dialog selectSetDlg = new("Select a Set", cancel) { Width = 45 };
 
             List<string> SetList = new();
-            _sql.Query(MTGQuery.GET_ALL_SETS).Read();
+            _sql.Query(MTGQuery.GET_ALL_SETS).OpenToRead();
             while (_sql.ReadNext())
             {
                 string name = _sql.ReadValue<string>("Name", "");
