@@ -3,7 +3,7 @@ using Google.Cloud.Firestore;
 
 namespace MTG_CLI
 {
-    public class Firestore_Connection : IFirebase_Connection
+    public class Firestore_Connection : IFirestore_Connection
     {
         readonly private string _dbName = ConfigurationManager.AppSettings["Firestore_DB"] ?? "";
         readonly private string _dbCollection = ConfigurationManager.AppSettings["Firestore_Collection"] ?? "";

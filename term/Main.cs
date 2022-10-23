@@ -8,7 +8,7 @@ namespace MTG_CLI
     {
         readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_File"].ConnectionString;
 
-        private static void StartTerminalView(ISQL_Connection sql, IScryfall_Connection mtgData, IFirebase_Connection inventory)
+        private static void StartTerminalView(ISQL_Connection sql, IScryfall_Connection mtgData, IFirestore_Connection inventory)
         {
             var win = new TerminalView(sql);
 
@@ -42,7 +42,7 @@ namespace MTG_CLI
                     services
                         .AddSingleton<ISQL_Connection>(x => ActivatorUtilities.CreateInstance<SQLite_Connection>(x, _sqliteFile))
                         .AddSingleton<IScryfall_Connection, Scryfall_Connection>()
-                        .AddSingleton<IFirebase_Connection, Firestore_Connection>();
+                        .AddSingleton<IFirestore_Connection, Firestore_Connection>();
                     services.AddHttpClient<IScryfall_Connection, Scryfall_Connection>();
                 });
         }
@@ -61,7 +61,7 @@ namespace MTG_CLI
             await (mtgData?.GetCollectableSets() ?? Task.FromResult<bool>(false));
 
             ISQL_Connection? sql = host.Services.GetService<ISQL_Connection>();
-            IFirebase_Connection? inventory = host.Services.GetService<IFirebase_Connection>();
+            IFirestore_Connection? inventory = host.Services.GetService<IFirestore_Connection>();
 
             if (sql == null || mtgData == null || inventory == null)
             {
