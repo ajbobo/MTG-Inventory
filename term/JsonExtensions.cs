@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ExtensionMethods
 {
-    public static class Extensions
+    public static class JsonExtensions
     {
         public static string AsString(this JToken? token)
         {

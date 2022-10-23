@@ -4,11 +4,12 @@ using System.Configuration;
 
 namespace MTG_CLI
 {
-    public class MTG_Connection
+    public class MTG_Connection : IMTG_Connection
     {
-        private ISQLManager _sql;
-        private HttpClient _httpClient;
+        private readonly ISQLManager _sql;
+        private readonly HttpClient _httpClient;
 
+        // This could be called directly, but is being called via dependency injection instead
         public MTG_Connection(ISQLManager sql, HttpClient httpClient)
         {
             _httpClient = httpClient;

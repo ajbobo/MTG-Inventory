@@ -5,25 +5,15 @@ namespace MTG_CLI
 {
     public partial class SQLiteManager : ISQLManager
     {
-        private static SQLiteManager? _instance = null;
-
         private SqliteCommand? _command;
         private SqliteConnection _connection;
         private SqliteDataReader? _reader;
         
-        private SQLiteManager(string connectionString)
+        public SQLiteManager(string connectionString)
         {
             _connection = new SqliteConnection(connectionString);
             _connection.Open();
             PopulateQueries();
-        }
-
-        public static SQLiteManager GetInstance(string connectionString)
-        {
-            if (_instance == null)
-                _instance = new SQLiteManager(connectionString);
-
-            return _instance;
         }
 
         public ISQLManager Query(MTGQuery query)

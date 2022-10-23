@@ -3,14 +3,15 @@ using Google.Cloud.Firestore;
 
 namespace MTG_CLI
 {
-    public class Inventory_Connection
+    public class Inventory_Connection : IInventory_Connection
     {
         readonly private string _dbName = ConfigurationManager.AppSettings["Firestore_DB"] ?? "";
         readonly private string _dbCollection = ConfigurationManager.AppSettings["Firestore_Collection"] ?? "";
-        
+
         private FirestoreDb _db;
         private ISQLManager _sql;
 
+        // This could be called directly, but is being called via dependency injection instead
         public Inventory_Connection(ISQLManager sql)
         {
             _db = FirestoreDb.Create(_dbName);

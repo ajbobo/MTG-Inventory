@@ -1,4 +1,6 @@
 ﻿using System.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace MTG_CLI
 {
@@ -6,25 +8,19 @@ namespace MTG_CLI
     {
         readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_File"].ConnectionString;
 
-        private static HttpClient _httpClient = new HttpClient();
-        private static ISQLManager _sql = SQLiteManager.GetInstance(_sqliteFile);
-
-        private static Inventory_Connection _inventory = new(_sql);
-        private static MTG_Connection _mtgData = new(_sql, _httpClient);
-
-        private static void StartTerminalView()
+        private static void StartTerminalView(ISQLManager sql, IMTG_Connection mtgData, IInventory_Connection inventory)
         {
-            var win = new TerminalView(_sql);
+            var win = new TerminalView(sql);
 
             win.SelectedSetChanged += async (newSet) =>
             {
                 win.SetCurrentSet(newSet);
 
                 Console.WriteLine("Getting cards for set: {0}", newSet);
-                await _mtgData.GetSetCards(newSet);
+                await mtgData.GetSetCards(newSet);
 
                 Console.WriteLine("Getting inventory for {0}", newSet);
-                await _inventory.ReadData(newSet);
+                await inventory.ReadData(newSet);
 
                 win.SetCardList();
             };
@@ -32,20 +28,48 @@ namespace MTG_CLI
             win.DataChanged += async () =>
             {
                 Console.WriteLine("Writing current inventory to Firebase");
-                await _inventory.WriteToFirebase();
+                await inventory.WriteToFirebase();
             };
 
             win.Start();
         }
 
+        private static IHostBuilder CreateHostBuilder()
+        {
+            return Host.CreateDefaultBuilder()
+                .ConfigureServices((_, services) =>
+                {
+                    services
+                        .AddSingleton<ISQLManager>(x => ActivatorUtilities.CreateInstance<SQLiteManager>(x, _sqliteFile))
+                        .AddSingleton<IMTG_Connection, MTG_Connection>()
+                        .AddSingleton<IInventory_Connection, Inventory_Connection>();
+                    services.AddHttpClient<IMTG_Connection, MTG_Connection>();
+                });
+        }
+        
         async public static Task Main(string[] args)
         {
             Console.Title = "Inventory Terminal";
 
-            Console.WriteLine("Reading Set data from Scryfall");
-            await _mtgData.GetSetList();
+            Console.WriteLine("Registering services with IoC Container");
+            using IHost host = CreateHostBuilder().Build();
+            host.Start();
 
-            StartTerminalView();
+            Console.WriteLine("Reading Set data from Scryfall");
+
+            IMTG_Connection? mtgData = host.Services.GetService<IMTG_Connection>();
+            await (mtgData?.GetSetList() ?? Task.FromResult<bool>(false));
+
+            ISQLManager? sql = host.Services.GetService<ISQLManager>();
+            IInventory_Connection? inventory = host.Services.GetService<IInventory_Connection>();
+
+            if (sql == null || mtgData == null || inventory == null)
+            {
+                Console.WriteLine("Something didn't initialize correctly");
+                System.Environment.Exit(1);
+            }
+
+            StartTerminalView(sql, mtgData, inventory);
         }
     }
 }
