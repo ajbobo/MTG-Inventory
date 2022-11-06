@@ -43,7 +43,8 @@ namespace MTG_CLI
                         .AddSingleton<ISQL_Connection>(x => ActivatorUtilities.CreateInstance<SQLite_Connection>(x, _sqliteFile))
                         .AddSingleton<IScryfall_Connection, Scryfall_Connection>()
                         .AddSingleton<IFirestore_Connection, Firestore_Connection>()
-                        .AddSingleton<IFirestore_Wrapper, Firestore_Wrapper>();
+                        .AddSingleton<IFirestore_Wrapper, Firestore_Wrapper>()
+                        .AddSingleton<IDB_Inventory, DB_Inventory>();
                     services.AddHttpClient<IScryfall_Connection, Scryfall_Connection>();
                 });
         }
@@ -62,15 +63,15 @@ namespace MTG_CLI
             await (mtgData?.GetCollectableSets() ?? Task.FromResult<bool>(false));
 
             ISQL_Connection? sql = host.Services.GetService<ISQL_Connection>();
-            IFirestore_Connection? inventory = host.Services.GetService<IFirestore_Connection>();
+            IFirestore_Connection? firestore = host.Services.GetService<IFirestore_Connection>();
 
-            if (sql == null || mtgData == null || inventory == null)
+            if (sql == null || mtgData == null || firestore == null)
             {
                 Console.WriteLine("Something didn't initialize correctly");
                 System.Environment.Exit(1);
             }
 
-            StartTerminalView(sql, mtgData, inventory);
+            StartTerminalView(sql, mtgData, firestore);
         }
     }
 }
