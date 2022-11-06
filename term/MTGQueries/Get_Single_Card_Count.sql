@@ -1,4 +1,4 @@
-SELECT ifnull(inv.Total || IFNULL(foil.Symbol, '') || IFNULL(other.Symbol, ''), 0) AS Cnt
+SELECT ifnull(inv.Total || IFNULL(foil.Symbol, '') || IFNULL(other.Symbol, ''), 0) AS 'Count'
 FROM cards cds
         LEFT JOIN (SELECT CollectorNumber, CAST(SUM(Count) as TEXT) AS Total
                     FROM user_inventory

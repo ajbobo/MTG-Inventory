@@ -1,7 +1,18 @@
+using System.Configuration;
+
 namespace MTG_CLI
 {
     public class DB_Inventory : IDB_Inventory
     {
+        readonly private string _cardNumber = ConfigurationManager.AppSettings["Card_Field_Number"] ?? "";
+        readonly private string _cardName = ConfigurationManager.AppSettings["Card_Field_Name"] ?? "";
+        readonly private string _cardCounts = ConfigurationManager.AppSettings["Card_Field_Counts"] ?? "";
+        readonly private string _dbSetCode = ConfigurationManager.AppSettings["DB_Card_Field_SetCode"] ?? "";
+        readonly private string _dbNumber = ConfigurationManager.AppSettings["DB_Card_Field_Number"] ?? "";
+        readonly private string _dbName = ConfigurationManager.AppSettings["DB_Card_Field_Name"] ?? "";
+        readonly private string _dbAttrs = ConfigurationManager.AppSettings["DB_Card_Field_Attrs"] ?? "";
+        readonly private string _dbCount = ConfigurationManager.AppSettings["DB_Card_Field_Count"] ?? "";
+        
         private ISQL_Connection _sql;
 
         public DB_Inventory(ISQL_Connection sql)
@@ -18,9 +29,9 @@ namespace MTG_CLI
         {
             foreach (CardData curCard in data)
             {
-                string collectorNumber = curCard["CollectorNumber"].ToString() ?? "0";
-                string name = curCard["Name"].ToString() ?? "";
-                Dictionary<string, object> counts = (Dictionary<string, object>)curCard["Counts"]; // This is really <string, long>
+                string collectorNumber = curCard[_cardNumber].ToString() ?? "0";
+                string name = curCard[_cardName].ToString() ?? "";
+                Dictionary<string, object> counts = (Dictionary<string, object>)curCard[_cardCounts]; // This is really <string, long>
                 foreach (string attrs in counts.Keys)
                 {
                     long count = (long)counts[attrs];
@@ -46,25 +57,25 @@ namespace MTG_CLI
             CardData curCard = new();
             while (_sql.ReadNext())
             {
-                setCode = _sql.ReadValue<string>("SetCode", ""); // This shouldn't change, but we'll set it here anyway
+                setCode = _sql.ReadValue<string>(_dbSetCode, ""); // This shouldn't change, but we'll set it here anyway
 
-                string collectorNumber = _sql.ReadValue<string>("CollectorNumber", "");
-                string name = _sql.ReadValue<string>("Name", "");
-                string attrs = _sql.ReadValue<string>("Attrs", "");
-                int count = _sql.ReadValue<int>("Count", 0);
+                string collectorNumber = _sql.ReadValue<string>(_dbNumber, "");
+                string name = _sql.ReadValue<string>(_dbName, "");
+                string attrs = _sql.ReadValue<string>(_dbAttrs, "");
+                int count = _sql.ReadValue<int>(_dbCount, 0);
 
                 if (!lastCollectorNumber.Equals(collectorNumber)) // We're at a new card in the table, make a new one and add it to the list
                 {
                     curCard = new();
                     fullSet.Add(curCard);
 
-                    curCard.Add("CollectorNumber", collectorNumber);
-                    curCard.Add("Name", name);
-                    curCard.Add("Counts", new Dictionary<string, int> { { attrs, count } });
+                    curCard.Add(_cardNumber, collectorNumber);
+                    curCard.Add(_cardName, name);
+                    curCard.Add(_cardCounts, new Dictionary<string, int> { { attrs, count } });
                 }
                 else if (!lastAttrs.Equals(attrs)) // New CTC - add it to the last card
                 {
-                    Dictionary<string, int> ctcs = (Dictionary<string, int>)curCard["Counts"];
+                    Dictionary<string, int> ctcs = (Dictionary<string, int>)curCard[_cardCounts];
                     ctcs.Add(attrs, count);
                 }
 

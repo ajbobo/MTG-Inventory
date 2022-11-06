@@ -1,5 +1,5 @@
 SELECT cds.CollectorNumber,
-       IFNULL(inv.Total || IFNULL(foil.Symbol, '') || IFNULL(other.Symbol, ''), 0) AS Cnt,
+       IFNULL(inv.Total || IFNULL(foil.Symbol, '') || IFNULL(other.Symbol, ''), 0) AS 'Count',
        CAST(IFNULL(inv.Total, 0) AS NUM) AS CntNum,
        cds.Name,
        cds.Rarity,
