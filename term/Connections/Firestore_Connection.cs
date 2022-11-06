@@ -8,11 +8,11 @@ namespace MTG_CLI
         readonly private string _dbCollection = ConfigurationManager.AppSettings["Firestore_Collection"] ?? "";
         readonly private string _dbCardsField = ConfigurationManager.AppSettings["Firestore_CardsField"] ?? "";
 
-        private IFirestore_Wrapper _firestore;
+        private IFirestoreDB_Wrapper _firestore;
         private IDB_Inventory _dbInv;
 
         // This could be called directly, but is being called via dependency injection instead
-        public Firestore_Connection(IFirestore_Wrapper firestore, IDB_Inventory dbInv)
+        public Firestore_Connection(IFirestoreDB_Wrapper firestore, IDB_Inventory dbInv)
         {
             _firestore = firestore;
             _firestore.Connect(_dbName);

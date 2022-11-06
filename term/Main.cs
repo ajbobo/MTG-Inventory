@@ -43,7 +43,7 @@ namespace MTG_CLI
                         .AddSingleton<ISQL_Connection>(x => ActivatorUtilities.CreateInstance<SQLite_Connection>(x, _sqliteFile))
                         .AddSingleton<IScryfall_Connection, Scryfall_Connection>()
                         .AddSingleton<IFirestore_Connection, Firestore_Connection>()
-                        .AddSingleton<IFirestore_Wrapper, Firestore_Wrapper>()
+                        .AddSingleton<IFirestoreDB_Wrapper, FirestoreDB_Wrapper>()
                         .AddSingleton<IDB_Inventory, DB_Inventory>();
                     services.AddHttpClient<IScryfall_Connection, Scryfall_Connection>();
                 });

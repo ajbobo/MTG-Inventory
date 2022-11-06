@@ -2,7 +2,7 @@ using Google.Cloud.Firestore;
 
 namespace MTG_CLI
 {
-    public class Firestore_Wrapper : IFirestore_Wrapper
+    public class FirestoreDB_Wrapper : IFirestoreDB_Wrapper
     {
         private FirestoreDb? _db;
 

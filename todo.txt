@@ -7,13 +7,12 @@ Unit tests should create an in-memory DB, and then use the ".read CreateTestDB.s
 Split UI logic from actual behavior?
     Maybe each Dialog needs a Dialog class and a Data/Behavior class
 Restructure files based on Model/View/Controller?
-Split Inventory_Connection so that the Firebase logic could be replaced with a different database?
-Can FilterSettings be changed so that adding new types of filters is easier?
 
 
 --- Term ---
 Add option to ChooseSetDialog to only show sets that are in User_Inv
     This will need to get the list of Documents in User_Inv
+Can FilterSettings be changed so that adding new types of filters is easier?
 Add filters:
     Price ($1+, $5+, $20+)
     CTC attributes (Foil, Prerelease, etc)
