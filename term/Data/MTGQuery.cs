@@ -24,6 +24,8 @@ namespace MTG_CLI
             return val;
         }
 
+        // The queries are defined in individual .sql files, and converted to code via Sylvan.BuildTools.Resources
+        //    See https://github.com/MarkPflug/Sylvan.BuildTools.Resources
         // The id number assigned to each query MUST be unique
         public static MTG_Query CREATE_SET_TABLE => GetOrInsert(1, MTGQueries.CreateSetTable);
         public static MTG_Query INSERT_SET => GetOrInsert(2, MTGQueries.InsertSet);
