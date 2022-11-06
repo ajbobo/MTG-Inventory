@@ -15,7 +15,7 @@ namespace MTG_CLI
             _connection.Open();
         }
 
-        public ISQL_Connection Query(MTG_Query query)
+        public ISQL_Connection Query(DB_Query query)
         {
             _command = new SqliteCommand();
             _command.Connection = _connection;

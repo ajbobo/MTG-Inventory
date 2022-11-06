@@ -130,7 +130,7 @@ namespace MTG_CLI
 
         private void FoundCard(string cardName)
         {
-            string cardNumber = _sql.Query(MTG_Query.GET_CARD_NUMBER).WithParam("@Name", cardName).ExecuteScalar<string>() ?? "";
+            string cardNumber = _sql.Query(DB_Query.GET_CARD_NUMBER).WithParam("@Name", cardName).ExecuteScalar<string>() ?? "";
 
             DataRow? cardRow = _cardTable.Table.Rows.Find(cardNumber);
             _cardTable.SelectedRow = _cardTable.Table.Rows.IndexOf(cardRow);
@@ -151,7 +151,7 @@ namespace MTG_CLI
 
         public void SetCurrentSet(string setCode)
         {
-            string setName = _sql.Query(MTG_Query.GET_SET_NAME).WithParam("@SetCode", setCode).ExecuteScalar<string>() ?? "<unknown>";
+            string setName = _sql.Query(DB_Query.GET_SET_NAME).WithParam("@SetCode", setCode).ExecuteScalar<string>() ?? "<unknown>";
 
             _curSetFrame.Title = setName;
             _curSetFrame.RemoveAll();
@@ -166,7 +166,7 @@ namespace MTG_CLI
             _collectedCount = 0;
 
             // This returns the filtered list of cards
-            _sql.Query(MTG_Query.GET_SET_CARDS).WithFilters(_filterSettings).OpenToRead();
+            _sql.Query(DB_Query.GET_SET_CARDS).WithFilters(_filterSettings).OpenToRead();
 
             _curSetFrame.RemoveAll();
 
@@ -268,7 +268,7 @@ namespace MTG_CLI
             string cardNum = row["#"].ToString() ?? "";
             UpdateCardFrame(cardNum);
 
-            string newCount = _sql.Query(MTG_Query.GET_SINGLE_CARD_COUNT).WithParam("@CollectorNumber", cardNum).ExecuteScalar<string>() ?? "0";
+            string newCount = _sql.Query(DB_Query.GET_SINGLE_CARD_COUNT).WithParam("@CollectorNumber", cardNum).ExecuteScalar<string>() ?? "0";
             row["Cnt"] = newCount;
         }
 
@@ -276,7 +276,7 @@ namespace MTG_CLI
         {
             _curCardFrame.RemoveAll();
 
-            _sql.Query(MTG_Query.GET_CARD_DETAILS).WithParam("@CollectorNumber", cardNumber).OpenToRead();
+            _sql.Query(DB_Query.GET_CARD_DETAILS).WithParam("@CollectorNumber", cardNumber).OpenToRead();
             if (!_sql.IsReady())
                 return;
 
@@ -288,7 +288,7 @@ namespace MTG_CLI
 
             _curCardFrame.Title = title;
 
-            _sql.Query(MTG_Query.GET_CARD_CTCS).WithParam("@CollectorNumber", cardNumber).OpenToRead();
+            _sql.Query(DB_Query.GET_CARD_CTCS).WithParam("@CollectorNumber", cardNumber).OpenToRead();
             int cnt = 0;
             while (_sql.ReadNext())
             {

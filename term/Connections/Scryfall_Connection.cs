@@ -29,7 +29,7 @@ namespace MTG_CLI
 
         async public Task<bool> GetCollectableSets()
         {
-            _sql.Query(MTG_Query.CREATE_SET_TABLE).Execute();
+            _sql.Query(DB_Query.CREATE_SET_TABLE).Execute();
 
             HttpResponseMessage msg = await _httpClient.GetAsync(ConfigurationManager.AppSettings["GetSetList_Url"]);
             if (!msg.IsSuccessStatusCode)
@@ -47,7 +47,7 @@ namespace MTG_CLI
                 string parent = curSet["parent_set_code"].AsString();
                 if (IsCollectableSetType(type, block, parent))
                 {
-                    _sql.Query(MTG_Query.INSERT_SET)
+                    _sql.Query(DB_Query.INSERT_SET)
                         .WithParam("@SetCode", curSet["code"].AsString())
                         .WithParam("@Name", curSet["name"].AsString())
                         .Execute();
@@ -58,7 +58,7 @@ namespace MTG_CLI
 
         async public Task<bool> GetCardsInSet(string targetSetCode)
         {
-            _sql.Query(MTG_Query.CREATE_CARD_TABLE).Execute();
+            _sql.Query(DB_Query.CREATE_CARD_TABLE).Execute();
 
             int page = 1;
             bool done = false;
@@ -74,7 +74,7 @@ namespace MTG_CLI
                     {
                         JToken prices = curCard["prices"] ?? new JObject();
 
-                        _sql.Query(MTG_Query.INSERT_CARD)
+                        _sql.Query(DB_Query.INSERT_CARD)
                             .WithParam("@SetCode", curCard["set"].AsString())
                             .WithParam("@CollectorNumber", curCard["collector_number"].AsString()) // Scryfall uses "collector_number", but I don't want the underscore anywhere else
                             .WithParam("@Name", curCard["name"].AsString())

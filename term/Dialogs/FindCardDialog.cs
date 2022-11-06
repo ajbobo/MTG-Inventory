@@ -97,7 +97,7 @@ namespace MTG_CLI
         {
             _cardNames.Clear();
 
-            sql.Query(MTG_Query.GET_CARD_NAMES).OpenToRead();
+            sql.Query(DB_Query.GET_CARD_NAMES).OpenToRead();
             while (sql.ReadNext())
             {
                 _cardNames.Add(sql.ReadValue<string>("Name", ""));

@@ -22,7 +22,7 @@ namespace MTG_CLI
 
         public void CreateDBTable()
         {
-            _sql.Query(MTG_Query.CREATE_USER_INVENTORY).Execute();
+            _sql.Query(DB_Query.CREATE_USER_INVENTORY).Execute();
         }
 
         public void PopulateDBTable(string setCode, CardData[] data)
@@ -35,7 +35,7 @@ namespace MTG_CLI
                 foreach (string attrs in counts.Keys)
                 {
                     long count = (long)counts[attrs];
-                    _sql.Query(MTG_Query.ADD_TO_USER_INVENTORY)
+                    _sql.Query(DB_Query.ADD_TO_USER_INVENTORY)
                         .WithParam("@SetCode", setCode)
                         .WithParam("@CollectorNumber", collectorNumber)
                         .WithParam("@Name", name)
@@ -50,7 +50,7 @@ namespace MTG_CLI
         {
             List<CardData> fullSet = new();
 
-            _sql.Query(MTG_Query.GET_USER_INVENTORY).OpenToRead();
+            _sql.Query(DB_Query.GET_USER_INVENTORY).OpenToRead();
 
             string lastCollectorNumber = "", lastAttrs = "";
             setCode = "";
