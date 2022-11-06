@@ -11,22 +11,22 @@ namespace MTG_CLI
             _db = FirestoreDb.Create(dbName);
         }
 
-        public async Task<Dictionary<string, object>[]> GetDocumentField(string collection, string document, string field)
+        public async Task<CardData[]> GetDocumentField(string collection, string document, string field)
         {
             CollectionReference? colRef = _db?.Collection(collection);
             DocumentReference? docRef = colRef?.Document(document);
 
-            Dictionary<string, object>[] res = {};
+            CardData[] res = {};
             if (docRef != null)
             {
                 DocumentSnapshot docSnap = await docRef.GetSnapshotAsync();
-                docSnap.TryGetValue<Dictionary<string, object>[]>(field, out res);
+                docSnap.TryGetValue<CardData[]>(field, out res);
             }
             
             return res;
         }
 
-        public async Task WriteDocumentField(string collection, string document, string field, Dictionary<string, object>[] data)
+        public async Task WriteDocumentField(string collection, string document, string field, CardData[] data)
         {
             Dictionary<string, object> fieldData = new Dictionary<string, object>
             {

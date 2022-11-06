@@ -1,5 +1,4 @@
 using System.Configuration;
-using Google.Cloud.Firestore;
 
 namespace MTG_CLI
 {
@@ -27,13 +26,13 @@ namespace MTG_CLI
 
             _sql.Query(MTG_Query.CREATE_USER_INVENTORY).Execute();
 
-            Dictionary<string, object>[] setData = await _db.GetDocumentField(_dbCollection, setCode, _dbCardsField);
+            CardData[] setData = await _db.GetDocumentField(_dbCollection, setCode, _dbCardsField);
 
-            foreach (Dictionary<string, object> curCard in setData)
+            foreach (CardData curCard in setData)
             {
                 string collectorNumber = curCard["CollectorNumber"].ToString() ?? "0";
                 string name = curCard["Name"].ToString() ?? "";
-                Dictionary<string, object> counts = (Dictionary<string, object>)curCard["Counts"];
+                Dictionary<string, object> counts = (Dictionary<string, object>)curCard["Counts"]; // This is really <string, long>
                 foreach (string attrs in counts.Keys)
                 {
                     long count = (long)counts[attrs];
@@ -51,12 +50,12 @@ namespace MTG_CLI
         async public Task WriteData()
         {
             // Build the data structure for the entire set - We'll send that to Firebase
-            List<Dictionary<string, object>> fullSet = new();
+            List<CardData> fullSet = new();
 
             _sql.Query(MTG_Query.GET_USER_INVENTORY).OpenToRead();
 
             string setCode = "", lastCollectorNumber = "", lastAttrs = "";
-            Dictionary<string, object> curCard = new();
+            CardData curCard = new();
             while (_sql.ReadNext())
             {
                 setCode = _sql.ReadValue<string>("SetCode", ""); // This shouldn't change, but we'll set it here anyway
