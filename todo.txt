@@ -12,12 +12,6 @@ Can FilterSettings be changed so that adding new types of filters is easier?
 
 
 --- Term ---
-Move SQL queries to app.config
-    Requires custom configuration: https://learn.microsoft.com/en-us/dotnet/api/system.configuration.configurationelementcollection?view=dotnet-plat-ext-6.0
-Can I change app.config to be JSON instead of XML?
-    It looks like it can be done, but it's kind of complicated and it wants a strongly-typed configuration class
-    https://code.4noobz.net/read-settings-from-the-appsettings-json/
-    https://andrewlock.net/how-to-use-the-ioptions-pattern-for-configuration-in-asp-net-core-rc2/
 Add option to ChooseSetDialog to only show sets that are in User_Inv
     This will need to get the list of Documents in User_Inv
 Add filters:

@@ -8,13 +8,15 @@ namespace MTG_CLI
         readonly private string _dbName = ConfigurationManager.AppSettings["Firestore_DB"] ?? "";
         readonly private string _dbCollection = ConfigurationManager.AppSettings["Firestore_Collection"] ?? "";
 
-        private FirestoreDb _db;
+        private IFirestore_Wrapper _db;
         private ISQL_Connection _sql;
 
         // This could be called directly, but is being called via dependency injection instead
-        public Firestore_Connection(ISQL_Connection sql)
+        public Firestore_Connection(ISQL_Connection sql, IFirestore_Wrapper db)
         {
-            _db = FirestoreDb.Create(_dbName);
+            _db = db;
+            _db.Connect(_dbName);
+
             _sql = sql;
         }
 
@@ -24,7 +26,10 @@ namespace MTG_CLI
 
             _sql.Query(MTG_Query.CREATE_USER_INVENTORY).Execute();
 
-            DocumentSnapshot setDoc = await _db.Collection(_dbCollection).Document(setCode).GetSnapshotAsync();
+            DocumentSnapshot? setDoc = await _db.GetDocument(_dbCollection, setCode);
+            if (setDoc == null)
+                return;
+
             Dictionary<string, object>[] setData;
             setDoc.TryGetValue<Dictionary<string, object>[]>("Cards", out setData);
             if (setData == null)
@@ -88,12 +93,11 @@ namespace MTG_CLI
             _sql.Close();
 
             // Write the full set to Firebase
-            CollectionReference collection = _db.Collection("User_Inv");
             Dictionary<string, object> cards = new Dictionary<string, object>
             {
                 { "Cards", fullSet.ToArray() }
             };
-            await collection.Document(setCode).SetAsync(cards);
+            await _db.WriteDocument("User_Inv", setCode, cards);
         }
     }
 }
