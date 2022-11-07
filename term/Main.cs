@@ -8,7 +8,7 @@ namespace MTG_CLI
     {
         readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_File"].ConnectionString;
 
-        private static void StartTerminalView(ISQL_Connection sql, IScryfall_Connection mtgData, IFirestore_Connection inventory)
+        private static void StartTerminalView(ISQL_Connection sql, IScryfall_Connection mtgData, IFirestore_Connection firestore)
         {
             var win = new TerminalView(sql);
 
@@ -20,7 +20,7 @@ namespace MTG_CLI
                 await mtgData.GetCardsInSet(newSet);
 
                 Console.WriteLine("Getting inventory for {0}", newSet);
-                await inventory.ReadData(newSet);
+                await firestore.ReadData(newSet);
 
                 win.SetCardList();
             };
@@ -28,7 +28,7 @@ namespace MTG_CLI
             win.DataChanged += async () =>
             {
                 Console.WriteLine("Writing current inventory to Firebase");
-                await inventory.WriteData();
+                await firestore.WriteData();
             };
 
             win.Start();

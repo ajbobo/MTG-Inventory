@@ -23,7 +23,7 @@ namespace MTG_CLI
                 docSnap.TryGetValue<CardData[]>(field, out res);
             }
             
-            return res;
+            return (res != null ? res : new CardData[]{} );
         }
 
         public async Task WriteDocumentField(string collection, string document, string field, CardData[] data)

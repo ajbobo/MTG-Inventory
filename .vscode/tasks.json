@@ -2,7 +2,38 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build term - debug",
+            "label": "Create Coverage Report",
+            "command": "reportgenerator",
+            "type": "process",
+            "args": [
+                "-reports:${workspaceFolder}/term-test/lcov.info",
+                "-targetdir:${workspaceFolder}/term-test/TestCoverage",
+                "-reporttypes:Html"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "View Coverage Report",
+            "dependsOn": "Coverage Report",
+            "command": "Invoke-Item",
+            "type": "shell",
+            "args": [
+                "${workspaceFolder}/term-test/TestCoverage/index.html"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Build All",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/MTG-Inventory.sln"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Build term - Debug",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -15,18 +46,18 @@
             "group": "build"
         },
         {
-            "label": "clean term - debug",
+            "label": "Clean term - Debug",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "clean",
-                "${workspaceFolder}/term/term.csproj",
+                "${workspaceFolder}/term/term.csproj"
             ],
             "problemMatcher": "$msCompile",
             "group": "none"
         },
         {
-            "label": "publish term - release", /* Needs to include Google Firebase creds somehow */
+            "label": "Publish term - Release",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -36,7 +67,7 @@
                 "Release"
             ],
             "problemMatcher": "$msCompile",
-            "group": "none" 
+            "group": "none"
         }
     ]
 }
