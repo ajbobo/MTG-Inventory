@@ -2,9 +2,11 @@ using System.Text;
 using Terminal.Gui;
 using Terminal.Gui.TextValidateProviders;
 using NStack;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MTG_CLI
 {
+    [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
     class FindCardDialog
     {
         public event Action<string>? CardSelected;

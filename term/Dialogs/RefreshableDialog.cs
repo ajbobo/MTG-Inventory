@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using Terminal.Gui;
 
 namespace MTG_CLI
 {
+    [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
     abstract class RefreshableDialog
     {
         static int cnt = 0;

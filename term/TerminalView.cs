@@ -1,10 +1,12 @@
 using System.Configuration;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using Terminal.Gui;
 using Terminal.Gui.Views;
 
 namespace MTG_CLI
 {
+    [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
     class TerminalView
     {
         readonly private string _dbSetCode = ConfigurationManager.AppSettings["DB_Card_Field_SetCode"] ?? "";

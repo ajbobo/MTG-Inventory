@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Terminal.Gui;
 
 namespace MTG_CLI
 {
+    [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
     class EditCardDialog : RefreshableDialog
     {
         public event Action? DataChanged;
@@ -136,6 +138,7 @@ namespace MTG_CLI
         }
     }
 
+    [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
     class EditCTCDialog : RefreshableDialog
     {
         public event Action<string, int>? DataChanged;

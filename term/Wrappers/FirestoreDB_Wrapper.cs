@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using Google.Cloud.Firestore;
 
 namespace MTG_CLI
 {
+    [ExcludeFromCodeCoverage] // I don't have a way to mock a FirestoreDb, so I can't unit test this one
     public class FirestoreDB_Wrapper : IFirestoreDB_Wrapper
     {
         private FirestoreDb? _db;

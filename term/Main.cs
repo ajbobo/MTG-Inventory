@@ -1,9 +1,11 @@
 ﻿using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace MTG_CLI
 {
+    [ExcludeFromCodeCoverage]
     class CLI_Window
     {
         readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_File"].ConnectionString;
