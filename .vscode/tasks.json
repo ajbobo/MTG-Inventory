@@ -3,8 +3,8 @@
     "tasks": [
         {
             "label": "Create Coverage Report",
-            "command": "reportgenerator",
-            "type": "process",
+            "command": "${userHome}\\.nuget\\packages\\reportgenerator\\5.1.10\\tools\\net6.0\\ReportGenerator.exe",
+            "type": "shell",
             "args": [
                 "-reports:${workspaceFolder}/term-test/lcov.info",
                 "-targetdir:${workspaceFolder}/term-test/TestResults",
