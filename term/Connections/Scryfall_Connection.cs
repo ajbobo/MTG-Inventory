@@ -9,7 +9,6 @@ namespace MTG_CLI
         private readonly ISQL_Connection _sql;
         private readonly HttpClient _httpClient;
 
-        // This could be called directly, but is being called via dependency injection instead
         public Scryfall_Connection(ISQL_Connection sql, HttpClient httpClient)
         {
             _httpClient = httpClient;

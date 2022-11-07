@@ -53,11 +53,8 @@ namespace MTG_CLI
         {
             Console.Title = "Inventory Terminal";
 
-            Console.WriteLine("Registering services with IoC Container");
             using IHost host = CreateHostBuilder().Build();
             host.Start();
-
-            Console.WriteLine("Reading Set data from Scryfall");
 
             IScryfall_Connection? mtgData = host.Services.GetService<IScryfall_Connection>();
             await (mtgData?.GetCollectableSets() ?? Task.FromResult<bool>(false));
