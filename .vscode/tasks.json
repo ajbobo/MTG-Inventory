@@ -7,18 +7,18 @@
             "type": "process",
             "args": [
                 "-reports:${workspaceFolder}/term-test/lcov.info",
-                "-targetdir:${workspaceFolder}/term-test/TestCoverage",
+                "-targetdir:${workspaceFolder}/term-test/TestResults",
                 "-reporttypes:Html"
             ],
             "problemMatcher": []
         },
         {
             "label": "View Coverage Report",
-            "dependsOn": "Coverage Report",
+            "dependsOn": "Create Coverage Report",
             "command": "Invoke-Item",
             "type": "shell",
             "args": [
-                "${workspaceFolder}/term-test/TestCoverage/index.html"
+                "${workspaceFolder}/term-test/TestResults/index.html"
             ],
             "problemMatcher": []
         },
