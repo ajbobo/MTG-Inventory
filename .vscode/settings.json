@@ -1,12 +1,3 @@
 {
     // "dotnet-test-explorer.testArguments": "-e GOOGLE_APPLICATION_CREDENTIALS=C:\\Dev\\Misc\\MTG-Inventory\\mtg-inventory-main-service-account.json",
-    "sqltools.useNodeRuntime": true,
-    "sqltools.connections": [
-        {
-            "previewLimit": 50,
-            "driver": "SQLite",
-            "name": "inv.db",
-            "database": "${workspaceFolder:MTG-Inventory}/term/inv.db"
-        }
-    ]
 }

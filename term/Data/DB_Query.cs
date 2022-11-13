@@ -24,6 +24,20 @@ namespace MTG_CLI
             return val;
         }
 
+        public override bool Equals(object? obj)
+        {
+            DB_Query? other = obj as DB_Query;
+            if (other == null)
+                return false;
+
+            return this.Query.Equals(other.Query);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         // The queries are defined in individual .sql files, and converted to code via Sylvan.BuildTools.Resources
         //    See https://github.com/MarkPflug/Sylvan.BuildTools.Resources
         // The id number assigned to each query MUST be unique
@@ -44,5 +58,4 @@ namespace MTG_CLI
         public static DB_Query GET_USER_INVENTORY => GetOrInsert(15, MTGQueries.GetUserInventory);
         public static DB_Query GET_CARD_CTCS => GetOrInsert(16, MTGQueries.GetCardCTCs);
         public static DB_Query UPDATE_CARD_CTC => GetOrInsert(17, MTGQueries.UpdateCardCTC);
-    };
-}
+    }}
