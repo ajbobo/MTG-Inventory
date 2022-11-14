@@ -10,24 +10,20 @@ namespace MTG_CLI
 
         public void ToggleFilter(Filter filter, bool enable)
         {
-            if (filter == CountFilter.CNT_ALL) // Disable all Count filters
-            {
-                ToggleFilter(CountFilter.CNT_ZERO, false);
-                ToggleFilter(CountFilter.CNT_ONE_PLUS, false);
-                ToggleFilter(CountFilter.CNT_LESS_THAN_FOUR, false);
-                ToggleFilter(CountFilter.CNT_FOUR_PLUS, false);
-                return;
-            }
+            // There should only be one Count filter enabled at a time
+            if (enable && filter != CountFilter.CNT_ZERO) ToggleFilter(CountFilter.CNT_ZERO, false);
+            if (enable && filter != CountFilter.CNT_ONE_PLUS) ToggleFilter(CountFilter.CNT_ONE_PLUS, false);
+            if (enable && filter != CountFilter.CNT_LESS_THAN_FOUR) ToggleFilter(CountFilter.CNT_LESS_THAN_FOUR, false);
+            if (enable && filter != CountFilter.CNT_FOUR_PLUS) ToggleFilter(CountFilter.CNT_FOUR_PLUS, false);
+            if (enable && filter == CountFilter.CNT_ALL) return; // No need to do anything else
 
-            List<Filter> filterList;
+            List<Filter> filterList = _rarityList;
             if (filter.GetType() == typeof(RarityFilter))
                 filterList = _rarityList;
             else if (filter.GetType() == typeof(CountFilter))
                 filterList = _countList;
             else if (filter.GetType() == typeof(ColorFilter))
                 filterList = _colorList;
-            else
-                return; // Weird state - do nothing
 
             if (!enable && filterList.Contains(filter))
                 filterList.Remove(filter);
@@ -59,8 +55,8 @@ namespace MTG_CLI
             List<Filter> theList = (_rarityList.Count != 0 ? _rarityList : new(allRarities));
 
             int cnt = theList.Count;
-            for (int x = 0; x < res.Count(); x++)
-                res[x] = (cnt > x ? (theList[x]?.ToString() ?? "na") : "na");
+            for (int x = 0; x < Math.Min(res.Count(), theList.Count); x++)
+                res[x] = theList[x].ToString();
 
             return res;
         }
