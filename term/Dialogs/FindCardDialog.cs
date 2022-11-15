@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace MTG_CLI
 {
-    [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
+    [ExcludeFromCodeCoverage]
     class FindCardDialog
     {
         public event Action<string>? CardSelected;
@@ -82,7 +82,7 @@ namespace MTG_CLI
 
     }
 
-    class CardNameValidator : ITextValidateProvider
+    public class CardNameValidator : ITextValidateProvider
     {
         private List<string> _cardNames;
 
@@ -157,7 +157,7 @@ namespace MTG_CLI
 
         public int CursorRight(int pos)
         {
-            return Math.Min(pos + 1, _typed.Length);
+            return Math.Min(Math.Max(pos, 0) + 1, _typed.Length);
         }
 
         public int CursorStart()

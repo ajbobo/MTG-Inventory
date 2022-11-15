@@ -23,6 +23,14 @@ namespace MTG_CLI
             return this;
         }
 
+        public ISQL_Connection Query(string query)
+        {
+            _command = new SqliteCommand();
+            _command.Connection = _connection;
+            _command.CommandText = query;
+            return this;
+        }
+
         public ISQL_Connection WithParam(string param, string value)
         {
             _command?.Parameters.AddWithValue(param, value);
