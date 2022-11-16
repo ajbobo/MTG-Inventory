@@ -19,7 +19,8 @@
     </PackageReference>
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
     <PackageReference Include="Terminal.Gui" Version="1.4.0" />
+  </ItemGroup>
+  <ItemGroup>
     <StaticResourceFolder Include="MTGQueries" />
   </ItemGroup>
-
 </Project>

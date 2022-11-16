@@ -1,14 +1,14 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Collections.Generic;
+using System.Configuration;
 
 namespace MTG_CLI;
 
 [TestClass]
 public class TestSQLite_Connection
 {
-    // TODO: Figure out how to use the ConfigurationManager here
-    readonly private static string _sqliteFile = "Data source=:memory:"; //ConfigurationManager.ConnectionStrings["SQLite_InMemory"].ConnectionString;
+    readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_InMemory"].ConnectionString;
 
     // This initializes the DB with Dominaria Unitied data, including some inventory data
     string setupQuery = File.ReadAllText("CreateTestDB.sql");

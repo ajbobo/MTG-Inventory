@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\term\app.config" />
-    <Content Include="CreateTestDB.sql"  CopyToOutputDirectory="Always" />
+    <!-- <Content Include="..\term\app.config" /> -->
+    <Content Include="CreateTestDB.sql" CopyToOutputDirectory="Always" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="3.2.0">
@@ -21,10 +21,14 @@
     <PackageReference Include="MSTest.TestFramework" Version="2.2.7" />
     <PackageReference Include="coverlet.collector" Version="3.1.0" />
     <PackageReference Include="ReportGenerator" Version="5.1.10" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\term\term.csproj" />
   </ItemGroup>
+
+  <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+    <Copy SourceFiles="..\term\app.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
+  </Target>
 
 </Project>
