@@ -46,25 +46,12 @@
             "group": "build"
         },
         {
-            "label": "Clean term - Debug",
+            "label": "Clean All",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "clean",
-                "${workspaceFolder}/term/term.csproj"
-            ],
-            "problemMatcher": "$msCompile",
-            "group": "none"
-        },
-        {
-            "label": "Publish term - Release",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/term/term.csproj",
-                "--configuration",
-                "Release"
+                "${workspaceFolder}/MTG-Inventory.sln"
             ],
             "problemMatcher": "$msCompile",
             "group": "none"
