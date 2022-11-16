@@ -15,7 +15,7 @@ namespace MTG_CLI
             _sql = sql;
         }
 
-        private bool IsCollectableSetType(string setType, string block, string parent)
+        public bool IsCollectableSetType(string setType, string block, string parent)
         {
             return (setType.Equals("core") ||
                     setType.Equals("expansion") ||
