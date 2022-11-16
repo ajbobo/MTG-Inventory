@@ -48,7 +48,7 @@ namespace MTG_CLI
             Assert.IsTrue(all.Contains(ColorFilter.BLUE));
             Assert.IsTrue(all.Contains(ColorFilter.BLACK));
             Assert.IsTrue(all.Contains(ColorFilter.RED));
-            Assert.IsTrue(all.Contains(ColorFilter.GREEEN));
+            Assert.IsTrue(all.Contains(ColorFilter.GREEN));
             Assert.IsTrue(all.Contains(ColorFilter.COLORLESS));
         }
 

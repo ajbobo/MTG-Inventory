@@ -33,10 +33,10 @@ namespace MTG_CLI
             CheckColors(fs, new[] { ColorFilter.BLUE }, "U");
 
             fs.ToggleFilter(ColorFilter.BLUE, false);
-            fs.ToggleFilter(ColorFilter.GREEEN, true);
-            CheckColors(fs, new[] { ColorFilter.GREEEN }, "G");
+            fs.ToggleFilter(ColorFilter.GREEN, true);
+            CheckColors(fs, new[] { ColorFilter.GREEN }, "G");
 
-            fs.ToggleFilter(ColorFilter.GREEEN, false);
+            fs.ToggleFilter(ColorFilter.GREEN, false);
             fs.ToggleFilter(ColorFilter.COLORLESS, true);
             CheckColors(fs, new[] { ColorFilter.COLORLESS }, "X");
 
@@ -153,6 +153,78 @@ namespace MTG_CLI
                 Assert.IsTrue(fs.HasFilter(filter));
             for (int x = 0; x < expected.Length; x++)
                 Assert.AreEqual(expected[x], colors[x]);
+        }
+
+        [TestMethod]
+        public void TestCountThenColor()
+        {
+            FilterSettings fs = new();
+            fs.ToggleFilter(CountFilter.CNT_ONE_PLUS, true);
+            fs.ToggleFilter(ColorFilter.RED, true);
+
+            Assert.IsTrue(fs.HasFilter(ColorFilter.RED));
+            Assert.IsTrue(fs.HasFilter(CountFilter.CNT_ONE_PLUS));
+            CheckDefaults(fs, false, true, false);
+        }
+
+        [TestMethod]
+        public void TestColorThenCount()
+        {
+            FilterSettings fs = new();
+            fs.ToggleFilter(ColorFilter.RED, true);
+            fs.ToggleFilter(CountFilter.CNT_ONE_PLUS, true);
+
+            Assert.IsTrue(fs.HasFilter(ColorFilter.RED));
+            Assert.IsTrue(fs.HasFilter(CountFilter.CNT_ONE_PLUS));
+            CheckDefaults(fs, false, true, false);
+        }
+
+        [TestMethod]
+        public void TestColorThenRarity()
+        {
+            FilterSettings fs = new();
+            fs.ToggleFilter(ColorFilter.RED, true);
+            fs.ToggleFilter(RarityFilter.RARE, true);
+
+            Assert.IsTrue(fs.HasFilter(ColorFilter.RED));
+            Assert.IsTrue(fs.HasFilter(RarityFilter.RARE));
+            CheckDefaults(fs, false, false, true);
+        }
+
+        [TestMethod]
+        public void TestRarityThenColor()
+        {
+            FilterSettings fs = new();
+            fs.ToggleFilter(RarityFilter.RARE, true);
+            fs.ToggleFilter(ColorFilter.RED, true);
+
+            Assert.IsTrue(fs.HasFilter(ColorFilter.RED));
+            Assert.IsTrue(fs.HasFilter(RarityFilter.RARE));
+            CheckDefaults(fs, false, false, true);
+        }
+
+        [TestMethod]
+        public void TestRarityThenCount()
+        {
+            FilterSettings fs = new();
+            fs.ToggleFilter(RarityFilter.RARE, true);
+            fs.ToggleFilter(CountFilter.CNT_FOUR_PLUS, true);
+
+            Assert.IsTrue(fs.HasFilter(CountFilter.CNT_FOUR_PLUS));
+            Assert.IsTrue(fs.HasFilter(RarityFilter.RARE));
+            CheckDefaults(fs, true, false, false);
+        }
+
+        [TestMethod]
+        public void TestCountThenRarity()
+        {
+            FilterSettings fs = new();
+            fs.ToggleFilter(CountFilter.CNT_FOUR_PLUS, true);
+            fs.ToggleFilter(RarityFilter.RARE, true);
+
+            Assert.IsTrue(fs.HasFilter(CountFilter.CNT_FOUR_PLUS));
+            Assert.IsTrue(fs.HasFilter(RarityFilter.RARE));
+            CheckDefaults(fs, true, false, false);
         }
 
         private void CheckDefaults(FilterSettings fs, bool checkColor, bool checkRarity, bool checkCount)

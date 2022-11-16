@@ -8,7 +8,7 @@ namespace MTG_CLI
         private SqliteCommand? _command;
         private SqliteConnection _connection;
         private SqliteDataReader? _reader;
-        
+
         public SQLite_Connection(string connectionString)
         {
             _connection = new SqliteConnection(connectionString);
@@ -56,14 +56,14 @@ namespace MTG_CLI
 
             string[] rarities = filterSettings.GetRarities();
             for (int x = 0; x < rarities.Count(); x++)
-                _command?.Parameters.AddWithValue($"@r{x}", rarities[x].ToLower());
+                _command?.Parameters.AddWithValue($"@r{x}", (rarities[x] != null ? rarities[x].ToLower() : "na"));
 
             string colors = filterSettings.GetColors();
             bool all = (colors.Length == 0);
-            char[] COLOR_LIST = {'W', 'U', 'B', 'R', 'G', 'X'};
+            char[] COLOR_LIST = { 'W', 'U', 'B', 'R', 'G', 'X' };
             foreach (char curChar in COLOR_LIST)
                 _command?.Parameters.AddWithValue($"@{curChar}", all || colors.Contains(curChar));
-                
+
             return this;
         }
 
@@ -96,10 +96,17 @@ namespace MTG_CLI
 
         public T ReadValue<T>(string fieldName, T fallback)
         {
-            if (_reader == null || _reader.IsDBNull(fieldName))
-                return fallback;
+            try
+            {
+                if (_reader == null || _reader.IsDBNull(fieldName))
+                    return fallback;
 
-            return _reader.GetFieldValue<T>(fieldName);
+                return _reader.GetFieldValue<T>(fieldName);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return fallback;
+            }
         }
 
         public void Close()

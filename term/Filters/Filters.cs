@@ -48,12 +48,12 @@ namespace MTG_CLI
         public static ColorFilter BLUE { get; } = new() { DisplayName = "Blue (U)", Color = 'U' };
         public static ColorFilter BLACK { get; } = new() { DisplayName = "Black (B)", Color = 'B' };
         public static ColorFilter RED { get; } = new() { DisplayName = "Red (R)", Color = 'R' };
-        public static ColorFilter GREEEN { get; } = new() { DisplayName = "Green (G)", Color = 'G' };
+        public static ColorFilter GREEN { get; } = new() { DisplayName = "Green (G)", Color = 'G' };
         public static ColorFilter COLORLESS { get; } = new() { DisplayName = "Colorless", Color = 'X' };
 
         public static Filter[] GetAllValues()
         {
-            return new[] { WHITE, BLUE, BLACK, RED, GREEEN, COLORLESS };
+            return new[] { WHITE, BLUE, BLACK, RED, GREEN, COLORLESS };
         }
     }
 }

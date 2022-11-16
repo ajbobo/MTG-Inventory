@@ -11,11 +11,14 @@ namespace MTG_CLI
         public void ToggleFilter(Filter filter, bool enable)
         {
             // There should only be one Count filter enabled at a time
-            if (enable && filter != CountFilter.CNT_ZERO) ToggleFilter(CountFilter.CNT_ZERO, false);
-            if (enable && filter != CountFilter.CNT_ONE_PLUS) ToggleFilter(CountFilter.CNT_ONE_PLUS, false);
-            if (enable && filter != CountFilter.CNT_LESS_THAN_FOUR) ToggleFilter(CountFilter.CNT_LESS_THAN_FOUR, false);
-            if (enable && filter != CountFilter.CNT_FOUR_PLUS) ToggleFilter(CountFilter.CNT_FOUR_PLUS, false);
-            if (enable && filter == CountFilter.CNT_ALL) return; // No need to do anything else
+            if (filter.GetType() == typeof(CountFilter))
+            {
+                if (enable && filter != CountFilter.CNT_ZERO) ToggleFilter(CountFilter.CNT_ZERO, false);
+                if (enable && filter != CountFilter.CNT_ONE_PLUS) ToggleFilter(CountFilter.CNT_ONE_PLUS, false);
+                if (enable && filter != CountFilter.CNT_LESS_THAN_FOUR) ToggleFilter(CountFilter.CNT_LESS_THAN_FOUR, false);
+                if (enable && filter != CountFilter.CNT_FOUR_PLUS) ToggleFilter(CountFilter.CNT_FOUR_PLUS, false);
+                if (enable && filter == CountFilter.CNT_ALL) return; // No need to do anything else
+            }
 
             List<Filter> filterList = _rarityList;
             if (filter.GetType() == typeof(RarityFilter))
