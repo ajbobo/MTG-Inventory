@@ -62,7 +62,7 @@ public class TestScryfall_Connection
         HttpResponseMessage resp = new();
         string respText = File.ReadAllText("MockResults/Scryfall-Sets.json");
         resp.Content = new StringContent(respText);
-        
+
         Mock<HttpMessageHandler> mockHandler = new();
         mockHandler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
@@ -92,7 +92,7 @@ public class TestScryfall_Connection
         HttpResponseMessage resp = new();
         string respText = File.ReadAllText("MockResults/Empty-Sets.json");
         resp.Content = new StringContent(respText);
-        
+
         Mock<HttpMessageHandler> mockHandler = new();
         mockHandler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
@@ -115,11 +115,11 @@ public class TestScryfall_Connection
     [TestMethod]
     public async Task TestGetSetFailure()
     {
-                ISQL_Connection sql = new SQLite_Connection(_sqlConnection);
+        ISQL_Connection sql = new SQLite_Connection(_sqlConnection);
 
         HttpResponseMessage resp = new();
         resp.StatusCode = System.Net.HttpStatusCode.Forbidden;
-        
+
         Mock<HttpMessageHandler> mockHandler = new();
         mockHandler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
@@ -127,6 +127,71 @@ public class TestScryfall_Connection
 
         Scryfall_Connection conn = new(sql, new HttpClient(mockHandler.Object));
         bool res = await conn.GetCollectableSets();
+
+        Assert.IsFalse(res);
+    }
+
+    [TestMethod]
+    public async Task TestGetCardsInSet()
+    {
+        ISQL_Connection sql = new SQLite_Connection(_sqlConnection);
+
+        HttpResponseMessage resp1 = new();
+        string respText1 = File.ReadAllText("MockResults/Scryfall-Cards-1.json");
+        resp1.Content = new StringContent(respText1);
+
+        HttpResponseMessage resp2 = new();
+        string respText2 = File.ReadAllText("MockResults/Scryfall-Cards-2.json");
+        resp2.Content = new StringContent(respText2);
+
+        Mock<HttpMessageHandler> mockHandler = new();
+        mockHandler.Protected()
+            .Setup<Task<HttpResponseMessage>>("SendAsync",
+                ItExpr.Is<HttpRequestMessage>(m => m.RequestUri!.Query.Contains("page=1")),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(resp1);
+
+        mockHandler.Protected()
+            .Setup<Task<HttpResponseMessage>>("SendAsync",
+                ItExpr.Is<HttpRequestMessage>(m => m.RequestUri!.Query.Contains("page=2")),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(resp2);
+
+        Scryfall_Connection conn = new(sql, new HttpClient(mockHandler.Object));
+        bool res = await conn.GetCardsInSet("dmu");
+
+        List<string> cardList = new();
+        sql.Query(DB_Query.GET_CARD_NAMES).OpenToRead();
+        while (sql.ReadNext())
+        {
+            cardList.Add(sql.ReadValue<string>("Name", ""));
+        }
+        sql.Close();
+
+        Assert.IsTrue(res);
+        Assert.AreEqual(272, cardList.Count);
+        Assert.AreEqual("Karn, Living Legacy", cardList[0]);
+        Assert.AreEqual("Phyrexian Vivisector", cardList[99]);
+        Assert.AreEqual("Ivy, Gleeful Spellthief", cardList[200]);
+        Assert.AreEqual("Briar Hydra", cardList[270]);
+        Assert.AreEqual("Ambitious Farmhand // Seasoned Cathar", cardList[271]);
+    }
+
+    [TestMethod]
+    public async Task TestGetCardsFailure()
+    {
+        ISQL_Connection sql = new SQLite_Connection(_sqlConnection);
+
+        HttpResponseMessage resp = new();
+        resp.StatusCode = System.Net.HttpStatusCode.Forbidden;
+
+        Mock<HttpMessageHandler> mockHandler = new();
+        mockHandler.Protected()
+            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(resp);
+
+        Scryfall_Connection conn = new(sql, new HttpClient(mockHandler.Object));
+        bool res = await conn.GetCardsInSet("dmu");
 
         Assert.IsFalse(res);
     }

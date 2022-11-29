@@ -63,12 +63,12 @@ namespace MTG_CLI
             bool done = false;
             while (!done)
             {
-                HttpResponseMessage msg = await _httpClient.GetAsync(string.Format(ConfigurationManager.AppSettings["SetSearch_Url"] ?? "", targetSetCode, page));
+                HttpResponseMessage msg = await _httpClient.GetAsync(string.Format(ConfigurationManager.AppSettings["SetSearch_Url"]!, targetSetCode, page));
                 if (msg.IsSuccessStatusCode)
                 {
                     string respStr = await msg.Content.ReadAsStringAsync();
                     JObject resp = JObject.Parse(respStr);
-                    JEnumerable<JToken> data = resp["data"]?.Children() ?? new();
+                    JEnumerable<JToken> data = resp["data"]!.Children();
                     foreach (JToken curCard in data)
                     {
                         JToken prices = curCard["prices"] ?? new JObject();
@@ -90,8 +90,8 @@ namespace MTG_CLI
                         }
                         else if (curCard["card_faces"] != null)
                         {
-                            _sql.WithParam("@FrontText", curCard["card_faces"]?[0]?["oracle_text"].AsString() ?? "");
-                            _sql.WithParam("@ManaCost", curCard["card_faces"]?[0]?["mana_cost"].AsString() ?? "");
+                            _sql.WithParam("@FrontText", curCard["card_faces"]![0]!["oracle_text"].AsString());
+                            _sql.WithParam("@ManaCost", curCard["card_faces"]![0]!["mana_cost"].AsString());
                         }
 
 
