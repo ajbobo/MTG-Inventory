@@ -4,9 +4,9 @@ namespace MTG_CLI
 {
     public class Firestore_Connection : IFirestore_Connection
     {
-        readonly private string _dbName = ConfigurationManager.AppSettings["Firestore_DB"] ?? "";
-        readonly private string _dbCollection = ConfigurationManager.AppSettings["Firestore_Collection"] ?? "";
-        readonly private string _dbCardsField = ConfigurationManager.AppSettings["Firestore_CardsField"] ?? "";
+        readonly private string _dbName = ConfigurationManager.AppSettings["Firestore_DB"]!;
+        readonly private string _dbCollection = ConfigurationManager.AppSettings["Firestore_Collection"]!;
+        readonly private string _dbCardsField = ConfigurationManager.AppSettings["Firestore_CardsField"]!;
 
         private IFirestoreDB_Wrapper _firestore;
         private IDB_Inventory _dbInv;

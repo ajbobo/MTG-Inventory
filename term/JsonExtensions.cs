@@ -12,8 +12,10 @@ namespace ExtensionMethods
 
         public static int AsInt(this JToken? token)
         {
+            if (token == null)
+                return 0;
             int res;
-            int.TryParse(token?.ToString() ?? "", out res);
+            int.TryParse(token.ToString(), out res);
             return res;
         }
 

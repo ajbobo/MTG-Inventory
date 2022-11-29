@@ -4,14 +4,15 @@ namespace MTG_CLI
 {
     public class DB_Inventory : IDB_Inventory
     {
-        readonly private string _cardNumber = ConfigurationManager.AppSettings["Card_Field_Number"] ?? "";
-        readonly private string _cardName = ConfigurationManager.AppSettings["Card_Field_Name"] ?? "";
-        readonly private string _cardCounts = ConfigurationManager.AppSettings["Card_Field_Counts"] ?? "";
-        readonly private string _dbSetCode = ConfigurationManager.AppSettings["DB_Card_Field_SetCode"] ?? "";
-        readonly private string _dbNumber = ConfigurationManager.AppSettings["DB_Card_Field_Number"] ?? "";
-        readonly private string _dbName = ConfigurationManager.AppSettings["DB_Card_Field_Name"] ?? "";
-        readonly private string _dbAttrs = ConfigurationManager.AppSettings["DB_Card_Field_Attrs"] ?? "";
-        readonly private string _dbCount = ConfigurationManager.AppSettings["DB_Card_Field_Count"] ?? "";
+        // All of these are required to be in the AppSettings, so I'm not worrying about a fall-back value
+        readonly private string _cardNumber = ConfigurationManager.AppSettings["Card_Field_Number"]!;
+        readonly private string _cardName = ConfigurationManager.AppSettings["Card_Field_Name"]!;
+        readonly private string _cardCounts = ConfigurationManager.AppSettings["Card_Field_Counts"]!;
+        readonly private string _dbSetCode = ConfigurationManager.AppSettings["DB_Card_Field_SetCode"]!;
+        readonly private string _dbNumber = ConfigurationManager.AppSettings["DB_Card_Field_Number"]!;
+        readonly private string _dbName = ConfigurationManager.AppSettings["DB_Card_Field_Name"]!;
+        readonly private string _dbAttrs = ConfigurationManager.AppSettings["DB_Card_Field_Attrs"]!;
+        readonly private string _dbCount = ConfigurationManager.AppSettings["DB_Card_Field_Count"]!;
         
         private ISQL_Connection _sql;
 
@@ -29,8 +30,8 @@ namespace MTG_CLI
         {
             foreach (CardData curCard in data)
             {
-                string collectorNumber = curCard[_cardNumber].ToString() ?? "0";
-                string name = curCard[_cardName].ToString() ?? "";
+                string collectorNumber = curCard[_cardNumber].ToString()!;
+                string name = curCard[_cardName].ToString()!;
                 Dictionary<string, object> counts = (Dictionary<string, object>)curCard[_cardCounts]; // This is really <string, long>
                 foreach (string attrs in counts.Keys)
                 {

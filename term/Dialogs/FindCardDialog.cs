@@ -51,8 +51,8 @@ namespace MTG_CLI
             {
                 // This updates a label with the predicted (but untyped) text in a different color
                 predictedText.Clear();
-                string fullText = _validator.DisplayText?.ToString() ?? "";
-                string typed = _validator.Text?.ToString() ?? "";
+                string fullText = _validator.DisplayText?.ToString()!;
+                string typed = _validator.Text?.ToString()!;
                 predictedText.Text = fullText.Substring(typed.Length);
                 predictedText.X = 11 + typed.Length;
                 editName.SetNeedsDisplay();
@@ -132,7 +132,7 @@ namespace MTG_CLI
         public ustring Text
         {
             get => _typed.ToString();
-            set => InsertWord(value.ToString());
+            set => InsertWord(value.ToString()!);
         }
 
         public ustring DisplayText => FindClosestWord();
@@ -190,13 +190,13 @@ namespace MTG_CLI
             return true;
         }
 
-        private void InsertWord(string? newStr)
+        private void InsertWord(string newStr)
         {
-            if (newStr?.Length == 0)
+            if (newStr.Length == 0)
                 _typed.Clear();
 
             int index = 0;
-            while (index < newStr?.Length)
+            while (index < newStr.Length)
             {
                 if (InsertAt(newStr[index], index))
                     index++;

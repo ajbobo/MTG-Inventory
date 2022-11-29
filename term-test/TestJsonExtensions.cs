@@ -51,6 +51,7 @@ namespace MTG_CLI
             int val4 = _jObj["Four"].AsInt();
             int val5 = _jObj["Five"].AsInt();
             int notReal = _jObj["NotReal"].AsInt();
+            int isNull = ((JToken?)null).AsInt();
 
             Assert.AreEqual(1, val1);
             Assert.AreEqual(2, val2);
@@ -58,6 +59,7 @@ namespace MTG_CLI
             Assert.AreEqual(0, val4);
             Assert.AreEqual(0, val5);
             Assert.AreEqual(0, notReal);
+            Assert.AreEqual(0, isNull);
         }
 
         [TestMethod]
