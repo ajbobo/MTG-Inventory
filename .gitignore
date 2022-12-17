@@ -7,3 +7,4 @@
 **/TestResults
 **/TestCoverage
 **/lcov*.info
+term-test/coverage.json
