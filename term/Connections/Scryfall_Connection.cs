@@ -22,6 +22,7 @@ namespace MTG_CLI
                     setType.Equals("masterpiece") ||
                     setType.Equals("masters") ||
                     setType.Equals("commander") ||
+                    setType.Equals("draft_innovation") ||
                     // To limit the number of funny sets to ones that are (mostly) actually collectable, I needed to add some more filters
                     (setType.Equals("funny") && block.Length == 0 && parent.Length == 0));
         }

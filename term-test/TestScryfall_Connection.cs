@@ -27,7 +27,7 @@ public class TestScryfall_Connection
     [DataRow("box", "Ice Age", "csp", false)]
     [DataRow("commander", "Commander", "mid", true)]
     [DataRow("core", "Core Set", "", true)]
-    [DataRow("draft_innovation", "Conspiracy", "", false)]
+    [DataRow("draft_innovation", "Conspiracy", "", true)]
     [DataRow("duel_deck", "", "", false)]
     [DataRow("expansion", "Alara", "", true)]
     [DataRow("from_the_vault", "", "", false)]
@@ -79,8 +79,8 @@ public class TestScryfall_Connection
         }
         sql.Close();
 
-        Assert.AreEqual(190, setList.Count);
-        Assert.AreEqual("Limited Edition Alpha", setList[189]);
+        Assert.AreEqual(202, setList.Count);
+        Assert.AreEqual("Fourth Edition Foreign Black Border", setList[189]);
         Assert.AreEqual("Dominaria Remastered", setList[0]);
     }
 
