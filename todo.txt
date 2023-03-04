@@ -1,10 +1,3 @@
---- SOLID refactor ---
-Guide: https://www.rhyous.com/2022/07/22/developer-training-wheels-for-writing-s-o-l-i-d-code/
-   I'm not 100% sold on all of this, but some of it would be worthwhile
-
-Add unit tests -- I think this is the most useful thing I can do, some of the SOLID principles make this easier/possible
-Unit tests should create an in-memory DB, and then use the ".read CreateTestDB.sql" to populate it so that tests have clean, real data
-
 --- General ---
 Split UI logic from actual behavior?
     Maybe each Dialog needs a Dialog class and a Data/Behavior class

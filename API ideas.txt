@@ -1,0 +1,12 @@
+Possible API design:
+
+Ideally, all of these would have an access_token parameter, and the DB would support multiple people. But that's a future problem.
+
+GET /collection/{set}?[filter=<filter>]  -- Can support multiple filters
+GET /collection/{set}/{card}
+POST /collection/{set}/{card} -- Only allows updating the CTCs
+
+<filter> = (color:<colorDef>)|(count:<countDef>)|(rarity:<rarityDef>)
+<colorDef> = <wWuUbBrRgGxX>+
+<countDef> = (<=|>=|=|<|>)\d+
+<rarityDef> = <cCuUrRmMm>+
