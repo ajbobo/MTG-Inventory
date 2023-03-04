@@ -1,36 +1,37 @@
 using Newtonsoft.Json.Linq;
 using ExtensionMethods;
-using static MTG_CLI.SQLManager.InternalQuery;
+using System.Configuration;
 
 namespace MTG_CLI
 {
-    public class MTG_Connection
+    public class Scryfall_Connection : IScryfall_Connection
     {
-        private SQLManager _sql;
-        private HttpClient _httpClient;
+        private readonly ISQL_Connection _sql;
+        private readonly HttpClient _httpClient;
 
-        public MTG_Connection(SQLManager sql, HttpClient httpClient)
+        public Scryfall_Connection(ISQL_Connection sql, HttpClient httpClient)
         {
             _httpClient = httpClient;
             _sql = sql;
         }
 
-        private static bool IsCollectableSetType(string setType, string block, string parent)
+        public bool IsCollectableSetType(string setType, string block, string parent)
         {
             return (setType.Equals("core") ||
                     setType.Equals("expansion") ||
                     setType.Equals("masterpiece") ||
                     setType.Equals("masters") ||
                     setType.Equals("commander") ||
+                    setType.Equals("draft_innovation") ||
                     // To limit the number of funny sets to ones that are (mostly) actually collectable, I needed to add some more filters
                     (setType.Equals("funny") && block.Length == 0 && parent.Length == 0));
         }
 
-        async public Task<bool> GetSetList()
+        async public Task<bool> GetCollectableSets()
         {
-            _sql.Query(CREATE_SET_TABLE).Execute();
+            _sql.Query(DB_Query.CREATE_SET_TABLE).Execute();
 
-            HttpResponseMessage msg = await _httpClient.GetAsync("https://api.scryfall.com/sets");
+            HttpResponseMessage msg = await _httpClient.GetAsync(ConfigurationManager.AppSettings["GetSetList_Url"]);
             if (!msg.IsSuccessStatusCode)
                 return false;
 
@@ -46,7 +47,7 @@ namespace MTG_CLI
                 string parent = curSet["parent_set_code"].AsString();
                 if (IsCollectableSetType(type, block, parent))
                 {
-                    _sql.Query(INSERT_SET)
+                    _sql.Query(DB_Query.INSERT_SET)
                         .WithParam("@SetCode", curSet["code"].AsString())
                         .WithParam("@Name", curSet["name"].AsString())
                         .Execute();
@@ -55,25 +56,25 @@ namespace MTG_CLI
             return true;
         }
 
-        async public Task<bool> GetSetCards(string targetSetCode)
+        async public Task<bool> GetCardsInSet(string targetSetCode)
         {
-            _sql.Query(CREATE_CARD_TABLE).Execute();
+            _sql.Query(DB_Query.CREATE_CARD_TABLE).Execute();
 
             int page = 1;
             bool done = false;
             while (!done)
             {
-                HttpResponseMessage msg = await _httpClient.GetAsync($"https://api.scryfall.com/cards/search?q=set:{targetSetCode} and game:paper&order=set&unique=prints&page={page}");
+                HttpResponseMessage msg = await _httpClient.GetAsync(string.Format(ConfigurationManager.AppSettings["SetSearch_Url"]!, targetSetCode, page));
                 if (msg.IsSuccessStatusCode)
                 {
                     string respStr = await msg.Content.ReadAsStringAsync();
                     JObject resp = JObject.Parse(respStr);
-                    JEnumerable<JToken> data = resp["data"]?.Children() ?? new();
+                    JEnumerable<JToken> data = resp["data"]!.Children();
                     foreach (JToken curCard in data)
                     {
                         JToken prices = curCard["prices"] ?? new JObject();
 
-                        _sql.Query(INSERT_CARD)
+                        _sql.Query(DB_Query.INSERT_CARD)
                             .WithParam("@SetCode", curCard["set"].AsString())
                             .WithParam("@CollectorNumber", curCard["collector_number"].AsString()) // Scryfall uses "collector_number", but I don't want the underscore anywhere else
                             .WithParam("@Name", curCard["name"].AsString())
@@ -90,8 +91,8 @@ namespace MTG_CLI
                         }
                         else if (curCard["card_faces"] != null)
                         {
-                            _sql.WithParam("@FrontText", curCard["card_faces"]?[0]?["oracle_text"].AsString() ?? "");
-                            _sql.WithParam("@ManaCost", curCard["card_faces"]?[0]?["mana_cost"].AsString() ?? "");
+                            _sql.WithParam("@FrontText", curCard["card_faces"]![0]!["oracle_text"].AsString());
+                            _sql.WithParam("@ManaCost", curCard["card_faces"]![0]!["mana_cost"].AsString());
                         }
 
 

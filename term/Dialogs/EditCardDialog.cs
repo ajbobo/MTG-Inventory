@@ -1,9 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Terminal.Gui;
-using static MTG_CLI.SQLManager.InternalQuery;
 
 namespace MTG_CLI
 {
+    [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
     class EditCardDialog : RefreshableDialog
     {
         public event Action? DataChanged;
@@ -12,9 +13,9 @@ namespace MTG_CLI
         private string _curCollectorNumber = "";
         private string _curCardName = "";
         private Dictionary<string, int> _ctcList = new();
-        private SQLManager _sql;
+        private ISQL_Connection _sql;
 
-        public EditCardDialog(SQLManager sql)
+        public EditCardDialog(ISQL_Connection sql)
         {
             _isDirty = false;
             _sql = sql;
@@ -22,7 +23,7 @@ namespace MTG_CLI
 
         private void UpdateInventory(string collectorNumber, string attrs, int count)
         {
-            _sql.Query(UPDATE_CARD_CTC)
+            _sql.Query(DB_Query.UPDATE_CARD_CTC)
                 .WithParam("@CollectorNumber", collectorNumber)
                 .WithParam("@Attrs", attrs)
                 .WithParam("@Count", count)
@@ -34,7 +35,7 @@ namespace MTG_CLI
         {
             _curCollectorNumber = collectorNumber;
 
-            _sql.Query(GET_CARD_CTCS).WithParam("@CollectorNumber", collectorNumber).Read();
+            _sql.Query(DB_Query.GET_CARD_CTCS).WithParam("@CollectorNumber", collectorNumber).OpenToRead();
             _ctcList.Clear();
             _ctcList.Add("Standard", 0);
             while (_sql.ReadNext())
@@ -137,6 +138,7 @@ namespace MTG_CLI
         }
     }
 
+    [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
     class EditCTCDialog : RefreshableDialog
     {
         public event Action<string, int>? DataChanged;

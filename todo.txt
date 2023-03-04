@@ -1,16 +1,36 @@
+--- SOLID refactor ---
+Guide: https://www.rhyous.com/2022/07/22/developer-training-wheels-for-writing-s-o-l-i-d-code/
+   I'm not 100% sold on all of this, but some of it would be worthwhile
+
+Add unit tests -- I think this is the most useful thing I can do, some of the SOLID principles make this easier/possible
+Unit tests should create an in-memory DB, and then use the ".read CreateTestDB.sql" to populate it so that tests have clean, real data
+
+--- General ---
+Split UI logic from actual behavior?
+    Maybe each Dialog needs a Dialog class and a Data/Behavior class
+Restructure files based on Model/View/Controller?
+
+--- Windows App ---
+Create a standalone app using a UI framework like Avalonia UI?
+    Something that can generate an Android app would be cool
+If the data and ui can be uncoupled, this might be easier
+
 --- Term ---
 Add option to ChooseSetDialog to only show sets that are in User_Inv
     This will need to get the list of Documents in User_Inv
+Can FilterSettings be changed so that adding new types of filters is easier?
 Add filters:
     Price ($1+, $5+, $20+)
     CTC attributes (Foil, Prerelease, etc)
     Type
     Name
+Add a way to save decks
+    Should also import them from the DeckBox files
 Add a way to open the card image? (Probably in a separate app, but if I can imbed it, that would be cool)
 Published build needs an icon
 Published build needs Google Firebase creds
-Add a way to save decks
-    Should also import them from the DeckBox files
+Is there a way to protect/hide app.config in release builds?
+    https://learn.microsoft.com/en-us/previous-versions/hh8x3tas(v=vs.140)?redirectedfrom=MSDN
 
 
 --- Web UI ---

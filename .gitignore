@@ -4,3 +4,7 @@
 **/*service-account.json
 **/inventory_cache.json
 **/*.db
+**/TestResults
+**/TestCoverage
+**/lcov*.info
+term-test/coverage.json

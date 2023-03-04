@@ -2,19 +2,20 @@ using System.Text;
 using Terminal.Gui;
 using Terminal.Gui.TextValidateProviders;
 using NStack;
-using static MTG_CLI.SQLManager.InternalQuery;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MTG_CLI
 {
+    [ExcludeFromCodeCoverage]
     class FindCardDialog
     {
         public event Action<string>? CardSelected;
 
-        private SQLManager _sql;
+        private ISQL_Connection _sql;
         private CardNameValidator _validator;
         private bool _cardSelected = false;
 
-        public FindCardDialog(SQLManager sql)
+        public FindCardDialog(ISQL_Connection sql)
         {
             _sql = sql;
             _validator = new CardNameValidator(_sql);
@@ -50,8 +51,8 @@ namespace MTG_CLI
             {
                 // This updates a label with the predicted (but untyped) text in a different color
                 predictedText.Clear();
-                string fullText = _validator.DisplayText?.ToString() ?? "";
-                string typed = _validator.Text?.ToString() ?? "";
+                string fullText = _validator.DisplayText?.ToString()!;
+                string typed = _validator.Text?.ToString()!;
                 predictedText.Text = fullText.Substring(typed.Length);
                 predictedText.X = 11 + typed.Length;
                 editName.SetNeedsDisplay();
@@ -81,24 +82,24 @@ namespace MTG_CLI
 
     }
 
-    class CardNameValidator : ITextValidateProvider
+    public class CardNameValidator : ITextValidateProvider
     {
         private List<string> _cardNames;
 
         public string? SelectedCard { get; protected set; }
 
-        public CardNameValidator(SQLManager sql)
+        public CardNameValidator(ISQL_Connection sql)
         {
             _cardNames = new();
 
             RefreshNames(sql);
         }
 
-        public void RefreshNames(SQLManager sql)
+        public void RefreshNames(ISQL_Connection sql)
         {
             _cardNames.Clear();
 
-            sql.Query(GET_CARD_NAMES).Read();
+            sql.Query(DB_Query.GET_CARD_NAMES).OpenToRead();
             while (sql.ReadNext())
             {
                 _cardNames.Add(sql.ReadValue<string>("Name", ""));
@@ -131,7 +132,7 @@ namespace MTG_CLI
         public ustring Text
         {
             get => _typed.ToString();
-            set => InsertWord(value.ToString());
+            set => InsertWord(value.ToString()!);
         }
 
         public ustring DisplayText => FindClosestWord();
@@ -156,7 +157,7 @@ namespace MTG_CLI
 
         public int CursorRight(int pos)
         {
-            return Math.Min(pos + 1, _typed.Length);
+            return Math.Min(Math.Max(pos, 0) + 1, _typed.Length);
         }
 
         public int CursorStart()
@@ -189,13 +190,13 @@ namespace MTG_CLI
             return true;
         }
 
-        private void InsertWord(string? newStr)
+        private void InsertWord(string newStr)
         {
-            if (newStr?.Length == 0)
+            if (newStr.Length == 0)
                 _typed.Clear();
 
             int index = 0;
-            while (index < newStr?.Length)
+            while (index < newStr.Length)
             {
                 if (InsertAt(newStr[index], index))
                     index++;

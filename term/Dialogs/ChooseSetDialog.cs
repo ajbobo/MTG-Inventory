@@ -1,14 +1,16 @@
+using System.Diagnostics.CodeAnalysis;
 using Terminal.Gui;
 
 namespace MTG_CLI
 {
+    [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
     public class ChooseSetDialog
     {
-        private SQLManager _sql;
+        private ISQL_Connection _sql;
 
         public event Action<string>? SetSelected;
 
-        public ChooseSetDialog(SQLManager sql)
+        public ChooseSetDialog(ISQL_Connection sql)
         {
             _sql = sql;
         }
@@ -21,7 +23,7 @@ namespace MTG_CLI
             Dialog selectSetDlg = new("Select a Set", cancel) { Width = 45 };
 
             List<string> SetList = new();
-            _sql.Query(SQLManager.InternalQuery.GET_ALL_SETS).Read();
+            _sql.Query(DB_Query.GET_ALL_SETS).OpenToRead();
             while (_sql.ReadNext())
             {
                 string name = _sql.ReadValue<string>("Name", "");

@@ -2,7 +2,42 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build term - debug",
+            "label": "Create Coverage Report",
+            "command": "${userHome}\\.nuget\\packages\\reportgenerator\\5.1.10\\tools\\net6.0\\ReportGenerator.exe",
+            "type": "shell",
+            "args": [
+                "-reports:${workspaceFolder}/term-test/lcov.info",
+                "-targetdir:${workspaceFolder}/term-test/TestResults",
+                "-reporttypes:Html"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "View Coverage Report",
+            "dependsOn": "Create Coverage Report",
+            "command": "Invoke-Item",
+            "type": "shell",
+            "args": [
+                "${workspaceFolder}/term-test/TestResults/index.html"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Build All",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/MTG-Inventory.sln"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build", 
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build term - Debug",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -15,28 +50,15 @@
             "group": "build"
         },
         {
-            "label": "clean term - debug",
+            "label": "Clean All",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "clean",
-                "${workspaceFolder}/term/term.csproj",
+                "${workspaceFolder}/MTG-Inventory.sln"
             ],
             "problemMatcher": "$msCompile",
             "group": "none"
-        },
-        {
-            "label": "publish term - release", /* Needs to include Google Firebase creds somehow */
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/term/term.csproj",
-                "--configuration",
-                "Release"
-            ],
-            "problemMatcher": "$msCompile",
-            "group": "none" 
         }
     ]
 }
