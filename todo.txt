@@ -4,10 +4,16 @@ Guide: https://www.rhyous.com/2022/07/22/developer-training-wheels-for-writing-s
 
 Add unit tests -- I think this is the most useful thing I can do, some of the SOLID principles make this easier/possible
 Unit tests should create an in-memory DB, and then use the ".read CreateTestDB.sql" to populate it so that tests have clean, real data
+
+--- General ---
 Split UI logic from actual behavior?
     Maybe each Dialog needs a Dialog class and a Data/Behavior class
 Restructure files based on Model/View/Controller?
 
+--- Windows App ---
+Create a standalone app using a UI framework like Avalonia UI?
+    Something that can generate an Android app would be cool
+If the data and ui can be uncoupled, this might be easier
 
 --- Term ---
 Add option to ChooseSetDialog to only show sets that are in User_Inv
