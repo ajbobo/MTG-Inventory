@@ -1,12 +1,38 @@
-Possible API design:
+-- Possible API design --
 
 Ideally, all of these would have an access_token parameter, and the DB would support multiple people. But that's a future problem.
 
-GET /collection/{set}?[filter=<filter>]  -- Can support multiple filters
+GET /collection/{set}?[filter=<filter>]  -- Can support multiple filters; Include cards not in collection
 GET /collection/{set}/{card}
 POST /collection/{set}/{card} -- Only allows updating the CTCs
+GET /sets -- Return a list of collectable sets
+GET /sets/{set} -- Return a list of cards from the set 
+GET /sets/{set}/search?q=<cardName> -- Return the card that starts with cardName (as much as possible); The API has to be fast enough to handle this in realtime
+GET /decks
+GET /decks/{deckId}
+POST /decks/{deckId}
 
 <filter> = (color:<colorDef>)|(count:<countDef>)|(rarity:<rarityDef>)
 <colorDef> = <wWuUbBrRgGxX>+
 <countDef> = (<=|>=|=|<|>)\d+
 <rarityDef> = <cCuUrRmMm>+
+
+
+-- Internals --
+3 tables:
+    Sets - Collectable sets - Update from Scryfall if >24 hours old
+    Cards - Cards from multiple sets - Update from Scryfall if a set's data is >24 hours old
+    Collection - User's card collection; All sets
+
+
+-- Architecture --
++----------+     +------------------+     +-----+
+| CosmosDB |<--->| Function App (?) |---->| API |
++----------+     +------------------+     +-----+
+                                             |
+                                             |   +-------------+
+                                             +-->| Desktop App |
+                                             |   +-------------+
+                                             |   +---------+
+                                             +-->| Web App |
+                                                 +---------+
