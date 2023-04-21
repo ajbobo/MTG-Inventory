@@ -9,6 +9,7 @@ namespace MTG_CLI
     class CLI_Window
     {
         readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_File"].ConnectionString;
+        // readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_InMemory"].ConnectionString;
 
         private static void StartTerminalView(ISQL_Connection sql, IScryfall_Connection mtgData, IFirestore_Connection firestore)
         {

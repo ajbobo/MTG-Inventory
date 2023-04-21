@@ -4,7 +4,7 @@ Ideally, all of these would have an access_token parameter, and the DB would sup
 
 GET /collection/{set}?[filter=<filter>]  -- Can support multiple filters; Include cards not in collection
 GET /collection/{set}/{card}
-POST /collection/{set}/{card} -- Only allows updating the CTCs
+POST /collection/{set}/{card}
 GET /sets -- Return a list of collectable sets
 GET /sets/{set} -- Return a list of cards from the set 
 GET /sets/{set}/search?q=<cardName> -- Return the card that starts with cardName (as much as possible); The API has to be fast enough to handle this in realtime

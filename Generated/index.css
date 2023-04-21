@@ -1,0 +1,27 @@
+.collection-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .set-dropdown {
+    margin-bottom: 20px;
+  }
+  
+  .card-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    /* text: ??? ChatGPT didn't give me the rest */
+  }
+  

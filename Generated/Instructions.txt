@@ -1,0 +1,18 @@
+To create the tables in Cosmos DB, you can follow these general steps:
+
+1. Create a new Cosmos DB account in the Azure portal.
+2. In the Azure portal, navigate to the Cosmos DB account and create a new database.
+3. Create the necessary containers for each table in the new database, specifying the partition key and indexing policies as needed.
+4. Optionally, you can add sample data to each container to test your API endpoints.
+
+Here's an example of how you might create the Sets table using the Azure portal:
+
+1. Navigate to your Cosmos DB account in the Azure portal.
+2. Select "Data Explorer" from the left-hand menu.
+3. Click the "New Container" button at the top of the window.
+4. Enter "Sets" as the container ID, and choose "Partition key" as the "Storage capacity" option.
+5. Choose "SetCode" as the partition key, and enter "/SetCode" as the "Partition key path".
+6. Under "Throughput", choose "Manual" and set the throughput to a value that meets your needs.
+7. Click "OK" to create the container.
+
+Repeat this process for each of the other tables you need to create. Once you've created the tables, you can use the CosmosClient class to interact with them in your API endpoints.
