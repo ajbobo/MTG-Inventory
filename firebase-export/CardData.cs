@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 namespace MTG_Export
 {
     [FirestoreData(ConverterType = typeof(CardDataConverter))]
-    [JsonObject(MemberSerialization.OptIn), JsonConverter(typeof(CardDataJsonConverter))]
+    [JsonObject, JsonConverter(typeof(CardDataJsonConverter))]
     public class CardData
     {
         private Dictionary<string, object> _data { set; get; } = new();

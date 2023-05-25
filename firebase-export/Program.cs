@@ -1,6 +1,5 @@
 ﻿using Google.Cloud.Firestore;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace MTG_Export
 {
