@@ -8,3 +8,4 @@
 **/TestCoverage
 **/lcov*.info
 term-test/coverage.json
+firebase-export/output.json

@@ -50,6 +50,19 @@
             "group": "build"
         },
         {
+            "label": "Build firebase-export - Debug",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/firebase-export/firebase-export.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        },
+        {
             "label": "Clean All",
             "command": "dotnet",
             "type": "process",

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "term", "term\term.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "term-test", "term-test\term-test.csproj", "{9F738E72-D86F-447E-BF2F-0363FD1CCD77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "firebase-export", "firebase-export\firebase-export.csproj", "{C2F8D332-7E33-4225-9131-61439B19ACE6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{9F738E72-D86F-447E-BF2F-0363FD1CCD77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F738E72-D86F-447E-BF2F-0363FD1CCD77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F738E72-D86F-447E-BF2F-0363FD1CCD77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2F8D332-7E33-4225-9131-61439B19ACE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2F8D332-7E33-4225-9131-61439B19ACE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2F8D332-7E33-4225-9131-61439B19ACE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2F8D332-7E33-4225-9131-61439B19ACE6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

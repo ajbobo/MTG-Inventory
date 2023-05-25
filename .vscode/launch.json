@@ -16,6 +16,20 @@
             }
         },
         {
+            "name": "Firebase Export",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build firebase-export - Debug",
+            "program": "${workspaceFolder}/firebase-export/bin/Debug/net7.0/firebase-export.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/firebase-export",
+            "stopAtEntry": false,
+            "console": "integratedTerminal",
+            "env": {
+                "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Dev\\Misc\\MTG-Inventory\\mtg-inventory-main-service-account.json"
+            }
+        },
+        {
             "command": "npm start",
             "name": "Run WebUI server",
             "request": "launch",
