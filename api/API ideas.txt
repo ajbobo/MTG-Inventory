@@ -1,13 +1,21 @@
+-- New Notes --
+The Sets table only needs to remember when the Cards for each Set were updated
+When GET /Sets is called, it can just call Scryfall
+    Maybe it keeps a cache of Set information from Scryfall for 24 hours?
+PUT and POST endpoints need to be able to support multiple objects at once, so that they can be sent to Cosmos in a single request
+
+
 -- Possible API design --
 
 Ideally, all of these would have an access_token parameter, and the DB would support multiple people. But that's a future problem.
 
 GET /collection/{set}?[filter=<filter>]  -- Can support multiple filters; Include cards not in collection
 GET /collection/{set}/{card}
-POST /collection/{set}/{card}
+POST /collection/{set} -- Body is an array of cards to update
 GET /sets -- Return a list of collectable sets
 GET /sets/{set} -- Return a list of cards from the set 
 GET /sets/{set}/search?q=<cardName> -- Return the card that starts with cardName (as much as possible); The API has to be fast enough to handle this in realtime
+    The list of cards should probably be cached internally, this would make the lookup much faster
 GET /decks
 GET /decks/{deckId}
 POST /decks/{deckId}
