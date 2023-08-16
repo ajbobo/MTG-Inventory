@@ -30,6 +30,24 @@
             }
         },
         {
+            "name": "Start API Server",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build API - Debug",
+            "program": "${workspaceFolder}/api/bin/Debug/net7.0/api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/api",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "%s/swagger"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
+        {
             "command": "npm start",
             "name": "Run WebUI server",
             "request": "launch",

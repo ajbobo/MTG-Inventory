@@ -1,0 +1,2 @@
+To add a Controller class from a Model:
+PS> dotnet aspnet-codegenerator controller -name CollectionController -async -api -m Collection -dc MtgInvContext -outDir Controllers
