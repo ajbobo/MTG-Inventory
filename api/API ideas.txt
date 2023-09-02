@@ -1,0 +1,55 @@
+-- New Notes --
+The Sets table only needs to remember when the Cards for each Set were updated
+When GET /Sets is called, it can just call Scryfall
+    Maybe it keeps a cache of Set information from Scryfall for 24 hours?
+PUT and POST endpoints need to be able to support multiple objects at once, so that they can be sent to Cosmos in a single request
+
+
+-- Possible API design --
+
+Ideally, all of these would have an access_token parameter, and the DB would support multiple people. But that's a future problem.
+
+GET /sets
+GET /cards/{set} - Return all cards from a given set - Probably don't need this
+GET /collection/{set}?[f=<filter>] - Load the full set, load CTCs for the set, return all cards - Can be filtered
+POST /collection/{set}/card/{card} - Update the CTCs for the card
+    Body: New CTCs
+GET /decks
+GET /decks/{deckId}
+POST /decks/{deckId}
+
+<filter> = (color:<colorDef>)|(count:<countDef>)|(rarity:<rarityDef>)
+<colorDef> = <wWuUbBrRgGxX>+
+<countDef> = (<=|>=|=|<|>)\d+
+<rarityDef> = <cCuUrRmMm>+
+
+-- App Architecture --
+TimedCache<T>() - Is there a prebuilt class that does this?
+    T GetData - Check the LastUpdate & TimeOut. Refresh the data if needed. Return the data
+    Duration TimeOut
+    DateTime LastUpdate
+    RefreshFunc - Function to refresh the data
+
+Required caches
+    Sets - Collectable sets
+    Cards - Cards from all sets that have been loaded since the app started (multiple sets)
+    CTCs - Cards in the collection from multiple sets (all that have been loaded since the app started)
+
+Internal DB:
+Needs to be queryable
+    Linq - Checks at compile time - Find a good object, DataTable?
+    List<Card>, List<CTC> - Easiest to implement?; Can I use stream-like filtering?
+
+
+
+-- Overall Architecture --
++----------+     +------------------+     +-----+
+| CosmosDB |<--->| Function App (?) |---->| API |
++----------+     +------------------+     +-----+
+                                             |
+                                             |   +-------------+
+                                             +-->| Desktop App |
+                                             |   +-------------+
+                                             |   +---------+
+                                             +-->| Web App |
+                                                 +---------+
