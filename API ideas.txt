@@ -2,12 +2,11 @@
 
 Ideally, all of these would have an access_token parameter, and the DB would support multiple people. But that's a future problem.
 
-GET /collection/{set}?[filter=<filter>]  -- Can support multiple filters; Include cards not in collection
-GET /collection/{set}/{card}
-POST /collection/{set}/{card}
-GET /sets -- Return a list of collectable sets
-GET /sets/{set} -- Return a list of cards from the set 
-GET /sets/{set}/search?q=<cardName> -- Return the card that starts with cardName (as much as possible); The API has to be fast enough to handle this in realtime
+GET /sets
+GET /cards/{set} - Return all cards from a given set - Probably don't need this
+GET /collection/{set}?[f=<filter>] - Load the full set, load CTCs for the set, return all cards - Can be filtered
+POST /collection/{set}/card/{card} - Update the CTCs for the card
+    Body: New CTCs
 GET /decks
 GET /decks/{deckId}
 POST /decks/{deckId}
@@ -17,15 +16,26 @@ POST /decks/{deckId}
 <countDef> = (<=|>=|=|<|>)\d+
 <rarityDef> = <cCuUrRmMm>+
 
+-- App Architecture --
+TimedCache<T>() - Is there a prebuilt class that does this?
+    T GetData - Check the LastUpdate & TimeOut. Refresh the data if needed. Return the data
+    Duration TimeOut
+    DateTime LastUpdate
+    RefreshFunc - Function to refresh the data
 
--- Internals --
-3 tables:
-    Sets - Collectable sets - Update from Scryfall if >24 hours old
-    Cards - Cards from multiple sets - Update from Scryfall if a set's data is >24 hours old
-    Collection - User's card collection; All sets
+Required caches
+    Sets - Collectable sets
+    Cards - Cards from all sets that have been loaded since the app started (multiple sets)
+    CTCs - Cards in the collection from multiple sets (all that have been loaded since the app started)
+
+Internal DB:
+Needs to be queryable
+    Linq - Checks at compile time - Find a good object, DataTable?
+    List<Card>, List<CTC> - Easiest to implement?; Can I use stream-like filtering?
 
 
--- Architecture --
+
+-- Overall Architecture --
 +----------+     +------------------+     +-----+
 | CosmosDB |<--->| Function App (?) |---->| API |
 +----------+     +------------------+     +-----+
