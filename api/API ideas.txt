@@ -37,7 +37,7 @@ Required caches
 
 Internal DB:
 Needs to be queryable
-    Linq - Checks at compile time - Find a good object, DataTable?
+    IEnumerable<Card> - Can be queried with Linq (kind of like Java streams)
     List<Card>, List<CTC> - Easiest to implement?; Can I use stream-like filtering?
 
 
