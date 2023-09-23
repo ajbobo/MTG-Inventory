@@ -2,12 +2,12 @@ using System.Runtime.Caching;
 
 namespace mtg_api;
 
-public class TimedCache<T>
+public class TimedCache<T> : ITimedCache<T>
 {
-    public delegate void RefreshFunction();
+    public delegate T RefreshFunction(string key);
 
     private MemoryCache cache;
-    public int CacheTime { get; set; }
+    public int CacheTime { get; set; } = 10;
 
     public event RefreshFunction? OnRefresh;
 
@@ -15,17 +15,16 @@ public class TimedCache<T>
     {
         get
         {
-            return new CacheItemPolicy { AbsoluteExpiration = DateTime.Now.AddMinutes(CacheTime) };
+            return new CacheItemPolicy { AbsoluteExpiration = DateTime.Now.AddSeconds(CacheTime) };
         }
     }
 
-    public TimedCache(string name, int cacheTime)
+    public TimedCache()
     {
-        cache = new MemoryCache(name);
-        CacheTime = cacheTime;
+        cache = MemoryCache.Default;
     }
 
-    public Boolean Contains(string key)
+    public bool Contains(string key)
     {
         return cache.Contains(key);
     }
@@ -33,7 +32,11 @@ public class TimedCache<T>
     public T Get(string key)
     {
         if (!cache.Contains(key) && OnRefresh != null)
-            OnRefresh();
+        {
+            T obj = OnRefresh(key);
+            if (obj != null)
+                cache.Add(key, obj, Policy);
+        }
 
         return (T)cache.Get(key);
     }

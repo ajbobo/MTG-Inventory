@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace mtg_api;
 
-public class MTG_Set
+public class MTG_Set : MTG_Obj
 {
     [Key, Required]
     public string SetCode { get; set; } = "";
@@ -11,6 +11,6 @@ public class MTG_Set
     [Required]
     public string SetName { get; set; } = "";
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid? Uuid { get; set; }
+    // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    // public Guid? Uuid { get; set; }
 }

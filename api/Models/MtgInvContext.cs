@@ -14,10 +14,10 @@ public class MtgInvContext : DbContext
     {
         builder.HasDefaultContainer("Misc");
 
-        builder.Entity<MTG_Set>()
-            .ToContainer("Sets")
-            .HasPartitionKey("Uuid")
-            .HasNoDiscriminator();
+        // builder.Entity<MTG_Set>()
+        //     .ToContainer("Sets")
+        //     .HasPartitionKey("Uuid")
+        //     .HasNoDiscriminator();
 
         builder.Entity<MTG_Card>()
             .ToContainer("Cards")
@@ -32,5 +32,5 @@ public class MtgInvContext : DbContext
 
     public DbSet<MTG_Card> Cards { get; set; } = default!;
     public DbSet<CollectionEntry> Collection { get; set; } = default!;
-    public DbSet<MTG_Set> Sets { get; set; } = default!;
+    // public DbSet<MTG_Set> Sets { get; set; } = default!;
 }
