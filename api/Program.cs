@@ -10,7 +10,6 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-
         builder.Services.AddControllers();
         builder.Services.AddDbContext<MtgInvContext>(opt => opt.UseCosmos(
             "AccountEndpoint=https://mtg-inventory.documents.azure.com:443/;AccountKey=fmo4nUmFhIUotZFeq6v3TZGQhGg3VsZRGMmQqreeB6di4ICxVJovNeqCdkkQOLivFmO6YfuwTPArACDbXjrVjA==;",
@@ -30,9 +29,7 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
         app.UseAuthorization();
-
         app.MapControllers();
 
         app.Run();

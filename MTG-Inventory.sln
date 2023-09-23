@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "firebase-export", "firebase
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api", "api\api.csproj", "{0E760AE2-2909-4FF6-81BB-FF6AD5195883}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api-test", "api-test\api-test.csproj", "{7982AB65-FF34-4A63-80EB-A9BC1BD92AD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{0E760AE2-2909-4FF6-81BB-FF6AD5195883}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E760AE2-2909-4FF6-81BB-FF6AD5195883}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E760AE2-2909-4FF6-81BB-FF6AD5195883}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7982AB65-FF34-4A63-80EB-A9BC1BD92AD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7982AB65-FF34-4A63-80EB-A9BC1BD92AD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7982AB65-FF34-4A63-80EB-A9BC1BD92AD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7982AB65-FF34-4A63-80EB-A9BC1BD92AD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
