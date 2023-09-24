@@ -55,9 +55,10 @@ public class Scryfall_Connection : IScryfall_Connection
         return setList;
     }
 
-    async public Task<bool> GetCardsInSet(string targetSetCode)
+    async public Task<List<MTG_Card>> GetCardsInSet(string targetSetCode)
     {
         int page = 1;
+        List<MTG_Card> cardList = new List<MTG_Card>();
         bool done = false;
         while (!done)
         {
@@ -69,31 +70,32 @@ public class Scryfall_Connection : IScryfall_Connection
                 JEnumerable<JToken> data = resp["data"]!.Children();
                 foreach (JToken curCard in data)
                 {
+                    var card = new MTG_Card();
                     JToken prices = curCard["prices"] ?? new JObject();
 
-                    // _sql.Query(DB_Query.INSERT_CARD)
-                    //     .WithParam("@SetCode", curCard["set"].AsString())
-                    //     .WithParam("@CollectorNumber", curCard["collector_number"].AsString()) // Scryfall uses "collector_number", but I don't want the underscore anywhere else
-                    //     .WithParam("@Name", curCard["name"].AsString())
-                    //     .WithParam("@Rarity", curCard["rarity"].AsString())
-                    //     .WithParam("@ColorIdentity", curCard["color_identity"].CompressArray())
-                    //     .WithParam("@TypeLine", curCard["type_line"].AsString())
-                    //     .WithParam("@Price", prices["usd"].AsString())
-                    //     .WithParam("@PriceFoil", (prices["usd_foil"].HasValue() ? prices["usd_foil"].AsString() : prices["usd_etched"].AsString()));
+                    card.SetCode = curCard["set"].AsString();
+
+                    card.CollectorNumber = curCard["collector_number"].AsString(); // Scryfall uses "collector_number", but I don't want the underscore anywhere else
+                    card.Name = curCard["name"].AsString();
+                    card.Rarity = curCard["rarity"].AsString();
+                    card.ColorIdentity = curCard["color_identity"].CompressArray();
+                    card.TypeLine = curCard["type_line"].AsString();
+                    // TODO: Figure out how to convert this to a Decimal
+                    // card.Price = prices["usd"].AsString()) 
+                    // card.PriceFoil = (prices["usd_foil"].HasValue() ? prices["usd_foil"].AsString() : prices["usd_etched"].AsString()));
 
                     if (curCard["oracle_text"] != null)
                     {
-                        // _sql.WithParam("@FrontText", curCard["oracle_text"].AsString());
-                        // _sql.WithParam("@ManaCost", curCard["mana_cost"].AsString());
+                        card.FrontText = curCard["oracle_text"].AsString();
+                        card.CastingCost = curCard["mana_cost"].AsString();
                     }
                     else if (curCard["card_faces"] != null)
                     {
-                        // _sql.WithParam("@FrontText", curCard["card_faces"]![0]!["oracle_text"].AsString());
-                        // _sql.WithParam("@ManaCost", curCard["card_faces"]![0]!["mana_cost"].AsString());
+                        card.FrontText = curCard["card_faces"]![0]!["oracle_text"].AsString();
+                        card.CastingCost = curCard["card_faces"]![0]!["mana_cost"].AsString();
                     }
 
-
-                    // _sql.Execute();
+                    cardList.Add(card);
                 }
 
                 if (resp["has_more"]?.Value<bool>() ?? false)
@@ -103,11 +105,11 @@ public class Scryfall_Connection : IScryfall_Connection
             }
             else
             {
-                // Do something smart
-                return false;
+                // TODO: Do something smart
+                return cardList;
             }
         }
 
-        return true;
+        return cardList;
     }
 }

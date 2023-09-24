@@ -14,16 +14,6 @@ public class MtgInvContext : DbContext
     {
         builder.HasDefaultContainer("Misc");
 
-        // builder.Entity<MTG_Set>()
-        //     .ToContainer("Sets")
-        //     .HasPartitionKey("Uuid")
-        //     .HasNoDiscriminator();
-
-        builder.Entity<MTG_Card>()
-            .ToContainer("Cards")
-            .HasPartitionKey("Uuid")
-            .HasNoDiscriminator();
-
         builder.Entity<CollectionEntry>()
             .ToContainer("Collection")
             .HasPartitionKey("Uuid")
