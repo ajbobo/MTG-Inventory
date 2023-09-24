@@ -19,9 +19,9 @@ public class CollectionController : ControllerBase
         _cache = cache;
     }
 
-    // GET: api/Collection/{set}
+    // GET: api/Collection/{set}?[f=<filter>]
     [HttpGet]
-    public async Task<ActionResult<List<MTG_Card>>> GetCollection(string set)
+    public async Task<ActionResult<List<MTG_Card>>> GetCollection(string set, [FromQuery(Name = "f")] string filter = "")
     {
         string cacheName = COLLECTION_CACHE_NAME + ":" + set;
 
