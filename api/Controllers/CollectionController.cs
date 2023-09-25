@@ -1,5 +1,6 @@
 using System.Runtime.Caching;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace mtg_api;
 
@@ -30,7 +31,7 @@ public class CollectionController : ControllerBase
         {
             Console.WriteLine("Collection {0} not in cache - Downloading", cacheName);
             List<MTG_Card> cards = await _scryfall_Connection.GetCardsInSet(set);
-            _cache.Add(cacheName, cards, new CacheItemPolicy()  { AbsoluteExpiration = DateTime.Now.AddMinutes(1) });
+            _cache.Add(cacheName, cards, new CacheItemPolicy() { AbsoluteExpiration = DateTime.Now.AddMinutes(1) });
         }
 
         return (List<MTG_Card>)_cache.Get(cacheName); // For now
@@ -48,51 +49,61 @@ public class CollectionController : ControllerBase
         // return await _dbContext.Collection.ToListAsync();
     }
 
-    // // PUT: api/Collection/5
-    // // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    // [HttpPut("{id}")]
-    // public async Task<IActionResult> PutCollectionEntry(Guid? id, CollectionEntry collectionEntry)
-    // {
-    //     if (id != collectionEntry.Uuid)
-    //     {
-    //         return BadRequest();
-    //     }
+    // PUT: /collection/{set}/card/{card}
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPut("{set}/card/{card}")]
+    public async Task<IActionResult> PutCollectionEntry(string set, string card, CollectionEntry collectionEntry)
+    {
+        collectionEntry.SetCode = set;
+        collectionEntry.CollectorNumber = card;
+        collectionEntry.Key = set + ":" + card;
+        // TODO: Get the name from the cache instead of relying on the user entering it
+        int total = 0;
+        foreach (CardTypeCount ctc in collectionEntry.CTCs)
+        {
+            total += ctc.Count;
+        }
+        collectionEntry.TotalCount = total;
 
-    //     _dbContext.Entry(collectionEntry).State = EntityState.Modified;
+        CollectionEntry? curEntry = GetCollectionEntry(collectionEntry.Key);
+        if (curEntry != null)
+        {
+            curEntry.SetCode = collectionEntry.SetCode;
+            curEntry.CollectorNumber = collectionEntry.CollectorNumber;
+            curEntry.Name = collectionEntry.Name;
+            curEntry.Key = collectionEntry.Key;
+            curEntry.CTCs = collectionEntry.CTCs;
+            curEntry.TotalCount = collectionEntry.TotalCount;
+        }
 
-    //     try
-    //     {
-    //         await _dbContext.SaveChangesAsync();
-    //     }
-    //     catch (DbUpdateConcurrencyException)
-    //     {
-    //         if (!CollectionEntryExists(id))
-    //         {
-    //             return NotFound();
-    //         }
-    //         else
-    //         {
-    //             throw;
-    //         }
-    //     }
+        if (curEntry == null)
+        {
+            _dbContext.Collection.Add(collectionEntry);
+        }
+        else
+        {
+            _dbContext.Entry(curEntry).State = EntityState.Modified;
+        }
 
-    //     return NoContent();
-    // }
+        await _dbContext.SaveChangesAsync();
 
-    // // POST: api/Collection
-    // // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    // [HttpPost]
-    // public async Task<ActionResult<CollectionEntry>> PostCollectionEntry(CollectionEntry collectionEntry)
-    // {
-    //     if (_dbContext.Collection == null)
-    //     {
-    //         return Problem("Entity set 'MtgInvContext.Collection'  is null.");
-    //     }
-    //     _dbContext.Collection.Add(collectionEntry);
-    //     await _dbContext.SaveChangesAsync();
 
-    //     return CreatedAtAction("GetCollectionEntry", new { id = collectionEntry.Uuid }, collectionEntry);
-    // }
+        return NoContent();
+    }
+
+    // POST: /collection/{set}/card/{card}
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPost("{set}/card/{card}")]
+    public async Task<IActionResult> PostCollectionEntry(string set, string card, CollectionEntry collectionEntry)
+    {
+        return await PutCollectionEntry(set, card, collectionEntry);
+    }
+
+    private CollectionEntry? GetCollectionEntry(string? key)
+    {
+        return _dbContext.Collection?.ToList().Find(e => e.Key.Equals(key));
+    }
+
 
     // // DELETE: api/Collection/5
     // [HttpDelete("{id}")]
@@ -112,10 +123,5 @@ public class CollectionController : ControllerBase
     //     await _dbContext.SaveChangesAsync();
 
     //     return NoContent();
-    // }
-
-    // private bool CollectionEntryExists(Guid? id)
-    // {
-    //     return (_dbContext.Collection?.Any(e => e.Uuid == id)).GetValueOrDefault();
     // }
 }

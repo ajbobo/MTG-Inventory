@@ -7,7 +7,17 @@ namespace mtg_api;
 
 public class CollectionEntry
 {
-    public MTG_Card Card { get; set; } = new MTG_Card();
+    public string SetCode { get; set; } = "";
+
+    public string CollectorNumber { get; set; } = "";
+
+    [Key]
+    public string Key { get; set; } = "";
+
+    public string Name { get; set; } = "";
+
+    [Required]
     public List<CardTypeCount> CTCs { get; set; } = new List<CardTypeCount>();
-    public int Count { get; set; } = 0;
+
+    public int TotalCount { get; set; } = 0;
 }
