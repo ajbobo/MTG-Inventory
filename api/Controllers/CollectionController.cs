@@ -49,7 +49,7 @@ public class CollectionController : ControllerBase
         // return await _dbContext.Collection.ToListAsync();
     }
 
-    // PUT: /collection/{set}/card/{card}
+    // PUT: api/collection/{set}/card/{card}
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{set}/card/{card}")]
     public async Task<IActionResult> PutCollectionEntry(string set, string card, CollectionEntry collectionEntry)
@@ -91,7 +91,7 @@ public class CollectionController : ControllerBase
         return NoContent();
     }
 
-    // POST: /collection/{set}/card/{card}
+    // POST: api/collection/{set}/card/{card}
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost("{set}/card/{card}")]
     public async Task<IActionResult> PostCollectionEntry(string set, string card, CollectionEntry collectionEntry)
@@ -105,23 +105,22 @@ public class CollectionController : ControllerBase
     }
 
 
-    // // DELETE: api/Collection/5
-    // [HttpDelete("{id}")]
-    // public async Task<IActionResult> DeleteCollectionEntry(Guid? id)
-    // {
-    //     if (_dbContext.Collection == null)
-    //     {
-    //         return NotFound();
-    //     }
-    //     var collectionEntry = await _dbContext.Collection.FindAsync(id);
-    //     if (collectionEntry == null)
-    //     {
-    //         return NotFound();
-    //     }
+    // DELETE: api/Collection/{set}/card/{card}
+    [HttpDelete("{set}/card/{card}")]
+    public async Task<IActionResult> DeleteCollectionEntry(string set, string card)
+    {
+        string key = set + ":" + card;
 
-    //     _dbContext.Collection.Remove(collectionEntry);
-    //     await _dbContext.SaveChangesAsync();
+        if (_dbContext.Collection == null)
+            return NotFound();
 
-    //     return NoContent();
-    // }
+        var collectionEntry = await _dbContext.Collection.FindAsync(key);
+        if (collectionEntry == null)
+            return NotFound();
+
+        _dbContext.Collection.Remove(collectionEntry);
+        await _dbContext.SaveChangesAsync();
+
+        return NoContent();
+    }
 }
