@@ -1,0 +1,45 @@
+-- New Notes --
+The Sets table only needs to remember when the Cards for each Set were updated
+When GET /Sets is called, it can just call Scryfall
+    Maybe it keeps a cache of Set information from Scryfall for 24 hours?
+PUT and POST endpoints need to be able to support multiple objects at once, so that they can be sent to Cosmos in a single request
+
+
+-- Possible API design --
+
+Ideally, all of these would have an access_token parameter, and the DB would support multiple people. But that's a future problem.
+
+GET /sets
+GET /collection/{set}?[color=<>][count=<>][rarity=<>][cost=<>] - Load the full set, load CTCs for the set, return all cards, filtered
+PUT|POST /collection/{set}/card/{card} - Update the CTCs for the card
+    Body: New CTCs
+GET /decks
+GET /decks/{deckId}
+PUT|POST /decks/{deckId}
+
+<colorDef> = <wWuUbBrRgGxX>+
+<countDef> = (<=|>=|=|<|>)\d+
+<rarityDef> = <cCuUrRmMm>+
+
+-- App Architecture --
+Required caches
+    Sets - Collectable sets
+    Collection - All the cards in a set (one cache per set) combined with their CTCs
+
+Internal DB:
+Needs to be queryable
+    List<Card>, List<CTC> - Should be able to use Linq queries to filter
+
+
+
+-- Overall Architecture --
++----------+     +------------------+     +-----+
+| CosmosDB |<--->| Function App (?) |---->| API |
++----------+     +------------------+     +-----+
+                                             |
+                                             |   +-------------+
+                                             +-->| Desktop App |
+                                             |   +-------------+
+                                             |   +---------+
+                                             +-->| Web App |
+                                                 +---------+
