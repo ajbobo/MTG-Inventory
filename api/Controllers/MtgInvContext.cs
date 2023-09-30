@@ -16,11 +16,9 @@ public class MtgInvContext : DbContext
 
         builder.Entity<CollectionEntry>()
             .ToContainer("Collection")
-            .HasPartitionKey("Key") // TODO: Can this be a composite key made of set & card?
+            .HasPartitionKey("Key")
             .HasNoDiscriminator();
     }
 
-    // public DbSet<MTG_Card> Cards { get; set; } = default!;
     public DbSet<CollectionEntry> Collection { get; set; } = default!;
-    // public DbSet<MTG_Set> Sets { get; set; } = default!;
 }

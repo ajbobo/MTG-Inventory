@@ -75,51 +75,51 @@ public class CollectionController : ControllerBase
     // PUT: api/collection/{set}/card/{card}
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{set}/card/{card}")]
-    public async Task<IActionResult> PutCollectionEntry(string set, string card, CollectionEntry collectionEntry)
+    public async Task<CollectionEntry> PutCollectionEntry(string set, string card, CTCList theList)
     {
-        collectionEntry.SetCode = set;
-        collectionEntry.CollectorNumber = card;
-        collectionEntry.Key = set + ":" + card;
-        // TODO: Get the name from the cache instead of relying on the user entering it
-        int total = 0;
-        foreach (CardTypeCount ctc in collectionEntry.CTCs)
-        {
-            total += ctc.Count;
-        }
-        collectionEntry.TotalCount = total;
+        List<MTG_Card> setList = await GetCardsInSet(set, COLLECTION_CACHE_NAME);
+        MTG_Card? theCard = setList.Find(e => e.CollectorNumber.Equals(card) && e.SetCode.Equals(set));
+        string name = theCard?.Name ?? "";
+        int total = theList.CTCs.Sum(e => e.Count);
 
-        CollectionEntry? curEntry = GetCollectionEntry(collectionEntry.Key);
+        string key = $"{set}:{card}";
+        CollectionEntry? curEntry = GetCollectionEntry(key);
         if (curEntry != null)
         {
-            curEntry.SetCode = collectionEntry.SetCode;
-            curEntry.CollectorNumber = collectionEntry.CollectorNumber;
-            curEntry.Name = collectionEntry.Name;
-            curEntry.Key = collectionEntry.Key;
-            curEntry.CTCs = collectionEntry.CTCs;
-            curEntry.TotalCount = collectionEntry.TotalCount;
-        }
+            curEntry.SetCode = set;
+            curEntry.CollectorNumber = card;
+            curEntry.Name = name;
+            curEntry.Key = key;
+            curEntry.CTCs = theList.CTCs;
+            curEntry.TotalCount = total;
 
-        if (curEntry == null)
-        {
-            _dbContext.Collection.Add(collectionEntry);
-        }
-        else
-        {
             _dbContext.Entry(curEntry).State = EntityState.Modified;
+        }
+        else 
+        {
+            curEntry = new CollectionEntry(){
+                Name = name,
+                SetCode = set,
+                CollectorNumber = card,
+                Key = key,
+                CTCs = theList.CTCs,
+                TotalCount = total
+            };
+
+            _dbContext.Collection.Add(curEntry!);
         }
 
         await _dbContext.SaveChangesAsync();
 
-
-        return NoContent();
+        return curEntry;
     }
 
     // POST: api/collection/{set}/card/{card}
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost("{set}/card/{card}")]
-    public async Task<IActionResult> PostCollectionEntry(string set, string card, CollectionEntry collectionEntry)
+    public async Task<CollectionEntry> PostCollectionEntry(string set, string card, CTCList theList)
     {
-        return await PutCollectionEntry(set, card, collectionEntry);
+        return await PutCollectionEntry(set, card, theList);
     }
 
     private CollectionEntry? GetCollectionEntry(string? key)

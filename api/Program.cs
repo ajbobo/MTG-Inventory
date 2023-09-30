@@ -15,10 +15,15 @@ public class Program
         builder.Services.AddHttpClient<IScryfall_Connection, Scryfall_Connection>();
 
         builder.Services.AddControllers();
+
+        string endpoint = System.Configuration.ConfigurationManager.AppSettings["DB_Endpoint"] ?? "";
+        string key = System.Configuration.ConfigurationManager.AppSettings["DB_Key"] ?? "";
+        string dbName = System.Configuration.ConfigurationManager.AppSettings["DB_Name"] ?? "";
         builder.Services.AddDbContext<MtgInvContext>(opt => opt.UseCosmos(
-            "AccountEndpoint=https://mtg-inventory.documents.azure.com:443/;AccountKey=fmo4nUmFhIUotZFeq6v3TZGQhGg3VsZRGMmQqreeB6di4ICxVJovNeqCdkkQOLivFmO6YfuwTPArACDbXjrVjA==;",
-            databaseName: "MTG-Inventory"
+            $"AccountEndpoint={endpoint};AccountKey={key};",
+            databaseName: dbName
             ));
+            
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
