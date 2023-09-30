@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using System.Runtime.Caching;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,33 +21,55 @@ public class CollectionController : ControllerBase
         _cache = cache;
     }
 
-    // GET: api/Collection/{set}?[f=<filter>]
-    [HttpGet]
-    public async Task<ActionResult<List<MTG_Card>>> GetCollection(string set, [FromQuery(Name = "f")] string filter = "")
+    // GET: api/Collection/{set}?[filters]
+    [HttpGet("{set}")]
+    public async Task<List<CardResult>> GetCollection(
+        string set,
+        [FromQuery(Name = "color")] string colorFilter = "",
+        [FromQuery(Name = "count")] string countFilter = "",
+        [FromQuery(Name = "rarity")] string rarityFilter = "",
+        [FromQuery(Name = "cost")] string costFilter = "")
     {
         string cacheName = COLLECTION_CACHE_NAME + ":" + set;
 
         // First - Get all the cards in the set
-        if (!_cache.Contains(cacheName))
-        {
-            Console.WriteLine("Collection {0} not in cache - Downloading", cacheName);
-            List<MTG_Card> cards = await _scryfall_Connection.GetCardsInSet(set);
-            _cache.Add(cacheName, cards, new CacheItemPolicy() { AbsoluteExpiration = DateTime.Now.AddMinutes(1) });
-        }
-
-        return (List<MTG_Card>)_cache.Get(cacheName); // For now
+        var cardList = await GetCardsInSet(set, cacheName);
 
         // Second - Get all the CTCs for the cards in the collection
-        // FINIDH ME
+        var ctcList = await GetCTCsForSet(set);
+
+        // Combine cards with CTCs
+        var joinedList =
+            from card in cardList
+            join ctc in ctcList on card.CollectorNumber equals ctc.CollectorNumber into temp
+            from subcard in temp.DefaultIfEmpty() // LINQ version of left join
+            select new CardResult()
+            {
+                Card = card,
+                CTCs = subcard?.CTCs ?? null
+            };
 
         // Third - Filter
         // FINISH ME
 
-        // if (_dbContext.Collection == null)
-        // {
-        //     return NotFound();
-        // }
-        // return await _dbContext.Collection.ToListAsync();
+        return joinedList.ToList();
+    }
+
+    private async Task<List<MTG_Card>> GetCardsInSet(string set, string cacheName)
+    {
+        if (!_cache.Contains(cacheName))
+        {
+            Console.WriteLine("Set {0} not in cache - Downloading", cacheName);
+            List<MTG_Card> cards = await _scryfall_Connection.GetCardsInSet(set);
+            _cache.Add(cacheName, cards, new CacheItemPolicy() { AbsoluteExpiration = DateTime.Now.AddMinutes(60 * 24) });
+        }
+
+        return (List<MTG_Card>)_cache.Get(cacheName);
+    }
+
+    private async Task<List<CollectionEntry>> GetCTCsForSet(string set)
+    {
+        return await _dbContext.Collection.Where(e => e.SetCode.Equals(set)).ToListAsync();
     }
 
     // PUT: api/collection/{set}/card/{card}

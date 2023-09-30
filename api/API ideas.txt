@@ -10,14 +10,13 @@ PUT and POST endpoints need to be able to support multiple objects at once, so t
 Ideally, all of these would have an access_token parameter, and the DB would support multiple people. But that's a future problem.
 
 GET /sets
-GET /collection/{set}?[f=<filter>] - Load the full set, load CTCs for the set, return all cards - Can be filtered
+GET /collection/{set}?[color=<>][count=<>][rarity=<>][cost=<>] - Load the full set, load CTCs for the set, return all cards, filtered
 PUT|POST /collection/{set}/card/{card} - Update the CTCs for the card
     Body: New CTCs
 GET /decks
 GET /decks/{deckId}
 PUT|POST /decks/{deckId}
 
-<filter> = (color:<colorDef>)|(count:<countDef>)|(rarity:<rarityDef>)
 <colorDef> = <wWuUbBrRgGxX>+
 <countDef> = (<=|>=|=|<|>)\d+
 <rarityDef> = <cCuUrRmMm>+

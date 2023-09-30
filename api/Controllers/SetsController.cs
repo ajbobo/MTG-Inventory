@@ -25,7 +25,7 @@ public class SetsController : ControllerBase
         {
             Console.WriteLine("Sets not in cache - Downloading");
             List<MTG_Set> sets = await _scryfall_Connection.GetCollectableSets();
-            _cache.Add(SET_CACHE_NAME, sets, new CacheItemPolicy()  { AbsoluteExpiration = DateTime.Now.AddMinutes(1) });
+            _cache.Add(SET_CACHE_NAME, sets, new CacheItemPolicy()  { AbsoluteExpiration = DateTime.Now.AddMinutes(60 * 24) });
         }
 
         return (List<MTG_Set>)_cache.Get(SET_CACHE_NAME);
