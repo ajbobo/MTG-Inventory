@@ -46,7 +46,8 @@ public class CollectionController : ControllerBase
             select new CardData()
             {
                 Card = card,
-                CTCs = subcard?.CTCs ?? null
+                CTCs = subcard?.CTCs ?? null,
+                TotalCount = subcard?.TotalCount ?? 0
             };
 
         // Third - Filter
