@@ -72,9 +72,9 @@ public class CollectionController : ControllerBase
         return await _dbContext.Collection.Where(e => e.SetCode.Equals(set)).ToListAsync();
     }
 
-    // PUT: api/collection/{set}/card/{card}
+    // PUT: api/collection/{set}/{card}
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPut("{set}/card/{card}")]
+    [HttpPut("{set}/{card}")]
     public async Task<CollectionInput> PutCollectionEntry(string set, string card, CTCList theList)
     {
         List<MTG_Card> setList = await GetCardsInSet(set, CACHE_NAME);
@@ -114,9 +114,9 @@ public class CollectionController : ControllerBase
         return curEntry;
     }
 
-    // POST: api/collection/{set}/card/{card}
+    // POST: api/collection/{set}/{card}
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPost("{set}/card/{card}")]
+    [HttpPost("{set}/{card}")]
     public async Task<CollectionInput> PostCollectionEntry(string set, string card, CTCList theList)
     {
         return await PutCollectionEntry(set, card, theList);
@@ -128,8 +128,8 @@ public class CollectionController : ControllerBase
     }
 
 
-    // DELETE: api/Collection/{set}/card/{card}
-    [HttpDelete("{set}/card/{card}")]
+    // DELETE: api/Collection/{set}/{card}
+    [HttpDelete("{set}/{card}")]
     public async Task<IActionResult> DeleteCollectionEntry(string set, string card)
     {
         string key = set + ":" + card;
