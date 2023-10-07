@@ -10,6 +10,15 @@ namespace ExtensionMethods
            return (token != null ? token.ToString() : "");
         }
 
+        public static bool AsBool(this JToken? token)
+        {
+            if (token == null)
+                return false;
+            bool res;
+            bool.TryParse(token.ToString(), out res);
+            return res;
+        }
+
         public static int AsInt(this JToken? token)
         {
             if (token == null)

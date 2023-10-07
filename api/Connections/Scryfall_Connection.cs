@@ -46,8 +46,9 @@ public class Scryfall_Connection : IScryfall_Connection
             {
                 var set = new MTG_Set
                 {
-                    SetCode = curSet["code"].AsString(),
-                    SetName = curSet["name"].AsString()
+                    Code = curSet["code"].AsString(),
+                    Name = curSet["name"].AsString(),
+                    IconUrl = curSet["icon_svg_uri"].AsString()
                 };
                 setList.Add(set);
             }
@@ -111,5 +112,34 @@ public class Scryfall_Connection : IScryfall_Connection
         }
 
         return cardList;
+    }
+
+    public async Task<List<MTG_Symbol>> GetSymbols()
+    {
+        var symbolList = new List<MTG_Symbol>();
+
+        HttpResponseMessage msg = await _httpClient.GetAsync(System.Configuration.ConfigurationManager.AppSettings["GetSymbolList_Url"]);
+        if (!msg.IsSuccessStatusCode)
+            return symbolList;
+
+        string respStr = await msg.Content.ReadAsStringAsync();
+
+        // I'm parsing this way so that I don't have to worry about large .NET objects that I won't need later
+        JObject resp = JObject.Parse(respStr);
+        JEnumerable<JToken> data = resp["data"]?.Children() ?? new();
+        foreach (JToken curSymbol in data)
+        {
+            bool inCost = curSymbol["appears_in_mana_costs"].AsBool();
+            if (inCost)
+            {
+                var symbol = new MTG_Symbol
+                {
+                    Text = curSymbol["symbol"].AsString(),
+                    URL = curSymbol["svg_uri"].AsString(),
+                };
+                symbolList.Add(symbol);
+            }
+        }
+        return symbolList;
     }
 }

@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace mtg_api;
 
-public class CollectionEntry
+public class CollectionInput
 {
     public string SetCode { get; set; } = "";
 

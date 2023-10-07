@@ -2,6 +2,7 @@ namespace mtg_api;
 
 public class MTG_Set
 {
-    public string SetCode { get; set; } = "";
-    public string SetName { get; set; } = "";
+    public string Code { get; set; } = "";
+    public string Name { get; set; } = "";
+    public string IconUrl { get; set; } = "";
 }

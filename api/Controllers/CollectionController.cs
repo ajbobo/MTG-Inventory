@@ -9,7 +9,7 @@ namespace mtg_api;
 [ApiController]
 public class CollectionController : ControllerBase
 {
-    private readonly string COLLECTION_CACHE_NAME = System.Configuration.ConfigurationManager.AppSettings["CollectionCacheName"] ?? "collection";
+    private readonly string CACHE_NAME = "collection";
     private readonly MtgInvContext _dbContext;
     private readonly IScryfall_Connection _scryfall_Connection;
     private MemoryCache _cache;
@@ -23,14 +23,14 @@ public class CollectionController : ControllerBase
 
     // GET: api/Collection/{set}?[filters]
     [HttpGet("{set}")]
-    public async Task<List<CardResult>> GetCollection(
+    public async Task<List<CardData>> GetCollection(
         string set,
         [FromQuery(Name = "color")] string colorFilter = "",
         [FromQuery(Name = "count")] string countFilter = "",
         [FromQuery(Name = "rarity")] string rarityFilter = "",
         [FromQuery(Name = "cost")] string costFilter = "")
     {
-        string cacheName = COLLECTION_CACHE_NAME + ":" + set;
+        string cacheName = CACHE_NAME + ":" + set;
 
         // First - Get all the cards in the set
         var cardList = await GetCardsInSet(set, cacheName);
@@ -43,7 +43,7 @@ public class CollectionController : ControllerBase
             from card in cardList
             join ctc in ctcList on card.CollectorNumber equals ctc.CollectorNumber into temp
             from subcard in temp.DefaultIfEmpty() // LINQ version of left join
-            select new CardResult()
+            select new CardData()
             {
                 Card = card,
                 CTCs = subcard?.CTCs ?? null
@@ -67,7 +67,7 @@ public class CollectionController : ControllerBase
         return (List<MTG_Card>)_cache.Get(cacheName);
     }
 
-    private async Task<List<CollectionEntry>> GetCTCsForSet(string set)
+    private async Task<List<CollectionInput>> GetCTCsForSet(string set)
     {
         return await _dbContext.Collection.Where(e => e.SetCode.Equals(set)).ToListAsync();
     }
@@ -75,15 +75,15 @@ public class CollectionController : ControllerBase
     // PUT: api/collection/{set}/card/{card}
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{set}/card/{card}")]
-    public async Task<CollectionEntry> PutCollectionEntry(string set, string card, CTCList theList)
+    public async Task<CollectionInput> PutCollectionEntry(string set, string card, CTCList theList)
     {
-        List<MTG_Card> setList = await GetCardsInSet(set, COLLECTION_CACHE_NAME);
+        List<MTG_Card> setList = await GetCardsInSet(set, CACHE_NAME);
         MTG_Card? theCard = setList.Find(e => e.CollectorNumber.Equals(card) && e.SetCode.Equals(set));
         string name = theCard?.Name ?? "";
         int total = theList.CTCs.Sum(e => e.Count);
 
         string key = $"{set}:{card}";
-        CollectionEntry? curEntry = GetCollectionEntry(key);
+        CollectionInput? curEntry = GetCollectionEntry(key);
         if (curEntry != null)
         {
             curEntry.SetCode = set;
@@ -97,7 +97,7 @@ public class CollectionController : ControllerBase
         }
         else 
         {
-            curEntry = new CollectionEntry(){
+            curEntry = new CollectionInput(){
                 Name = name,
                 SetCode = set,
                 CollectorNumber = card,
@@ -117,12 +117,12 @@ public class CollectionController : ControllerBase
     // POST: api/collection/{set}/card/{card}
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost("{set}/card/{card}")]
-    public async Task<CollectionEntry> PostCollectionEntry(string set, string card, CTCList theList)
+    public async Task<CollectionInput> PostCollectionEntry(string set, string card, CTCList theList)
     {
         return await PutCollectionEntry(set, card, theList);
     }
 
-    private CollectionEntry? GetCollectionEntry(string? key)
+    private CollectionInput? GetCollectionEntry(string? key)
     {
         return _dbContext.Collection?.ToList().Find(e => e.Key.Equals(key));
     }

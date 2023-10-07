@@ -14,11 +14,11 @@ public class MtgInvContext : DbContext
     {
         builder.HasDefaultContainer("Misc");
 
-        builder.Entity<CollectionEntry>()
+        builder.Entity<CollectionInput>()
             .ToContainer("Collection")
             .HasPartitionKey("Key")
             .HasNoDiscriminator();
     }
 
-    public DbSet<CollectionEntry> Collection { get; set; } = default!;
+    public DbSet<CollectionInput> Collection { get; set; } = default!;
 }
