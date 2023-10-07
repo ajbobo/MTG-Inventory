@@ -81,10 +81,8 @@ public class Scryfall_Connection : IScryfall_Connection
                     card.Rarity = curCard["rarity"].AsString();
                     card.ColorIdentity = curCard["color_identity"].CompressArray();
                     card.TypeLine = curCard["type_line"].AsString();
-                    // TODO: Figure out how to convert this to a Decimal
-                    // card.Price = prices["usd"].AsString()) 
-                    // card.PriceFoil = (prices["usd_foil"].HasValue() ? prices["usd_foil"].AsString() : prices["usd_etched"].AsString()));
-
+                    card.Price = prices["usd"].AsDecimal();
+                    card.PriceFoil = prices["usd_foil"].HasValue() ? prices["usd_foil"].AsDecimal() : prices["usd_etched"].AsDecimal();
                     if (curCard["oracle_text"] != null)
                     {
                         card.FrontText = curCard["oracle_text"].AsString();

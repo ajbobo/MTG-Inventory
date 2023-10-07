@@ -28,6 +28,15 @@ namespace ExtensionMethods
             return res;
         }
 
+        public static decimal AsDecimal(this JToken? token)
+        {
+            if (token == null)
+                return 0;
+            decimal res;
+            decimal.TryParse(token.ToString(), out res);
+            return res;
+        }
+
         public static bool HasValue(this JToken? token)
         {
             return ((token != null && token.Type != JTokenType.Null) ? true : false);
