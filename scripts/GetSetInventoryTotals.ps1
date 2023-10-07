@@ -7,6 +7,5 @@ $sets = Invoke-WebRequest "https://mtg-inventory.azurewebsites.net/api/Collectio
     | ConvertFrom-Json 
 
 $sets | Where-Object ctcs -NE $null
-    | Select-Object -ExpandProperty Card -Property CTCs
-    | Select-Object -Property CollectorNumber, Name -ExpandProperty CTCs
-    | Select-Object CollectorNumber, Name, Cardtype, Count
+    | Select-Object -ExpandProperty Card -Property TotalCount
+    | Select-Object CollectorNumber, Name, TotalCount
