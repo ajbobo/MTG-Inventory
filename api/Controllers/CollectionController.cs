@@ -1,5 +1,6 @@
 using System.Reflection.Metadata;
 using System.Runtime.Caching;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +29,7 @@ public class CollectionController : ControllerBase
         [FromQuery(Name = "color")] string colorFilter = "",
         [FromQuery(Name = "count")] string countFilter = "",
         [FromQuery(Name = "rarity")] string rarityFilter = "",
-        [FromQuery(Name = "cost")] string costFilter = "")
+        [FromQuery(Name = "price")] string priceFilter = "")
     {
         string cacheName = CACHE_NAME + ":" + set;
 
@@ -51,9 +52,54 @@ public class CollectionController : ControllerBase
             };
 
         // Third - Filter
-        // FINISH ME
+        var rarityList =
+            from card in joinedList
+            where rarityFilter.Length == 0 || rarityFilter.ToUpper().Contains(card.Card?.Rarity.Substring(0, 1).ToUpper() ?? "")
+            select card;
 
-        return joinedList.ToList();
+        string op;
+        decimal num;
+        GetComparison(countFilter, out op, out num);
+        var countList =
+            from card in rarityList
+            where (op.Equals(">=") && card.TotalCount >= num) ||
+                (op.Equals("<=") && card.TotalCount <= num) ||
+                (op.Equals(">") && card.TotalCount > num) ||
+                (op.Equals("<") && card.TotalCount < num) ||
+                (op.Equals("=") && card.TotalCount == num)
+            select card;
+
+        string priceOp;
+        decimal priceNum;
+        GetComparison(priceFilter, out priceOp, out priceNum);
+        var priceList =
+            from card in countList
+            where (priceOp.Equals(">=") && (card.Card!.Price >= priceNum || card.Card!.PriceFoil >= priceNum)) ||
+                (priceOp.Equals("<=") && (card.Card!.Price <= priceNum || card.Card!.PriceFoil <= priceNum)) ||
+                (priceOp.Equals(">") && (card.Card!.Price > priceNum || card.Card!.PriceFoil > priceNum)) ||
+                (priceOp.Equals("<") && (card.Card!.Price < priceNum || card.Card!.PriceFoil < priceNum)) ||
+                (priceOp.Equals("=") && (card.Card!.Price == priceNum || card.Card!.PriceFoil == priceNum))
+            select card;
+
+
+        return priceList.ToList();
+    }
+
+    private void GetComparison(string countFilter, out string op, out decimal num)
+    {
+        op = ">=";
+        num = 0;
+        if (countFilter == null || countFilter.Length == 0)
+            return;
+
+        Regex regex = new Regex(@"(?<op><=|>=|=|<|>)(\s*)(?<num>\d+)");
+        Match match = regex.Match(countFilter); // If there is more than one match, only use the first one
+        if (match.Success)
+        {
+            GroupCollection groups = match.Groups;
+            op = groups["op"].Value;
+            num = decimal.Parse(groups["num"].Value);
+        }
     }
 
     private async Task<List<MTG_Card>> GetCardsInSet(string set, string cacheName)
@@ -96,9 +142,10 @@ public class CollectionController : ControllerBase
 
             _dbContext.Entry(curEntry).State = EntityState.Modified;
         }
-        else 
+        else
         {
-            curEntry = new CollectionInput(){
+            curEntry = new CollectionInput()
+            {
                 Name = name,
                 SetCode = set,
                 CollectorNumber = card,
