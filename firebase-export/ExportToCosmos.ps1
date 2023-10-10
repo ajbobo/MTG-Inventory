@@ -23,7 +23,7 @@ $setList | ForEach-Object {
 
         Write-Host "Sending Card `"$($card.Name)`""
 
-        $url = "https://localhost:7269/api/Collection/$setName/card/$number"
+        $url = "https://localhost:7269/api/Collection/$setName/$number"
         $body = [PSCustomObject]@{
             Name = $card.Name
             CTCs = $CTCs
