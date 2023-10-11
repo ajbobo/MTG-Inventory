@@ -11,21 +11,15 @@ namespace MTG_CLI
         readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_File"].ConnectionString;
         // readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_InMemory"].ConnectionString;
 
-        private static void StartTerminalView(ISQL_Connection sql, IScryfall_Connection mtgData, IFirestore_Connection firestore)
+        private static void StartTerminalView(ISQL_Connection sql, IFirestore_Connection firestore, IAPI_Connection api)
         {
-            var win = new TerminalView(sql);
+            var win = new TerminalView(sql, api);
 
-            win.SelectedSetChanged += async (newSet) =>
+            win.SelectedSetChanged += async (newSet, newName) =>
             {
-                win.SetCurrentSet(newSet);
+                win.SetCurrentSet(newSet, newName);
 
-                Console.WriteLine("Getting cards for set: {0}", newSet);
-                await mtgData.GetCardsInSet(newSet);
-
-                Console.WriteLine("Getting inventory for {0}", newSet);
-                await firestore.ReadData(newSet);
-
-                win.SetCardList();
+                win.SetCardList(newSet);
             };
 
             win.DataChanged += async () =>
@@ -44,34 +38,32 @@ namespace MTG_CLI
                 {
                     services
                         .AddSingleton<ISQL_Connection>(x => ActivatorUtilities.CreateInstance<SQLite_Connection>(x, _sqliteFile))
-                        .AddSingleton<IScryfall_Connection, Scryfall_Connection>()
                         .AddSingleton<IFirestore_Connection, Firestore_Connection>()
+                        .AddSingleton<IAPI_Connection, API_Connection>()
                         .AddSingleton<IFirestoreDB_Wrapper, FirestoreDB_Wrapper>()
                         .AddSingleton<IDB_Inventory, DB_Inventory>();
-                    services.AddHttpClient<IScryfall_Connection, Scryfall_Connection>();
+                    services.AddHttpClient<IAPI_Connection, API_Connection>();
                 });
         }
         
-        async public static Task Main(string[] args)
+        public static void Main(string[] args)
         {
             Console.Title = "Inventory Terminal";
 
             using IHost host = CreateHostBuilder().Build();
             host.Start();
 
-            IScryfall_Connection? mtgData = host.Services.GetService<IScryfall_Connection>();
-            await (mtgData?.GetCollectableSets() ?? Task.FromResult<bool>(false));
-
             ISQL_Connection? sql = host.Services.GetService<ISQL_Connection>();
             IFirestore_Connection? firestore = host.Services.GetService<IFirestore_Connection>();
+            IAPI_Connection? api = host.Services.GetService<IAPI_Connection>();
 
-            if (sql == null || mtgData == null || firestore == null)
+            if (sql == null || firestore == null || api == null)
             {
                 Console.WriteLine("Something didn't initialize correctly");
                 System.Environment.Exit(1);
             }
 
-            StartTerminalView(sql, mtgData, firestore);
+            StartTerminalView(sql, firestore, api);
         }
     }
 }

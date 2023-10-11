@@ -35,17 +35,19 @@ namespace MTG_CLI
         private ChooseSetDialog _chooseSet;
 
         private ISQL_Connection _sql;
+        private IAPI_Connection _api;
 
         private int _collectedCount;
         private FilterSettings _filterSettings;
         private bool _autoFind = true;
 
-        public event Action<string>? SelectedSetChanged;
+        public event Action<string, string>? SelectedSetChanged;
         public event Action? DataChanged;
 
-        public TerminalView(ISQL_Connection sql)
+        public TerminalView(ISQL_Connection sql, IAPI_Connection api)
         {
             _sql = sql;
+            _api = api;
             _filterSettings = new();
 
             Application.Init();
@@ -84,9 +86,9 @@ namespace MTG_CLI
             _findCardDlg = new(sql);
             _findCardDlg.CardSelected += FoundCard;
             _editFilters = new(_filterSettings);
-            _editFilters.OnClose += SetCardList;
-            _chooseSet = new(sql);
-            _chooseSet.SetSelected += (setCode) => { SelectedSetChanged?.Invoke(setCode); };
+            // _editFilters.OnClose += SetCardList;
+            _chooseSet = new(api);
+            _chooseSet.SetSelected += (setCode, setName) => { SelectedSetChanged?.Invoke(setCode, setName); };
         }
 
         private void ToggleAutoAdvance()
@@ -151,10 +153,8 @@ namespace MTG_CLI
             _chooseSet.ChooseSet();
         }
 
-        public void SetCurrentSet(string setCode)
+        public void SetCurrentSet(string setCode, string setName)
         {
-            string setName = _sql.Query(DB_Query.GET_SET_NAME).WithParam("@SetCode", setCode).ExecuteScalar<string>() ?? "<unknown>";
-
             _curSetFrame.Title = setName;
             _curSetFrame.RemoveAll();
             _curSetFrame.Add(new Label("Loading cards...") { X = Pos.Center(), Y = 0 });
@@ -163,12 +163,12 @@ namespace MTG_CLI
                 _top.Add(_curSetFrame);
         }
 
-        public void SetCardList()
+        public async void SetCardList(string setCode)
         {
             _collectedCount = 0;
 
-            // This returns the filtered list of cards
-            _sql.Query(DB_Query.GET_SET_CARDS).WithFilters(_filterSettings).OpenToRead();
+            // This returns the filtered list of cards - FINISH ME
+            List<CardData> cardList = await _api.GetCardsInSet(setCode);
 
             _curSetFrame.RemoveAll();
 
@@ -181,19 +181,19 @@ namespace MTG_CLI
             table.Columns.Add("Cost");
             table.Columns.Add("Price");
 
-            while (_sql.ReadNext())
+            foreach (CardData curCard in cardList)
             {
                 DataRow row = table.NewRow();
-                row["#"] = _sql.ReadValue<string>(_dbNumber, "");
-                string cnt = _sql.ReadValue<string>(_dbCount, "");
+                row["#"] = curCard["collectorNumber"];
+                string cnt = curCard["count"]?.ToString() ?? "0";
                 row["Cnt"] = cnt;
-                row["Rarity"] = _sql.ReadValue<string>(_dbRarity, "").ToUpper()[0];
-                row["Name"] = _sql.ReadValue<string>(_dbName, "");
-                row["Color"] = _sql.ReadValue<string>(_dbColor, "");
-                row["Cost"] = _sql.ReadValue<string>(_dbMana, "");
-                string price = _sql.ReadValue<string>(_dbPrice, "");
-                if (price.Length == 0 || cnt.Contains("*"))
-                    price = _sql.ReadValue<string>(_dbPriceFoil, "");
+                row["Rarity"] = curCard["rarity"].ToString()?[..1].ToUpper() ?? "";
+                row["Name"] = curCard["name"];
+                row["Color"] = curCard["color"];
+                row["Cost"] = curCard["manaCost"];
+                string price = curCard["price"]?.ToString() ?? "0.00";
+                if (price.Length == 0 || cnt.Contains('*'))
+                    price = curCard["priceFoil"]?.ToString() ?? "0.00";
                 row["Price"] = $"{(price.Length > 0 ? '$' : "")}{price}";
 
                 table.Rows.Add(row);
@@ -201,20 +201,24 @@ namespace MTG_CLI
                 if (!cnt.Equals("0"))
                     _collectedCount++;
             }
-            _sql.Close();
 
-            _cardTable = new(table) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
-            _cardTable.FullRowSelect = true;
-
-            _cardTable.MultiSelect = false;
+            _cardTable = new(table)
+            {
+                X = 0,
+                Y = 0,
+                Width = Dim.Fill(),
+                Height = Dim.Fill(),
+                FullRowSelect = true,
+                MultiSelect = false
+            };
             _cardTable.Style.AlwaysShowHeaders = true;
             _cardTable.Style.ExpandLastColumn = false;
-            _cardTable.Style.ColumnStyles.Add(table.Columns["#"], new() { MaxWidth = 5, MinWidth = 5 });
-            _cardTable.Style.ColumnStyles.Add(table.Columns["Cnt"], new() { MaxWidth = 3, MinWidth = 3 });
-            _cardTable.Style.ColumnStyles.Add(table.Columns["Rarity"], new() { MinWidth = 2, MaxWidth = 2 });
-            _cardTable.Style.ColumnStyles.Add(table.Columns["Name"], new() { MinWidth = 15 });
-            _cardTable.Style.ColumnStyles.Add(table.Columns["Color"], new() { MaxWidth = 5, MinWidth = 5 });
-            _cardTable.Style.ColumnStyles.Add(table.Columns["Price"], new() { MaxWidth = 8, MinWidth = 5 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["#"]!, new() { MaxWidth = 5, MinWidth = 5 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["Cnt"]!, new() { MaxWidth = 3, MinWidth = 3 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["Rarity"]!, new() { MinWidth = 2, MaxWidth = 2 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["Name"]!, new() { MinWidth = 15 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["Color"]!, new() { MaxWidth = 5, MinWidth = 5 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["Price"]!, new() { MaxWidth = 8, MinWidth = 5 });
             _cardTable.SelectedCellChanged += (args) => UpdateCardFrame(table.Rows[args.NewRow]["#"].ToString()!);
 
             _curSetFrame.Add(_cardTable);
