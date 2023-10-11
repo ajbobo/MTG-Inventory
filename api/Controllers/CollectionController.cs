@@ -81,8 +81,23 @@ public class CollectionController : ControllerBase
                 (priceOp.Equals("=") && (card.Card!.Price == priceNum || card.Card!.PriceFoil == priceNum))
             select card;
 
+        var colorList = 
+            from card in priceList
+            where colorFilter.Length == 0 || InsideString(card.Card!.ColorIdentity, colorFilter.ToUpper())
+            select card;
 
-        return priceList.ToList();
+        return colorList.ToList();
+    }
+
+    private bool InsideString(string search, string target)
+    {
+        foreach (char curChar in search)
+        {
+            if (target.Contains(curChar))
+                return true;
+        }
+
+        return false;
     }
 
     private void GetComparison(string countFilter, out string op, out decimal num)
