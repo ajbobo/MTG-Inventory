@@ -9,16 +9,16 @@ namespace MTG_CLI
     [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
     class TerminalView
     {
-        readonly private string _dbSetCode = ConfigurationManager.AppSettings["DB_Card_Field_SetCode"]!;
+        // readonly private string _dbSetCode = ConfigurationManager.AppSettings["DB_Card_Field_SetCode"]!;
         readonly private string _dbNumber = ConfigurationManager.AppSettings["DB_Card_Field_Number"]!;
         readonly private string _dbName = ConfigurationManager.AppSettings["DB_Card_Field_Name"]!;
         readonly private string _dbAttrs = ConfigurationManager.AppSettings["DB_Card_Field_Attrs"]!;
         readonly private string _dbCount = ConfigurationManager.AppSettings["DB_Card_Field_Count"]!;
-        readonly private string _dbRarity = ConfigurationManager.AppSettings["DB_Card_Field_Rarity"]!;
-        readonly private string _dbColor = ConfigurationManager.AppSettings["DB_Card_Field_ColorIdentity"]!;
-        readonly private string _dbMana = ConfigurationManager.AppSettings["DB_Card_Field_ManaCost"]!;
-        readonly private string _dbPrice = ConfigurationManager.AppSettings["DB_Card_Field_Price"]!;
-        readonly private string _dbPriceFoil = ConfigurationManager.AppSettings["DB_Card_Field_PriceFoil"]!;
+        // readonly private string _dbRarity = ConfigurationManager.AppSettings["DB_Card_Field_Rarity"]!;
+        // readonly private string _dbColor = ConfigurationManager.AppSettings["DB_Card_Field_ColorIdentity"]!;
+        // readonly private string _dbMana = ConfigurationManager.AppSettings["DB_Card_Field_ManaCost"]!;
+        // readonly private string _dbPrice = ConfigurationManager.AppSettings["DB_Card_Field_Price"]!;
+        // readonly private string _dbPriceFoil = ConfigurationManager.AppSettings["DB_Card_Field_PriceFoil"]!;
         readonly private string _dbFrontText = ConfigurationManager.AppSettings["DB_Card_Field_FrontText"]!;
         readonly private string _dbTypeLine = ConfigurationManager.AppSettings["DB_Card_Field_TypeLine"]!;
 
@@ -37,6 +37,7 @@ namespace MTG_CLI
         private ISQL_Connection _sql;
         private IAPI_Connection _api;
 
+        private string _curSetCode = "";
         private int _collectedCount;
         private FilterSettings _filterSettings;
         private bool _autoFind = true;
@@ -86,7 +87,7 @@ namespace MTG_CLI
             _findCardDlg = new(sql);
             _findCardDlg.CardSelected += FoundCard;
             _editFilters = new(_filterSettings);
-            // _editFilters.OnClose += SetCardList;
+            _editFilters.OnClose += UpdateCardList;
             _chooseSet = new(api);
             _chooseSet.SetSelected += (setCode, setName) => { SelectedSetChanged?.Invoke(setCode, setName); };
         }
@@ -155,6 +156,8 @@ namespace MTG_CLI
 
         public void SetCurrentSet(string setCode, string setName)
         {
+            _curSetCode = setCode;
+
             _curSetFrame.Title = setName;
             _curSetFrame.RemoveAll();
             _curSetFrame.Add(new Label("Loading cards...") { X = Pos.Center(), Y = 0 });
@@ -163,12 +166,17 @@ namespace MTG_CLI
                 _top.Add(_curSetFrame);
         }
 
+        private void UpdateCardList()
+        {
+            SetCardList(_curSetCode);
+        }
+
         public async void SetCardList(string setCode)
         {
             _collectedCount = 0;
 
-            // This returns the filtered list of cards - FINISH ME
-            List<CardData> cardList = await _api.GetCardsInSet(setCode);
+            // This returns the filtered list of cards
+            List<CardData> cardList = await _api.GetCardsInSet(setCode, _filterSettings);
 
             _curSetFrame.RemoveAll();
 

@@ -15,10 +15,9 @@ namespace MTG_CLI
         {
             var win = new TerminalView(sql, api);
 
-            win.SelectedSetChanged += async (newSet, newName) =>
+            win.SelectedSetChanged += (newSet, newName) =>
             {
                 win.SetCurrentSet(newSet, newName);
-
                 win.SetCardList(newSet);
             };
 

@@ -1,6 +1,7 @@
 using Newtonsoft.Json.Linq;
 using ExtensionMethods;
 using System.Configuration;
+using System.Text;
 
 namespace MTG_CLI
 {
@@ -38,11 +39,20 @@ namespace MTG_CLI
             return SetList;
         }
 
-        async public Task<List<CardData>> GetCardsInSet(string targetSetCode)
+        async public Task<List<CardData>> GetCardsInSet(string targetSetCode, FilterSettings filtersettings)
         {
             List<CardData> results = new();
 
-            HttpResponseMessage msg = await _httpClient.GetAsync(string.Format(ConfigurationManager.AppSettings["GetCollection_Url"]!, targetSetCode));
+            StringBuilder urlParams = new();
+            string colorFilter = filtersettings.GetColorsAPI();
+            string rarityFilter = filtersettings.GetRaritiesAPI();
+            string countFilter = filtersettings.GetCountAPI();
+            AddParam("color", colorFilter, urlParams);
+            AddParam("rarity", rarityFilter, urlParams);
+            AddParam("count", countFilter, urlParams);
+
+            string url = ConfigurationManager.AppSettings["GetCollection_Url"]! + "?" + urlParams.ToString();
+            HttpResponseMessage msg = await _httpClient.GetAsync(string.Format(url, targetSetCode));
             if (msg.IsSuccessStatusCode)
             {
                 string respStr = await msg.Content.ReadAsStringAsync();
@@ -56,7 +66,7 @@ namespace MTG_CLI
                     cardData.Add("collectorNumber", cardDefinition["collectorNumber"].AsString());
                     cardData.Add("name", cardDefinition["name"].AsString());
                     cardData.Add("rarity", cardDefinition["rarity"].AsString());
-                    cardData.Add("color", cardDefinition["color_identity"].AsString());
+                    cardData.Add("color", cardDefinition["colorIdentity"].AsString());
                     cardData.Add("typeLine", cardDefinition["type_line"].AsString());
                     cardData.Add("price", cardDefinition["price"].AsString());
                     cardData.Add("priceFoil", cardDefinition["priceFoil"].AsString());
@@ -74,6 +84,18 @@ namespace MTG_CLI
             }
 
             return results;
+        }
+
+        private void AddParam(string name, string val, StringBuilder paramList)
+        {
+            if (val == null || val.Length == 0)
+                return;
+                
+            if (paramList.Length > 0)
+                paramList.Append("&");
+            paramList.Append(name);
+            paramList.Append("=");
+            paramList.Append(val);
         }
     }
 }
