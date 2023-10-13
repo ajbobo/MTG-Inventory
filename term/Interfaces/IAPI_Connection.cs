@@ -4,5 +4,6 @@ namespace MTG_CLI
     {
         Task<List<string>> GetCollectableSets();
         Task<List<CardData>> GetCardsInSet(string targetSetCode, FilterSettings filterSettings);
+        Task<List<CardData>> GetCardsInSet(string targetSetCode);
     }
 }

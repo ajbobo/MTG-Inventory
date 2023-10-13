@@ -84,7 +84,7 @@ namespace MTG_CLI
             _curStatsFrame = new() { X = Pos.Right(_curSetFrame), Y = Pos.Top(_curSetFrame), Width = Dim.Fill(), Height = 5 };
             _curCardFrame = new() { X = Pos.Right(_curSetFrame), Y = Pos.Bottom(_curStatsFrame), Width = Dim.Fill(), Height = Dim.Fill() - 1 };
             _cardTable = new() { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
-            _findCardDlg = new(sql);
+            _findCardDlg = new(_curSetCode, api);
             _findCardDlg.CardSelected += FoundCard;
             _editFilters = new(_filterSettings);
             _editFilters.OnClose += UpdateCardList;
@@ -130,7 +130,7 @@ namespace MTG_CLI
 
         private void FindCard()
         {
-            _findCardDlg.FindCard();
+            _findCardDlg.FindCard(_curSetCode);
         }
 
         private void FoundCard(string cardName)

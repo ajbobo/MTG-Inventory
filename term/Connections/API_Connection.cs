@@ -39,6 +39,11 @@ namespace MTG_CLI
             return SetList;
         }
 
+        async public Task<List<CardData>> GetCardsInSet(string targetSetCode)
+        {
+            return await GetCardsInSet(targetSetCode, new FilterSettings());
+        }
+
         async public Task<List<CardData>> GetCardsInSet(string targetSetCode, FilterSettings filtersettings)
         {
             List<CardData> results = new();
@@ -90,7 +95,7 @@ namespace MTG_CLI
         {
             if (val == null || val.Length == 0)
                 return;
-                
+
             if (paramList.Length > 0)
                 paramList.Append("&");
             paramList.Append(name);

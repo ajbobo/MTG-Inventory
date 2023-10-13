@@ -3,6 +3,7 @@ using Terminal.Gui;
 using Terminal.Gui.TextValidateProviders;
 using NStack;
 using System.Diagnostics.CodeAnalysis;
+using Grpc.Core;
 
 namespace MTG_CLI
 {
@@ -11,19 +12,19 @@ namespace MTG_CLI
     {
         public event Action<string>? CardSelected;
 
-        private ISQL_Connection _sql;
+        private IAPI_Connection _api;
         private CardNameValidator _validator;
         private bool _cardSelected = false;
 
-        public FindCardDialog(ISQL_Connection sql)
+        public FindCardDialog(string setCode, IAPI_Connection api)
         {
-            _sql = sql;
-            _validator = new CardNameValidator(_sql);
+            _api = api;
+            _validator = new CardNameValidator(setCode, _api);
         }
 
-        public void FindCard()
+        public void FindCard(string setCode)
         {
-            _validator.RefreshNames(_sql);
+            _validator.RefreshNames(setCode);
             _validator.Text = "";
 
             Button ok = new("OK");
@@ -84,27 +85,31 @@ namespace MTG_CLI
 
     public class CardNameValidator : ITextValidateProvider
     {
+        private IAPI_Connection _api;
         private List<string> _cardNames;
 
         public string? SelectedCard { get; protected set; }
 
-        public CardNameValidator(ISQL_Connection sql)
+        public CardNameValidator(string setCode, IAPI_Connection api)
         {
             _cardNames = new();
+            _api = api;
 
-            RefreshNames(sql);
+            RefreshNames(setCode);
         }
 
-        public void RefreshNames(ISQL_Connection sql)
+        public async void RefreshNames(string setCode)
         {
             _cardNames.Clear();
 
-            sql.Query(DB_Query.GET_CARD_NAMES).OpenToRead();
-            while (sql.ReadNext())
+            List<CardData> cards = await _api.GetCardsInSet(setCode);
+
+            foreach (CardData card in cards)
             {
-                _cardNames.Add(sql.ReadValue<string>("Name", ""));
+                string name = card["name"].ToString() ?? "";
+                if (!_cardNames.Contains(name))
+                    _cardNames.Add(name);
             }
-            sql.Close();
         }
 
         private StringBuilder _typed = new StringBuilder();
