@@ -176,7 +176,7 @@ namespace MTG_CLI
             _collectedCount = 0;
 
             // This returns the filtered list of cards
-            List<XCardData> cardList = await _api.GetCardsInSet(setCode, _filterSettings);
+            List<CardData> cardList = await _api.GetCardsInSet(setCode, _filterSettings);
 
             _curSetFrame.RemoveAll();
 
@@ -189,19 +189,20 @@ namespace MTG_CLI
             table.Columns.Add("Cost");
             table.Columns.Add("Price");
 
-            foreach (XCardData curCard in cardList)
+            foreach (CardData curCard in cardList)
             {
+                MTG_Card cardDetail = curCard.Card!;
                 DataRow row = table.NewRow();
-                row["#"] = curCard["collectorNumber"];
-                string cnt = curCard["count"]?.ToString() ?? "0";
+                row["#"] = cardDetail.CollectorNumber;
+                string cnt = curCard.TotalCount.ToString(); // Add marks for Foil & Other - FINISH ME
                 row["Cnt"] = cnt;
-                row["Rarity"] = curCard["rarity"].ToString()?[..1].ToUpper() ?? "";
-                row["Name"] = curCard["name"];
-                row["Color"] = curCard["color"];
-                row["Cost"] = curCard["manaCost"];
-                string price = curCard["price"]?.ToString() ?? "0.00";
+                row["Rarity"] = cardDetail.Rarity[..1].ToUpper();
+                row["Name"] = cardDetail.Name;
+                row["Color"] = cardDetail.ColorIdentity;
+                row["Cost"] = cardDetail.CastingCost;
+                string price = cardDetail.Price.ToString();
                 if (price.Length == 0 || cnt.Contains('*'))
-                    price = curCard["priceFoil"]?.ToString() ?? "0.00";
+                    price = cardDetail.PriceFoil.ToString();
                 row["Price"] = $"{(price.Length > 0 ? '$' : "")}{price}";
 
                 table.Rows.Add(row);

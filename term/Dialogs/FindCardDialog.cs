@@ -102,11 +102,11 @@ namespace MTG_CLI
         {
             _cardNames.Clear();
 
-            List<XCardData> cards = await _api.GetCardsInSet(setCode);
+            List<CardData> cards = await _api.GetCardsInSet(setCode);
 
-            foreach (XCardData card in cards)
+            foreach (CardData card in cards)
             {
-                string name = card["name"].ToString() ?? "";
+                string name = card.Card!.Name;
                 if (!_cardNames.Contains(name))
                     _cardNames.Add(name);
             }
