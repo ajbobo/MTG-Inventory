@@ -36,7 +36,7 @@ public class TestFirestore_Connection
         await firestoreConn.ReadData("setName");
 
         string code;
-        List<CardData> list = inv.GetTableData(out code);
+        List<XCardData> list = inv.GetTableData(out code);
 
         Assert.AreEqual("setName", code);
         Assert.AreEqual(3, list.Count);
@@ -53,37 +53,37 @@ public class TestFirestore_Connection
 
         Mock<IFirestoreDB_Wrapper> mockFirestore = new();
         mockFirestore
-            .Setup(r => r.WriteDocumentField(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CardData[]>()))
+            .Setup(r => r.WriteDocumentField(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<XCardData[]>()))
             .Returns(Task.CompletedTask);
 
         Firestore_Connection firestoreConn = new(mockFirestore.Object, inv);
         await firestoreConn.WriteData();
     }
 
-    private CardData[] GetCards()
+    private XCardData[] GetCards()
     {
-        CardData card1 = new();
+        XCardData card1 = new();
         card1.Add("CollectorNumber", 1);
         card1.Add("Name", "Card1");
         Dictionary<string, object> counts = new();
         counts.Add("standard", 1L);
         card1.Add("Counts", counts);
 
-        CardData card2 = new();
+        XCardData card2 = new();
         card2.Add("CollectorNumber", 1);
         card2.Add("Name", "Card1");
         counts = new();
         counts.Add("foil", 2L);
         card2.Add("Counts", counts);
 
-        CardData card3 = new();
+        XCardData card3 = new();
         card3.Add("CollectorNumber", 3);
         card3.Add("Name", "Card3");
         counts = new();
         counts.Add("foil", 3L);
         card3.Add("Counts", counts);
 
-        CardData card4 = new();
+        XCardData card4 = new();
         card4.Add("CollectorNumber", 5);
         card4.Add("Name", "Card5");
         counts = new();

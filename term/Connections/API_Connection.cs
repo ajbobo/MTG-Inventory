@@ -39,25 +39,25 @@ namespace MTG_CLI
             return SetList;
         }
 
-        async public Task<List<CardData>> GetCardsInSet(string targetSetCode)
+        async public Task<List<XCardData>> GetCardsInSet(string targetSetCode)
         {
-            List<CardData> results = new();
+            List<XCardData> results = new();
 
             string url = ConfigurationManager.AppSettings["GetCollection_Url"]!;
             return await CallAPI(targetSetCode, results, url);
         }
 
-        async public Task<List<CardData>> GetCardsInSet(string targetSetCode, string collectorNumber)
+        async public Task<List<XCardData>> GetCardsInSet(string targetSetCode, string collectorNumber)
         {
-            List<CardData> results = new();
+            List<XCardData> results = new();
 
             string url = ConfigurationManager.AppSettings["GetCollection_Url"]! + "?collectorNumber=" + collectorNumber;
             return await CallAPI(targetSetCode, results, url);
         }
 
-        async public Task<List<CardData>> GetCardsInSet(string targetSetCode, FilterSettings filtersettings)
+        async public Task<List<XCardData>> GetCardsInSet(string targetSetCode, FilterSettings filtersettings)
         {
-            List<CardData> results = new();
+            List<XCardData> results = new();
 
             StringBuilder urlParams = new();
             string colorFilter = filtersettings.GetColorsAPI();
@@ -71,7 +71,7 @@ namespace MTG_CLI
             return await CallAPI(targetSetCode, results, url);
         }
 
-        private async Task<List<CardData>> CallAPI(string targetSetCode, List<CardData> results, string url)
+        private async Task<List<XCardData>> CallAPI(string targetSetCode, List<XCardData> results, string url)
         {
             HttpResponseMessage msg = await _httpClient.GetAsync(string.Format(url, targetSetCode));
             if (msg.IsSuccessStatusCode)
@@ -83,7 +83,7 @@ namespace MTG_CLI
                 {
                     JToken cardDefinition = curCard["card"]!;
 
-                    CardData cardData = new();
+                    XCardData cardData = new();
                     cardData.Add("collectorNumber", cardDefinition["collectorNumber"].AsString());
                     cardData.Add("name", cardDefinition["name"].AsString());
                     cardData.Add("rarity", cardDefinition["rarity"].AsString());

@@ -26,9 +26,9 @@ namespace MTG_CLI
             _sql.Query(DB_Query.CREATE_USER_INVENTORY).Execute();
         }
 
-        public void PopulateDBTable(string setCode, CardData[] data)
+        public void PopulateDBTable(string setCode, XCardData[] data)
         {
-            foreach (CardData curCard in data)
+            foreach (XCardData curCard in data)
             {
                 string collectorNumber = curCard[_cardNumber].ToString()!;
                 string name = curCard[_cardName].ToString()!;
@@ -47,15 +47,15 @@ namespace MTG_CLI
             }
         }
 
-        public List<CardData> GetTableData(out string setCode)
+        public List<XCardData> GetTableData(out string setCode)
         {
-            List<CardData> fullSet = new();
+            List<XCardData> fullSet = new();
 
             _sql.Query(DB_Query.GET_USER_INVENTORY).OpenToRead();
 
             string lastCollectorNumber = "", lastAttrs = "";
             setCode = "";
-            CardData curCard = new();
+            XCardData curCard = new();
             while (_sql.ReadNext())
             {
                 setCode = _sql.ReadValue<string>(_dbSetCode, ""); // This shouldn't change, but we'll set it here anyway

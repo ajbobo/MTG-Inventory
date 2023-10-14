@@ -9,14 +9,14 @@ public class TestCardData
     [TestMethod]
     public void EmptyCardData()
     {
-        CardData card = new();
+        XCardData card = new();
         Assert.AreEqual(0, card.Keys.Length);
     }
 
     [TestMethod]
     public void AssignFields()
     {
-        CardData card = new();
+        XCardData card = new();
         card["one"] = 1;
         card["two"] = "2";
 
@@ -28,7 +28,7 @@ public class TestCardData
     [TestMethod]
     public void AddFields()
     {
-        CardData card = new();
+        XCardData card = new();
         card.Add("one", 1);
         card.Add("two", "2");
 
@@ -41,7 +41,7 @@ public class TestCardData
     [ExpectedException(typeof(KeyNotFoundException))]
     public void InvalidField()
     {
-        CardData card = new();
+        XCardData card = new();
         int val = (int)card["Invalid"];
     }
 }
@@ -52,7 +52,7 @@ public class TestCardDataConverter
     [TestMethod]
     public void ToFirestore()
     {
-        CardData card = new();
+        XCardData card = new();
         card["one"] = 1;
         card["two"] = "2";
 
@@ -77,7 +77,7 @@ public class TestCardDataConverter
         };
 
         CardDataConverter convert = new();
-        CardData res = convert.FromFirestore(dict);
+        XCardData res = convert.FromFirestore(dict);
 
         Assert.AreEqual(2, res.Keys.Length);
         Assert.AreEqual(1, res["one"]);

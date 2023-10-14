@@ -176,7 +176,7 @@ namespace MTG_CLI
             _collectedCount = 0;
 
             // This returns the filtered list of cards
-            List<CardData> cardList = await _api.GetCardsInSet(setCode, _filterSettings);
+            List<XCardData> cardList = await _api.GetCardsInSet(setCode, _filterSettings);
 
             _curSetFrame.RemoveAll();
 
@@ -189,7 +189,7 @@ namespace MTG_CLI
             table.Columns.Add("Cost");
             table.Columns.Add("Price");
 
-            foreach (CardData curCard in cardList)
+            foreach (XCardData curCard in cardList)
             {
                 DataRow row = table.NewRow();
                 row["#"] = curCard["collectorNumber"];

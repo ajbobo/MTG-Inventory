@@ -23,7 +23,7 @@ namespace MTG_CLI
         public async Task ReadData(string setCode)
         {
             _dbInv.CreateDBTable();
-            CardData[] setData = await _firestore.GetDocumentField(_dbCollection, setCode, _dbCardsField);
+            XCardData[] setData = await _firestore.GetDocumentField(_dbCollection, setCode, _dbCardsField);
             _dbInv.PopulateDBTable(setCode, setData);
         }
 
@@ -31,7 +31,7 @@ namespace MTG_CLI
         {
             // Build the data structure for the entire set - We'll send that to Firebase
             string setCode;
-            List<CardData> fullSet = _dbInv.GetTableData(out setCode);
+            List<XCardData> fullSet = _dbInv.GetTableData(out setCode);
             await _firestore.WriteDocumentField(_dbCollection, setCode, _dbCardsField, fullSet.ToArray());
         }
     }

@@ -3,7 +3,7 @@ using Google.Cloud.Firestore;
 namespace MTG_CLI
 {
     [FirestoreData(ConverterType = typeof(CardDataConverter))]
-    public class CardData
+    public class XCardData
     {
         private Dictionary<string, object> _data { set; get; } = new();
 
@@ -21,9 +21,9 @@ namespace MTG_CLI
         public string[] Keys { get { return _data.Keys.ToArray<string>(); } }
     }
 
-    public class CardDataConverter : IFirestoreConverter<CardData>
+    public class CardDataConverter : IFirestoreConverter<XCardData>
     {
-        public object ToFirestore(CardData value)
+        public object ToFirestore(XCardData value)
         {
             Dictionary<string, object> res = new();
             foreach (string key in value.Keys)
@@ -32,9 +32,9 @@ namespace MTG_CLI
             return res;
         }
 
-        public CardData FromFirestore(object value)
+        public XCardData FromFirestore(object value)
         {
-            CardData res = new();
+            XCardData res = new();
 
             Dictionary<string, object> dict = (Dictionary<string, object>)value;
             foreach (string key in dict.Keys)
