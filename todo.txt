@@ -1,7 +1,3 @@
---- General ---
-Split UI logic from actual behavior?
-    Maybe each Dialog needs a Dialog class and a Data/Behavior class
-Restructure files based on Model/View/Controller?
 
 --- Windows App ---
 Create a standalone app using a UI framework like Avalonia UI?
@@ -43,10 +39,3 @@ Add a panel of set information
 Migrate from Bootstrap to TailwindCSS and HeadlessUI?
     https://tailwindcss.com/
     https://headlessui.dev/
-
---- V2.0 ---
-Can I create an API (hosted in Firebase) that does all the real work?
-    Firebase Functions requires a paid account, so I'd need to find another way. Heroku? Hosted web-app? Microsft Azure has a free tier that includes Azure Functions
-    Then I could create a UI or commandline app that drives it
-    https://betterprogramming.pub/building-an-api-with-firebase-109041721f77
-
