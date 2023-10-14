@@ -29,7 +29,8 @@ public class CollectionController : ControllerBase
         [FromQuery(Name = "color")] string colorFilter = "",
         [FromQuery(Name = "count")] string countFilter = "",
         [FromQuery(Name = "rarity")] string rarityFilter = "",
-        [FromQuery(Name = "price")] string priceFilter = "")
+        [FromQuery(Name = "price")] string priceFilter = "",
+        [FromQuery(Name = "collectorNumber")] string collectorNumber = "")
     {
         string cacheName = CACHE_NAME + ":" + set;
 
@@ -56,24 +57,32 @@ public class CollectionController : ControllerBase
         IEnumerable<CardData> countList = FilterByCount(countFilter, rarityList);
         IEnumerable<CardData> priceList = FilterByPrice(priceFilter, countList);
         IEnumerable<CardData> colorList = FilterByColor(colorFilter, priceList);
+        IEnumerable<CardData> numberList = FilterByNumber(collectorNumber, colorList);
 
-        return colorList.ToList();
+        return numberList.ToList();
     }
 
-    private IEnumerable<CardData> FilterByColor(string colorFilter, IEnumerable<CardData> priceList)
+    private IEnumerable<CardData> FilterByNumber(string collectorNumber, IEnumerable<CardData> list)
     {
-        return from card in priceList
+        return from card in list
+               where collectorNumber.Length == 0 || card.Card!.CollectorNumber.Equals(collectorNumber)
+               select card;
+    }
+
+    private IEnumerable<CardData> FilterByColor(string colorFilter, IEnumerable<CardData> list)
+    {
+        return from card in list
                where colorFilter.Length == 0 || InsideString(card.Card!.ColorIdentity, colorFilter.ToUpper())
                select card;
     }
 
-    private IEnumerable<CardData> FilterByPrice(string priceFilter, IEnumerable<CardData> countList)
+    private IEnumerable<CardData> FilterByPrice(string priceFilter, IEnumerable<CardData> list)
     {
         string priceOp;
         decimal priceNum;
         GetComparison(priceFilter, out priceOp, out priceNum);
         var priceList =
-            from card in countList
+            from card in list
             where (priceOp.Equals(">=") && (card.Card!.Price >= priceNum || card.Card!.PriceFoil >= priceNum)) ||
                 (priceOp.Equals("<=") && (card.Card!.Price <= priceNum || card.Card!.PriceFoil <= priceNum)) ||
                 (priceOp.Equals(">") && (card.Card!.Price > priceNum || card.Card!.PriceFoil > priceNum)) ||
@@ -83,13 +92,13 @@ public class CollectionController : ControllerBase
         return priceList;
     }
 
-    private IEnumerable<CardData> FilterByCount(string countFilter, IEnumerable<CardData> rarityList)
+    private IEnumerable<CardData> FilterByCount(string countFilter, IEnumerable<CardData> list)
     {
         string op;
         decimal num;
         GetComparison(countFilter, out op, out num);
         var countList =
-            from card in rarityList
+            from card in list
             where (op.Equals(">=") && card.TotalCount >= num) ||
                 (op.Equals("<=") && card.TotalCount <= num) ||
                 (op.Equals(">") && card.TotalCount > num) ||
@@ -99,9 +108,9 @@ public class CollectionController : ControllerBase
         return countList;
     }
 
-    private static IEnumerable<CardData> FilterByRarity(string rarityFilter, IEnumerable<CardData> joinedList)
+    private static IEnumerable<CardData> FilterByRarity(string rarityFilter, IEnumerable<CardData> list)
     {
-        return from card in joinedList
+        return from card in list
                where rarityFilter.Length == 0 || rarityFilter.ToUpper().Contains(card.Card?.Rarity.Substring(0, 1).ToUpper() ?? "")
                select card;
     }
