@@ -4,7 +4,7 @@ using Terminal.Gui;
 
 namespace MTG_CLI
 {
-    [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
+    [ExcludeFromCodeCoverage]
     class EditCardDialog : RefreshableDialog
     {
         public event Action<CardData>? DataChanged;
@@ -108,18 +108,18 @@ namespace MTG_CLI
                 if (!attrs.Equals("Standard") && _ctcList[attrs] <= 0)
                     continue;
 
-                Label ctcName = tmpView<Label>(new(FormatCTC(attrs, _ctcList[attrs])) { X = 0, Y = ctc_count, Width = 25, Height = 1 });
+                Label ctcName = TmpView<Label>(new(FormatCTC(attrs, _ctcList[attrs])) { X = 0, Y = ctc_count, Width = 25, Height = 1 });
 
-                Button addOne = tmpView<Button>(new("+1") { X = Pos.Right(ctcName) + 1, Y = ctc_count });
+                Button addOne = TmpView<Button>(new("+1") { X = Pos.Right(ctcName) + 1, Y = ctc_count });
                 addOne.Clicked += () => { AdjustCount(attrs, _ctcList[attrs] + 1, ctcName, ok); };
 
-                Button subOne = tmpView<Button>(new("-1") { X = Pos.Right(addOne) + 1, Y = ctc_count });
+                Button subOne = TmpView<Button>(new("-1") { X = Pos.Right(addOne) + 1, Y = ctc_count });
                 subOne.Clicked += () => { AdjustCount(attrs, _ctcList[attrs] - 1, ctcName, ok); };
 
-                Button setFour = tmpView<Button>(new("=4") { X = Pos.Right(subOne) + 1, Y = ctc_count });
+                Button setFour = TmpView<Button>(new("=4") { X = Pos.Right(subOne) + 1, Y = ctc_count });
                 setFour.Clicked += () => { AdjustCount(attrs, 4, ctcName, ok); };
 
-                Button delete = tmpView<Button>(new("X") { X = Pos.Right(setFour) + 1, Y = ctc_count });
+                Button delete = TmpView<Button>(new("X") { X = Pos.Right(setFour) + 1, Y = ctc_count });
                 delete.Clicked += () => { AdjustCount(attrs, 0, ctcName, ok); };
 
                 editDialog.Add(ctcName, addOne, subOne, setFour, delete);
@@ -129,7 +129,7 @@ namespace MTG_CLI
                 ctc_count++;
             }
 
-            Button newCTC = tmpView<Button>(new("New Card Type") { X = Pos.Center(), Y = ctc_count });
+            Button newCTC = TmpView<Button>(new("New Card Type") { X = Pos.Center(), Y = ctc_count });
             newCTC.Clicked += () =>
             {
                 EditCTCDialog ctcDialog = new();
@@ -150,7 +150,7 @@ namespace MTG_CLI
         }
     }
 
-    [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
+    [ExcludeFromCodeCoverage] 
     class EditCTCDialog : RefreshableDialog
     {
         public event Action<string, int>? DataChanged;
@@ -186,7 +186,7 @@ namespace MTG_CLI
 
             for (int x = 0; x < _attrList.Count; x++)
             {
-                TextField txt = tmpView<TextField>(new() { X = 0, Y = x, Width = 15 });
+                TextField txt = TmpView<TextField>(new() { X = 0, Y = x, Width = 15 });
                 txt.Data = x;
                 txt.Text = _attrList[x];
                 txt.TextChanged += (str) =>
@@ -197,14 +197,14 @@ namespace MTG_CLI
                 ctcDialog.Add(txt);
             }
 
-            Button add = tmpView<Button>(new("Add") { X = 0, Y = _attrList.Count });
+            Button add = TmpView<Button>(new("Add") { X = 0, Y = _attrList.Count });
             add.Clicked += () =>
             {
                 _attrList.Add(_attrList.Count < ATTRS.Length ? ATTRS[_attrList.Count] : "");
                 RefreshDialog(ctcDialog);
             };
 
-            Button sub = tmpView<Button>(new("Sub") { X = Pos.Right(add), Y = _attrList.Count });
+            Button sub = TmpView<Button>(new("Sub") { X = Pos.Right(add), Y = _attrList.Count });
             sub.Clicked += () =>
             {
                 if (_attrList.Count > 0)

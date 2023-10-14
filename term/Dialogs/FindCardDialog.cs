@@ -3,7 +3,6 @@ using Terminal.Gui;
 using Terminal.Gui.TextValidateProviders;
 using NStack;
 using System.Diagnostics.CodeAnalysis;
-using Grpc.Core;
 
 namespace MTG_CLI
 {

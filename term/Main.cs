@@ -8,9 +8,6 @@ namespace MTG_CLI
     [ExcludeFromCodeCoverage]
     class CLI_Window
     {
-        readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_File"].ConnectionString;
-        // readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_InMemory"].ConnectionString;
-
         private static void StartTerminalView(IAPI_Connection api)
         {
             var win = new TerminalView(api);

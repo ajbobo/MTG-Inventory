@@ -1,7 +1,5 @@
-using System.Configuration;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
-using System.Security.Cryptography;
 using Terminal.Gui;
 using Terminal.Gui.Views;
 
@@ -272,9 +270,6 @@ namespace MTG_CLI
         {
             var row = _cardTable.Table.Rows[_cardTable.SelectedRow];
 
-            // string cardNum = row["#"].ToString()!;
-            // List<CardData> cardList = await _api.GetCardsInSet(_curSetCode, cardNum);
-            // CardData selectedCard = cardList[0];
             UpdateCardFrame(selectedCard);
 
             string newCount = selectedCard.TotalCount.ToString(); // Add decoration for foil, etc. - FINISH ME
@@ -292,21 +287,13 @@ namespace MTG_CLI
         {
             _curCardFrame.RemoveAll();
 
-            // _sql.Query(DB_Query.GET_CARD_DETAILS).WithParam("@CollectorNumber", cardNumber).OpenToRead();
-            // if (!_sql.IsReady())
-                // return;
-
-            // _sql.ReadNext();
             string title = $"{selectedCard.Card!.CollectorNumber} - {selectedCard.Card!.Name}";
             string frontText = selectedCard.Card!.FrontText;
             string typeLine = selectedCard.Card!.TypeLine;
-            // _sql.Close();
 
             _curCardFrame.Title = title;
 
-            // _sql.Query(DB_Query.GET_CARD_CTCS).WithParam("@CollectorNumber", cardNumber).OpenToRead();
             int cnt = 0;
-            // while (_sql.ReadNext())
             foreach (CardTypeCount curCTC in selectedCard.CTCs ?? new())
             {
                 int count = curCTC.Count;
@@ -317,7 +304,6 @@ namespace MTG_CLI
                     cnt++;
                 }
             }
-            // _sql.Close();
 
             _curCardFrame.Add(new LineView() { X = 0, Y = cnt, Width = Dim.Fill() });
 

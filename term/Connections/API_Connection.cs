@@ -3,7 +3,6 @@ using ExtensionMethods;
 using System.Configuration;
 using System.Text;
 using Newtonsoft.Json;
-using System.Net.Http.Json;
 using System.Net.Http.Headers;
 
 namespace MTG_CLI
@@ -92,7 +91,7 @@ namespace MTG_CLI
             return results;
         }
 
-        private void AddParam(string name, string val, StringBuilder paramList)
+        private static void AddParam(string name, string val, StringBuilder paramList)
         {
             if (val == null || val.Length == 0)
                 return;

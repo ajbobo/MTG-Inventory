@@ -3,12 +3,12 @@ using Terminal.Gui;
 
 namespace MTG_CLI
 {
-    [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
+    [ExcludeFromCodeCoverage] 
     abstract class RefreshableDialog
     {
         static int cnt = 0;
 
-        protected void ClearTmpViews(Dialog dlg)
+        protected static void ClearTmpViews(Dialog dlg)
         {
             if (dlg.Visible)
             {
@@ -26,7 +26,7 @@ namespace MTG_CLI
             }
         }
 
-        protected T tmpView<T>(T view) where T : View
+        protected static T TmpView<T>(T view) where T : View
         {
             view.Id = "tmp" + cnt;
             cnt++;
