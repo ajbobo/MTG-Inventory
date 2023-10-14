@@ -11,7 +11,7 @@ namespace MTG_CLI
         readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_File"].ConnectionString;
         // readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_InMemory"].ConnectionString;
 
-        private static void StartTerminalView(ISQL_Connection sql, IFirestore_Connection firestore, IAPI_Connection api)
+        private static void StartTerminalView(ISQL_Connection sql, IAPI_Connection api)
         {
             var win = new TerminalView(sql, api);
 
@@ -19,12 +19,6 @@ namespace MTG_CLI
             {
                 win.SetCurrentSet(newSet, newName);
                 win.SetCardList(newSet);
-            };
-
-            win.DataChanged += async () =>
-            {
-                Console.WriteLine("Writing current inventory to Firebase");
-                await firestore.WriteData();
             };
 
             win.Start();
@@ -37,10 +31,7 @@ namespace MTG_CLI
                 {
                     services
                         .AddSingleton<ISQL_Connection>(x => ActivatorUtilities.CreateInstance<SQLite_Connection>(x, _sqliteFile))
-                        .AddSingleton<IFirestore_Connection, Firestore_Connection>()
-                        .AddSingleton<IAPI_Connection, API_Connection>()
-                        .AddSingleton<IFirestoreDB_Wrapper, FirestoreDB_Wrapper>()
-                        .AddSingleton<IDB_Inventory, DB_Inventory>();
+                        .AddSingleton<IAPI_Connection, API_Connection>();
                     services.AddHttpClient<IAPI_Connection, API_Connection>();
                 });
         }
@@ -53,16 +44,15 @@ namespace MTG_CLI
             host.Start();
 
             ISQL_Connection? sql = host.Services.GetService<ISQL_Connection>();
-            IFirestore_Connection? firestore = host.Services.GetService<IFirestore_Connection>();
             IAPI_Connection? api = host.Services.GetService<IAPI_Connection>();
 
-            if (sql == null || firestore == null || api == null)
+            if (sql == null || api == null)
             {
                 Console.WriteLine("Something didn't initialize correctly");
                 System.Environment.Exit(1);
             }
 
-            StartTerminalView(sql, firestore, api);
+            StartTerminalView(sql, api);
         }
     }
 }
