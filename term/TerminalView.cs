@@ -34,7 +34,6 @@ namespace MTG_CLI
         private EditFiltersDialog _editFilters;
         private ChooseSetDialog _chooseSet;
 
-        private ISQL_Connection _sql;
         private IAPI_Connection _api;
 
         private string _curSetCode = "";
@@ -45,9 +44,8 @@ namespace MTG_CLI
         public event Action<string, string>? SelectedSetChanged;
         public event Action? DataChanged;
 
-        public TerminalView(ISQL_Connection sql, IAPI_Connection api)
+        public TerminalView(IAPI_Connection api)
         {
-            _sql = sql;
             _api = api;
             _filterSettings = new();
 
@@ -135,13 +133,15 @@ namespace MTG_CLI
 
         private void FoundCard(string cardName)
         {
-            string cardNumber = _sql.Query(DB_Query.GET_CARD_NUMBER).WithParam("@Name", cardName).ExecuteScalar<string>()!;
+            // FINISH ME
+            
+            // string cardNumber = _sql.Query(DB_Query.GET_CARD_NUMBER).WithParam("@Name", cardName).ExecuteScalar<string>()!;
 
-            DataRow? cardRow = _cardTable.Table.Rows.Find(cardNumber);
-            _cardTable.SelectedRow = _cardTable.Table.Rows.IndexOf(cardRow);
-            _cardTable.EnsureSelectedCellIsVisible();
+            // DataRow? cardRow = _cardTable.Table.Rows.Find(cardNumber);
+            // _cardTable.SelectedRow = _cardTable.Table.Rows.IndexOf(cardRow);
+            // _cardTable.EnsureSelectedCellIsVisible();
 
-            UpdateCardFrame(cardNumber);
+            // UpdateCardFrame(cardNumber);
         }
 
         private void ChooseFilters()

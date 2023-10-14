@@ -11,9 +11,9 @@ namespace MTG_CLI
         readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_File"].ConnectionString;
         // readonly private static string _sqliteFile = ConfigurationManager.ConnectionStrings["SQLite_InMemory"].ConnectionString;
 
-        private static void StartTerminalView(ISQL_Connection sql, IAPI_Connection api)
+        private static void StartTerminalView(IAPI_Connection api)
         {
-            var win = new TerminalView(sql, api);
+            var win = new TerminalView(api);
 
             win.SelectedSetChanged += (newSet, newName) =>
             {
@@ -30,7 +30,6 @@ namespace MTG_CLI
                 .ConfigureServices((_, services) =>
                 {
                     services
-                        .AddSingleton<ISQL_Connection>(x => ActivatorUtilities.CreateInstance<SQLite_Connection>(x, _sqliteFile))
                         .AddSingleton<IAPI_Connection, API_Connection>();
                     services.AddHttpClient<IAPI_Connection, API_Connection>();
                 });
@@ -43,16 +42,15 @@ namespace MTG_CLI
             using IHost host = CreateHostBuilder().Build();
             host.Start();
 
-            ISQL_Connection? sql = host.Services.GetService<ISQL_Connection>();
             IAPI_Connection? api = host.Services.GetService<IAPI_Connection>();
 
-            if (sql == null || api == null)
+            if (api == null)
             {
                 Console.WriteLine("Something didn't initialize correctly");
                 System.Environment.Exit(1);
             }
 
-            StartTerminalView(sql, api);
+            StartTerminalView(api);
         }
     }
 }

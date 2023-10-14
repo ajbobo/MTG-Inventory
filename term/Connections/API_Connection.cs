@@ -10,13 +10,11 @@ namespace MTG_CLI
 {
     public class API_Connection : IAPI_Connection
     {
-        private readonly ISQL_Connection _sql;
         private readonly HttpClient _httpClient;
 
-        public API_Connection(ISQL_Connection sql, HttpClient httpClient)
+        public API_Connection(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _sql = sql;
         }
 
         async public Task<List<string>> GetCollectableSets()
