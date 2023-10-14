@@ -41,7 +41,18 @@ namespace MTG_CLI
 
         async public Task<List<CardData>> GetCardsInSet(string targetSetCode)
         {
-            return await GetCardsInSet(targetSetCode, new FilterSettings());
+            List<CardData> results = new();
+
+            string url = ConfigurationManager.AppSettings["GetCollection_Url"]!;
+            return await CallAPI(targetSetCode, results, url);
+        }
+
+        async public Task<List<CardData>> GetCardsInSet(string targetSetCode, string collectorNumber)
+        {
+            List<CardData> results = new();
+
+            string url = ConfigurationManager.AppSettings["GetCollection_Url"]! + "?collectorNumber=" + collectorNumber;
+            return await CallAPI(targetSetCode, results, url);
         }
 
         async public Task<List<CardData>> GetCardsInSet(string targetSetCode, FilterSettings filtersettings)
@@ -57,6 +68,11 @@ namespace MTG_CLI
             AddParam("count", countFilter, urlParams);
 
             string url = ConfigurationManager.AppSettings["GetCollection_Url"]! + "?" + urlParams.ToString();
+            return await CallAPI(targetSetCode, results, url);
+        }
+
+        private async Task<List<CardData>> CallAPI(string targetSetCode, List<CardData> results, string url)
+        {
             HttpResponseMessage msg = await _httpClient.GetAsync(string.Format(url, targetSetCode));
             if (msg.IsSuccessStatusCode)
             {
