@@ -50,6 +50,14 @@ namespace MTG_CLI
             return (_countList.Count > 0 ? ((CountFilter)_countList[0]).Max : 1000);
         }
 
+        public string GetCountAPI()
+        {
+            if (GetMaxCount() == 1000) // Unbounded Max, so we care about the Min
+                return ">=" + GetMinCount();
+            else // If a Max is defined, we want anything lower than that
+                return "<=" + GetMaxCount();
+        }
+
         public string[] GetRarities()
         {
             Filter[] allRarities = RarityFilter.GetAllValues();
@@ -64,6 +72,14 @@ namespace MTG_CLI
             return res;
         }
 
+        public string GetRaritiesAPI()
+        {
+            StringBuilder builder = new();
+            foreach (Filter filter in _rarityList)
+                builder.Append(filter.DisplayName[..1].ToUpper());
+            return builder.ToString();
+        }
+
         public string GetColors()
         {
             StringBuilder builder = new();
@@ -72,6 +88,11 @@ namespace MTG_CLI
                 builder.Append(((ColorFilter)filter).Color);
             }
             return builder.ToString();
+        }
+
+        public string GetColorsAPI()
+        {
+            return GetColors();
         }
     }
 }

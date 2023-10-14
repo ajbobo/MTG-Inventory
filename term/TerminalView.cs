@@ -1,4 +1,3 @@
-using System.Configuration;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using Terminal.Gui;
@@ -9,19 +8,6 @@ namespace MTG_CLI
     [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
     class TerminalView
     {
-        readonly private string _dbSetCode = ConfigurationManager.AppSettings["DB_Card_Field_SetCode"]!;
-        readonly private string _dbNumber = ConfigurationManager.AppSettings["DB_Card_Field_Number"]!;
-        readonly private string _dbName = ConfigurationManager.AppSettings["DB_Card_Field_Name"]!;
-        readonly private string _dbAttrs = ConfigurationManager.AppSettings["DB_Card_Field_Attrs"]!;
-        readonly private string _dbCount = ConfigurationManager.AppSettings["DB_Card_Field_Count"]!;
-        readonly private string _dbRarity = ConfigurationManager.AppSettings["DB_Card_Field_Rarity"]!;
-        readonly private string _dbColor = ConfigurationManager.AppSettings["DB_Card_Field_ColorIdentity"]!;
-        readonly private string _dbMana = ConfigurationManager.AppSettings["DB_Card_Field_ManaCost"]!;
-        readonly private string _dbPrice = ConfigurationManager.AppSettings["DB_Card_Field_Price"]!;
-        readonly private string _dbPriceFoil = ConfigurationManager.AppSettings["DB_Card_Field_PriceFoil"]!;
-        readonly private string _dbFrontText = ConfigurationManager.AppSettings["DB_Card_Field_FrontText"]!;
-        readonly private string _dbTypeLine = ConfigurationManager.AppSettings["DB_Card_Field_TypeLine"]!;
-
         private Toplevel _top;
         private MenuBar _menu;
         private StatusBar _statusBar;
@@ -34,18 +20,19 @@ namespace MTG_CLI
         private EditFiltersDialog _editFilters;
         private ChooseSetDialog _chooseSet;
 
-        private ISQL_Connection _sql;
+        private IAPI_Connection _api;
 
+        private string _curSetCode = "";
         private int _collectedCount;
         private FilterSettings _filterSettings;
         private bool _autoFind = true;
 
-        public event Action<string>? SelectedSetChanged;
+        public event Action<string, string>? SelectedSetChanged;
         public event Action? DataChanged;
 
-        public TerminalView(ISQL_Connection sql)
+        public TerminalView(IAPI_Connection api)
         {
-            _sql = sql;
+            _api = api;
             _filterSettings = new();
 
             Application.Init();
@@ -81,12 +68,12 @@ namespace MTG_CLI
             _curStatsFrame = new() { X = Pos.Right(_curSetFrame), Y = Pos.Top(_curSetFrame), Width = Dim.Fill(), Height = 5 };
             _curCardFrame = new() { X = Pos.Right(_curSetFrame), Y = Pos.Bottom(_curStatsFrame), Width = Dim.Fill(), Height = Dim.Fill() - 1 };
             _cardTable = new() { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
-            _findCardDlg = new(sql);
+            _findCardDlg = new(_curSetCode, api);
             _findCardDlg.CardSelected += FoundCard;
             _editFilters = new(_filterSettings);
-            _editFilters.OnClose += SetCardList;
-            _chooseSet = new(sql);
-            _chooseSet.SetSelected += (setCode) => { SelectedSetChanged?.Invoke(setCode); };
+            _editFilters.OnClose += UpdateCardList;
+            _chooseSet = new(api);
+            _chooseSet.SetSelected += (setCode, setName) => { SelectedSetChanged?.Invoke(setCode, setName); };
         }
 
         private void ToggleAutoAdvance()
@@ -127,18 +114,24 @@ namespace MTG_CLI
 
         private void FindCard()
         {
-            _findCardDlg.FindCard();
+            _findCardDlg.FindCard(_curSetCode);
         }
 
-        private void FoundCard(string cardName)
+        private async void FoundCard(string cardName)
         {
-            string cardNumber = _sql.Query(DB_Query.GET_CARD_NUMBER).WithParam("@Name", cardName).ExecuteScalar<string>()!;
+            List<CardData> cardList = await _api.GetCardsInSet(_curSetCode);
 
-            DataRow? cardRow = _cardTable.Table.Rows.Find(cardNumber);
+            var filteredCards = 
+                from card in cardList
+                where card.Card!.Name.Equals(cardName)
+                select card;
+            CardData foundCard = filteredCards.First();
+
+            DataRow? cardRow = _cardTable.Table.Rows.Find(foundCard.Card!.CollectorNumber);
             _cardTable.SelectedRow = _cardTable.Table.Rows.IndexOf(cardRow);
             _cardTable.EnsureSelectedCellIsVisible();
 
-            UpdateCardFrame(cardNumber);
+            UpdateCardFrame(foundCard);
         }
 
         private void ChooseFilters()
@@ -151,9 +144,9 @@ namespace MTG_CLI
             _chooseSet.ChooseSet();
         }
 
-        public void SetCurrentSet(string setCode)
+        public void SetCurrentSet(string setCode, string setName)
         {
-            string setName = _sql.Query(DB_Query.GET_SET_NAME).WithParam("@SetCode", setCode).ExecuteScalar<string>() ?? "<unknown>";
+            _curSetCode = setCode;
 
             _curSetFrame.Title = setName;
             _curSetFrame.RemoveAll();
@@ -163,12 +156,17 @@ namespace MTG_CLI
                 _top.Add(_curSetFrame);
         }
 
-        public void SetCardList()
+        private void UpdateCardList()
+        {
+            SetCardList(_curSetCode);
+        }
+
+        public async void SetCardList(string setCode)
         {
             _collectedCount = 0;
 
             // This returns the filtered list of cards
-            _sql.Query(DB_Query.GET_SET_CARDS).WithFilters(_filterSettings).OpenToRead();
+            List<CardData> cardList = await _api.GetCardsInSet(setCode, _filterSettings);
 
             _curSetFrame.RemoveAll();
 
@@ -181,19 +179,20 @@ namespace MTG_CLI
             table.Columns.Add("Cost");
             table.Columns.Add("Price");
 
-            while (_sql.ReadNext())
+            foreach (CardData curCard in cardList)
             {
+                MTG_Card cardDetail = curCard.Card!;
                 DataRow row = table.NewRow();
-                row["#"] = _sql.ReadValue<string>(_dbNumber, "");
-                string cnt = _sql.ReadValue<string>(_dbCount, "");
+                row["#"] = cardDetail.CollectorNumber;
+                string cnt = curCard.TotalCount.ToString(); // Add marks for Foil & Other - FINISH ME
                 row["Cnt"] = cnt;
-                row["Rarity"] = _sql.ReadValue<string>(_dbRarity, "").ToUpper()[0];
-                row["Name"] = _sql.ReadValue<string>(_dbName, "");
-                row["Color"] = _sql.ReadValue<string>(_dbColor, "");
-                row["Cost"] = _sql.ReadValue<string>(_dbMana, "");
-                string price = _sql.ReadValue<string>(_dbPrice, "");
-                if (price.Length == 0 || cnt.Contains("*"))
-                    price = _sql.ReadValue<string>(_dbPriceFoil, "");
+                row["Rarity"] = cardDetail.Rarity[..1].ToUpper();
+                row["Name"] = cardDetail.Name;
+                row["Color"] = cardDetail.ColorIdentity;
+                row["Cost"] = cardDetail.CastingCost;
+                string price = cardDetail.Price.ToString();
+                if (price.Length == 0 || cnt.Contains('*'))
+                    price = cardDetail.PriceFoil.ToString();
                 row["Price"] = $"{(price.Length > 0 ? '$' : "")}{price}";
 
                 table.Rows.Add(row);
@@ -201,20 +200,24 @@ namespace MTG_CLI
                 if (!cnt.Equals("0"))
                     _collectedCount++;
             }
-            _sql.Close();
 
-            _cardTable = new(table) { X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill() };
-            _cardTable.FullRowSelect = true;
-
-            _cardTable.MultiSelect = false;
+            _cardTable = new(table)
+            {
+                X = 0,
+                Y = 0,
+                Width = Dim.Fill(),
+                Height = Dim.Fill(),
+                FullRowSelect = true,
+                MultiSelect = false
+            };
             _cardTable.Style.AlwaysShowHeaders = true;
             _cardTable.Style.ExpandLastColumn = false;
-            _cardTable.Style.ColumnStyles.Add(table.Columns["#"], new() { MaxWidth = 5, MinWidth = 5 });
-            _cardTable.Style.ColumnStyles.Add(table.Columns["Cnt"], new() { MaxWidth = 3, MinWidth = 3 });
-            _cardTable.Style.ColumnStyles.Add(table.Columns["Rarity"], new() { MinWidth = 2, MaxWidth = 2 });
-            _cardTable.Style.ColumnStyles.Add(table.Columns["Name"], new() { MinWidth = 15 });
-            _cardTable.Style.ColumnStyles.Add(table.Columns["Color"], new() { MaxWidth = 5, MinWidth = 5 });
-            _cardTable.Style.ColumnStyles.Add(table.Columns["Price"], new() { MaxWidth = 8, MinWidth = 5 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["#"]!, new() { MaxWidth = 5, MinWidth = 5 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["Cnt"]!, new() { MaxWidth = 3, MinWidth = 3 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["Rarity"]!, new() { MinWidth = 2, MaxWidth = 2 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["Name"]!, new() { MinWidth = 15 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["Color"]!, new() { MaxWidth = 5, MinWidth = 5 });
+            _cardTable.Style.ColumnStyles.Add(table.Columns["Price"]!, new() { MaxWidth = 8, MinWidth = 5 });
             _cardTable.SelectedCellChanged += (args) => UpdateCardFrame(table.Rows[args.NewRow]["#"].ToString()!);
 
             _curSetFrame.Add(_cardTable);
@@ -222,15 +225,15 @@ namespace MTG_CLI
             _cardTable.CellActivated += (args) =>
             {
                 DataTable table = args.Table;
-                EditCardDialog dlg = new(_sql);
-                dlg.DataChanged += () =>
+                EditCardDialog dlg = new(_api);
+                dlg.DataChanged += (curCard) =>
                 {
                     DataChanged?.Invoke(); 
-                    UpdateCardTableRow();
+                    UpdateCardTableRow(curCard);
                     if (_autoFind)
                         FindCard();
                 };
-                dlg.EditCard(table.Rows[args.Row]["#"]?.ToString()!);
+                dlg.EditCard(table.Rows[args.Row]["#"]?.ToString()!, _curSetCode);
             };
             _cardTable.KeyDown += (args) =>
             {
@@ -263,46 +266,44 @@ namespace MTG_CLI
                 _top.Add(_curStatsFrame);
         }
 
-        private void UpdateCardTableRow()
+        private void UpdateCardTableRow(CardData selectedCard)
         {
             var row = _cardTable.Table.Rows[_cardTable.SelectedRow];
 
-            string cardNum = row["#"].ToString()!;
-            UpdateCardFrame(cardNum);
+            UpdateCardFrame(selectedCard);
 
-            string newCount = _sql.Query(DB_Query.GET_SINGLE_CARD_COUNT).WithParam("@CollectorNumber", cardNum).ExecuteScalar<string>() ?? "0";
+            string newCount = selectedCard.TotalCount.ToString(); // Add decoration for foil, etc. - FINISH ME
             row["Cnt"] = newCount;
         }
 
-        private void UpdateCardFrame(string cardNumber)
+        private async void UpdateCardFrame(string cardNum)
+        {
+            List<CardData> cardList = await _api.GetCardsInSet(_curSetCode, cardNum);
+            CardData selectedCard = cardList[0];
+            UpdateCardFrame(selectedCard);
+        }
+
+        private void UpdateCardFrame(CardData selectedCard)
         {
             _curCardFrame.RemoveAll();
 
-            _sql.Query(DB_Query.GET_CARD_DETAILS).WithParam("@CollectorNumber", cardNumber).OpenToRead();
-            if (!_sql.IsReady())
-                return;
-
-            _sql.ReadNext();
-            string title = $"{_sql.ReadValue<string>(_dbNumber, "")} - {_sql.ReadValue<string>(_dbName, "")}";
-            string frontText = _sql.ReadValue<string>(_dbFrontText, "");
-            string typeLine = _sql.ReadValue<string>(_dbTypeLine, "");
-            _sql.Close();
+            string title = $"{selectedCard.Card!.CollectorNumber} - {selectedCard.Card!.Name}";
+            string frontText = selectedCard.Card!.FrontText;
+            string typeLine = selectedCard.Card!.TypeLine;
 
             _curCardFrame.Title = title;
 
-            _sql.Query(DB_Query.GET_CARD_CTCS).WithParam("@CollectorNumber", cardNumber).OpenToRead();
             int cnt = 0;
-            while (_sql.ReadNext())
+            foreach (CardTypeCount curCTC in selectedCard.CTCs ?? new())
             {
-                int count = _sql.ReadValue<int>(_dbCount, 0);
+                int count = curCTC.Count;
                 if (count > 0)
                 {
-                    string ctc = $"{count} - {_sql.ReadValue<string>(_dbAttrs, "")}";
+                    string ctc = $"{count} - {curCTC.CardType}";
                     _curCardFrame.Add(new Label(ctc) { X = 0, Y = cnt, Width = Dim.Fill() });
                     cnt++;
                 }
             }
-            _sql.Close();
 
             _curCardFrame.Add(new LineView() { X = 0, Y = cnt, Width = Dim.Fill() });
 

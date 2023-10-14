@@ -3,7 +3,7 @@ using Terminal.Gui;
 
 namespace MTG_CLI
 {
-    [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
+    [ExcludeFromCodeCoverage]
     class EditFiltersDialog
     {
         private FilterSettings _filterSettings;
@@ -12,7 +12,7 @@ namespace MTG_CLI
 
         public EditFiltersDialog(FilterSettings filterSettings)
         {
-            this._filterSettings = filterSettings;
+            _filterSettings = filterSettings;
         }
 
         private void AddFilterCheckBoxes(View frame, Filter[] filters)
