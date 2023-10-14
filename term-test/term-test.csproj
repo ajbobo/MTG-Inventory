@@ -8,8 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="CreateTestDB.sql" CopyToOutputDirectory="Always" />
-    <Content Include="MockResults/*.json" CopyToOutputDirectory="Always" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="3.2.0">
