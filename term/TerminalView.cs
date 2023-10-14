@@ -1,6 +1,7 @@
 using System.Configuration;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
 using Terminal.Gui;
 using Terminal.Gui.Views;
 
@@ -9,19 +10,6 @@ namespace MTG_CLI
     [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
     class TerminalView
     {
-        // readonly private string _dbSetCode = ConfigurationManager.AppSettings["DB_Card_Field_SetCode"]!;
-        // readonly private string _dbNumber = ConfigurationManager.AppSettings["DB_Card_Field_Number"]!;
-        // readonly private string _dbName = ConfigurationManager.AppSettings["DB_Card_Field_Name"]!;
-        // readonly private string _dbAttrs = ConfigurationManager.AppSettings["DB_Card_Field_Attrs"]!;
-        // readonly private string _dbCount = ConfigurationManager.AppSettings["DB_Card_Field_Count"]!;
-        // readonly private string _dbRarity = ConfigurationManager.AppSettings["DB_Card_Field_Rarity"]!;
-        // readonly private string _dbColor = ConfigurationManager.AppSettings["DB_Card_Field_ColorIdentity"]!;
-        // readonly private string _dbMana = ConfigurationManager.AppSettings["DB_Card_Field_ManaCost"]!;
-        // readonly private string _dbPrice = ConfigurationManager.AppSettings["DB_Card_Field_Price"]!;
-        // readonly private string _dbPriceFoil = ConfigurationManager.AppSettings["DB_Card_Field_PriceFoil"]!;
-        // readonly private string _dbFrontText = ConfigurationManager.AppSettings["DB_Card_Field_FrontText"]!;
-        // readonly private string _dbTypeLine = ConfigurationManager.AppSettings["DB_Card_Field_TypeLine"]!;
-
         private Toplevel _top;
         private MenuBar _menu;
         private StatusBar _statusBar;
@@ -131,17 +119,21 @@ namespace MTG_CLI
             _findCardDlg.FindCard(_curSetCode);
         }
 
-        private void FoundCard(string cardName)
+        private async void FoundCard(string cardName)
         {
-            // FINISH ME
-            
-            // string cardNumber = _sql.Query(DB_Query.GET_CARD_NUMBER).WithParam("@Name", cardName).ExecuteScalar<string>()!;
+            List<CardData> cardList = await _api.GetCardsInSet(_curSetCode);
 
-            // DataRow? cardRow = _cardTable.Table.Rows.Find(cardNumber);
-            // _cardTable.SelectedRow = _cardTable.Table.Rows.IndexOf(cardRow);
-            // _cardTable.EnsureSelectedCellIsVisible();
+            var filteredCards = 
+                from card in cardList
+                where card.Card!.Name.Equals(cardName)
+                select card;
+            CardData foundCard = filteredCards.First();
 
-            // UpdateCardFrame(cardNumber);
+            DataRow? cardRow = _cardTable.Table.Rows.Find(foundCard.Card!.CollectorNumber);
+            _cardTable.SelectedRow = _cardTable.Table.Rows.IndexOf(cardRow);
+            _cardTable.EnsureSelectedCellIsVisible();
+
+            UpdateCardFrame(foundCard);
         }
 
         private void ChooseFilters()
