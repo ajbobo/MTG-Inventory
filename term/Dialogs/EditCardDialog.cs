@@ -28,6 +28,9 @@ namespace MTG_CLI
             int total = 0;
             foreach (string attrs in _ctcList.Keys)
             {
+                if (_ctcList[attrs] <= 0)
+                    continue;
+                    
                 updatedCTCs.Add(new CardTypeCount()
                 {
                     CardType = attrs,
