@@ -106,7 +106,7 @@ namespace MTG_CLI
 
             foreach (CardData card in cards)
             {
-                string name = card["name"].ToString() ?? "";
+                string name = card.Card!.Name;
                 if (!_cardNames.Contains(name))
                     _cardNames.Add(name);
             }

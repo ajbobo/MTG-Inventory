@@ -2,6 +2,7 @@ using Newtonsoft.Json.Linq;
 using ExtensionMethods;
 using System.Configuration;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace MTG_CLI
 {
@@ -44,7 +45,7 @@ namespace MTG_CLI
             List<CardData> results = new();
 
             string url = ConfigurationManager.AppSettings["GetCollection_Url"]!;
-            return await CallAPI(targetSetCode, results, url);
+            return await CallCardsAPI(targetSetCode, results, url);
         }
 
         async public Task<List<CardData>> GetCardsInSet(string targetSetCode, string collectorNumber)
@@ -52,7 +53,7 @@ namespace MTG_CLI
             List<CardData> results = new();
 
             string url = ConfigurationManager.AppSettings["GetCollection_Url"]! + "?collectorNumber=" + collectorNumber;
-            return await CallAPI(targetSetCode, results, url);
+            return await CallCardsAPI(targetSetCode, results, url);
         }
 
         async public Task<List<CardData>> GetCardsInSet(string targetSetCode, FilterSettings filtersettings)
@@ -68,35 +69,19 @@ namespace MTG_CLI
             AddParam("count", countFilter, urlParams);
 
             string url = ConfigurationManager.AppSettings["GetCollection_Url"]! + "?" + urlParams.ToString();
-            return await CallAPI(targetSetCode, results, url);
+            return await CallCardsAPI(targetSetCode, results, url);
         }
 
-        private async Task<List<CardData>> CallAPI(string targetSetCode, List<CardData> results, string url)
+        private async Task<List<CardData>> CallCardsAPI(string targetSetCode, List<CardData> results, string url)
         {
             HttpResponseMessage msg = await _httpClient.GetAsync(string.Format(url, targetSetCode));
             if (msg.IsSuccessStatusCode)
             {
                 string respStr = await msg.Content.ReadAsStringAsync();
-                JArray resp = JArray.Parse(respStr);
-                JEnumerable<JToken> data = resp!.Children();
-                foreach (JToken curCard in data)
-                {
-                    JToken cardDefinition = curCard["card"]!;
+                CardData[] cardList = JsonConvert.DeserializeObject<CardData[]>(respStr) ?? Array.Empty<CardData>();
 
-                    CardData cardData = new();
-                    cardData.Add("collectorNumber", cardDefinition["collectorNumber"].AsString());
-                    cardData.Add("name", cardDefinition["name"].AsString());
-                    cardData.Add("rarity", cardDefinition["rarity"].AsString());
-                    cardData.Add("color", cardDefinition["colorIdentity"].AsString());
-                    cardData.Add("typeLine", cardDefinition["type_line"].AsString());
-                    cardData.Add("price", cardDefinition["price"].AsString());
-                    cardData.Add("priceFoil", cardDefinition["priceFoil"].AsString());
-                    cardData.Add("frontText", cardDefinition["frontText"].AsString());
-                    cardData.Add("manaCost", cardDefinition["castingCost"].AsString());
-                    cardData.Add("count", curCard["totalCount"].AsString());
-
-                    results.Add(cardData);
-                }
+                foreach (CardData card in cardList)
+                    results.Add(card);
             }
             else
             {

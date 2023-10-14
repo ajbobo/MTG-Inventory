@@ -20,7 +20,7 @@ public class TestDB_Inventory
         inv.PopulateDBTable("ajb", CreateData());
 
         string code;
-        List<CardData> data = inv.GetTableData(out code);
+        List<XCardData> data = inv.GetTableData(out code);
 
         Assert.AreEqual("ajb", code);
         Assert.AreEqual(2, data.Count);
@@ -35,23 +35,23 @@ public class TestDB_Inventory
         Assert.AreEqual(3, attrs["foil"]);
     }
 
-    private CardData[] CreateData()
+    private XCardData[] CreateData()
     {
-        CardData card1 = new();
+        XCardData card1 = new();
         card1.Add("CollectorNumber", 1);
         card1.Add("Name", "Card1");
         Dictionary<string, object> counts = new();
         counts.Add("standard", 1L);
         card1.Add("Counts", counts);
 
-        CardData card2 = new();
+        XCardData card2 = new();
         card2.Add("CollectorNumber", 1);
         card2.Add("Name", "Card1");
         counts = new();
         counts.Add("foil", 2L);
         card2.Add("Counts", counts);
 
-        CardData card3 = new();
+        XCardData card3 = new();
         card3.Add("CollectorNumber", 3);
         card3.Add("Name", "Card3");
         counts = new();
