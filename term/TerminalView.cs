@@ -10,17 +10,17 @@ namespace MTG_CLI
     class TerminalView
     {
         // readonly private string _dbSetCode = ConfigurationManager.AppSettings["DB_Card_Field_SetCode"]!;
-        readonly private string _dbNumber = ConfigurationManager.AppSettings["DB_Card_Field_Number"]!;
-        readonly private string _dbName = ConfigurationManager.AppSettings["DB_Card_Field_Name"]!;
-        readonly private string _dbAttrs = ConfigurationManager.AppSettings["DB_Card_Field_Attrs"]!;
-        readonly private string _dbCount = ConfigurationManager.AppSettings["DB_Card_Field_Count"]!;
+        // readonly private string _dbNumber = ConfigurationManager.AppSettings["DB_Card_Field_Number"]!;
+        // readonly private string _dbName = ConfigurationManager.AppSettings["DB_Card_Field_Name"]!;
+        // readonly private string _dbAttrs = ConfigurationManager.AppSettings["DB_Card_Field_Attrs"]!;
+        // readonly private string _dbCount = ConfigurationManager.AppSettings["DB_Card_Field_Count"]!;
         // readonly private string _dbRarity = ConfigurationManager.AppSettings["DB_Card_Field_Rarity"]!;
         // readonly private string _dbColor = ConfigurationManager.AppSettings["DB_Card_Field_ColorIdentity"]!;
         // readonly private string _dbMana = ConfigurationManager.AppSettings["DB_Card_Field_ManaCost"]!;
         // readonly private string _dbPrice = ConfigurationManager.AppSettings["DB_Card_Field_Price"]!;
         // readonly private string _dbPriceFoil = ConfigurationManager.AppSettings["DB_Card_Field_PriceFoil"]!;
-        readonly private string _dbFrontText = ConfigurationManager.AppSettings["DB_Card_Field_FrontText"]!;
-        readonly private string _dbTypeLine = ConfigurationManager.AppSettings["DB_Card_Field_TypeLine"]!;
+        // readonly private string _dbFrontText = ConfigurationManager.AppSettings["DB_Card_Field_FrontText"]!;
+        // readonly private string _dbTypeLine = ConfigurationManager.AppSettings["DB_Card_Field_TypeLine"]!;
 
         private Toplevel _top;
         private MenuBar _menu;
@@ -235,15 +235,15 @@ namespace MTG_CLI
             _cardTable.CellActivated += (args) =>
             {
                 DataTable table = args.Table;
-                EditCardDialog dlg = new(_sql);
-                dlg.DataChanged += () =>
+                EditCardDialog dlg = new(_api);
+                dlg.DataChanged += (curCard) =>
                 {
                     DataChanged?.Invoke(); 
-                    UpdateCardTableRow();
+                    UpdateCardTableRow(curCard);
                     if (_autoFind)
                         FindCard();
                 };
-                dlg.EditCard(table.Rows[args.Row]["#"]?.ToString()!);
+                dlg.EditCard(table.Rows[args.Row]["#"]?.ToString()!, _curSetCode);
             };
             _cardTable.KeyDown += (args) =>
             {
@@ -276,46 +276,56 @@ namespace MTG_CLI
                 _top.Add(_curStatsFrame);
         }
 
-        private void UpdateCardTableRow()
+        private void UpdateCardTableRow(CardData selectedCard)
         {
             var row = _cardTable.Table.Rows[_cardTable.SelectedRow];
 
-            string cardNum = row["#"].ToString()!;
-            UpdateCardFrame(cardNum);
+            // string cardNum = row["#"].ToString()!;
+            // List<CardData> cardList = await _api.GetCardsInSet(_curSetCode, cardNum);
+            // CardData selectedCard = cardList[0];
+            UpdateCardFrame(selectedCard);
 
-            string newCount = _sql.Query(DB_Query.GET_SINGLE_CARD_COUNT).WithParam("@CollectorNumber", cardNum).ExecuteScalar<string>() ?? "0";
+            string newCount = selectedCard.TotalCount.ToString(); // Add decoration for foil, etc. - FINISH ME
             row["Cnt"] = newCount;
         }
 
-        private void UpdateCardFrame(string cardNumber)
+        private async void UpdateCardFrame(string cardNum)
+        {
+            List<CardData> cardList = await _api.GetCardsInSet(_curSetCode, cardNum);
+            CardData selectedCard = cardList[0];
+            UpdateCardFrame(selectedCard);
+        }
+
+        private void UpdateCardFrame(CardData selectedCard)
         {
             _curCardFrame.RemoveAll();
 
-            _sql.Query(DB_Query.GET_CARD_DETAILS).WithParam("@CollectorNumber", cardNumber).OpenToRead();
-            if (!_sql.IsReady())
-                return;
+            // _sql.Query(DB_Query.GET_CARD_DETAILS).WithParam("@CollectorNumber", cardNumber).OpenToRead();
+            // if (!_sql.IsReady())
+                // return;
 
-            _sql.ReadNext();
-            string title = $"{_sql.ReadValue<string>(_dbNumber, "")} - {_sql.ReadValue<string>(_dbName, "")}";
-            string frontText = _sql.ReadValue<string>(_dbFrontText, "");
-            string typeLine = _sql.ReadValue<string>(_dbTypeLine, "");
-            _sql.Close();
+            // _sql.ReadNext();
+            string title = $"{selectedCard.Card!.CollectorNumber} - {selectedCard.Card!.Name}";
+            string frontText = selectedCard.Card!.FrontText;
+            string typeLine = selectedCard.Card!.TypeLine;
+            // _sql.Close();
 
             _curCardFrame.Title = title;
 
-            _sql.Query(DB_Query.GET_CARD_CTCS).WithParam("@CollectorNumber", cardNumber).OpenToRead();
+            // _sql.Query(DB_Query.GET_CARD_CTCS).WithParam("@CollectorNumber", cardNumber).OpenToRead();
             int cnt = 0;
-            while (_sql.ReadNext())
+            // while (_sql.ReadNext())
+            foreach (CardTypeCount curCTC in selectedCard.CTCs ?? new())
             {
-                int count = _sql.ReadValue<int>(_dbCount, 0);
+                int count = curCTC.Count;
                 if (count > 0)
                 {
-                    string ctc = $"{count} - {_sql.ReadValue<string>(_dbAttrs, "")}";
+                    string ctc = $"{count} - {curCTC.CardType}";
                     _curCardFrame.Add(new Label(ctc) { X = 0, Y = cnt, Width = Dim.Fill() });
                     cnt++;
                 }
             }
-            _sql.Close();
+            // _sql.Close();
 
             _curCardFrame.Add(new LineView() { X = 0, Y = cnt, Width = Dim.Fill() });
 

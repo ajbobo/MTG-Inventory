@@ -3,6 +3,8 @@ using ExtensionMethods;
 using System.Configuration;
 using System.Text;
 using Newtonsoft.Json;
+using System.Net.Http.Json;
+using System.Net.Http.Headers;
 
 namespace MTG_CLI
 {
@@ -102,6 +104,20 @@ namespace MTG_CLI
             paramList.Append(name);
             paramList.Append("=");
             paramList.Append(val);
+        }
+
+        public async void UpdateCardData(CardData card)
+        {
+            List<CardTypeCount> ctcs = card.CTCs ?? new();
+
+            var obj = new {ctcs = ctcs};
+
+            string json = JsonConvert.SerializeObject(obj);
+
+            string url = ConfigurationManager.AppSettings["PutCollection_Url"]!;
+            StringContent content = new(json);
+            content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+            await _httpClient.PutAsync(string.Format(url, card.Card!.SetCode, card.Card!.CollectorNumber), content);
         }
     }
 }

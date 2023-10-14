@@ -7,61 +7,72 @@ namespace MTG_CLI
     [ExcludeFromCodeCoverage] // For now - maybe I can separate logic from UI?
     class EditCardDialog : RefreshableDialog
     {
-        public event Action? DataChanged;
+        public event Action<CardData>? DataChanged;
 
         private bool _isDirty;
-        private string _curCollectorNumber = "";
-        private string _curCardName = "";
+        private CardData _curCard = new();
         private Dictionary<string, int> _ctcList = new();
-        private ISQL_Connection _sql;
+        private IAPI_Connection _api;
 
-        public EditCardDialog(ISQL_Connection sql)
+        public EditCardDialog(IAPI_Connection api)
         {
             _isDirty = false;
-            _sql = sql;
+            _api = api;
         }
 
-        private void UpdateInventory(string collectorNumber, string attrs, int count)
+        private void UpdateInventory()
         {
-            _sql.Query(DB_Query.UPDATE_CARD_CTC)
-                .WithParam("@CollectorNumber", collectorNumber)
-                .WithParam("@Attrs", attrs)
-                .WithParam("@Count", count)
-                .Execute();
             _isDirty = true;
+
+            List<CardTypeCount> updatedCTCs = new();
+            int total = 0;
+            foreach (string attrs in _ctcList.Keys)
+            {
+                updatedCTCs.Add(new CardTypeCount()
+                {
+                    CardType = attrs,
+                    Count = _ctcList[attrs]
+                });
+                total += _ctcList[attrs];
+            }
+            _curCard.TotalCount = total;
+            _curCard.CTCs = updatedCTCs;
+            _api.UpdateCardData(_curCard);
         }
 
-        public void EditCard(string collectorNumber)
+        public async void EditCard(string collectorNumber, string setCode)
         {
-            _curCollectorNumber = collectorNumber;
-
-            _sql.Query(DB_Query.GET_CARD_CTCS).WithParam("@CollectorNumber", collectorNumber).OpenToRead();
+            List<CardData> cardList = await _api.GetCardsInSet(setCode, collectorNumber);
+            CardData selectedCard = cardList[0];
+            _curCard = selectedCard;
             _ctcList.Clear();
             _ctcList.Add("Standard", 0);
-            while (_sql.ReadNext())
+            foreach (CardTypeCount ctc in selectedCard.CTCs ?? new List<CardTypeCount>())
             {
-                _curCardName = _sql.ReadValue<string>("Name", "");
-                string attrs = _sql.ReadValue<string>("Attrs", "");
-                int cnt = _sql.ReadValue<int>("Count", 0);
+                string attrs = ctc.CardType;
+                int cnt = ctc.Count;
 
                 if (attrs.Length > 0 && !_ctcList.ContainsKey(attrs))
                     _ctcList.Add(attrs, cnt);
                 else if (_ctcList.ContainsKey(attrs))
                     _ctcList[attrs] = cnt;
             }
-            _sql.Close();
 
             Button ok = new("OK");
-            ok.Clicked += () => Application.RequestStop();
+            ok.Clicked += () => 
+            {
+                UpdateInventory();
+                Application.RequestStop();
+            };
 
-            Dialog dlg = new(string.Format("Edit - {0}", _curCardName), ok) { Width = 55, Height = _ctcList.Count + 5 };
+            Dialog dlg = new(string.Format("Edit - {0}", _curCard.Card!.Name), ok) { Width = 55, Height = _ctcList.Count + 5 };
             RefreshDialog(dlg, ok);
             dlg.Closed += (args) =>
             {
                 if (_isDirty)
                 {
                     _isDirty = false;
-                    DataChanged?.Invoke();
+                    DataChanged?.Invoke(_curCard);
                 }
             };
 
@@ -77,7 +88,6 @@ namespace MTG_CLI
         {
             newCount = Math.Max(newCount, 0);
             _ctcList[attrs] = newCount;
-            UpdateInventory(_curCollectorNumber, attrs, newCount);
             label.Text = FormatCTC(attrs, newCount);
             newFocus.SetFocus();
         }
@@ -126,7 +136,6 @@ namespace MTG_CLI
                         _ctcList?.Add(attrs, count);
                     else if (_ctcList?.ContainsKey(attrs) ?? false)
                         _ctcList[attrs] = count;
-                    UpdateInventory(_curCollectorNumber, attrs, count);
                     RefreshDialog(editDialog, ok);
                 };
                 ctcDialog.NewCTC();
