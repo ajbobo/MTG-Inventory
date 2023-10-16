@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Collection";
+}
+
+<div class="text-center collection-panel">
+    <h1 class="display-4">MTG Inventory</h1>
+    <div class="collection-header">
+        <img class="set-icon-lg" src=@(ViewData["setIconUrl"] != null ? @ViewData["setIconUrl"] : null) />
+        <div class="dropdown-center">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                @(ViewData["setName"] != null ? ViewData["setName"] : "Choose a set")
+            </button>
+            <ul class="dropdown-menu scrollable-menu">
+                @if (ViewData["setList"] != null)
+                {
+                    var list = (List<MTG_Set>)(ViewData["setList"] ?? new());
+                    foreach (MTG_Set set in list)
+                    {
+                        <li>
+                            <a class="dropdown-item" asp-controller="Home" asp-action="Collection" asp-route-setCode=@set.Code>
+                                <img class="set-icon" src=@set.IconUrl />
+                                @set.Name
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        <img class="set-icon-lg" src=@(ViewData["setIconUrl"] != null ? @ViewData["setIconUrl"] : null) />
+    </div>
+</div>

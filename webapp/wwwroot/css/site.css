@@ -1,0 +1,58 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.collection-panel {
+  /* background: blue; */
+  /* padding: 10px; */
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  height: 1px; /* The height will be determined by flexbox */
+  flex-grow: 1;
+} 
+
+.collection-header {
+  /* background: lightsalmon; */
+  /* padding: 10px; */
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.set-icon-lg {
+  height: 40px;
+  width: 40px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.scrollable-menu {
+  height: auto;
+  max-height: 300px;
+  overflow-x: hidden;
+}
+
+.set-icon {
+  height: 25px;
+  width: 25px;
+}
