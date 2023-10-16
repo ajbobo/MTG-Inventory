@@ -5,7 +5,7 @@
 <div class="text-center collection-panel">
     <h1 class="display-4">MTG Inventory</h1>
     <div class="collection-header">
-        <img class="set-icon-lg" src=@(ViewData["setIconUrl"] != null ? @ViewData["setIconUrl"] : null) />
+        <img class="set-icon-lg" src=@(ViewData["setIconUrl"] != null ? @ViewData["setIconUrl"] : "https://svgs.scryfall.io/sets/planeswalker.svg") />
         <div class="dropdown-center">
             <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
@@ -27,6 +27,6 @@
                 }
             </ul>
         </div>
-        <img class="set-icon-lg" src=@(ViewData["setIconUrl"] != null ? @ViewData["setIconUrl"] : null) />
+        <img class="set-icon-lg" src=@(ViewData["setIconUrl"] != null ? @ViewData["setIconUrl"] : "https://svgs.scryfall.io/sets/planeswalker.svg") />
     </div>
 </div>
