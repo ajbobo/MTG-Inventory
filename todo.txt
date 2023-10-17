@@ -1,3 +1,7 @@
+--- API ---
+Add a new field to the CardData class for CountDecoration (* and Ω)
+Add a new parameter that forces a cache update
+
 
 --- Windows App ---
 Create a standalone app using a UI framework like Avalonia UI?
