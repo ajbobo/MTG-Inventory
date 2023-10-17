@@ -21,6 +21,7 @@ public class HomeController : Controller
         // Get the list of available sets
         var httpClient = _httpClientFactory.CreateClient();
         var resp = httpClient.GetAsync("https://mtg-inventory.azurewebsites.net/api/Sets");
+        MTG_Set? curSet = null;
         if (resp.Result.IsSuccessStatusCode)
         {
             var setStr = await resp.Result.Content.ReadAsStringAsync();
@@ -33,6 +34,7 @@ public class HomeController : Controller
                 {
                     if (setCode.Equals(set.Code))
                     {
+                        curSet = set;
                         ViewData["setName"] = set.Name;
                         ViewData["setIconUrl"] = set.IconUrl;
                     }
@@ -40,7 +42,19 @@ public class HomeController : Controller
             }
         }
 
-        return View();
+        // Get the cards in the selected set
+        var cardList = new List<CardData>();
+        if (curSet != null)
+        {
+            resp = httpClient.GetAsync("https://mtg-inventory.azurewebsites.net/api/Collection/" + curSet.Code);
+            if (resp.Result.IsSuccessStatusCode)
+            {
+                var cardStr = await resp.Result.Content.ReadAsStringAsync();
+                cardList = JsonConvert.DeserializeObject<List<CardData>>(cardStr);
+            }
+        }
+
+        return View(cardList);
     }
 
     public IActionResult Decks()

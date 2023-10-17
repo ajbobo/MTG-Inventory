@@ -39,6 +39,10 @@ body {
   align-items: center;
 }
 
+.collection-table {
+  height:75vh; /* 75% of the viewport height*/
+}
+
 .set-icon-lg {
   height: 40px;
   width: 40px;
