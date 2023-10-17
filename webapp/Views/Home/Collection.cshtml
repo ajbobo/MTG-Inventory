@@ -4,6 +4,14 @@
     ViewData["Title"] = "Collection";
 }
 
+<script>
+    function UpdateImages(front, back)
+    {
+        document.getElementById("cardfront").src=front;
+        document.getElementById("cardback").src=back;
+    }
+</script>
+
 <div class="text-center collection-panel">
     <h1 class="display-4">MTG Inventory</h1>
     <div class="collection-header">
@@ -35,7 +43,7 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-10">
+            <div class="col-9">
                 <div class="table-responsive collection-table">
                 <table class="table table-striped table-hover text-nowrap">
                     <thead>
@@ -49,7 +57,7 @@
                     <tbody>
                         @foreach (CardData curCard in @Model)
                         {
-                            <tr height="25px">
+                            <tr height="25px"  onclick="UpdateImages( '@(curCard.Card!.FrontImageUrl)', '@(curCard.Card!.BackImageUrl)' )">
                                 <td>@curCard.Card!.CollectorNumber</td>
                                 <td>@curCard.TotalCount</td>
                                 <td>@curCard.Card!.Name</td>
@@ -62,8 +70,9 @@
                 </table>
                 </div>
             </div>
-            <div class="col-2">
-                <p>The card image goes here</p>
+            <div class="col-3">
+                <img width="100%" id="cardfront" src=""/>
+                <img width="100%" id="cardback" src=""/>
             </div>
         </div>
     </div>
