@@ -44,6 +44,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Color</th>
                         <th scope="col">Casting Cost</th>
+                        <th scope="col">Rarity</th>
                     </thead>
                     <tbody>
                         @foreach (CardData curCard in @Model)
@@ -54,6 +55,7 @@
                                 <td>@curCard.Card!.Name</td>
                                 <td>@curCard.Card!.ColorIdentity</td>
                                 <td>@curCard.Card!.CastingCost</td>
+                                <td>@curCard.Card!.Rarity</td>
                             </tr>
                         }
                     </tbody>
