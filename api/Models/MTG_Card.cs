@@ -12,4 +12,6 @@ public class MTG_Card
     public decimal PriceFoil { get; set; } = 0;
     public string SetCode { get; set; } = "";
     public string CollectorNumber { get; set; } = "";
+    public string FrontImageUrl {get; set; } = "";
+    public string BackImageUrl {get; set; } = "";
 }
