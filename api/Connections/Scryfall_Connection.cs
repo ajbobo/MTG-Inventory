@@ -87,12 +87,18 @@ public class Scryfall_Connection : IScryfall_Connection
                     {
                         card.FrontText = curCard["oracle_text"].AsString();
                         card.CastingCost = curCard["mana_cost"].AsString();
-                        card.FrontImageUrl = curCard["image_uris"]!["normal"].AsString();
                     }
                     else if (curCard["card_faces"] != null)
                     {
                         card.FrontText = curCard["card_faces"]![0]!["oracle_text"].AsString();
                         card.CastingCost = curCard["card_faces"]![0]!["mana_cost"].AsString();
+                    }
+                    if (curCard["image_uris"] != null)
+                    {
+                        card.FrontImageUrl = curCard["image_uris"]!["normal"].AsString();
+                    }
+                    else
+                    {
                         card.FrontImageUrl = curCard["card_faces"]![0]!["image_uris"]!["normal"].AsString();
                         card.BackImageUrl = curCard["card_faces"]![1]!["image_uris"]!["normal"].AsString();
                     }
