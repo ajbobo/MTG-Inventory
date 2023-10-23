@@ -1,5 +1,6 @@
 using System.Reflection.Metadata;
 using System.Runtime.Caching;
+using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -49,7 +50,8 @@ public class CollectionController : ControllerBase
             {
                 Card = card,
                 CTCs = subcard?.CTCs ?? null,
-                TotalCount = subcard?.TotalCount ?? 0
+                TotalCount = subcard?.TotalCount ?? 0,
+                DecoratedCount = subcard?.TotalCount.ToString() + GetDecorations(subcard?.CTCs)
             };
 
         // Filter
@@ -60,6 +62,26 @@ public class CollectionController : ControllerBase
         IEnumerable<CardData> numberList = FilterByNumber(collectorNumber, colorList);
 
         return numberList.ToList();
+    }
+
+    private static string GetDecorations(List<CardTypeCount>? CTCs)
+    {
+        if (CTCs == null)
+            return "";
+
+        StringBuilder builder = new();
+        foreach (CardTypeCount ctc in CTCs)
+        {
+            string type = ctc.CardType.ToLower();
+            if (type.Equals("standard"))
+                continue;
+            if (type.Contains("foil"))
+                builder.Append('*');
+            if (!ctc.CardType.ToLower().Equals("foil"))
+                builder.Append('Ω');
+        }
+
+        return builder.ToString();
     }
 
     private IEnumerable<CardData> FilterByNumber(string collectorNumber, IEnumerable<CardData> list)
