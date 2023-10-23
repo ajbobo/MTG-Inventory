@@ -184,7 +184,7 @@ namespace MTG_CLI
                 MTG_Card cardDetail = curCard.Card!;
                 DataRow row = table.NewRow();
                 row["#"] = cardDetail.CollectorNumber;
-                string cnt = curCard.TotalCount.ToString(); // Add marks for Foil & Other - FINISH ME
+                string cnt = curCard.DecoratedCount;
                 row["Cnt"] = cnt;
                 row["Rarity"] = cardDetail.Rarity[..1].ToUpper();
                 row["Name"] = cardDetail.Name;

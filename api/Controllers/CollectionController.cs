@@ -51,7 +51,7 @@ public class CollectionController : ControllerBase
                 Card = card,
                 CTCs = subcard?.CTCs ?? null,
                 TotalCount = subcard?.TotalCount ?? 0,
-                DecoratedCount = subcard?.TotalCount.ToString() + GetDecorations(subcard?.CTCs)
+                DecoratedCount = subcard?.TotalCount.ToString() ?? "0" + GetDecorations(subcard?.CTCs)
             };
 
         // Filter
