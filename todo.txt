@@ -7,7 +7,6 @@ Create a standalone app using a UI framework like Avalonia UI?
 If the data and ui can be uncoupled, this might be easier
 
 --- Term ---
-Use DecoratedCount when updating the list after editing CTCs
 Add option to ChooseSetDialog to only show sets that are in User_Inv
     This will need to get the list of Documents in User_Inv
 Can FilterSettings be changed so that adding new types of filters is easier?
