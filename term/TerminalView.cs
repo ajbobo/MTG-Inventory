@@ -1,4 +1,5 @@
 using System.Data;
+using System.Text;
 using System.Diagnostics.CodeAnalysis;
 using Terminal.Gui;
 using Terminal.Gui.Views;
@@ -121,7 +122,7 @@ namespace MTG_CLI
         {
             List<CardData> cardList = await _api.GetCardsInSet(_curSetCode);
 
-            var filteredCards = 
+            var filteredCards =
                 from card in cardList
                 where card.Card!.Name.Equals(cardName)
                 select card;
@@ -184,7 +185,7 @@ namespace MTG_CLI
                 MTG_Card cardDetail = curCard.Card!;
                 DataRow row = table.NewRow();
                 row["#"] = cardDetail.CollectorNumber;
-                string cnt = curCard.DecoratedCount;
+                string cnt = curCard.TotalCount.ToString() + GetDecorations(curCard.CTCs);
                 row["Cnt"] = cnt;
                 row["Rarity"] = cardDetail.Rarity[..1].ToUpper();
                 row["Name"] = cardDetail.Name;
@@ -228,7 +229,7 @@ namespace MTG_CLI
                 EditCardDialog dlg = new(_api);
                 dlg.DataChanged += (curCard) =>
                 {
-                    DataChanged?.Invoke(); 
+                    DataChanged?.Invoke();
                     UpdateCardTableRow(curCard);
                     if (_autoFind)
                         FindCard();
@@ -272,8 +273,28 @@ namespace MTG_CLI
 
             UpdateCardFrame(selectedCard);
 
-            string newCount = selectedCard.TotalCount.ToString(); // Add decoration for foil, etc. - FINISH ME
+            string newCount = selectedCard.TotalCount.ToString() + GetDecorations(selectedCard.CTCs);
             row["Cnt"] = newCount;
+        }
+
+        private static string GetDecorations(List<CardTypeCount>? CTCs)
+        {
+            if (CTCs == null)
+                return "";
+
+            StringBuilder builder = new();
+            foreach (CardTypeCount ctc in CTCs)
+            {
+                string type = ctc.CardType.ToLower();
+                if (type.Equals("standard"))
+                    continue;
+                if (type.Contains("foil"))
+                    builder.Append('*');
+                if (!ctc.CardType.ToLower().Equals("foil"))
+                    builder.Append('Ω');
+            }
+
+            return builder.ToString();
         }
 
         private async void UpdateCardFrame(string cardNum)

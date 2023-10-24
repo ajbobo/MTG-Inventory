@@ -7,6 +7,7 @@ Create a standalone app using a UI framework like Avalonia UI?
 If the data and ui can be uncoupled, this might be easier
 
 --- Term ---
+Use DecoratedCount when updating the list after editing CTCs
 Add option to ChooseSetDialog to only show sets that are in User_Inv
     This will need to get the list of Documents in User_Inv
 Can FilterSettings be changed so that adding new types of filters is easier?
@@ -19,9 +20,6 @@ Add a way to save decks
     Should also import them from the DeckBox files
 Add a way to open the card image? (Probably in a separate app, but if I can imbed it, that would be cool)
 Published build needs an icon
-Published build needs Google Firebase creds
-Is there a way to protect/hide app.config in release builds?
-    https://learn.microsoft.com/en-us/previous-versions/hh8x3tas(v=vs.140)?redirectedfrom=MSDN
 
 
 --- Web UI ---
