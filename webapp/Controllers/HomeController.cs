@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using webapp.Models;
+using webapp.Utils;
 
 namespace webapp.Controllers;
 
@@ -53,6 +54,16 @@ public class HomeController : Controller
                 cardList = JsonConvert.DeserializeObject<List<CardData>>(cardStr);
             }
         }
+
+        // Get the list of symbols
+        var symbolList = new List<MTG_Symbol>();
+        resp = httpClient.GetAsync("https://mtg-inventory.azurewebsites.net/api/Symbols");
+        if (resp.Result.IsSuccessStatusCode)
+        {
+            var symbolStr = await resp.Result.Content.ReadAsStringAsync();
+            symbolList = JsonConvert.DeserializeObject<List<MTG_Symbol>>(symbolStr);
+        }
+        SymbolHelper.SetSymbolList(symbolList ?? new());
 
         return View(cardList);
     }

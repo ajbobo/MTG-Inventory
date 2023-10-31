@@ -17,7 +17,7 @@ public class SymbolsController : ControllerBase
         _cache = cache;
     }
 
-    // GET: api/Sets
+    // GET: api/Symbols
     [HttpGet]
     public async Task<ActionResult<List<MTG_Symbol>>> GetMTG_Symbols()
     {

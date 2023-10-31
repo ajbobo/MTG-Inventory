@@ -1,0 +1,47 @@
+.collection-panel {
+    /* background: blue; */
+    /* padding: 10px; */
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    height: 1px; /* The height will be determined by flexbox */
+    flex-grow: 1;
+  } 
+  
+  .collection-header {
+    /* background: lightsalmon; */
+    /* padding: 10px; */
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+  }
+  
+  .collection-table {
+    height:75vh; /* 75% of the viewport height*/
+  }
+  
+  .set-icon-lg {
+    height: 40px;
+    width: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  
+  .scrollable-menu {
+    height: auto;
+    max-height: 300px;
+    overflow-x: hidden;
+  }
+  
+  .set-icon {
+    height: 25px;
+    width: 25px;
+  }
+  
+  .table-row {
+    height: 25px;
+  }
+
+  .table-img {
+    height: 20px;
+  }
