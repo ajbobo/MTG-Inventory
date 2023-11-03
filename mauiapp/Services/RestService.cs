@@ -28,4 +28,17 @@ public class RestService : IRestService
 
         return cardList;
     }
+
+    public async Task<List<MTG_Set>> GetAllSets()
+    {
+        var setList = new List<MTG_Set>();
+        HttpResponseMessage resp = await _httpClient.GetAsync("https://mtg-inventory.azurewebsites.net/api/Sets");
+        if (resp.IsSuccessStatusCode)
+        {
+            var setStr = await resp.Content.ReadAsStringAsync();
+            setList = JsonConvert.DeserializeObject<List<MTG_Set>>(setStr);
+        }
+
+        return setList;
+    }
 }

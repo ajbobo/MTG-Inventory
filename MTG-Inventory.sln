@@ -1,27 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "term", "term\term.csproj", "{56861036-AD0B-456E-9E3A-47E34E2D9F07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "term", "term\term.csproj", "{56861036-AD0B-456E-9E3A-47E34E2D9F07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "term-test", "term-test\term-test.csproj", "{9F738E72-D86F-447E-BF2F-0363FD1CCD77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "term-test", "term-test\term-test.csproj", "{9F738E72-D86F-447E-BF2F-0363FD1CCD77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "firebase-export", "firebase-export\firebase-export.csproj", "{C2F8D332-7E33-4225-9131-61439B19ACE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "firebase-export", "firebase-export\firebase-export.csproj", "{C2F8D332-7E33-4225-9131-61439B19ACE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api", "api\api.csproj", "{0E760AE2-2909-4FF6-81BB-FF6AD5195883}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api", "api\api.csproj", "{0E760AE2-2909-4FF6-81BB-FF6AD5195883}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webapp", "webapp\webapp.csproj", "{32F71049-F399-4612-8756-0A47C9AE0523}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "webapp", "webapp\webapp.csproj", "{32F71049-F399-4612-8756-0A47C9AE0523}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mauiapp", "mauiapp\mauiapp.csproj", "{404FBCB3-6827-48F8-94CA-0ACBEE0FF759}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mauiapp", "mauiapp\mauiapp.csproj", "{404FBCB3-6827-48F8-94CA-0ACBEE0FF759}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{56861036-AD0B-456E-9E3A-47E34E2D9F07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -46,7 +43,11 @@ Global
 		{32F71049-F399-4612-8756-0A47C9AE0523}.Release|Any CPU.Build.0 = Release|Any CPU
 		{404FBCB3-6827-48F8-94CA-0ACBEE0FF759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{404FBCB3-6827-48F8-94CA-0ACBEE0FF759}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{404FBCB3-6827-48F8-94CA-0ACBEE0FF759}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{404FBCB3-6827-48F8-94CA-0ACBEE0FF759}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{404FBCB3-6827-48F8-94CA-0ACBEE0FF759}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

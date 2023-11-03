@@ -1,12 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="mauiapp.MainPage"
-    xmlns:viewmodel="clr-namespace:mauiapp" x:DataType="viewmodel:MainPageViewModel">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="mauiapp.MainPage"
+             xmlns:viewmodel="clr-namespace:mauiapp" 
+             x:DataType="viewmodel:MainPageViewModel">
 
-    <Grid RowDefinitions="Auto, Auto, *" ColumnDefinitions=".10*, .80*, .10*" Padding="10" RowSpacing="10" ColumnSpacing="10">
+    <Grid RowDefinitions="Auto, Auto, *" ColumnDefinitions="Auto, *, Auto" Padding="10" RowSpacing="10" ColumnSpacing="10">
 
-        <Image Grid.Row="0" Grid.Column="0" Source="dotnet_bot.png" />
-        <Image Grid.Row="0" Grid.Column="2" Source="dotnet_bot.png" />
+        <Image Grid.Row="0" Grid.Column="0" Source="planeswalker.png" BackgroundColor="AntiqueWhite" HeightRequest="100" WidthRequest="100"/>
+        <Image Grid.Row="0" Grid.Column="2" Source="planeswalker.png" BackgroundColor="AntiqueWhite" HeightRequest="100" WidthRequest="100"/>
+
+        <Picker x:Name="setPicker" 
+                SelectedIndexChanged="OnPickerSelectedIndexChanged" 
+                Grid.Row="0" Grid.Column="1" 
+                ItemsSource="{Binding SetList}" 
+                FontSize="24" 
+                HorizontalOptions="CenterAndExpand" 
+                VerticalOptions="Center"/>
 
         <Entry Placeholder="" Grid.Row="1" Grid.ColumnSpan="3" />
 
@@ -23,7 +33,6 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-
 
     </Grid>
 
