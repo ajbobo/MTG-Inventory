@@ -15,9 +15,12 @@ public partial class MainPageViewModel : ObservableObject
     [ObservableProperty]
     public MTG_Set selectedSet;
 
+    public List<CardData> FullCardList { get; set; }
+
     public MainPageViewModel()
     {
-        CardList = new ObservableCollection<CardData>();
-        SetList = new ObservableCollection<MTG_Set>();
+        CardList = new();
+        SetList = new();
+        FullCardList = new();
     }
 }

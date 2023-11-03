@@ -14,7 +14,6 @@
                 FontSize="36" 
                 HorizontalOptions="CenterAndExpand" 
                 VerticalOptions="Center"
-                x:DataType="viewmodel:MTG_Set"
                 ItemDisplayBinding="{Binding Name}"
                 SelectedItem="{Binding SelectedSet}"/>
 
@@ -22,7 +21,7 @@
         <WebView Source="{Binding SelectedSet.IconUrl}" Grid.Row="0" Grid.Column="0" BackgroundColor="AntiqueWhite" HeightRequest="100" WidthRequest="100"/>
         <WebView Source="{Binding SelectedSet.IconUrl}" Grid.Row="0" Grid.Column="2" BackgroundColor="AntiqueWhite" HeightRequest="100" WidthRequest="100"/>
 
-        <Entry Placeholder="" Grid.Row="1" Grid.ColumnSpan="3" />
+        <Entry Placeholder="" Grid.Row="1" Grid.ColumnSpan="3" TextChanged="OnEntryTextChanged"/>
         
         <CollectionView Grid.Row="2" Grid.ColumnSpan="3" ItemsSource="{Binding CardList}">
             <CollectionView.ItemTemplate>
