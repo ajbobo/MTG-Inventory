@@ -5,25 +5,29 @@
              xmlns:viewmodel="clr-namespace:mauiapp" 
              x:DataType="viewmodel:MainPageViewModel">
 
-    <Grid RowDefinitions="Auto, Auto, *" ColumnDefinitions="Auto, *, Auto" Padding="10" RowSpacing="10" ColumnSpacing="10">
-
-        <Image Grid.Row="0" Grid.Column="0" Source="planeswalker.png" BackgroundColor="AntiqueWhite" HeightRequest="100" WidthRequest="100"/>
-        <Image Grid.Row="0" Grid.Column="2" Source="planeswalker.png" BackgroundColor="AntiqueWhite" HeightRequest="100" WidthRequest="100"/>
+    <Grid RowDefinitions="Auto, Auto, *" ColumnDefinitions="Auto, *, Auto" Padding="10" RowSpacing="0" ColumnSpacing="10">
 
         <Picker x:Name="setPicker" 
                 SelectedIndexChanged="OnPickerSelectedIndexChanged" 
                 Grid.Row="0" Grid.Column="1" 
                 ItemsSource="{Binding SetList}" 
-                FontSize="24" 
+                FontSize="36" 
                 HorizontalOptions="CenterAndExpand" 
-                VerticalOptions="Center"/>
+                VerticalOptions="Center"
+                x:DataType="viewmodel:MTG_Set"
+                ItemDisplayBinding="{Binding Name}"
+                SelectedItem="{Binding SelectedSet}"/>
+
+        <!-- I have to use WebViews here because Images can't support .svg images at runtime -->
+        <WebView Source="{Binding SelectedSet.IconUrl}" Grid.Row="0" Grid.Column="0" BackgroundColor="AntiqueWhite" HeightRequest="100" WidthRequest="100"/>
+        <WebView Source="{Binding SelectedSet.IconUrl}" Grid.Row="0" Grid.Column="2" BackgroundColor="AntiqueWhite" HeightRequest="100" WidthRequest="100"/>
 
         <Entry Placeholder="" Grid.Row="1" Grid.ColumnSpan="3" />
-
+        
         <CollectionView Grid.Row="2" Grid.ColumnSpan="3" ItemsSource="{Binding CardList}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="viewmodel:CardData">
-                    <Frame >
+                    <Frame Padding="20">
                         <Grid ColumnSpacing="10" ColumnDefinitions="Auto, *, Auto">
                             <Label Text="{Binding Card.CollectorNumber}" FontSize="24" Grid.Column="0"/>
                             <Label Text="{Binding Card.Name}" FontSize="24" Grid.Column="1"/>
