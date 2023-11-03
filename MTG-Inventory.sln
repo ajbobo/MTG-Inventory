@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api", "api\api.csproj", "{0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webapp", "webapp\webapp.csproj", "{32F71049-F399-4612-8756-0A47C9AE0523}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mauiapp", "mauiapp\mauiapp.csproj", "{404FBCB3-6827-48F8-94CA-0ACBEE0FF759}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{32F71049-F399-4612-8756-0A47C9AE0523}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32F71049-F399-4612-8756-0A47C9AE0523}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32F71049-F399-4612-8756-0A47C9AE0523}.Release|Any CPU.Build.0 = Release|Any CPU
+		{404FBCB3-6827-48F8-94CA-0ACBEE0FF759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{404FBCB3-6827-48F8-94CA-0ACBEE0FF759}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{404FBCB3-6827-48F8-94CA-0ACBEE0FF759}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{404FBCB3-6827-48F8-94CA-0ACBEE0FF759}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

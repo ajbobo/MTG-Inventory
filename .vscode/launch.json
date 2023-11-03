@@ -2,6 +2,12 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "MAUI App",
+            "type": "maui",
+            "request": "launch",
+            "preLaunchTask": "maui: Build"
+        },
+        {
             "name": "Launch WebApp",
             "type": "coreclr",
             "request": "launch",
