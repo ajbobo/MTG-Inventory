@@ -1,8 +1,8 @@
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
-namespace mauiapp;
+namespace mauiapp.ViewModels;
 
 public partial class MainPageViewModel : ObservableObject
 {
@@ -22,5 +22,14 @@ public partial class MainPageViewModel : ObservableObject
         CardList = new();
         SetList = new();
         FullCardList = new();
+    }
+
+    [RelayCommand]
+    async Task TapCard(CardData cardData)
+    {
+        await Shell.Current.GoToAsync(nameof(CTCPage), new Dictionary<string, object>()
+        {
+            {"cardData", cardData}
+        });
     }
 }

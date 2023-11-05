@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="mauiapp.MainPage"
-             xmlns:viewmodel="clr-namespace:mauiapp" 
+             xmlns:viewmodel="clr-namespace:mauiapp.ViewModels" 
+             xmlns:innerns="clr-namespace:mauiapp"
              x:DataType="viewmodel:MainPageViewModel">
 
     <Grid RowDefinitions="Auto, Auto, *" ColumnDefinitions="Auto, *, Auto" Padding="10" RowSpacing="0" ColumnSpacing="10">
@@ -21,12 +22,19 @@
         <WebView Source="{Binding SelectedSet.IconUrl}" Grid.Row="0" Grid.Column="0" BackgroundColor="AntiqueWhite" HeightRequest="100" WidthRequest="100"/>
         <WebView Source="{Binding SelectedSet.IconUrl}" Grid.Row="0" Grid.Column="2" BackgroundColor="AntiqueWhite" HeightRequest="100" WidthRequest="100"/>
 
-        <Entry Placeholder="" Grid.Row="1" Grid.ColumnSpan="3" TextChanged="OnEntryTextChanged"/>
+        <Entry x:Name="cardEntry" Placeholder="" Grid.Row="1" Grid.ColumnSpan="3" TextChanged="OnEntryTextChanged"/>
         
-        <CollectionView Grid.Row="2" Grid.ColumnSpan="3" ItemsSource="{Binding CardList}">
+        <CollectionView Grid.Row="2" 
+                        Grid.ColumnSpan="3" 
+                        ItemsSource="{Binding CardList}" 
+                        SelectionMode="None">
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="viewmodel:CardData">
+                <DataTemplate x:DataType="innerns:CardData">
                     <Frame Padding="20">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainPageViewModel}}, Path=TapCardCommand}"
+                                                  CommandParameter="{Binding .}" />
+                        </Frame.GestureRecognizers>
                         <Grid ColumnSpacing="10" ColumnDefinitions="Auto, *, Auto">
                             <Label Text="{Binding Card.CollectorNumber}" FontSize="24" Grid.Column="0"/>
                             <Label Text="{Binding Card.Name}" FontSize="24" Grid.Column="1"/>

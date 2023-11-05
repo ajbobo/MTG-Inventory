@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using mauiapp.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace mauiapp;
 
@@ -17,7 +18,9 @@ public static class MauiProgram
 
 		builder.Services.AddSingleton<IRestService, RestService>()
 						.AddSingleton<MainPage>()
-						.AddSingleton<MainPageViewModel>();
+						.AddSingleton<MainPageViewModel>()
+						.AddTransient<CTCPage>()
+						.AddTransient<CTCPageViewModel>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

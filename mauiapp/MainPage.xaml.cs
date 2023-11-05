@@ -1,4 +1,7 @@
-﻿namespace mauiapp;
+﻿using CommunityToolkit.Mvvm.Input;
+using mauiapp.ViewModels;
+
+namespace mauiapp;
 
 public partial class MainPage : ContentPage
 {
@@ -17,13 +20,16 @@ public partial class MainPage : ContentPage
     {
         base.OnAppearing();
 
+        cardEntry.Text = "";
+
         List<MTG_Set> setList = await _restService.GetAllSets();
         foreach (MTG_Set set in setList)
             _cdv.SetList.Add(set);
 
-        await PopulateCardLists(setList[0].Code);
+        if (setPicker.SelectedIndex == -1)
+            setPicker.SelectedIndex = 0;
 
-        setPicker.SelectedIndex = 0;
+        await PopulateCardLists(setList[setPicker.SelectedIndex].Code);
     }
 
     protected async void OnPickerSelectedIndexChanged(object sender, EventArgs e)
