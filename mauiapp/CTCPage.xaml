@@ -40,7 +40,9 @@
                             <Button Text="=4" Grid.Column="2" Grid.Row="1" FontSize="24" 
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CTCPageViewModel}}, Path=EqualsFourCommand}"
                                     CommandParameter="{Binding .}"/>
-                            <Button Text="X" Grid.Column="3" Grid.Row="1" FontSize="24" />
+                            <Button Text="X" Grid.Column="3" Grid.Row="1" FontSize="24" 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CTCPageViewModel}}, Path=RemoveCommand}"
+                                    CommandParameter="{Binding .}"/>
                         </Grid>
                     </Frame>
                 </DataTemplate>
@@ -49,11 +51,12 @@
         </CollectionView>
 
         <Button Text="Add Type" 
-            FontSize="24 "
-            WidthRequest="150"/>
+                FontSize="24"
+                Command="{Binding Path=NewCTCCommand}"
+                WidthRequest="150"/>
 
         <Button Text="Save" 
-                FontSize="24 "
+                FontSize="24"
                 Command="{Binding Path=SaveCommand}" 
                 WidthRequest="150"/>
     </VerticalStackLayout>

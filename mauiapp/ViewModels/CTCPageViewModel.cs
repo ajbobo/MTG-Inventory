@@ -22,13 +22,6 @@ public partial class CTCPageViewModel : ObservableObject
     }
 
     [RelayCommand]
-    async Task Save()
-    {
-        await _restService.UpdateCardData(CardData);
-        await Shell.Current.GoToAsync("..");
-    }
-
-    [RelayCommand]
     void PlusOne(CardTypeCount ctc)
     {
         ctc.Count++;
@@ -44,5 +37,28 @@ public partial class CTCPageViewModel : ObservableObject
     void EqualsFour(CardTypeCount ctc)
     {
         ctc.Count = 4;
+    }
+
+    [RelayCommand]
+    void Remove(CardTypeCount ctc)
+    {
+        Ctcs.Remove(ctc);
+        CardData.CTCs.Remove(ctc);
+    }
+
+    [RelayCommand]
+    void NewCTC()
+    {
+        CardTypeCount ctc = new CardTypeCount();
+
+        Ctcs.Add(ctc);
+        CardData.CTCs.Add(ctc);
+    }
+
+    [RelayCommand]
+    async Task Save()
+    {
+        await _restService.UpdateCardData(CardData);
+        await Shell.Current.GoToAsync("..");
     }
 }

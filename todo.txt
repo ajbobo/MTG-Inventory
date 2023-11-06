@@ -4,8 +4,6 @@ Rename "foil | prerelease" and "foil" in Windows App and DB to be capitalized
 --- API ---
 
 --- Windows App ---
-Implment "Remove CTC" button
-Implement "Add CTC" button
 
 --- Term ---
 Add option to ChooseSetDialog to only show sets that are in User_Inv
