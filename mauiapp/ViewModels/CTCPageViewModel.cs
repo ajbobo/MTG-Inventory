@@ -22,53 +22,27 @@ public partial class CTCPageViewModel : ObservableObject
     }
 
     [RelayCommand]
-    async Task GoBack()
+    async Task Save()
     {
+        await _restService.UpdateCardData(CardData);
         await Shell.Current.GoToAsync("..");
     }
 
     [RelayCommand]
     void PlusOne(CardTypeCount ctc)
     {
-
         ctc.Count++;
-        UpdateView(ctc);
-
-        _restService.UpdateCardData(CardData);
     }
 
     [RelayCommand]
     void MinusOne(CardTypeCount ctc)
     {
         ctc.Count--;
-        UpdateView(ctc);
-
-        _restService.UpdateCardData(CardData);
     }
 
     [RelayCommand]
     void EqualsFour(CardTypeCount ctc)
     {
         ctc.Count = 4;
-        UpdateView(ctc);
-
-        _restService.UpdateCardData(CardData);
     }
-
-    private void UpdateView(CardTypeCount ctc)
-    {
-        int index = Ctcs.IndexOf(ctc);
-        Ctcs.RemoveAt(index);
-        Ctcs.Insert(index, new CardTypeCount() // Have to create a new one because of some caching (or something) in the UI layer
-        {
-            CardType = ctc.CardType,
-            Count = ctc.Count
-        });
-
-        // Keep the CTC in the CardData up-to-date with the one in the other observable list
-        CardData.CTCs.RemoveAt(index);
-        CardData.CTCs.Insert(index, ctc);
-    }
-
-
 }
