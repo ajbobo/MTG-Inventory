@@ -23,7 +23,7 @@
                                 <Picker.ItemsSource>
                                     <x:Array Type="{x:Type x:String}">
                                         <x:String>Standard</x:String>
-                                        <x:String>foil | prerelease</x:String>
+                                        <x:String>foil | prerelease</x:String> <!-- The picker is case-sensitive. Update these when the DB has been updated. -->
                                         <x:String>foil</x:String>
                                         <x:String>Spanish</x:String>
                                         <x:String>Signed</x:String>

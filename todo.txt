@@ -1,10 +1,11 @@
+--- General ---
+Rename "foil | prerelease" and "foil" in Windows App and DB to be capitalized
+
 --- API ---
 
-
 --- Windows App ---
-Create a standalone app using a UI framework like Avalonia UI?
-    Something that can generate an Android app would be cool
-If the data and ui can be uncoupled, this might be easier
+Implment "Remove CTC" button
+Implement "Add CTC" button
 
 --- Term ---
 Add option to ChooseSetDialog to only show sets that are in User_Inv
@@ -19,22 +20,3 @@ Add a way to save decks
     Should also import them from the DeckBox files
 Add a way to open the card image? (Probably in a separate app, but if I can imbed it, that would be cool)
 Published build needs an icon
-
-
---- Web UI ---
-Should I change EditCTC into a React object instead of a group of functions?
-Add filters for Foil, Prerelease, etc.
-Add filters for card type
-Include column for card type
-Card panel doesn't scroll when 2 sides are shown and they overflow the bottom of the window
-Add a panel of set information
-    Number of cards in the set
-    Cards collected
-    Percentage collected
-    Adjust values based on current filters
-
-
---- New Web UI ---
-Migrate from Bootstrap to TailwindCSS and HeadlessUI?
-    https://tailwindcss.com/
-    https://headlessui.dev/

@@ -65,6 +65,7 @@ public partial class CTCPageViewModel : ObservableObject
             Count = ctc.Count
         });
 
+        // Keep the CTC in the CardData up-to-date with the one in the other observable list
         CardData.CTCs.RemoveAt(index);
         CardData.CTCs.Insert(index, ctc);
     }
