@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace mauiapp;
 
 public class CardTypeCount

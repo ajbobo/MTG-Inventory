@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using Newtonsoft.Json;
 
 namespace mauiapp;
@@ -40,5 +42,15 @@ public class RestService : IRestService
         }
 
         return setList;
+    }
+
+    public async Task UpdateCardData(CardData cardData)
+    {
+        var obj = new { ctcs = cardData.CTCs };
+        string json = JsonConvert.SerializeObject(obj);
+        var content = new StringContent(json);
+        content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+
+        HttpResponseMessage resp = await _httpClient.PutAsync($"https://mtg-inventory.azurewebsites.net/api/Collection/{cardData.Card.SetCode}/{cardData.Card.CollectorNumber}", content);
     }
 }
