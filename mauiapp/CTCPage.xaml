@@ -5,10 +5,10 @@
              xmlns:viewmodel="clr-namespace:mauiapp.ViewModels"
              xmlns:toplevel="clr-namespace:mauiapp"
              x:DataType="viewmodel:CTCPageViewModel" >
-    <VerticalStackLayout Padding="20">
+    <VerticalStackLayout Padding="10" Spacing="5">
         <Label 
             Text="{Binding CardData.Card.Name}"
-            FontSize="40"
+            FontSize="30"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
@@ -17,9 +17,9 @@
         <CollectionView ItemsSource="{Binding Ctcs}" SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="toplevel:CardTypeCount" >
-                    <Frame>
+                    <Frame Padding="5">
                         <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10">
-                            <Picker SelectedItem="{Binding CardType}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" FontSize="36" >
+                            <Picker SelectedItem="{Binding CardType}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" FontSize="16" >
                                 <Picker.ItemsSource>
                                     <x:Array Type="{x:Type x:String}">
                                         <x:String>Standard</x:String>
@@ -30,17 +30,17 @@
                                     </x:Array>
                                 </Picker.ItemsSource>
                             </Picker>
-                            <Label Text="{Binding Count}" Grid.Column="3" FontSize="36" Grid.Row="0" HorizontalTextAlignment="End"/>
-                            <Button Text="+" Grid.Column="0" Grid.Row="1" FontSize="24" 
+                            <Label Text="{Binding Count}" Grid.Column="3" FontSize="16" Grid.Row="0" HorizontalTextAlignment="End" VerticalTextAlignment="Center"/>
+                            <Button Text="+" Grid.Column="0" Grid.Row="1" FontSize="16"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CTCPageViewModel}}, Path=PlusOneCommand}"
                                     CommandParameter="{Binding .}"/>
-                            <Button Text="-" Grid.Column="1" Grid.Row="1" FontSize="24" 
+                            <Button Text="-" Grid.Column="1" Grid.Row="1" FontSize="16" 
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CTCPageViewModel}}, Path=MinusOneCommand}"
                                     CommandParameter="{Binding .}"/>
-                            <Button Text="=4" Grid.Column="2" Grid.Row="1" FontSize="24" 
+                            <Button Text="=4" Grid.Column="2" Grid.Row="1" FontSize="16" 
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CTCPageViewModel}}, Path=EqualsFourCommand}"
                                     CommandParameter="{Binding .}"/>
-                            <Button Text="X" Grid.Column="3" Grid.Row="1" FontSize="24" 
+                            <Button Text="X" Grid.Column="3" Grid.Row="1" FontSize="16" 
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CTCPageViewModel}}, Path=RemoveCommand}"
                                     CommandParameter="{Binding .}"/>
                         </Grid>

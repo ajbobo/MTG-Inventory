@@ -27,6 +27,11 @@ public class RestService : IRestService
                 cardList = JsonConvert.DeserializeObject<List<CardData>>(cardStr);
             }
         }
+        foreach (CardData card in cardList)
+        {
+            if (card.CTCs == null)
+                card.CTCs = new();
+        }
 
         return cardList;
     }

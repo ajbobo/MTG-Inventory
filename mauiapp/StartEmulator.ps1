@@ -1,0 +1,1 @@
+& 'C:\Program Files (x86)\Android\android-sdk\emulator\emulator.exe' -avd ajb

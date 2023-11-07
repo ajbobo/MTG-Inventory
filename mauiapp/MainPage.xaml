@@ -12,15 +12,25 @@
                 SelectedIndexChanged="OnPickerSelectedIndexChanged" 
                 Grid.Row="0" Grid.Column="1" 
                 ItemsSource="{Binding SetList}" 
-                FontSize="36" 
+                FontSize="24" 
                 HorizontalOptions="CenterAndExpand" 
                 VerticalOptions="Center"
                 ItemDisplayBinding="{Binding Name}"
                 SelectedItem="{Binding SelectedSet}"/>
 
         <!-- I have to use WebViews here because Images can't support .svg images at runtime -->
-        <WebView Source="{Binding SelectedSet.IconUrl}" Grid.Row="0" Grid.Column="0" BackgroundColor="AntiqueWhite" HeightRequest="100" WidthRequest="100"/>
-        <WebView Source="{Binding SelectedSet.IconUrl}" Grid.Row="0" Grid.Column="2" BackgroundColor="AntiqueWhite" HeightRequest="100" WidthRequest="100"/>
+        <WebView Source="{Binding SelectedSet.IconUrl}" 
+                 Grid.Row="0" 
+                 Grid.Column="0" 
+                 BackgroundColor="AntiqueWhite" 
+                 HeightRequest="{OnPlatform WinUI=100, Android=50}" 
+                 WidthRequest="{OnPlatform WinUI=100, Android=50}"/>
+        <WebView Source="{Binding SelectedSet.IconUrl}" 
+                 Grid.Row="0" 
+                 Grid.Column="2" 
+                 BackgroundColor="AntiqueWhite" 
+                 HeightRequest="{OnPlatform WinUI=100, Android=50}" 
+                 WidthRequest="{OnPlatform WinUI=100, Android=50}"/>
 
         <Entry x:Name="cardEntry" Placeholder="" Grid.Row="1" Grid.ColumnSpan="3" TextChanged="OnEntryTextChanged"/>
         
@@ -36,9 +46,9 @@
                                                   CommandParameter="{Binding .}" />
                         </Frame.GestureRecognizers>
                         <Grid ColumnSpacing="10" ColumnDefinitions="Auto, *, Auto">
-                            <Label Text="{Binding Card.CollectorNumber}" FontSize="24" Grid.Column="0"/>
-                            <Label Text="{Binding Card.Name}" FontSize="24" Grid.Column="1"/>
-                            <Label Text="{Binding TotalCount}" FontSize="24" Grid.Column="2"/>
+                            <Label Text="{Binding Card.CollectorNumber}" FontSize="16" Grid.Column="0"/>
+                            <Label Text="{Binding Card.Name}" FontSize="16" Grid.Column="1"/>
+                            <Label Text="{Binding TotalCount}" FontSize="16" Grid.Column="2"/>
                         </Grid>
                     </Frame>
                 </DataTemplate>
