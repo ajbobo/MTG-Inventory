@@ -1,9 +1,12 @@
 --- General ---
-Rename "foil | prerelease" and "foil" in Windows App and DB to be capitalized
+Rename "foil | prerelease" and "foil" in Maui App and DB to be capitalized
 
 --- API ---
 
---- Windows App ---
+--- Maui App ---
+CTCPage needs to be scrollable
+Set starting window size for Windows
+Create icon and splash screen - .svg format
 
 --- Term ---
 Add option to ChooseSetDialog to only show sets that are in User_Inv
