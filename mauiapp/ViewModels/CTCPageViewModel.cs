@@ -49,7 +49,11 @@ public partial class CTCPageViewModel : ObservableObject
     [RelayCommand]
     void NewCTC()
     {
-        CardTypeCount ctc = new CardTypeCount();
+        CardTypeCount ctc = new()
+        {
+            CardType = Ctcs.Count == 0 ? "Standard" : "foil",
+            Count = 1
+        };
 
         Ctcs.Add(ctc);
         CardData.CTCs.Add(ctc);
