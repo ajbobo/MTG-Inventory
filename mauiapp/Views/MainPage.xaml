@@ -29,13 +29,11 @@
         <WebView Source="{Binding SelectedSet.IconUrl}" 
                  Grid.Row="0" 
                  Grid.Column="0" 
-                 BackgroundColor="AntiqueWhite" 
                  HeightRequest="{OnPlatform WinUI=100, Android=50}" 
                  WidthRequest="{OnPlatform WinUI=100, Android=50}"/>
         <WebView Source="{Binding SelectedSet.IconUrl}" 
                  Grid.Row="0" 
                  Grid.Column="2" 
-                 BackgroundColor="AntiqueWhite" 
                  HeightRequest="{OnPlatform WinUI=100, Android=50}" 
                  WidthRequest="{OnPlatform WinUI=100, Android=50}"/>
 
