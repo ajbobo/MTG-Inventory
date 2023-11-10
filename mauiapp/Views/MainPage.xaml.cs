@@ -48,6 +48,7 @@ public partial class MainPage : ContentPage
 
     private async Task PopulateCardLists(string setCode)
     {
+        activityIndicator.IsRunning = true;
         _cdv.CardList.Clear();
         _cdv.FullCardList.Clear();
         List<CardData> cardList = await _restService.GetCardsInSet(setCode);
@@ -56,6 +57,7 @@ public partial class MainPage : ContentPage
             _cdv.CardList.Add(card);
             _cdv.FullCardList.Add(card);
         }
+        activityIndicator.IsRunning = false;
     }
 
     protected void OnEntryTextChanged(object sender, EventArgs e)
