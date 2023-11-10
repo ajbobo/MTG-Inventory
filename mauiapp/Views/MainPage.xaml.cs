@@ -30,6 +30,8 @@ public partial class MainPage : ContentPage
             setPicker.SelectedIndex = 0;
 
         await PopulateCardLists(setList[setPicker.SelectedIndex].Code);
+
+        cardEntry.Focus();
     }
 
     protected async void OnPickerSelectedIndexChanged(object sender, EventArgs e)
