@@ -6,6 +6,13 @@
              xmlns:toplevel="clr-namespace:mauiapp"
              x:DataType="viewmodel:MainPageViewModel">
 
+    <Shell.Title>
+        <MultiBinding StringFormat="{}{0}  ({1})">
+            <Binding Path="SelectedSet.Name" />
+            <Binding Path="SelectedSet.Code" />
+        </MultiBinding>
+    </Shell.Title>
+
     <Grid RowDefinitions="Auto, Auto, *" ColumnDefinitions="Auto, *, Auto" Padding="10" RowSpacing="0" ColumnSpacing="10">
 
         <Picker x:Name="setPicker" 

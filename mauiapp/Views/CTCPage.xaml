@@ -4,14 +4,10 @@
              x:Class="mauiapp.CTCPage"
              xmlns:viewmodel="clr-namespace:mauiapp.ViewModels"
              xmlns:toplevel="clr-namespace:mauiapp"
-             x:DataType="viewmodel:CTCPageViewModel" >
+             x:DataType="viewmodel:CTCPageViewModel" 
+             Title="{Binding CardData.Card.Name}">
     <ScrollView>
         <VerticalStackLayout Padding="10" Spacing="5">
-            <Label 
-                Text="{Binding CardData.Card.Name}"
-                FontSize="30"
-                VerticalOptions="Center" 
-                HorizontalOptions="Center" />
 
             <Image Source="{Binding CardData.Card.FrontImageUrl}" HeightRequest="300"/>
 
