@@ -4,6 +4,8 @@ Rename "foil | prerelease" and "foil" in Maui App and DB to be capitalized
 --- API ---
 
 --- Maui App ---
+Pressing Enter in the card Entry field should open the CTC page for the first card in the list
+Selecting a card in the list with the keyboard and pressing Enter or Space should open the card's CTC page
 
 --- Term ---
 Add option to ChooseSetDialog to only show sets that are in User_Inv
