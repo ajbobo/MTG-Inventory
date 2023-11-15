@@ -74,5 +74,12 @@ public partial class MainPage : ContentPage
                 _cdv.CardList.Add(card);
         }
     }
+
+    protected async void OnEntryCompleted(object sender, EventArgs e)
+    {
+        // Open whatever card is at the top of the visible list
+        CardData topCard = _cdv.CardList[0];
+        await _cdv.TapCard(topCard);
+    }
 }
 

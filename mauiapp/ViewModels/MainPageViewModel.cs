@@ -25,7 +25,7 @@ public partial class MainPageViewModel : ObservableObject
     }
 
     [RelayCommand]
-    async Task TapCard(CardData cardData)
+    public async Task TapCard(CardData cardData)
     {
         await Shell.Current.GoToAsync(nameof(CTCPage), new Dictionary<string, object>()
         {

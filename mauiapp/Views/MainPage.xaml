@@ -37,7 +37,7 @@
                  HeightRequest="{OnPlatform WinUI=100, Android=50}" 
                  WidthRequest="{OnPlatform WinUI=100, Android=50}"/>
 
-        <Entry x:Name="cardEntry" Placeholder="" Grid.Row="1" Grid.ColumnSpan="3" TextChanged="OnEntryTextChanged"/>
+        <Entry x:Name="cardEntry" Placeholder="" Grid.Row="1" Grid.ColumnSpan="3" TextChanged="OnEntryTextChanged" Completed="OnEntryCompleted"/>
 
         <ActivityIndicator x:Name="activityIndicator" IsRunning="True" Grid.Row="2" Grid.Column="1"/>
         
