@@ -6,6 +6,11 @@
              xmlns:toplevel="clr-namespace:mauiapp"
              x:DataType="viewmodel:MainPageViewModel">
 
+    <ContentPage.Resources>
+        <toplevel:CountColorConverter x:Key="countColor" />
+        <toplevel:PriceColorConverter x:Key="priceColor" />
+    </ContentPage.Resources>
+
     <Shell.Title>
         <MultiBinding StringFormat="{}{0}  ({1})">
             <Binding Path="SelectedSet.Name" />
@@ -52,10 +57,11 @@
                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainPageViewModel}}, Path=TapCardCommand}"
                                                   CommandParameter="{Binding .}" />
                         </Frame.GestureRecognizers>
-                        <Grid ColumnSpacing="10" ColumnDefinitions="Auto, *, Auto">
+                        <Grid ColumnSpacing="10" ColumnDefinitions="Auto, *, Auto, Auto">
                             <Label Text="{Binding Card.CollectorNumber}" FontSize="16" Grid.Column="0"/>
                             <Label Text="{Binding Card.Name}" FontSize="16" Grid.Column="1"/>
-                            <Label Text="{Binding TotalCount}" FontSize="16" Grid.Column="2"/>
+                            <Label Text="{Binding Card.Price, StringFormat='${0}'}" FontSize="16" TextColor="{Binding .,Converter={StaticResource priceColor}}" Grid.Column="2"/>
+                            <Label Text="{Binding TotalCount}" FontSize="16" TextColor="{Binding .,Converter={StaticResource countColor}}" Grid.Column="3"/>
                         </Grid>
                     </Frame>
                 </DataTemplate>
