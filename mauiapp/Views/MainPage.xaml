@@ -18,7 +18,7 @@
         </MultiBinding>
     </Shell.Title>
 
-    <Grid RowDefinitions="Auto, Auto, *" ColumnDefinitions="Auto, *, Auto" Padding="10" RowSpacing="0" ColumnSpacing="10">
+    <Grid RowDefinitions="Auto, Auto, Auto, *" ColumnDefinitions="Auto, *, Auto" Padding="10" RowSpacing="0" ColumnSpacing="10">
 
         <Picker x:Name="setPicker" 
                 SelectedIndexChanged="OnPickerSelectedIndexChanged" 
@@ -44,9 +44,9 @@
 
         <Entry x:Name="cardEntry" Placeholder="" Grid.Row="1" Grid.ColumnSpan="3" TextChanged="OnEntryTextChanged" Completed="OnEntryCompleted"/>
 
-        <ActivityIndicator x:Name="activityIndicator" IsRunning="True" Grid.Row="2" Grid.Column="1"/>
+        <ActivityIndicator x:Name="activityIndicator" IsRunning="True" Grid.Row="3" Grid.Column="1"/>
         
-        <CollectionView Grid.Row="2" 
+        <CollectionView Grid.Row="3" 
                         Grid.ColumnSpan="3" 
                         ItemsSource="{Binding CardList}" 
                         SelectionMode="None">
@@ -67,6 +67,47 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <HorizontalStackLayout Grid.Row="2" Grid.Column="1" HorizontalOptions="Center">
+            <Label VerticalTextAlignment="Center">Count:</Label>
+            <Picker x:Name="countPicker"
+                    SelectedItem="{Binding CountFilter}">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>All</x:String>
+                        <x:String>1+</x:String>
+                        <x:String>4+</x:String>
+                        <x:String>&lt;4</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <Label VerticalTextAlignment="Center">Price:</Label>
+            <Picker x:Name="pricePicker"
+                    SelectedItem="{Binding PriceFilter}">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>All</x:String>
+                        <x:String>$1.00+</x:String>
+                        <x:String>$10.00+</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <Label VerticalTextAlignment="Center">Rarity:</Label>
+            <Picker x:Name="rarityPicker"
+                    SelectedItem="{Binding RarityFilter}">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>All</x:String>
+                        <x:String>Common</x:String>
+                        <x:String>Uncommon</x:String>
+                        <x:String>Rare</x:String>
+                        <x:String>Mythic</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+        </HorizontalStackLayout>
 
     </Grid>
 

@@ -15,6 +15,15 @@ public partial class MainPageViewModel : ObservableObject
     [ObservableProperty]
     public MTG_Set selectedSet;
 
+    [ObservableProperty]
+    public string countFilter = "All";
+
+    [ObservableProperty]
+    public string priceFilter = "All";
+
+    [ObservableProperty]
+    public string rarityFilter = "All";
+
     public List<CardData> FullCardList { get; set; }
 
     public MainPageViewModel()
