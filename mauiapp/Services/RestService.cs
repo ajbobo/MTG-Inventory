@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Net.Mime;
+using System.Text;
 using Newtonsoft.Json;
 
 namespace mauiapp;
@@ -15,12 +16,18 @@ public class RestService : IRestService
     }
 
 
-    public async Task<List<CardData>> GetCardsInSet(string setCode)
+    public async Task<List<CardData>> GetCardsInSet(string setCode, string countFilter = "", string priceFilter = "", string rarityFilter = "")
     {
         var cardList = new List<CardData>();
         if (setCode != null)
         {
-            HttpResponseMessage resp = await _httpClient.GetAsync("https://mtg-inventory.azurewebsites.net/api/Collection/" + setCode);
+            var builder = new StringBuilder("https://mtg-inventory.azurewebsites.net/api/Collection/");
+            builder.Append(setCode);
+            builder.Append('?');
+            builder.Append(countFilter.Length > 0 ? "&count=" + countFilter : null);
+            builder.Append(priceFilter.Length > 0 ? "&price=" + priceFilter : null);
+            builder.Append(rarityFilter.Length > 0 ? "&rarity=" + rarityFilter : null);
+            HttpResponseMessage resp = await _httpClient.GetAsync(builder.ToString());
             if (resp.IsSuccessStatusCode)
             {
                 var cardStr = await resp.Content.ReadAsStringAsync();

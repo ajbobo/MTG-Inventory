@@ -46,12 +46,21 @@ public partial class MainPage : ContentPage
         }
     }
 
+    protected async void OnFilterSelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (_cdv.SelectedSet != null)
+            await PopulateCardLists(_cdv.SelectedSet.Code);
+    }
+
     private async Task PopulateCardLists(string setCode)
     {
         activityIndicator.IsRunning = true;
         _cdv.CardList.Clear();
         _cdv.FullCardList.Clear();
-        List<CardData> cardList = await _restService.GetCardsInSet(setCode);
+        var count = _cdv.CountFilter.Equals("All") ? "" : _cdv.CountFilter;
+        var price = _cdv.PriceFilter.Equals("All") ? "" : _cdv.PriceFilter;
+        var rarity = _cdv.RarityFilter.Equals("All") ? "" : _cdv.RarityFilter.Substring(0,1);
+        List<CardData> cardList = await _restService.GetCardsInSet(setCode, count, price, rarity);
         foreach (CardData card in cardList)
         {
             _cdv.CardList.Add(card);

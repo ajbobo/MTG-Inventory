@@ -71,12 +71,14 @@
         <HorizontalStackLayout Grid.Row="2" Grid.Column="1" HorizontalOptions="Center">
             <Label VerticalTextAlignment="Center">Count:</Label>
             <Picker x:Name="countPicker"
-                    SelectedItem="{Binding CountFilter}">
+                    SelectedItem="{Binding CountFilter}"
+                    SelectedIndexChanged="OnFilterSelectedIndexChanged">
                 <Picker.ItemsSource>
                     <x:Array Type="{x:Type x:String}">
                         <x:String>All</x:String>
-                        <x:String>1+</x:String>
-                        <x:String>4+</x:String>
+                        <x:String>=0</x:String>
+                        <x:String>&gt;=1</x:String>
+                        <x:String>&gt;=4</x:String>
                         <x:String>&lt;4</x:String>
                     </x:Array>
                 </Picker.ItemsSource>
@@ -84,19 +86,21 @@
 
             <Label VerticalTextAlignment="Center">Price:</Label>
             <Picker x:Name="pricePicker"
-                    SelectedItem="{Binding PriceFilter}">
+                    SelectedItem="{Binding PriceFilter}"
+                    SelectedIndexChanged="OnFilterSelectedIndexChanged">
                 <Picker.ItemsSource>
                     <x:Array Type="{x:Type x:String}">
                         <x:String>All</x:String>
-                        <x:String>$1.00+</x:String>
-                        <x:String>$10.00+</x:String>
+                        <x:String>&gt;=1</x:String>
+                        <x:String>&gt;=10</x:String>
                     </x:Array>
                 </Picker.ItemsSource>
             </Picker>
 
             <Label VerticalTextAlignment="Center">Rarity:</Label>
             <Picker x:Name="rarityPicker"
-                    SelectedItem="{Binding RarityFilter}">
+                    SelectedItem="{Binding RarityFilter}"
+                    SelectedIndexChanged="OnFilterSelectedIndexChanged">
                 <Picker.ItemsSource>
                     <x:Array Type="{x:Type x:String}">
                         <x:String>All</x:String>
