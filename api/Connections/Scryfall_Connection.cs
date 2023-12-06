@@ -7,6 +7,10 @@ public class Scryfall_Connection : IScryfall_Connection
 {
     private readonly HttpClient _httpClient;
 
+    public string SetListUri { get; set; } = System.Configuration.ConfigurationManager.AppSettings["GetSetList_Url"]!;
+    public string SetSearchUri { get; set; } = System.Configuration.ConfigurationManager.AppSettings["SetSearch_Url"]!;
+    public string SymbolSearchUri { get; set; } = System.Configuration.ConfigurationManager.AppSettings["GetSymbolList_Url"]!;
+
     public Scryfall_Connection(HttpClient httpClient)
     {
         _httpClient = httpClient;
@@ -28,7 +32,8 @@ public class Scryfall_Connection : IScryfall_Connection
     {
         var setList = new List<MTG_Set>();
 
-        HttpResponseMessage msg = await _httpClient.GetAsync(System.Configuration.ConfigurationManager.AppSettings["GetSetList_Url"]);
+        // string uri = System.Configuration.ConfigurationManager.AppSettings["GetSetList_Url"]!;
+        HttpResponseMessage msg = await _httpClient.GetAsync(SetListUri);
         if (!msg.IsSuccessStatusCode)
             return setList;
 
@@ -63,7 +68,7 @@ public class Scryfall_Connection : IScryfall_Connection
         bool done = false;
         while (!done)
         {
-            HttpResponseMessage msg = await _httpClient.GetAsync(string.Format(System.Configuration.ConfigurationManager.AppSettings["SetSearch_Url"]!, targetSetCode, page));
+            HttpResponseMessage msg = await _httpClient.GetAsync(string.Format(SetSearchUri, targetSetCode, page));
             if (msg.IsSuccessStatusCode)
             {
                 string respStr = await msg.Content.ReadAsStringAsync();
@@ -125,7 +130,7 @@ public class Scryfall_Connection : IScryfall_Connection
     {
         var symbolList = new List<MTG_Symbol>();
 
-        HttpResponseMessage msg = await _httpClient.GetAsync(System.Configuration.ConfigurationManager.AppSettings["GetSymbolList_Url"]);
+        HttpResponseMessage msg = await _httpClient.GetAsync(SymbolSearchUri);
         if (!msg.IsSuccessStatusCode)
             return symbolList;
 

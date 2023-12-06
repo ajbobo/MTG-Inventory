@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		todo.txt = todo.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api-test", "api-test\api-test.csproj", "{81A9251B-EBDC-4F1A-AEB7-C699887AC70D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{404FBCB3-6827-48F8-94CA-0ACBEE0FF759}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{404FBCB3-6827-48F8-94CA-0ACBEE0FF759}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{404FBCB3-6827-48F8-94CA-0ACBEE0FF759}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81A9251B-EBDC-4F1A-AEB7-C699887AC70D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81A9251B-EBDC-4F1A-AEB7-C699887AC70D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81A9251B-EBDC-4F1A-AEB7-C699887AC70D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81A9251B-EBDC-4F1A-AEB7-C699887AC70D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
