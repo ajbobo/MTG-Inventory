@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Caching;
 using Microsoft.EntityFrameworkCore;
 
 namespace mtg_api;
 
+[ExcludeFromCodeCoverage]
 public class Program
 {
     public static void Main(string[] args)

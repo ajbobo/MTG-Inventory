@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using mtg_api;
 
 namespace mtg_api;
 
+[ExcludeFromCodeCoverage]
 public class MtgInvContext : DbContext
 {
     public MtgInvContext(DbContextOptions<MtgInvContext> options)

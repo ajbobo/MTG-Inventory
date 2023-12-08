@@ -1,7 +1,6 @@
 {
     "object": "list2",
     "total_cards": 399,
-    "has_more": false,
     "next_page": "https://api.scryfall.com/cards/search?format=json&include_extras=false&include_multilingual=false&include_variations=false&order=set&page=3&q=set%3Amid&unique=prints",
     "data": [
         {
@@ -307,14 +306,6 @@
             "booster": true,
             "story_spotlight": false,
             "edhrec_rank": 12044,
-            "prices": {
-                "usd": "0.01",
-                "usd_foil": "0.08",
-                "usd_etched": null,
-                "eur": "0.06",
-                "eur_foil": "0.16",
-                "tix": "0.03"
-            },
             "related_uris": {
                 "gatherer": "https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=534955&printed=false",
                 "tcgplayer_infinite_articles": "https://tcgplayer.pxf.io/c/4931599/1830156/21018?subId1=api&trafcat=infinite&u=https%3A%2F%2Finfinite.tcgplayer.com%2Fsearch%3FcontentMode%3Darticle%26game%3Dmagic%26partner%3Dscryfall%26q%3DBounding%2BWolf",

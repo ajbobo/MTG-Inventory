@@ -7,6 +7,7 @@ public class Scryfall_Connection : IScryfall_Connection
 {
     private readonly HttpClient _httpClient;
 
+    // These are configurable so that unit tests can set them - I couldn't get AppSettings to work in a test project
     public string SetListUri { get; set; } = System.Configuration.ConfigurationManager.AppSettings["GetSetList_Url"]!;
     public string SetSearchUri { get; set; } = System.Configuration.ConfigurationManager.AppSettings["SetSearch_Url"]!;
     public string SymbolSearchUri { get; set; } = System.Configuration.ConfigurationManager.AppSettings["GetSymbolList_Url"]!;
@@ -32,7 +33,6 @@ public class Scryfall_Connection : IScryfall_Connection
     {
         var setList = new List<MTG_Set>();
 
-        // string uri = System.Configuration.ConfigurationManager.AppSettings["GetSetList_Url"]!;
         HttpResponseMessage msg = await _httpClient.GetAsync(SetListUri);
         if (!msg.IsSuccessStatusCode)
             return setList;
@@ -138,7 +138,7 @@ public class Scryfall_Connection : IScryfall_Connection
 
         // I'm parsing this way so that I don't have to worry about large .NET objects that I won't need later
         JObject resp = JObject.Parse(respStr);
-        JEnumerable<JToken> data = resp["data"]?.Children() ?? new();
+        JEnumerable<JToken> data = resp["data"]!.Children();
         foreach (JToken curSymbol in data)
         {
             bool inCost = curSymbol["appears_in_mana_costs"].AsBool();

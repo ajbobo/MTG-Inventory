@@ -2,7 +2,24 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Create Coverage Report",
+            "label": "Generate API code coverage",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}\\api-test\\api-test.csproj",
+                "/p:CollectCoverage=true",
+                "/p:CoverletOutputFormat=lcov",
+                "/p:CoverletOutput=./TestResults/lcov.info"
+            ],
+            "problemMatcher": ["$msCompile"],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Create Term Coverage Report",
             "command": "${userHome}\\.nuget\\packages\\reportgenerator\\5.1.10\\tools\\net6.0\\ReportGenerator.exe",
             "type": "shell",
             "args": [
@@ -13,7 +30,7 @@
             "problemMatcher": []
         },
         {
-            "label": "View Coverage Report",
+            "label": "View Term Coverage Report",
             "dependsOn": "Create Coverage Report",
             "command": "Invoke-Item",
             "type": "shell",

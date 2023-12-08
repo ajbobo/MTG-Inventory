@@ -118,4 +118,52 @@ public class Test_Scryfall_Connection
         Assert.AreEqual("{7}", symbolList[10].Text);
         Assert.AreEqual("{U}", symbolList[45].Text);
     }
+
+    [TestMethod]
+    public async Task TestGetCardsConnectionFailed()
+    {
+        HttpResponseMessage resp = new() { StatusCode = System.Net.HttpStatusCode.NotFound };
+
+        Mock<HttpMessageHandler> mockHandler = new();
+        mockHandler.Protected()
+            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(resp);
+
+        var conn = new Scryfall_Connection(new HttpClient(mockHandler.Object)) { SetSearchUri = "htto://anyURIisFine" };
+        List<MTG_Card> list = await conn.GetCardsInSet("dom");
+
+        Assert.AreEqual(0, list.Count);
+    }
+
+    [TestMethod]
+    public async Task TestGetSetsConnectionFailed()
+    {
+        HttpResponseMessage resp = new() { StatusCode = System.Net.HttpStatusCode.NotFound };
+
+        Mock<HttpMessageHandler> mockHandler = new();
+        mockHandler.Protected()
+            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(resp);
+
+        var conn = new Scryfall_Connection(new HttpClient(mockHandler.Object)) { SetListUri = "htto://anyURIisFine" };
+        List<MTG_Set> list = await conn.GetCollectableSets();
+
+        Assert.AreEqual(0, list.Count);
+    }
+
+    [TestMethod]
+    public async Task TestGetSymbolConnectionFailed()
+    {
+        HttpResponseMessage resp = new() { StatusCode = System.Net.HttpStatusCode.NotFound };
+
+        Mock<HttpMessageHandler> mockHandler = new();
+        mockHandler.Protected()
+            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(resp);
+
+        var conn = new Scryfall_Connection(new HttpClient(mockHandler.Object)) { SymbolSearchUri = "htto://anyURIisFine" };
+        List<MTG_Symbol> list = await conn.GetSymbols();
+
+        Assert.AreEqual(0, list.Count);
+    }
 }
