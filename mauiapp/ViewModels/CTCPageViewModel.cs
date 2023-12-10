@@ -24,19 +24,19 @@ public partial class CTCPageViewModel : ObservableObject
     [RelayCommand]
     void PlusOne(CardTypeCount ctc)
     {
-        ctc.Count++;
+        ctc.TempCount++;
     }
 
     [RelayCommand]
     void MinusOne(CardTypeCount ctc)
     {
-        ctc.Count--;
+        ctc.TempCount--;
     }
 
     [RelayCommand]
     void EqualsFour(CardTypeCount ctc)
     {
-        ctc.Count = 4;
+        ctc.TempCount = 4;
     }
 
     [RelayCommand]
@@ -52,7 +52,7 @@ public partial class CTCPageViewModel : ObservableObject
         CardTypeCount ctc = new()
         {
             CardType = Ctcs.Count == 0 ? "Standard" : "foil",
-            Count = 1
+            TempCount = 1
         };
 
         Ctcs.Add(ctc);
@@ -62,6 +62,9 @@ public partial class CTCPageViewModel : ObservableObject
     [RelayCommand]
     async Task Save()
     {
+        // Only TempCount has been set to this point. Save TempCount to Count
+        foreach (CardTypeCount ctc in CardData.CTCs)
+            ctc.UpdateCount();
         await _restService.UpdateCardData(CardData);
         await Shell.Current.GoToAsync("..");
     }

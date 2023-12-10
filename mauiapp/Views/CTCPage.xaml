@@ -6,6 +6,11 @@
              xmlns:toplevel="clr-namespace:mauiapp"
              x:DataType="viewmodel:CTCPageViewModel" 
              Title="{Binding CardData.Card.Name}">
+
+    <ContentPage.Resources>
+        <toplevel:CTCColorConverter x:Key="ctcColor" />
+    </ContentPage.Resources>
+
     <ScrollView>
         <VerticalStackLayout Padding="10" Spacing="5">
 
@@ -27,7 +32,14 @@
                                         </x:Array>
                                     </Picker.ItemsSource>
                                 </Picker>
-                                <Label Text="{Binding Count}" Grid.Column="3" FontSize="16" Grid.Row="0" HorizontalTextAlignment="End" VerticalTextAlignment="Center"/>
+                                <Label Text="{Binding TempCount}" Grid.Row="0" Grid.Column="3" FontSize="16" HorizontalTextAlignment="End" VerticalTextAlignment="Center">
+                                    <Label.TextColor>
+                                        <MultiBinding Converter="{StaticResource ctcColor}">
+                                            <Binding Path="Count"/>
+                                            <Binding Path="TempCount"/>
+                                        </MultiBinding>
+                                    </Label.TextColor>
+                                </Label>
                                 <Button Text="+" Grid.Column="0" Grid.Row="1" FontSize="16"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CTCPageViewModel}}, Path=PlusOneCommand}"
                                         CommandParameter="{Binding .}"/>

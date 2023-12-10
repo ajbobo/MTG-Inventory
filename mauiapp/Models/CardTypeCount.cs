@@ -28,5 +28,22 @@ public class CardTypeCount : INotifyPropertyChanged
         }
     }
 
+    [JsonIgnoreAttribute]
+    private int _tempCount = -1;
+    public int TempCount 
+    { 
+        get => _tempCount >= 0 ? _tempCount : _count;
+        set
+        {
+            _tempCount = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TempCount)));
+        }
+    }
+
     public event PropertyChangedEventHandler PropertyChanged;
+
+    public void UpdateCount() 
+    {
+        Count = TempCount;
+    }
 }
