@@ -54,94 +54,13 @@ public class CollectionController : ControllerBase
             };
 
         // Filter
-        IEnumerable<CardData> rarityList = FilterByRarity(rarityFilter, joinedList);
-        IEnumerable<CardData> countList = FilterByCount(countFilter, rarityList);
-        IEnumerable<CardData> priceList = FilterByPrice(priceFilter, countList);
-        IEnumerable<CardData> colorList = FilterByColor(colorFilter, priceList);
-        IEnumerable<CardData> numberList = FilterByNumber(collectorNumber, colorList);
+        IEnumerable<CardData> rarityList = Filters.FilterByRarity(rarityFilter, joinedList);
+        IEnumerable<CardData> countList = Filters.FilterByCount(countFilter, rarityList);
+        IEnumerable<CardData> priceList = Filters.FilterByPrice(priceFilter, countList);
+        IEnumerable<CardData> colorList = Filters.FilterByColor(colorFilter, priceList);
+        IEnumerable<CardData> numberList = Filters.FilterByNumber(collectorNumber, colorList);
 
         return numberList.ToList();
-    }
-
-    internal static IEnumerable<CardData> FilterByNumber(string collectorNumber, IEnumerable<CardData> list)
-    {
-        return from card in list
-               where collectorNumber.Length == 0 || card.Card!.CollectorNumber.Equals(collectorNumber)
-               select card;
-    }
-
-    internal static IEnumerable<CardData> FilterByColor(string colorFilter, IEnumerable<CardData> list)
-    {
-        return from card in list
-               where colorFilter.Length == 0 || InsideString(card.Card!.ColorIdentity, colorFilter.ToUpper())
-               select card;
-    }
-
-    internal static IEnumerable<CardData> FilterByPrice(string priceFilter, IEnumerable<CardData> list)
-    {
-        string priceOp;
-        decimal priceNum;
-        GetComparison(priceFilter, out priceOp, out priceNum);
-        var priceList =
-            from card in list
-            where (priceOp.Equals(">=") && (card.Card!.Price >= priceNum || card.Card!.PriceFoil >= priceNum)) ||
-                (priceOp.Equals("<=") && (card.Card!.Price <= priceNum || card.Card!.PriceFoil <= priceNum)) ||
-                (priceOp.Equals(">") && (card.Card!.Price > priceNum || card.Card!.PriceFoil > priceNum)) ||
-                (priceOp.Equals("<") && (card.Card!.Price < priceNum || card.Card!.PriceFoil < priceNum)) ||
-                (priceOp.Equals("=") && (card.Card!.Price == priceNum || card.Card!.PriceFoil == priceNum))
-            select card;
-        return priceList;
-    }
-
-    internal static IEnumerable<CardData> FilterByCount(string countFilter, IEnumerable<CardData> list)
-    {
-        string op;
-        decimal num;
-        GetComparison(countFilter, out op, out num);
-        var countList =
-            from card in list
-            where (op.Equals(">=") && card.TotalCount >= num) ||
-                (op.Equals("<=") && card.TotalCount <= num) ||
-                (op.Equals(">") && card.TotalCount > num) ||
-                (op.Equals("<") && card.TotalCount < num) ||
-                (op.Equals("=") && card.TotalCount == num)
-            select card;
-        return countList;
-    }
-
-    internal static IEnumerable<CardData> FilterByRarity(string rarityFilter, IEnumerable<CardData> list)
-    {
-        return from card in list
-               where rarityFilter.Length == 0 || rarityFilter.ToUpper().Contains(card.Card?.Rarity.Substring(0, 1).ToUpper() ?? "")
-               select card;
-    }
-
-    internal static bool InsideString(string search, string target)
-    {
-        foreach (char curChar in search)
-        {
-            if (target.Contains(curChar))
-                return true;
-        }
-
-        return false;
-    }
-
-    internal static void GetComparison(string countFilter, out string op, out decimal num)
-    {
-        op = ">=";
-        num = 0;
-        if (countFilter == null || countFilter.Length == 0)
-            return;
-
-        Regex regex = new Regex(@"(?<op><=|>=|=|<|>)(\s*)(?<num>\d+)");
-        Match match = regex.Match(countFilter); // If there is more than one match, only use the first one
-        if (match.Success)
-        {
-            GroupCollection groups = match.Groups;
-            op = groups["op"].Value;
-            num = decimal.Parse(groups["num"].Value);
-        }
     }
 
     internal async Task<List<MTG_Card>> GetCardsInSet(string set, string cacheName)
