@@ -1,10 +1,10 @@
-using System.Reflection.Metadata;
 using System.Runtime.Caching;
-using System.Text;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+[assembly: InternalsVisibleTo("api-test")]
 namespace mtg_api;
 
 [Route("api/[controller]")]
@@ -63,21 +63,21 @@ public class CollectionController : ControllerBase
         return numberList.ToList();
     }
 
-    private IEnumerable<CardData> FilterByNumber(string collectorNumber, IEnumerable<CardData> list)
+    internal static IEnumerable<CardData> FilterByNumber(string collectorNumber, IEnumerable<CardData> list)
     {
         return from card in list
                where collectorNumber.Length == 0 || card.Card!.CollectorNumber.Equals(collectorNumber)
                select card;
     }
 
-    private IEnumerable<CardData> FilterByColor(string colorFilter, IEnumerable<CardData> list)
+    internal static IEnumerable<CardData> FilterByColor(string colorFilter, IEnumerable<CardData> list)
     {
         return from card in list
                where colorFilter.Length == 0 || InsideString(card.Card!.ColorIdentity, colorFilter.ToUpper())
                select card;
     }
 
-    private IEnumerable<CardData> FilterByPrice(string priceFilter, IEnumerable<CardData> list)
+    internal static IEnumerable<CardData> FilterByPrice(string priceFilter, IEnumerable<CardData> list)
     {
         string priceOp;
         decimal priceNum;
@@ -93,7 +93,7 @@ public class CollectionController : ControllerBase
         return priceList;
     }
 
-    private IEnumerable<CardData> FilterByCount(string countFilter, IEnumerable<CardData> list)
+    internal static IEnumerable<CardData> FilterByCount(string countFilter, IEnumerable<CardData> list)
     {
         string op;
         decimal num;
@@ -109,14 +109,14 @@ public class CollectionController : ControllerBase
         return countList;
     }
 
-    private static IEnumerable<CardData> FilterByRarity(string rarityFilter, IEnumerable<CardData> list)
+    internal static IEnumerable<CardData> FilterByRarity(string rarityFilter, IEnumerable<CardData> list)
     {
         return from card in list
                where rarityFilter.Length == 0 || rarityFilter.ToUpper().Contains(card.Card?.Rarity.Substring(0, 1).ToUpper() ?? "")
                select card;
     }
 
-    private bool InsideString(string search, string target)
+    internal static bool InsideString(string search, string target)
     {
         foreach (char curChar in search)
         {
@@ -127,7 +127,7 @@ public class CollectionController : ControllerBase
         return false;
     }
 
-    private void GetComparison(string countFilter, out string op, out decimal num)
+    internal static void GetComparison(string countFilter, out string op, out decimal num)
     {
         op = ">=";
         num = 0;
@@ -144,7 +144,7 @@ public class CollectionController : ControllerBase
         }
     }
 
-    private async Task<List<MTG_Card>> GetCardsInSet(string set, string cacheName)
+    internal async Task<List<MTG_Card>> GetCardsInSet(string set, string cacheName)
     {
         if (!_cache.Contains(cacheName))
         {
@@ -156,7 +156,7 @@ public class CollectionController : ControllerBase
         return (List<MTG_Card>)_cache.Get(cacheName);
     }
 
-    private async Task<List<CollectionInput>> GetCTCsForSet(string set)
+    internal async Task<List<CollectionInput>> GetCTCsForSet(string set)
     {
         return await _dbContext.Collection.Where(e => e.SetCode.Equals(set)).ToListAsync();
     }
@@ -212,7 +212,7 @@ public class CollectionController : ControllerBase
         return await PutCollectionEntry(set, card, theList);
     }
 
-    private CollectionInput? GetCollectionEntry(string? key)
+    internal CollectionInput? GetCollectionEntry(string? key)
     {
         return _dbContext.Collection?.ToList().Find(e => e.Key.Equals(key));
     }

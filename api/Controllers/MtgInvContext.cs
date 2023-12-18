@@ -12,6 +12,10 @@ public class MtgInvContext : DbContext
     {
     }
 
+    public MtgInvContext()
+    {
+    }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.HasDefaultContainer("Misc");
