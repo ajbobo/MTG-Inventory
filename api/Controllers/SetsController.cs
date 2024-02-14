@@ -1,9 +1,11 @@
 using System.Runtime.Caching;
+using System.Web.Http.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace mtg_api;
 
 [Route("api/[controller]")]
+[EnableCors(origins: "*", headers: "*", methods: "*")]
 [ApiController]
 public class SetsController : ControllerBase
 {
