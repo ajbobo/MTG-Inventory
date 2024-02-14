@@ -43,8 +43,6 @@ public class Program
         app.UseAuthorization();
         app.MapControllers();
 
-        app.UseCors(); // Allow cross-site requests
-
         app.Run();
     }
 }
