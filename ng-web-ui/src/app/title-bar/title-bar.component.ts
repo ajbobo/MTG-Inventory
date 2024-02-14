@@ -20,7 +20,7 @@ export class TitleBarComponent {
   ) { }
 
   ngOnInit(): void {
-    this.setList = this.inventory.getSetList();
+    this.inventory.getSetList().subscribe(s => this.setList = s);
   }
 
   getSetDisplayName(): string {

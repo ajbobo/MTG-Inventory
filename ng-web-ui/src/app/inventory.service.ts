@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MTG_Set } from './models/mtg_set';
 import { CardData } from './models/carddata';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,9 @@ export class InventoryService {
 
   constructor() { }
 
-  getSetList() : MTG_Set[] {
-    // TODO: This needs to be asynchronous and call the API
-    return [
+  getSetList() : Observable<MTG_Set[]> {
+    // TODO: This needs to call the API
+    return of([
       {
         code: "pip",
         name: "Fallout",
@@ -27,6 +28,6 @@ export class InventoryService {
         name: "Murders at Karlov Manor",
         iconUrl: "https://svgs.scryfall.io/sets/mkm.svg?1707714000"
       }
-    ]
+    ])
   }
 }
