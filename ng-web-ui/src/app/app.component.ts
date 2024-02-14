@@ -4,6 +4,7 @@ import { TitleBarComponent } from './title-bar/title-bar.component';
 import { FilterPanelComponent } from './filter-panel/filter-panel.component';
 import { TablePanelComponent } from './table-panel/table-panel.component';
 import { CardPanelComponent } from './card-panel/card-panel.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
