@@ -1,0 +1,18 @@
+.ctc-row{
+    display: flex;
+    flex-flow: row ;
+    align-items: center;
+    margin: 5px;
+}
+
+p {
+    margin: 0;
+}
+
+.ctc-type {
+    width:8em;
+}
+
+.ctc-count {
+    width:1em;
+}

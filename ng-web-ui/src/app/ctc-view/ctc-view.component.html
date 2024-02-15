@@ -1,1 +1,6 @@
-<p>ctc-view works!</p>
+<div class="ctc-view">
+    <div *ngIf="curCard?.ctCs">
+        <app-ctc-row *ngFor="let curCTC of curCard?.ctCs" [ctc]="curCTC"> </app-ctc-row>
+    </div>
+    <button class="btn btn-primary">New</button>
+</div>

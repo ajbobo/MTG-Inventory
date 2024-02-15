@@ -8,6 +8,6 @@
         </div>
         <div *ngIf="card?.index === expandedCard" class="card-row">
                 <app-card-panel [curCard]="card?.card"></app-card-panel>
-                <app-ctc-view></app-ctc-view>
+                <app-ctc-view [curCard]="card"></app-ctc-view>
         </div>
 </div>

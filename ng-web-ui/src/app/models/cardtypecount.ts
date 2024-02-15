@@ -1,4 +1,4 @@
 export interface CardTypeCount {
-    type: string,
+    cardType: string,
     count: number
 }

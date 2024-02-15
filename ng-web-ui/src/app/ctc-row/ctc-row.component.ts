@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { CardTypeCount } from '../models/cardtypecount';
 
 @Component({
   selector: 'app-ctc-row',
@@ -8,5 +9,5 @@ import { Component } from '@angular/core';
   styleUrl: './ctc-row.component.css'
 })
 export class CtcRowComponent {
-
+  @Input() ctc?: CardTypeCount;
 }
