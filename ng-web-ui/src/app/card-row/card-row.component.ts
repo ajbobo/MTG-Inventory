@@ -10,5 +10,6 @@ import { NgIf } from '@angular/common';
   styleUrl: './card-row.component.css'
 })
 export class CardRowComponent {
+  hasMouse: boolean = false;
   @Input() card?: CardData;
 }

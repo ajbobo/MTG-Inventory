@@ -16,6 +16,7 @@ export class TitleBarComponent {
   @Input() curSet?: MTG_Set;
   @Output() curSetChange = new EventEmitter<MTG_Set>();
 
+
   constructor(
     private inventory: InventoryService
   ) { }

@@ -1,6 +1,8 @@
-<div *ngIf="card?.card" class="card-row" >
-        <p class="id">{{card?.card!.collectorNumber}}</p>
-        <p class="name">{{card?.card!.name}}</p>
-        <p class="price">${{card?.card!.price}}</p>
-        <p class="count">{{card?.totalCount}}</p>
+<div *ngIf="card?.card" class="card-row"
+        [class]="hasMouse ? 'selected-row' : card?.index! % 2 == 0 ? 'even-row' : 'odd-row'" (mouseover)="hasMouse=true"
+        (mouseout)="hasMouse=false">
+        <p class="id bold">{{card?.card!.collectorNumber}}</p>
+        <p class="name bold">{{card?.card!.name}}</p>
+        <p class="price" [class]="card?.card!.price! > 1 ? 'bold' : ''">${{card?.card!.price}}</p>
+        <p class="count" [class]="card?.totalCount! > 0 ? 'bold' : ''">{{card?.totalCount}}</p>
 </div>

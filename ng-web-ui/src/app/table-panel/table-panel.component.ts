@@ -14,10 +14,12 @@ import { MTG_Set } from '../models/mtg_set';
 })
 export class TablePanelComponent {
   private _curSet?: MTG_Set;
+
   @Input() set curSet(value: MTG_Set | undefined) {
     this._curSet = value;
     this.getCardList();
   }
+
   get curSet(): MTG_Set | undefined {
     return this._curSet;
   }
@@ -33,6 +35,9 @@ export class TablePanelComponent {
   }
 
   getCardList(): void {
-    this.inventory.getCardList().subscribe(s => this.cardList = s);
+    this.inventory.getCardList().subscribe(s => {
+      this.cardList = s;
+      this.cardList.forEach((v, i) => v.index = i);
+    });
   }
 }

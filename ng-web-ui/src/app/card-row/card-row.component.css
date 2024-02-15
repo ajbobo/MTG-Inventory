@@ -1,8 +1,8 @@
 .card-row {
     display: flex;
     flex-flow: row nowrap;
-    border: 1px solid black;
-    border-radius: 5px;
+    /* border: 1px solid black; */
+    /* border-radius: 5px; */
 }
 
 p {
@@ -19,17 +19,25 @@ p {
 }
 
 .price {
-    width: 3em
+    width: 4em
 }
 
 .count {
-    width: 1em
+    width: 1em;
+}
+
+.bold {
+    font-weight: bold;
 }
 
 .even-row {
-    background-color: blue;
+    background-color: aliceblue;
 }
 
 .odd-row {
-    background-color: red;
+    background-color: honeydew;
+}
+
+.selected-row {
+    background-color: aquamarine;
 }
