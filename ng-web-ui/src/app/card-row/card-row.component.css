@@ -26,18 +26,14 @@ p {
     width: 1em;
 }
 
-.bold {
-    font-weight: bold;
-}
-
 .even-row {
-    background-color: aliceblue;
+    background-color: lightgrey;
 }
 
 .odd-row {
-    background-color: honeydew;
+    background-color: ghostwhite;
 }
 
 .selected-row {
-    background-color: aquamarine;
+    background-color: grey;
 }
