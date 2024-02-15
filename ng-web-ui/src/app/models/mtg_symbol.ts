@@ -1,4 +1,4 @@
 export interface MTG_Symbol {
-    Text: string,
-    URL: string
+    text: string,
+    uRL: string
 }

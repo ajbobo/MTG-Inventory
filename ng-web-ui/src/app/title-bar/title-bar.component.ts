@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { InventoryService } from '../inventory.service';
 import { MTG_Set } from '../models/mtg_set';
 import { NgFor } from '@angular/common';
@@ -13,7 +13,8 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 })
 export class TitleBarComponent {
   setList: MTG_Set[] = [];
-  curSet?: MTG_Set;
+  @Input() curSet?: MTG_Set;
+  @Output() curSetChange = new EventEmitter<MTG_Set>();
 
   constructor(
     private inventory: InventoryService
@@ -26,7 +27,7 @@ export class TitleBarComponent {
   getSetDisplayName(): string {
     if (this.curSet?.name)
       return this.curSet.name;
-    return 'Choose Set';
+    return 'Choose a Set';
   }
 
   getSetIcon(): string {
@@ -37,5 +38,7 @@ export class TitleBarComponent {
 
   changeCurrentSet(set: MTG_Set): void {
     this.curSet = set;
+    this.curSetChange.emit(this.curSet);
+    this.inventory.changeActiveSet(set);
   }
 }

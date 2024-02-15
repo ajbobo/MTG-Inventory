@@ -5,6 +5,7 @@ import { FilterPanelComponent } from './filter-panel/filter-panel.component';
 import { TablePanelComponent } from './table-panel/table-panel.component';
 import { CardPanelComponent } from './card-panel/card-panel.component';
 import { HttpClient } from '@angular/common/http';
+import { MTG_Set } from './models/mtg_set';
 
 @Component({
   selector: 'app-root',
@@ -21,4 +22,6 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AppComponent {
   title = 'ng-web-ui';
+  curSet?: MTG_Set;
+
 }
