@@ -24,6 +24,7 @@ export class CardRowComponent {
   onClick(): void {
     if (this.expandedCard != this.card?.index!) {
       this.expandedCard = this.card?.index!
+      this.hasMouse = false;
     }
     else {
       this.expandedCard = -1;
