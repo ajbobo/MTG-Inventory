@@ -10,6 +10,9 @@ import { HttpClient } from '@angular/common/http';
 export class InventoryService {
   private apiUrl: string = '/api'; // The proxy.conf.json file connects this to the full URL
   private curSet?: MTG_Set;
+  private countFilter: string = '';
+  private priceFilter: string = '';
+  private rarityFilter: string = '';
 
   constructor(private http: HttpClient) { }
 
@@ -23,11 +26,26 @@ export class InventoryService {
     this.curSet = set;
   }
 
+  setCountFilter(filter: string): void {
+    this.countFilter = filter != 'All' ? filter : '';
+  }
+
+  setPriceFilter(filter: string): void {
+    this.priceFilter = filter != 'All' ? filter.replace("$", '') : '';
+  }
+
+  setRarityFilter(filter: string): void {
+    this.rarityFilter = filter != 'All' ? filter.toUpperCase().charAt(0) : '';
+  }
+
   getCardList(): Observable<CardData[]> {
     if (this.curSet) {
-      const url: string = `${this.apiUrl}/Collection/${this.curSet?.code}`
-      console.log(`CardList URL: ${url}`);
-      return this.http.get<CardData[]>(url); // This should have error handling and maybe logging
+      var url: string = `${this.apiUrl}/Collection/${this.curSet?.code}?`
+      if (this.countFilter.length > 0) url += `&count=${this.countFilter}`
+      if (this.priceFilter.length > 0) url += `&price=${this.priceFilter}`
+      if (this.rarityFilter.length > 0) url += `&rarity=${this.rarityFilter}`
+      console.log(`CardList URL: ${encodeURI(url)}`);
+      return this.http.get<CardData[]>(encodeURI(url)); // This should have error handling and maybe logging
     }
 
     return new Observable<CardData[]>();

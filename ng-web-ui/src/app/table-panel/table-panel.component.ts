@@ -9,15 +9,15 @@ import { MTG_Set } from '../models/mtg_set';
   selector: 'app-table-panel',
   standalone: true,
   imports: [
-    CardRowComponent, 
-    NgForOf, 
+    CardRowComponent,
+    NgForOf,
     NgIf],
   templateUrl: './table-panel.component.html',
   styleUrl: './table-panel.component.css'
 })
 export class TablePanelComponent {
   expandedCard: number = -1;
-  
+
   private _curSet?: MTG_Set;
   @Input() set curSet(value: MTG_Set | undefined) {
     this._curSet = value;
@@ -42,6 +42,7 @@ export class TablePanelComponent {
 
   getCardList(): void {
     this.inventory.getCardList().subscribe(s => {
+      console.log("Updating CardList in TablePanel");
       this.cardList = s;
       this.cardList.forEach((v, i) => v.index = i); // Set each card's display index number, so that they can be highlighted correctly
       this.cardListChange.emit(this.cardList);

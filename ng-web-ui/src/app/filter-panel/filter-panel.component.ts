@@ -3,7 +3,8 @@ import { NgbDropdownModule, NgbTypeaheadConfig, NgbTypeaheadModule, NgbTypeahead
 import { CardData } from '../models/carddata';
 import { FormsModule } from '@angular/forms';
 import { Observable, OperatorFunction, debounceTime, distinctUntilChanged, map } from 'rxjs';
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
+import { InventoryService } from '../inventory.service';
 
 @Component({
   selector: 'app-filter-panel',
@@ -12,7 +13,8 @@ import { NgIf } from '@angular/common';
     NgbDropdownModule,
     FormsModule,
     NgbTypeaheadModule,
-    NgIf
+    NgIf,
+    NgFor
   ],
   templateUrl: './filter-panel.component.html',
   styleUrl: './filter-panel.component.css'
@@ -26,28 +28,62 @@ export class FilterPanelComponent {
   get cardList(): CardData[] {
     return this._cardList;
   }
+  @Output() cardListChange = new EventEmitter<CardData[]>();
 
   @Input() selectedCard?: CardData;
   @Output() selectedCardChange = new EventEmitter<CardData>();
 
-  card: any;
   @ViewChild('cardSearch') searchInput?: ElementRef; // Finds the element with the #cardSearch tag
 
-  constructor(config: NgbTypeaheadConfig) {
-		config.showHint = true;
-	}
+  // These are used as the display text in the dropdowns
+  countFilter: string = 'All';
+  priceFilter: string = 'All';
+  rarityFilter: string = 'All';
+
+  constructor(config: NgbTypeaheadConfig, private inventory: InventoryService) {
+    config.showHint = true;
+  }
+
+  card: any; // Holds the card that is found by the search box
 
   formatter = (card: CardData) => card.card.name;
 
   search: OperatorFunction<string, readonly CardData[]> = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(200),
-    distinctUntilChanged(),
-    map((term) =>
-      // term.length < 2 ? [] : this.cardList.filter((v) => v.card.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
-      term.length < 2 ? [] : this.cardList.filter((v) => v.card.name.toLowerCase().startsWith(term.toLowerCase())).slice(0, 10),
-    ),
-  );
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map((term) =>
+        // term.length < 2 ? [] : this.cardList.filter((v) => v.card.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
+        term.length < 2 ? [] : this.cardList.filter((v) => v.card.name.toLowerCase().startsWith(term.toLowerCase())).slice(0, 10),
+      ),
+    );
+
+  onCountChange(ev: string): void {
+    this.countFilter = ev;
+    this.inventory.setCountFilter(ev);
+    this.updateCardList()
+  }
+
+  onPriceChange(ev: string): void {
+    this.priceFilter = ev;
+    this.inventory.setPriceFilter(ev);
+    this.updateCardList()
+  }
+
+  onRarityChange(ev: string): void {
+    this.rarityFilter = ev;
+    this.inventory.setRarityFilter(ev);
+    this.updateCardList()
+  }
+
+  updateCardList() {
+    this.inventory.getCardList().subscribe(s => {
+      console.log("Updating CardList in FilterPanel");
+      this.cardList = s;
+      this.cardList.forEach((v, i) => v.index = i); // Set each card's display index number, so that they can be highlighted correctly
+      this.cardListChange.emit(this.cardList);
+    });
+  }
 
   onSelectItem(ev: NgbTypeaheadSelectItemEvent): void {
     this.selectedCard = ev.item;
