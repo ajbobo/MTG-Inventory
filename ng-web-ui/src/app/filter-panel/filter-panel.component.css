@@ -3,7 +3,7 @@
     margin: auto;
 }
 
-.dropdown-panel {
+.horizontal-panel {
     display: flex;
     flex-flow: row;
     align-items: center;

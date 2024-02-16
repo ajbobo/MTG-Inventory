@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { NgbDropdownModule, NgbTypeaheadConfig, NgbTypeaheadModule, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
 import { CardData } from '../models/carddata';
 import { FormsModule } from '@angular/forms';
@@ -27,7 +27,11 @@ export class FilterPanelComponent {
     return this._cardList;
   }
 
+  @Input() selectedCard?: CardData;
+  @Output() selectedCardChange = new EventEmitter<CardData>();
+
   card: any;
+  @ViewChild('cardSearch') searchInput?: ElementRef; // Finds the element with the #cardSearch tag
 
   constructor(config: NgbTypeaheadConfig) {
 		config.showHint = true;
@@ -46,7 +50,13 @@ export class FilterPanelComponent {
   );
 
   onSelectItem(ev: NgbTypeaheadSelectItemEvent): void {
-    console.log("Selected something");
-    console.log(ev.item);
+    this.selectedCard = ev.item;
+    this.selectedCardChange.emit(this.selectedCard);
+  }
+
+  clearSelectedCard(): void {
+    this.searchInput!.nativeElement.value = '';
+    this.selectedCard = undefined;
+    this.selectedCardChange.emit(undefined);
   }
 }

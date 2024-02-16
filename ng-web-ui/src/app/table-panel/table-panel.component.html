@@ -1,3 +1,8 @@
 <div class="table-panel">
-    <app-card-row *ngFor="let card of cardList" [card]="card" [(expandedCard)]="expandedCard"></app-card-row>
+    <div *ngIf="selectedCard; else elseBlock">
+        <app-card-row [card]="selectedCard" [(expandedCard)]="selectedCard!.index"></app-card-row>
+    </div>
+    <ng-template #elseBlock>
+        <app-card-row *ngFor="let card of cardList" [card]="card" [(expandedCard)]="expandedCard"></app-card-row>
+    </ng-template>
 </div>

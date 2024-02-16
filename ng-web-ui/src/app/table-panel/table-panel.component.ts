@@ -2,13 +2,16 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CardData } from '../models/carddata';
 import { InventoryService } from '../inventory.service';
 import { CardRowComponent } from '../card-row/card-row.component';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { MTG_Set } from '../models/mtg_set';
 
 @Component({
   selector: 'app-table-panel',
   standalone: true,
-  imports: [CardRowComponent, NgForOf],
+  imports: [
+    CardRowComponent, 
+    NgForOf, 
+    NgIf],
   templateUrl: './table-panel.component.html',
   styleUrl: './table-panel.component.css'
 })
@@ -26,6 +29,8 @@ export class TablePanelComponent {
 
   @Input() cardList: CardData[] = [];
   @Output() cardListChange = new EventEmitter<CardData[]>();
+
+  @Input() selectedCard?: CardData;
 
   constructor(
     private inventory: InventoryService

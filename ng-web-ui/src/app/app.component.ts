@@ -25,5 +25,6 @@ export class AppComponent {
   title = 'ng-web-ui';
   curSet?: MTG_Set;
   cardList: CardData[] = [];
+  selectedCard?: CardData;
 
 }
