@@ -1,3 +1,3 @@
 <app-title-bar [(curSet)]="curSet"></app-title-bar>
-<app-filter-panel></app-filter-panel>
-<app-table-panel [curSet]="curSet"></app-table-panel>
+<app-filter-panel [cardList]="cardList"></app-filter-panel>
+<app-table-panel [curSet]="curSet" [(cardList)]="cardList"></app-table-panel>

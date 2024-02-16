@@ -2,3 +2,15 @@
     width: fit-content;
     margin: auto;
 }
+
+.dropdown-panel {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+}
+
+p {
+    margin-left: 10px;
+    margin-right: 5px;
+    margin-bottom: 0px;
+}

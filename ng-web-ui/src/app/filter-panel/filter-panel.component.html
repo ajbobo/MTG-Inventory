@@ -1,1 +1,44 @@
-<p class="filter-panel">filter-panel works!</p>
+<div class="filter-panel">
+    <div class="dropdown-panel">
+        <p>Count:</p>
+        <div ngbDropdown class="d-inline-block">
+            <button type="button" class="btn btn-secondary" id="countDropdown" ngbDropdownToggle>
+                All
+            </button>
+            <div ngbDropdownMenu aria-labelledby="countDropdown" class="set-dropdown">
+                <button ngbDropdownItem>=0</button>
+                <button ngbDropdownItem>&gt;=1</button>
+                <button ngbDropdownItem>&gt;=4</button>
+                <button ngbDropdownItem>&lt;4</button>
+            </div>
+        </div>
+
+        <p>Price:</p>
+        <div ngbDropdown class="d-inline-block">
+            <button type="button" class="btn btn-secondary" id="priceDropdown" ngbDropdownToggle>
+                All
+            </button>
+            <div ngbDropdownMenu aria-labelledby="countDropDown" class="set-dropdown">
+                <button ngbDropdownItem>&gt;=$1.00</button>
+                <button ngbDropdownItem>&gt;=$10.00</button>
+            </div>
+        </div>
+
+        <p>Rarity:</p>
+        <div ngbDropdown class="d-inline-block">
+            <button type="button" class="btn btn-secondary" id="rarityDropdown" ngbDropdownToggle>
+                All
+            </button>
+            <div ngbDropdownMenu aria-labelledby="rarityDropdown" class="set-dropdown">
+                <button ngbDropdownItem>Common</button>
+                <button ngbDropdownItem>Uncommon</button>
+                <button ngbDropdownItem>Rare</button>
+                <button ngbDropdownItem>Mythic</button>
+            </div>
+        </div>
+    </div>
+
+    <label for="cardSearch">Search for a card:</label>
+    <input id="cardSearch" type="text" class="form-control" [(ngModel)]="card" [ngbTypeahead]="search"
+        [inputFormatter]="formatter" [resultFormatter]="formatter" (selectItem)="onSelectItem($event)" />
+</div>

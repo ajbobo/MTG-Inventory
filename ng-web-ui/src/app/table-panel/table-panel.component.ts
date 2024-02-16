@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CardData } from '../models/carddata';
 import { InventoryService } from '../inventory.service';
 import { CardRowComponent } from '../card-row/card-row.component';
@@ -24,7 +24,8 @@ export class TablePanelComponent {
     return this._curSet;
   }
 
-  cardList: CardData[] = [];
+  @Input() cardList: CardData[] = [];
+  @Output() cardListChange = new EventEmitter<CardData[]>();
 
   constructor(
     private inventory: InventoryService
@@ -38,6 +39,7 @@ export class TablePanelComponent {
     this.inventory.getCardList().subscribe(s => {
       this.cardList = s;
       this.cardList.forEach((v, i) => v.index = i); // Set each card's display index number, so that they can be highlighted correctly
+      this.cardListChange.emit(this.cardList);
     });
   }
 }
