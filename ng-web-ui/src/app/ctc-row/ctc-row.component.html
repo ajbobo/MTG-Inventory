@@ -1,8 +1,8 @@
 <div class="ctc-row">
     <p class="ctc-count bold">{{ctc?.count}}</p>
     <p class="ctc-type">{{ctc?.cardType}}</p>
-    <button class="btn btn-outline-primary btn-sm">+</button>
-    <button class="btn btn-outline-primary btn-sm">-</button>
-    <button class="btn btn-outline-primary btn-sm">=4</button>
-    <button class="btn btn-outline-primary btn-sm">X</button>
+    <button class="btn btn-outline-primary btn-sm" (click)="IncrementCTC(ctc, $event)">+</button>
+    <button class="btn btn-outline-primary btn-sm" (click)="DecrementCTC(ctc, $event)">-</button>
+    <button class="btn btn-outline-primary btn-sm" (click)="SetCTCto4(ctc, $event)">=4</button>
+    <button class="btn btn-outline-primary btn-sm" (click)="DeleteCTC(ctc, $event)">X</button>
 </div>

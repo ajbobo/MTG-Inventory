@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { MTG_Set } from './models/mtg_set';
 import { CardData } from './models/carddata';
 import { Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { CardTypeCount } from './models/cardtypecount';
 
 @Injectable({
   providedIn: 'root'
@@ -50,5 +51,21 @@ export class InventoryService {
 
     return new Observable<CardData[]>();
   }
+
+  updateCardCTCs(card: CardData | undefined): Observable<any> {
+    if (card === undefined)
+      return new Observable<any>();
+
+    console.log("Writing to API");
+    const url: string = `${this.apiUrl}/Collection/${this.curSet?.code}/${card.card.collectorNumber}`
+    const body = { ctCs: card.ctCs };
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    return this.http.post<string>(url, JSON.stringify(body), httpOptions);
+  }
+
 
 }

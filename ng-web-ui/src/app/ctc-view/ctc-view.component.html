@@ -1,6 +1,7 @@
 <div class="ctc-view">
-    <div *ngIf="curCard?.ctCs">
-        <app-ctc-row *ngFor="let curCTC of curCard?.ctCs" [ctc]="curCTC"> </app-ctc-row>
+    <div *ngIf="curCard?.ctCs?.length">
+        <app-ctc-row *ngFor="let curCTC of curCard?.ctCs" [ctc]="curCTC" (isDirty)="onIsDirty($event)"> </app-ctc-row>
+        <p>{{curCard?.ctCs | json}}</p>
     </div>
-    <button class="btn btn-primary">New</button>
+    <button class="btn btn-primary" (click)="addNewCTC($event)">New</button>
 </div>

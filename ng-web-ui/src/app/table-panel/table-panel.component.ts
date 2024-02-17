@@ -48,4 +48,10 @@ export class TablePanelComponent {
       this.cardListChange.emit(this.cardList);
     });
   }
+
+  onIsDirty(ev: boolean) {
+    console.log("Table caught isDirty");
+    console.log(ev);
+    this.cardListChange.emit(this.cardList); // Refresh anything bound to the cardList
+  }
 }
