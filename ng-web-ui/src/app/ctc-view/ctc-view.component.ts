@@ -35,6 +35,8 @@ export class CtcViewComponent {
     this.curCard?.ctCs.push(ctc);
     this.curCard!.totalCount++;
 
+    this.isDirty.emit(true);
+
     ev.stopPropagation();
   }
 }
