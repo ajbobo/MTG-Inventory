@@ -32,6 +32,8 @@ export class TablePanelComponent {
 
   @Input() selectedCard?: CardData;
 
+  @Output() isDirty = new EventEmitter<boolean>();
+
   constructor(
     private inventory: InventoryService
   ) { }
@@ -42,7 +44,6 @@ export class TablePanelComponent {
 
   getCardList(): void {
     this.inventory.getCardList().subscribe(s => {
-      console.log("Updating CardList in TablePanel");
       this.cardList = s;
       this.cardList.forEach((v, i) => v.index = i); // Set each card's display index number, so that they can be highlighted correctly
       this.cardListChange.emit(this.cardList);
@@ -50,8 +51,7 @@ export class TablePanelComponent {
   }
 
   onIsDirty(ev: boolean) {
-    console.log("Table caught isDirty");
-    console.log(ev);
     this.cardListChange.emit(this.cardList); // Refresh anything bound to the cardList
+    this.isDirty.emit(ev);
   }
 }

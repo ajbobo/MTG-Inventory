@@ -1,3 +1,4 @@
 <app-title-bar [(curSet)]="curSet"></app-title-bar>
-<app-filter-panel [(cardList)]="cardList" [(selectedCard)]="selectedCard"></app-filter-panel>
-<app-table-panel [curSet]="curSet" [(cardList)]="cardList" [selectedCard]="selectedCard"></app-table-panel>
+<app-filter-panel [(cardList)]="cardList" [(selectedCard)]="selectedCard" [needsFocus]="focusFilter"></app-filter-panel>
+<app-table-panel [curSet]="curSet" [(cardList)]="cardList" [selectedCard]="selectedCard"
+    (isDirty)="onIsDirty($event)"></app-table-panel>

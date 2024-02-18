@@ -20,6 +20,14 @@ import { InventoryService } from '../inventory.service';
   styleUrl: './filter-panel.component.css'
 })
 export class FilterPanelComponent {
+  @ViewChild('cardSearch') searchInput?: ElementRef; // Finds the element with the #cardSearch tag
+
+  @Input() set needsFocus(focus: boolean) {
+    if (focus) {
+      this.searchInput?.nativeElement.focus();
+    }
+  }
+
   private _cardList: CardData[] = []
   @Input() set cardList(value: CardData[]) {
     this._cardList = value;
@@ -32,8 +40,6 @@ export class FilterPanelComponent {
 
   @Input() selectedCard?: CardData;
   @Output() selectedCardChange = new EventEmitter<CardData>();
-
-  @ViewChild('cardSearch') searchInput?: ElementRef; // Finds the element with the #cardSearch tag
 
   // These are used as the display text in the dropdowns
   countFilter: string = 'All';

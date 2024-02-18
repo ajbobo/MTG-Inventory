@@ -27,4 +27,11 @@ export class AppComponent {
   cardList: CardData[] = [];
   selectedCard?: CardData;
 
+  focusFilter: boolean = false;
+
+  onIsDirty(ev: boolean) {
+    this.focusFilter = true;
+    setTimeout(() => this.focusFilter = false, 200); // We need to set focusFilter back to false AFTER the focus changes
+  }
+
 }
