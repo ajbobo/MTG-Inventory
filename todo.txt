@@ -4,6 +4,7 @@ Rename "foil | prerelease" and "foil" in Angular, Maui App, and DB to be capital
 --- API ---
 
 --- Angular App ---
+*** New CTC button adds a new row, but doesn't write to the database
 CTCs need a dropdown for the type
 Add "Done" button after New in CTC view that closes the current card - Get focus back to the search box quickly
 Set focus in CTC View to "Done" after clicking on +/-/4/X button?
