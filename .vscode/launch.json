@@ -2,13 +2,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "NG WebUI server",
+            "command": "npm start",
+            "request": "launch",
+            "type": "node-terminal",
+            "cwd": "${workspaceFolder}/ng-web-ui"
+        },
+        {
             "name": "MAUI App",
             "type": "maui",
             "request": "launch",
             "preLaunchTask": "maui: Build"
         },
         {
-            "name": "Launch WebApp",
+            "name": ".NET WebApp",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "Build webapp - debug",
@@ -56,7 +63,7 @@
             }
         },
         {
-            "name": "Start API Server",
+            "name": "API Server",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "Build API - Debug",
@@ -74,11 +81,11 @@
             }
         },
         {
+            "name": "React WebUI server",
             "command": "npm start",
-            "name": "Run WebUI server",
             "request": "launch",
             "type": "node-terminal",
-            "cwd": "${workspaceFolder}/web-ui",
+            "cwd": "${workspaceFolder}/react-web-ui",
             "env": {
                 "PORT": "3005" // Set the port that Node will use (3000 is the default, but something is using it on my PC)
             }

@@ -1,10 +1,12 @@
 --- General ---
-Rename "foil | prerelease" and "foil" in Maui App and DB to be capitalized
+Rename "foil | prerelease" and "foil" in Angular, Maui App, and DB to be capitalized
 
 --- API ---
 
+--- Angular App ---
+Add routing to URL (ie: <app>/{setCode} and <app>/{SetCode}/{Card})
+
 --- Maui App ---
-Add filters
 Selecting a card in the list with the keyboard and pressing Enter or Space should open the card's CTC page - I can't find a way to do this in MAUI
 
 --- Term ---

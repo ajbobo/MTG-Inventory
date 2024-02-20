@@ -1,0 +1,6 @@
+.ctc-view {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    margin-left: 2em;
+}

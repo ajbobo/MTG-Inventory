@@ -1,0 +1,8 @@
+<div class="table-panel">
+    <div *ngIf="selectedCard; else elseBlock">
+        <app-card-row [card]="selectedCard" [(expandedCard)]="selectedCard!.index" (isDirty)="onIsDirty($event)"></app-card-row>
+    </div>
+    <ng-template #elseBlock>
+        <app-card-row *ngFor="let card of cardList" [card]="card" [(expandedCard)]="expandedCard" (isDirty)="onIsDirty($event)"></app-card-row>
+    </ng-template>
+</div>

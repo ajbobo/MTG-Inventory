@@ -1,0 +1,17 @@
+<div class="title-header">
+    <img src={{this.getSetIcon()}} class="top-icon" />
+
+    <div ngbDropdown class="d-inline-block">
+        <button type="button" class="btn btn-primary" id="setDropdown" ngbDropdownToggle>
+            {{this.getSetDisplayName()}}
+        </button>
+        <div ngbDropdownMenu aria-labelledby="setDropdown" class="set-dropdown">
+            <button ngbDropdownItem *ngFor="let set of setList" (click)="changeCurrentSet(set)">
+                <img src={{set.iconUrl}} class="menu-icon"/>
+                {{set.name}} ({{set.code}})
+            </button>
+        </div>
+    </div>
+
+    <img src={{this.getSetIcon()}} class="top-icon" />
+</div>

@@ -1,0 +1,41 @@
+.card-row {
+    display: flex;
+    flex-flow: row nowrap;
+    /* border: 1px solid black; */
+    /* border-radius: 5px; */
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+p {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.id {
+    width: 3em;
+}
+
+.name {
+    width: 90%
+}
+
+.price {
+    width: 4em
+}
+
+.count {
+    width: 1em;
+}
+
+.even-row {
+    background-color: lightgrey;
+}
+
+.odd-row {
+    background-color: ghostwhite;
+}
+
+.selected-row {
+    background-color: grey;
+}

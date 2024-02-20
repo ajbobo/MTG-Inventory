@@ -1,0 +1,42 @@
+<div class="filter-panel">
+    <div class="horizontal-panel">
+        <p>Count:</p>
+        <div ngbDropdown class="d-inline-block">
+            <button type="button" class="btn btn-secondary" id="countDropdown" ngbDropdownToggle>
+                {{countFilter}}
+            </button>
+            <div ngbDropdownMenu aria-labelledby="countDropdown">
+                <button ngbDropdownItem *ngFor="let item of ['All','=0','&gt;=1','&gt;=4','&lt;4']"
+                    (click)="onCountChange(item)">{{item}}</button>
+            </div>
+        </div>
+
+        <p>Price:</p>
+        <div ngbDropdown class="d-inline-block">
+            <button type="button" class="btn btn-secondary" id="priceDropdown" ngbDropdownToggle>
+                {{priceFilter}}
+            </button>
+            <div ngbDropdownMenu aria-labelledby="countDropDown" class="set-dropdown">
+                <button ngbDropdownItem *ngFor="let item of ['All','&gt;=$1.00','&gt;=$10.00']"
+                    (click)="onPriceChange(item)">{{item}}</button>
+            </div>
+        </div>
+
+        <p>Rarity:</p>
+        <div ngbDropdown class="d-inline-block">
+            <button type="button" class="btn btn-secondary" id="rarityDropdown" ngbDropdownToggle>
+                {{rarityFilter}}
+            </button>
+            <div ngbDropdownMenu aria-labelledby="rarityDropdown" class="set-dropdown">
+                <button ngbDropdownItem *ngFor="let item of ['All','Common','Uncommon','Rare','Mythic']"
+                    (click)="onRarityChange(item)">{{item}}</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="horizontal-panel">
+        <button class="btn btn-outline-secondary btn-sm" (click)="clearSelectedCard()">X</button>
+        <input #cardSearch id="cardSearch" type="text" class="form-control" [(ngModel)]="card" [ngbTypeahead]="search"
+            [inputFormatter]="formatter" [resultFormatter]="formatter" (selectItem)="onSelectItem($event)" />
+    </div>
+</div>
