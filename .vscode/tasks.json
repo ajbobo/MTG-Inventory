@@ -67,45 +67,6 @@
             "group": "build"
         },
         {
-            "label": "Build webapp - debug",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/webapp/webapp.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile",
-            "group": "build"
-        },
-        {
-            "label": "Build firebase-export - Debug",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/firebase-export/firebase-export.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile",
-            "group": "build"
-        },
-        {
-            "label": "Build API - Debug",
-            "command": "dotnet",
-            "type": "process",
-            "args": [ 
-                "build",
-                "${workspaceFolder}/api/api.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile",
-            "group": "build"
-        },
-        {
             "label": "Clean All",
             "command": "dotnet",
             "type": "process",
