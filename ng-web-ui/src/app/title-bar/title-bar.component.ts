@@ -9,7 +9,7 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
   standalone: true,
   imports: [NgFor, NgbDropdownModule],
   templateUrl: './title-bar.component.html',
-  styleUrl: './title-bar.component.css'
+  styleUrl: './title-bar.component.scss'
 })
 export class TitleBarComponent {
   setList: MTG_Set[] = [];

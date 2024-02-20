@@ -19,7 +19,7 @@ import { CardData } from './models/carddata';
     CardPanelComponent
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'ng-web-ui';

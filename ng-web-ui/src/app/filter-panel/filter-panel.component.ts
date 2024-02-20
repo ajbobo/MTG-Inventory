@@ -17,7 +17,7 @@ import { InventoryService } from '../inventory.service';
     NgFor
   ],
   templateUrl: './filter-panel.component.html',
-  styleUrl: './filter-panel.component.css'
+  styleUrl: './filter-panel.component.scss'
 })
 export class FilterPanelComponent {
   @ViewChild('cardSearch') searchInput?: ElementRef; // Finds the element with the #cardSearch tag

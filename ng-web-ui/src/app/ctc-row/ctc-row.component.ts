@@ -11,7 +11,7 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
     NgbDropdownModule
   ],
   templateUrl: './ctc-row.component.html',
-  styleUrl: './ctc-row.component.css'
+  styleUrl: './ctc-row.component.scss'
 })
 export class CtcRowComponent {
   typeList: string[] = ['Standard', 'foil', 'foil | prerelease', 'Spanish', 'Autographed'];

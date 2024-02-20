@@ -15,7 +15,7 @@ import { CardTypeCount } from '../models/cardtypecount';
     CardPanelComponent
   ],
   templateUrl: './card-row.component.html',
-  styleUrl: './card-row.component.css'
+  styleUrl: './card-row.component.scss'
 })
 export class CardRowComponent {
   hasMouse: boolean = false;

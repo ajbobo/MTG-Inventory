@@ -7,7 +7,7 @@ import { NgIf } from '@angular/common';
   standalone: true,
   imports: [NgIf],
   templateUrl: './card-panel.component.html',
-  styleUrl: './card-panel.component.css'
+  styleUrl: './card-panel.component.scss'
 })
 export class CardPanelComponent {
   @Input() curCard?: MTG_Card;

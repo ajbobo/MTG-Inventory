@@ -14,7 +14,7 @@ import { CtcRowComponent } from '../ctc-row/ctc-row.component';
     JsonPipe
   ],
   templateUrl: './ctc-view.component.html',
-  styleUrl: './ctc-view.component.css'
+  styleUrl: './ctc-view.component.scss'
 })
 export class CtcViewComponent {
   @Input() curCard?: CardData;

@@ -13,7 +13,7 @@ import { MTG_Set } from '../models/mtg_set';
     NgForOf,
     NgIf],
   templateUrl: './table-panel.component.html',
-  styleUrl: './table-panel.component.css'
+  styleUrl: './table-panel.component.scss'
 })
 export class TablePanelComponent {
   expandedCard: number = -1;
