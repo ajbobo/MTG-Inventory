@@ -1,17 +1,33 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CardTypeCount } from '../models/cardtypecount';
+import { NgFor } from '@angular/common';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-ctc-row',
   standalone: true,
-  imports: [],
+  imports: [
+    NgFor,
+    NgbDropdownModule
+  ],
   templateUrl: './ctc-row.component.html',
   styleUrl: './ctc-row.component.css'
 })
 export class CtcRowComponent {
+  typeList: string[] = ['Standard', 'foil', 'foil | prerelease', 'Spanish', 'Autographed'];
+
   @Input() ctc?: CardTypeCount;
 
   @Output() isDirty = new EventEmitter<boolean>();
+
+  setCTCType(type: string, ev: MouseEvent){
+    if (this.ctc) {
+      this.ctc.cardType = type;
+      this.isDirty.emit(true);
+    }
+
+    ev.stopPropagation();
+  }
 
   setCount(ctc: CardTypeCount, count: number) {
     ctc.count = count;
