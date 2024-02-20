@@ -7,17 +7,20 @@
 }
 
 .set-dropdown {
-    height: 33vh; /* Roughly 1/3 of the screen/viewport height */
+    /* Roughly 1/3 of the screen/viewport height */
+    height: 33vh;
     overflow-y: scroll;
     margin: auto;
 }
 
 .top-icon {
     width: 50px;
-    height:50px;
+    height: 50px;
+    filter: invert(50%);
 }
 
 .menu-icon {
     width: 25px;
     height: 25px;
+    filter: invert(50%);
 }

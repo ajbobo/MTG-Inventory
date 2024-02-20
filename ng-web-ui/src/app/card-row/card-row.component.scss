@@ -1,3 +1,26 @@
+// Custom.scss
+// Option B: Include parts of Bootstrap
+
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../../../node_modules/bootstrap/scss/functions";
+
+// 2. Include any default variable overrides here
+
+// 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
+@import "../../../node_modules/bootstrap/scss/variables";
+@import "../../../node_modules/bootstrap/scss/variables-dark";
+
+// 4. Include any default map overrides here
+
+// 5. Include remainder of required parts
+@import "../../../node_modules/bootstrap/scss/maps";
+@import "../../../node_modules/bootstrap/scss/mixins";
+@import "../../../node_modules/bootstrap/scss/root";
+
+// ...
+
+// 8. Add additional custom code here
+
 .card-row {
     display: flex;
     flex-flow: row nowrap;
@@ -5,6 +28,7 @@
     /* border-radius: 5px; */
     margin-left: 5px;
     margin-right: 5px;
+    color: $black;
 }
 
 p {
@@ -29,13 +53,13 @@ p {
 }
 
 .even-row {
-    background-color: lightgrey;
+    background-color: $blue-200;
 }
 
 .odd-row {
-    background-color: ghostwhite;
+    background-color: $blue-100;
 }
 
 .selected-row {
-    background-color: grey;
+    background-color: $blue-500;
 }
