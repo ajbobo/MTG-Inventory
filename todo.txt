@@ -4,7 +4,7 @@ Rename "foil | prerelease" and "foil" in Angular, Maui App, and DB to be capital
 --- API ---
 
 --- Angular App ---
-CTCs need a dropdown for the type
+Add routing to URL (ie: <app>/{setCode} and <app>/{SetCode}/{Card})
 
 --- Maui App ---
 Selecting a card in the list with the keyboard and pressing Enter or Space should open the card's CTC page - I can't find a way to do this in MAUI
