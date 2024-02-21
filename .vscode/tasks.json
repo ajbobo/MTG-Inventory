@@ -54,6 +54,19 @@
             }
         },
         {
+            "label": "Build API - Debug",
+            "command": "dotnet",
+            "type": "process",
+            "args": [ 
+                "build",
+                "${workspaceFolder}/api/api.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        },
+        {
             "label": "Build term - Debug",
             "command": "dotnet",
             "type": "process",

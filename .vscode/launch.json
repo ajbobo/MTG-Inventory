@@ -9,12 +9,6 @@
             "cwd": "${workspaceFolder}/ng-web-ui"
         },
         {
-            "name": "MAUI App",
-            "type": "maui",
-            "request": "launch",
-            "preLaunchTask": "maui: Build"
-        },
-        {
             "name": "Terminal UI",
             "type": "coreclr",
             "request": "launch",
