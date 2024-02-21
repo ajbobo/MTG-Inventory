@@ -28,9 +28,7 @@ jobs:
           npm run build --if-present
 
       - name: Zip artifact for deployment
-        run: |
-          cd ng-web-ui
-          zip release.zip ./* -r
+        run: zip release.zip ./ng-web-ui/* -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
