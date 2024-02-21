@@ -29,6 +29,22 @@ export class CardRowComponent {
 
   constructor(private inventory: InventoryService) { }
 
+  getRaritySymbol(): string {
+    return `/assets/${this.card?.card!.rarity}.png`;
+  }
+
+  hasFoil(): boolean {
+    var hasFoil = false;
+    this.card?.ctCs?.forEach((c: CardTypeCount) => { if (c.cardType.indexOf('foil') > -1) hasFoil = true; })
+    return hasFoil;
+  }
+
+  hasOther(): boolean {
+    var hasOther = false;
+    this.card?.ctCs?.forEach((c: CardTypeCount) => { if (c.cardType != 'Standard' && c.cardType != 'foil') hasOther = true; })
+    return hasOther;
+  }
+
   onClick(): void {
     if (this.expandedCard != this.card?.index!) {
       this.expandedCard = this.card?.index!

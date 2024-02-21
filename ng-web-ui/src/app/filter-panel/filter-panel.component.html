@@ -1,5 +1,5 @@
 <div class="filter-panel">
-    <div class="horizontal-panel">
+    <div class="horizontal">
         <p>Count:</p>
         <div ngbDropdown class="d-inline-block">
             <button type="button" class="btn btn-secondary" id="countDropdown" ngbDropdownToggle>
@@ -34,7 +34,7 @@
         </div>
     </div>
 
-    <div class="horizontal-panel">
+    <div class="horizontal">
         <button class="btn btn-outline-secondary btn-sm" (click)="clearSelectedCard()">X</button>
         <input #cardSearch id="cardSearch" type="text" class="form-control" [(ngModel)]="card" [ngbTypeahead]="search"
             [inputFormatter]="formatter" [resultFormatter]="formatter" (selectItem)="onSelectItem($event)" />
