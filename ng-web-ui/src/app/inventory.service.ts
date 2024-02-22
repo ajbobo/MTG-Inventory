@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { MTG_Set } from './models/mtg_set';
 import { CardData } from './models/carddata';
 import { Observable, of } from 'rxjs';
@@ -9,7 +9,8 @@ import { CardTypeCount } from './models/cardtypecount';
   providedIn: 'root'
 })
 export class InventoryService {
-  private apiUrl: string = '/api'; // The proxy.conf.json file connects this to the full URL
+   // The proxy.conf.json file connects this to the full URL when running locally
+  private apiUrl: string = (isDevMode() ? '/api' : 'https://mtg-inventory.azurewebsites.net/api');
   private curSet?: MTG_Set;
   private countFilter: string = '';
   private priceFilter: string = '';
