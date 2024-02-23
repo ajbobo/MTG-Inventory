@@ -40,4 +40,48 @@ public class Test_SetsController
 
         Assert.AreEqual(1, conn.Invocations.Count);
     }
+
+    [TestMethod]
+    public async Task TestGetSingleSet()
+    {
+        var cache = MemoryCache.Default;
+        cache.Remove("sets");
+
+        Mock<IScryfall_Connection> conn = new();
+        conn.Setup(o => o.GetCollectableSets())
+            .ReturnsAsync(CreateSets());
+
+        var controller = new SetsController(conn.Object, cache);
+        var res = await controller.GetSingleMTG_Set("dom");
+
+        Assert.IsNotNull(res.Value);
+        Assert.AreEqual(1, res.Value.Count);
+        Assert.AreEqual("Dominaria", res.Value[0].Name);
+        Assert.AreEqual("dom", res.Value[0].Code);
+
+        Assert.IsNotNull(cache.Get("sets"));
+
+        Assert.AreEqual(1, conn.Invocations.Count);
+    }
+
+    [TestMethod]
+    public async Task TestGetSingleSet_NonExisting()
+    {
+        var cache = MemoryCache.Default;
+        cache.Remove("sets");
+
+        Mock<IScryfall_Connection> conn = new();
+        conn.Setup(o => o.GetCollectableSets())
+            .ReturnsAsync(CreateSets());
+
+        var controller = new SetsController(conn.Object, cache);
+        var res = await controller.GetSingleMTG_Set("xyz");
+
+        Assert.IsNotNull(res.Value);
+        Assert.AreEqual(0, res.Value.Count);
+
+        Assert.IsNotNull(cache.Get("sets"));
+
+        Assert.AreEqual(1, conn.Invocations.Count);
+    }
 }

@@ -21,13 +21,33 @@ public class SetsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<MTG_Set>>> GetMTG_Sets()
     {
+        await UpdateCache();
+
+        return (List<MTG_Set>)_cache.Get(CACHE_NAME);
+    }
+
+    [HttpGet("{set}")]
+    public async Task<ActionResult<List<MTG_Set>>> GetSingleMTG_Set(string set)
+    {
+        await UpdateCache();
+
+        List<MTG_Set> fullList = (List<MTG_Set>)_cache.Get(CACHE_NAME);
+        MTG_Set? found = fullList.Find(x => x.Code.ToLower().Equals(set.ToLower()));
+
+        List<MTG_Set> res = new();
+        if (found != null)
+            res.Add(found);
+
+        return res;
+    }
+
+    private async Task UpdateCache()
+    {
         if (!_cache.Contains(CACHE_NAME))
         {
             Console.WriteLine("Sets not in cache - Downloading");
             List<MTG_Set> sets = await _scryfall_Connection.GetCollectableSets();
-            _cache.Add(CACHE_NAME, sets, new CacheItemPolicy()  { AbsoluteExpiration = DateTime.Now.AddMinutes(60 * 24) });
+            _cache.Add(CACHE_NAME, sets, new CacheItemPolicy() { AbsoluteExpiration = DateTime.Now.AddMinutes(60 * 24) });
         }
-
-        return (List<MTG_Set>)_cache.Get(CACHE_NAME);
     }
 }
