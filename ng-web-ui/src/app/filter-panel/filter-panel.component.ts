@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Observable, OperatorFunction, debounceTime, distinctUntilChanged, map } from 'rxjs';
 import { NgFor, NgIf } from '@angular/common';
 import { InventoryService } from '../inventory.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-filter-panel',
@@ -32,6 +33,7 @@ export class FilterPanelComponent {
   @Input() set cardList(value: CardData[]) {
     this._cardList = value;
     this.card = null;
+    this.displaySelectedCard();
   }
   get cardList(): CardData[] {
     return this._cardList;
@@ -46,8 +48,20 @@ export class FilterPanelComponent {
   priceFilter: string = 'All';
   rarityFilter: string = 'All';
 
-  constructor(config: NgbTypeaheadConfig, private inventory: InventoryService) {
+   // The values from the URL, if provided
+  setCode: string = "";
+  cardNumber: string = "";
+
+  constructor(
+    config: NgbTypeaheadConfig, 
+    private inventory: InventoryService, 
+    private router: Router,
+    private route: ActivatedRoute) {
     config.showHint = true;
+    this.route.params.subscribe(p => { 
+      this.setCode = p['setCode']; 
+      this.cardNumber = p['cardNumber']; 
+    });
   }
 
   card: any; // Holds the card that is found by the search box
@@ -93,12 +107,30 @@ export class FilterPanelComponent {
 
   onSelectItem(ev: NgbTypeaheadSelectItemEvent): void {
     this.selectedCard = ev.item;
+    this.router.navigate(['/collection', this.selectedCard?.card.setCode, this.selectedCard?.card.collectorNumber]);
     this.selectedCardChange.emit(this.selectedCard);
   }
 
   clearSelectedCard(): void {
     this.searchInput!.nativeElement.value = '';
     this.selectedCard = undefined;
+    this.router.navigate(['/collection', this.setCode]);
     this.selectedCardChange.emit(undefined);
   }
+  
+  private displaySelectedCard() {
+    if (this.cardNumber) {
+      const selCard: CardData | undefined = this._cardList.find(x => x.card.collectorNumber === this.cardNumber);
+      if (selCard) {
+        this.selectedCard = selCard;
+        this.selectedCardChange.emit(this.selectedCard);
+        if (this.searchInput)
+          this.searchInput.nativeElement.value = this.selectedCard.card.name;
+      }
+      else if (this._cardList.length > 0) {
+        this.router.navigate(['/notfound']);
+      }
+    }
+  }
+
 }

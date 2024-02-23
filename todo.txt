@@ -4,7 +4,6 @@ Rename "foil | prerelease" and "foil" in Angular, Maui App, and DB to be capital
 --- API ---
 
 --- Angular App ---
-Add routing to URL (ie: <app>/{setCode} and <app>/{SetCode}/{Card})
 Highlight text in search box when it receives focus
 Add favicon
 
