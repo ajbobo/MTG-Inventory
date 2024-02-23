@@ -34,6 +34,8 @@ export class TitleBarComponent {
         const selSet: MTG_Set | undefined = this.setList.find(s => s.code.toLowerCase() === this.setCode.toLowerCase());
         if (selSet)
           this.changeCurrentSet(selSet);
+        else // An invalid setCode was provided
+          this.router.navigate(['/notfound']);
       }
     });
   }
