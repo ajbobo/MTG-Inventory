@@ -3,6 +3,7 @@ import { InventoryService } from '../inventory.service';
 import { MTG_Set } from '../models/mtg_set';
 import { NgFor } from '@angular/common';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-title-bar',
@@ -12,17 +13,29 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './title-bar.component.scss'
 })
 export class TitleBarComponent {
+  setCode: string = "";
   setList: MTG_Set[] = [];
   @Input() curSet?: MTG_Set;
   @Output() curSetChange = new EventEmitter<MTG_Set>();
 
 
   constructor(
-    private inventory: InventoryService
-  ) { }
+    private inventory: InventoryService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    this.route.params.subscribe(p => this.setCode = p['setCode']);
+  }
 
   ngOnInit(): void {
-    this.inventory.getSetList().subscribe(s => this.setList = s);
+    this.inventory.getSetList().subscribe(s => {
+      this.setList = s
+      if (this.setCode) {
+        const selSet: MTG_Set | undefined = this.setList.find(s => s.code.toLowerCase() === this.setCode.toLowerCase());
+        if (selSet)
+          this.changeCurrentSet(selSet);
+      }
+    });
   }
 
   getSetDisplayName(): string {
@@ -35,6 +48,11 @@ export class TitleBarComponent {
     if (this.curSet?.iconUrl)
       return this.curSet.iconUrl;
     return 'https://svgs.scryfall.io/sets/planeswalker.svg'
+  }
+
+  routeTo(set: MTG_Set) {
+    this.router.navigate(['/collection', set.code])
+    this.changeCurrentSet(set);
   }
 
   changeCurrentSet(set: MTG_Set): void {
