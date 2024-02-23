@@ -63,6 +63,36 @@ public class CollectionController : ControllerBase
         return numberList.ToList();
     }
 
+    // GET: api/Collection/{set}/{card}
+    [HttpGet("{set}/{card}")]
+    public async Task<List<CardData>> GetSingleCard(string set, string card)
+    {
+        string cacheName = CACHE_NAME + ":" + set;
+
+        // Get the requested card
+        var cardList = await GetCardsInSet(set, cacheName);
+        var selCard = cardList.Find(x => x.CollectorNumber.Equals(card) && x.SetCode.Equals(set));
+
+        // Get the CTCs for the requested card
+        var ctcList = await GetCTCsForSet(set);
+        var selCTC = ctcList.Find(x => x.CollectorNumber.Equals(card) && x.SetCode.Equals(set));
+
+        var res = new List<CardData>();
+
+        // Combine card with CTCs
+        if (selCard != null)
+        {
+            res.Add(new CardData()
+            {
+                Card = selCard,
+                CTCs = selCTC?.CTCs ?? null,
+                TotalCount = selCTC?.TotalCount ?? 0,
+            });
+        }
+
+        return res;
+    }
+
     internal async Task<List<MTG_Card>> GetCardsInSet(string set, string cacheName)
     {
         if (!_cache.Contains(cacheName))
