@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { TitleBarComponent } from './title-bar/title-bar.component';
 import { FilterPanelComponent } from './filter-panel/filter-panel.component';
 import { TablePanelComponent } from './table-panel/table-panel.component';
@@ -13,6 +13,7 @@ import { CardData } from './models/carddata';
   standalone: true,
   imports: [
     RouterOutlet,
+    RouterLink,
     TitleBarComponent,
     FilterPanelComponent,
     TablePanelComponent,
