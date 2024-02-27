@@ -1,0 +1,109 @@
+{
+  "name": "Dominaria - WGU",
+  "cards": [
+    {
+      "name": "Ancient Animus",
+      "count": "1"
+    },
+    {
+      "name": "Aven Sentry",
+      "count": "1"
+    },
+    {
+      "name": "Baird, Steward of Argive",
+      "count": "1"
+    },
+    {
+      "name": "Benalish Marshal",
+      "count": "1"
+    },
+    {
+      "name": "Blessed Light",
+      "count": "1"
+    },
+    {
+      "name": "Call the Cavalry",
+      "count": "1"
+    },
+    {
+      "name": "Danitha Capashen, Paragon",
+      "count": "1"
+    },
+    {
+      "name": "Elfhame Druid",
+      "count": "1"
+    },
+    {
+      "name": "Evra, Halcyon Witness",
+      "count": "1"
+    },
+    {
+      "name": "Forest",
+      "count": "5"
+    },
+    {
+      "name": "Gideon's Reproach",
+      "count": "1"
+    },
+    {
+      "name": "Hinterland Harbor",
+      "count": "1"
+    },
+    {
+      "name": "Invoke the Divine",
+      "count": "1"
+    },
+    {
+      "name": "Island",
+      "count": "1"
+    },
+    {
+      "name": "Llanowar Envoy",
+      "count": "1"
+    },
+    {
+      "name": "Mammoth Spider",
+      "count": "1"
+    },
+    {
+      "name": "On Serra's Wings",
+      "count": "2"
+    },
+    {
+      "name": "Pegasus Courser",
+      "count": "1"
+    },
+    {
+      "name": "Plains",
+      "count": "9"
+    },
+    {
+      "name": "Seal Away",
+      "count": "2"
+    },
+    {
+      "name": "Sergeant-at-Arms",
+      "count": "1"
+    },
+    {
+      "name": "Skittering Surveyor",
+      "count": "1"
+    },
+    {
+      "name": "Song of Freyalise",
+      "count": "1"
+    },
+    {
+      "name": "Tatyova, Benthic Druid",
+      "count": "1"
+    },
+    {
+      "name": "Territorial Allosaurus",
+      "count": "1"
+    },
+    {
+      "name": "Untamed Kavu",
+      "count": "1"
+    }
+  ]
+}

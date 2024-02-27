@@ -1,0 +1,121 @@
+{
+  "name": "HS Green",
+  "cards": [
+    {
+      "name": "Aspect of Wolf",
+      "count": "1"
+    },
+    {
+      "name": "Cockatrice",
+      "count": "1"
+    },
+    {
+      "name": "Craw Giant",
+      "count": "1"
+    },
+    {
+      "name": "Craw Wurm",
+      "count": "1"
+    },
+    {
+      "name": "Earthlore",
+      "count": "1"
+    },
+    {
+      "name": "Elvish Archers",
+      "count": "1"
+    },
+    {
+      "name": "Feral Thallid",
+      "count": "1"
+    },
+    {
+      "name": "Flying Carpet",
+      "count": "1"
+    },
+    {
+      "name": "Forest",
+      "count": "20"
+    },
+    {
+      "name": "Fyndhorn Elder",
+      "count": "1"
+    },
+    {
+      "name": "Gaea's Liege",
+      "count": "1"
+    },
+    {
+      "name": "Giant Growth",
+      "count": "2"
+    },
+    {
+      "name": "Giant Spider",
+      "count": "1"
+    },
+    {
+      "name": "Hidden Path",
+      "count": "1"
+    },
+    {
+      "name": "Joven's Ferrets",
+      "count": "1"
+    },
+    {
+      "name": "Killer Bees",
+      "count": "1"
+    },
+    {
+      "name": "Llanowar Elves",
+      "count": "2"
+    },
+    {
+      "name": "Lure",
+      "count": "2"
+    },
+    {
+      "name": "Maddening Wind",
+      "count": "1"
+    },
+    {
+      "name": "Radjan Spirit",
+      "count": "1"
+    },
+    {
+      "name": "Scryb Sprites",
+      "count": "3"
+    },
+    {
+      "name": "Stream of Life",
+      "count": "1"
+    },
+    {
+      "name": "Thicket Basilisk",
+      "count": "1"
+    },
+    {
+      "name": "Venom",
+      "count": "1"
+    },
+    {
+      "name": "Wild Growth",
+      "count": "3"
+    },
+    {
+      "name": "Willow Faerie",
+      "count": "1"
+    },
+    {
+      "name": "Wolverine Pack",
+      "count": "1"
+    },
+    {
+      "name": "Wooden Sphere",
+      "count": "1"
+    },
+    {
+      "name": "Wormwood Treefolk",
+      "count": "1"
+    }
+  ]
+}

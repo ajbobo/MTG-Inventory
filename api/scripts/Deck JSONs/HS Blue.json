@@ -1,0 +1,53 @@
+{
+  "name": "HS Blue",
+  "cards": [
+    {
+      "name": "Control Magic",
+      "count": "3"
+    },
+    {
+      "name": "Counterspell",
+      "count": "1"
+    },
+    {
+      "name": "Feedback",
+      "count": "2"
+    },
+    {
+      "name": "Flood",
+      "count": "1"
+    },
+    {
+      "name": "Gaseous Form",
+      "count": "2"
+    },
+    {
+      "name": "Island",
+      "count": "13"
+    },
+    {
+      "name": "Mana Short",
+      "count": "2"
+    },
+    {
+      "name": "Phantasmal Terrain",
+      "count": "4"
+    },
+    {
+      "name": "Power Leak",
+      "count": "4"
+    },
+    {
+      "name": "Psychic Venom",
+      "count": "4"
+    },
+    {
+      "name": "Svyelunite Temple",
+      "count": "1"
+    },
+    {
+      "name": "Twiddle",
+      "count": "3"
+    }
+  ]
+}

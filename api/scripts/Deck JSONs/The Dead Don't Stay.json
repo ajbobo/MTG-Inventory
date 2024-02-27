@@ -1,0 +1,97 @@
+{
+  "name": "The Dead Don't Stay",
+  "cards": [
+    {
+      "name": "Abnormal Endurance",
+      "count": "1"
+    },
+    {
+      "name": "Child of Night",
+      "count": "1"
+    },
+    {
+      "name": "Colossal Dreadmaw",
+      "count": "1"
+    },
+    {
+      "name": "Doomed Dissenter",
+      "count": "1"
+    },
+    {
+      "name": "Forest",
+      "count": "8"
+    },
+    {
+      "name": "Ghirapur Guide",
+      "count": "1"
+    },
+    {
+      "name": "Giant Spider",
+      "count": "1"
+    },
+    {
+      "name": "Gravedigger",
+      "count": "1"
+    },
+    {
+      "name": "Isareth the Awakener",
+      "count": "2"
+    },
+    {
+      "name": "Lich's Caress",
+      "count": "2"
+    },
+    {
+      "name": "Meteor Golem",
+      "count": "1"
+    },
+    {
+      "name": "Murder",
+      "count": "1"
+    },
+    {
+      "name": "Naturalize",
+      "count": "1"
+    },
+    {
+      "name": "Oakenform",
+      "count": "1"
+    },
+    {
+      "name": "Poison-Tip Archer",
+      "count": "1"
+    },
+    {
+      "name": "Rabid Bite",
+      "count": "1"
+    },
+    {
+      "name": "Reclamation Sage",
+      "count": "1"
+    },
+    {
+      "name": "Skeleton Archer",
+      "count": "1"
+    },
+    {
+      "name": "Skymarch Bloodletter",
+      "count": "1"
+    },
+    {
+      "name": "Strangling Spores",
+      "count": "1"
+    },
+    {
+      "name": "Swamp",
+      "count": "9"
+    },
+    {
+      "name": "Vigilant Baloth",
+      "count": "1"
+    },
+    {
+      "name": "Wall of Vines",
+      "count": "1"
+    }
+  ]
+}

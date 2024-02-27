@@ -1,0 +1,101 @@
+{
+  "name": "Ral, Caller of Storms",
+  "cards": [
+    {
+      "name": "Chemister's Insight",
+      "count": "1"
+    },
+    {
+      "name": "Command the Storm",
+      "count": "2"
+    },
+    {
+      "name": "Direct Current",
+      "count": "1"
+    },
+    {
+      "name": "Erratic Cyclops",
+      "count": "1"
+    },
+    {
+      "name": "Fearless Halberdier",
+      "count": "3"
+    },
+    {
+      "name": "Fire Urchin",
+      "count": "2"
+    },
+    {
+      "name": "Goblin Electromancer",
+      "count": "2"
+    },
+    {
+      "name": "Hellkite Whelp",
+      "count": "2"
+    },
+    {
+      "name": "Island",
+      "count": "10"
+    },
+    {
+      "name": "Izzet Guildgate",
+      "count": "4"
+    },
+    {
+      "name": "Leapfrog",
+      "count": "1"
+    },
+    {
+      "name": "Maximize Altitude",
+      "count": "1"
+    },
+    {
+      "name": "Mountain",
+      "count": "12"
+    },
+    {
+      "name": "Muse Drake",
+      "count": "1"
+    },
+    {
+      "name": "Omnispell Adept",
+      "count": "1"
+    },
+    {
+      "name": "Passwall Adept",
+      "count": "1"
+    },
+    {
+      "name": "Precision Bolt",
+      "count": "4"
+    },
+    {
+      "name": "Ral, Caller of Storms",
+      "count": "1"
+    },
+    {
+      "name": "Ral's Dispersal",
+      "count": "2"
+    },
+    {
+      "name": "Ral's Staticaster",
+      "count": "3"
+    },
+    {
+      "name": "Rubblebelt Boar",
+      "count": "1"
+    },
+    {
+      "name": "Sonic Assault",
+      "count": "1"
+    },
+    {
+      "name": "Vedalken Mesmerist",
+      "count": "1"
+    },
+    {
+      "name": "Wee Dragonauts",
+      "count": "2"
+    }
+  ]
+}

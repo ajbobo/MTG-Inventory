@@ -1,0 +1,101 @@
+{
+  "name": "Guilds - Boros",
+  "cards": [
+    {
+      "name": "Boros Guildgate",
+      "count": "3"
+    },
+    {
+      "name": "Candlelight Vigil",
+      "count": "1"
+    },
+    {
+      "name": "Collar the Culprit",
+      "count": "1"
+    },
+    {
+      "name": "Command the Storm",
+      "count": "1"
+    },
+    {
+      "name": "Fresh-Faced Recruit",
+      "count": "1"
+    },
+    {
+      "name": "Garrison Sergeant",
+      "count": "2"
+    },
+    {
+      "name": "Goblin Banneret",
+      "count": "1"
+    },
+    {
+      "name": "Hammer Dropper",
+      "count": "1"
+    },
+    {
+      "name": "Healer's Hawk",
+      "count": "1"
+    },
+    {
+      "name": "Integrity // Intervention",
+      "count": "1"
+    },
+    {
+      "name": "Lava Coil",
+      "count": "1"
+    },
+    {
+      "name": "Legion Guildmage",
+      "count": "1"
+    },
+    {
+      "name": "Light of the Legion",
+      "count": "1"
+    },
+    {
+      "name": "Luminous Bonds",
+      "count": "1"
+    },
+    {
+      "name": "Mountain",
+      "count": "6"
+    },
+    {
+      "name": "Parhelion Patrol",
+      "count": "2"
+    },
+    {
+      "name": "Plains",
+      "count": "7"
+    },
+    {
+      "name": "Roc Charger",
+      "count": "1"
+    },
+    {
+      "name": "Skyknight Legionnaire",
+      "count": "1"
+    },
+    {
+      "name": "Swathcutter Giant",
+      "count": "1"
+    },
+    {
+      "name": "Swiftblade Vindicator",
+      "count": "1"
+    },
+    {
+      "name": "Sworn Companions",
+      "count": "1"
+    },
+    {
+      "name": "Take Heart",
+      "count": "2"
+    },
+    {
+      "name": "Truefire Captain",
+      "count": "1"
+    }
+  ]
+}

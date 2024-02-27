@@ -10,8 +10,11 @@ $csvData = Import-Csv $fileName | ForEach-Object {
     }
 }
 
+$start = $fileName.LastIndexOf('\');
+$name = $fileName.Substring($start + 1, $fileName.Length - $start - 5);
+
 $deck = [PSCustomObject]@{
-    name = $fileName.Substring(2,$fileName.Length - 6);
+    name = $name
     cards = $csvData;
 }
 

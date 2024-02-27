@@ -1,0 +1,105 @@
+{
+  "name": "Urza's Soldiers",
+  "cards": [
+    {
+      "name": "Aeronaut Cavalry",
+      "count": "1"
+    },
+    {
+      "name": "Aeronaut's Wings",
+      "count": "1"
+    },
+    {
+      "name": "Air Marshal",
+      "count": "1"
+    },
+    {
+      "name": "Airlift Chaplain",
+      "count": "1"
+    },
+    {
+      "name": "Defabricate",
+      "count": "1"
+    },
+    {
+      "name": "Evolving Wilds",
+      "count": "1"
+    },
+    {
+      "name": "Island",
+      "count": "8"
+    },
+    {
+      "name": "Loran's Escape",
+      "count": "1"
+    },
+    {
+      "name": "Mass Production",
+      "count": "1"
+    },
+    {
+      "name": "Phalanx Vanguard",
+      "count": "1"
+    },
+    {
+      "name": "Plains",
+      "count": "7"
+    },
+    {
+      "name": "Platoon Dispenser",
+      "count": "1"
+    },
+    {
+      "name": "Recommission",
+      "count": "1"
+    },
+    {
+      "name": "Recruitment Officer",
+      "count": "1"
+    },
+    {
+      "name": "Repair and Recharge",
+      "count": "1"
+    },
+    {
+      "name": "Scrapwork Cohort",
+      "count": "1"
+    },
+    {
+      "name": "Siege Veteran",
+      "count": "1"
+    },
+    {
+      "name": "Surge Engine",
+      "count": "1"
+    },
+    {
+      "name": "Sword of the Meek",
+      "count": "1"
+    },
+    {
+      "name": "Take Flight",
+      "count": "2"
+    },
+    {
+      "name": "Urza's Rebuff",
+      "count": "1"
+    },
+    {
+      "name": "Veteran's Powerblade",
+      "count": "1"
+    },
+    {
+      "name": "Wing Commando",
+      "count": "1"
+    },
+    {
+      "name": "Yotian Frontliner",
+      "count": "2"
+    },
+    {
+      "name": "Yotian Tactician",
+      "count": "1"
+    }
+  ]
+}

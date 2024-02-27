@@ -1,0 +1,85 @@
+{
+  "name": "Gideon, the Oathsworn",
+  "cards": [
+    {
+      "name": "Ajani's Pridemate",
+      "count": "3"
+    },
+    {
+      "name": "Bond of Discipline",
+      "count": "1"
+    },
+    {
+      "name": "Charmed Stray",
+      "count": "4"
+    },
+    {
+      "name": "Command the Dreadhorde",
+      "count": "1"
+    },
+    {
+      "name": "Cruel Celebrant",
+      "count": "3"
+    },
+    {
+      "name": "Desperate Lunge",
+      "count": "4"
+    },
+    {
+      "name": "Enforcer Griffin",
+      "count": "2"
+    },
+    {
+      "name": "Gideon, the Oathsworn",
+      "count": "1"
+    },
+    {
+      "name": "Gideon's Battle Cry",
+      "count": "2"
+    },
+    {
+      "name": "Gideon's Company",
+      "count": "3"
+    },
+    {
+      "name": "Kaya, Bane of the Dead",
+      "count": "1"
+    },
+    {
+      "name": "Makeshift Battalion",
+      "count": "3"
+    },
+    {
+      "name": "Oath of Kaya",
+      "count": "1"
+    },
+    {
+      "name": "Ob Nixilis's Cruelty",
+      "count": "3"
+    },
+    {
+      "name": "Orzhov Guildgate",
+      "count": "4"
+    },
+    {
+      "name": "Plains",
+      "count": "12"
+    },
+    {
+      "name": "Swamp",
+      "count": "8"
+    },
+    {
+      "name": "Trusted Pegasus",
+      "count": "2"
+    },
+    {
+      "name": "Vampire Opportunist",
+      "count": "1"
+    },
+    {
+      "name": "War Screecher",
+      "count": "1"
+    }
+  ]
+}

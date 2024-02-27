@@ -1,0 +1,117 @@
+{
+  "name": "Tidal Guardians",
+  "cards": [
+    {
+      "name": "Aquitect's Will",
+      "count": "4"
+    },
+    {
+      "name": "Blighted Cataract",
+      "count": "1"
+    },
+    {
+      "name": "Claustrophobia",
+      "count": "2"
+    },
+    {
+      "name": "Cold-Eyed Selkie",
+      "count": "1"
+    },
+    {
+      "name": "Concentrate",
+      "count": "1"
+    },
+    {
+      "name": "Engulf the Shore",
+      "count": "1"
+    },
+    {
+      "name": "Essence Scatter",
+      "count": "2"
+    },
+    {
+      "name": "Harbinger of the Tides",
+      "count": "1"
+    },
+    {
+      "name": "Inkfathom Divers",
+      "count": "1"
+    },
+    {
+      "name": "Island",
+      "count": "21"
+    },
+    {
+      "name": "Lonely Sandbar",
+      "count": "2"
+    },
+    {
+      "name": "Master of the Pearl Trident",
+      "count": "1"
+    },
+    {
+      "name": "Master of Waves",
+      "count": "1"
+    },
+    {
+      "name": "Merfolk Looter",
+      "count": "1"
+    },
+    {
+      "name": "Merfolk Sovereign",
+      "count": "1"
+    },
+    {
+      "name": "Merfolk Wayfinder",
+      "count": "1"
+    },
+    {
+      "name": "Merrow Reejerey",
+      "count": "1"
+    },
+    {
+      "name": "Mind Spring",
+      "count": "1"
+    },
+    {
+      "name": "Misdirection",
+      "count": "1"
+    },
+    {
+      "name": "Rootwater Hunter",
+      "count": "2"
+    },
+    {
+      "name": "Scroll Thief",
+      "count": "2"
+    },
+    {
+      "name": "Streambed Aquitects",
+      "count": "3"
+    },
+    {
+      "name": "Tidal Courier",
+      "count": "2"
+    },
+    {
+      "name": "Tidal Warrior",
+      "count": "2"
+    },
+    {
+      "name": "Tidal Wave",
+      "count": "1"
+    },
+    {
+      "name": "Tidebinder Mage",
+      "count": "1"
+    },
+    {
+      "name": "Triton Tactics",
+      "count": "1"
+    },
+    {
+      "name": "Wake Thrasher",
+      "count": "1"
+    }
+  ]
+}

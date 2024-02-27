@@ -1,0 +1,121 @@
+{
+  "name": "Reckless Vandals",
+  "cards": [
+    {
+      "name": "Battle Squadron",
+      "count": "1"
+    },
+    {
+      "name": "Blighted Gorge",
+      "count": "2"
+    },
+    {
+      "name": "Boggart Brute",
+      "count": "2"
+    },
+    {
+      "name": "Brittle Effigy",
+      "count": "1"
+    },
+    {
+      "name": "Brute Strength",
+      "count": "2"
+    },
+    {
+      "name": "Cleaver Riot",
+      "count": "1"
+    },
+    {
+      "name": "Ember Hauler",
+      "count": "1"
+    },
+    {
+      "name": "Forgotten Cave",
+      "count": "2"
+    },
+    {
+      "name": "Foundry Street Denizen",
+      "count": "2"
+    },
+    {
+      "name": "Gempalm Incinerator",
+      "count": "1"
+    },
+    {
+      "name": "Ghostfire",
+      "count": "3"
+    },
+    {
+      "name": "Goblin Charbelcher",
+      "count": "1"
+    },
+    {
+      "name": "Goblin Chieftain",
+      "count": "1"
+    },
+    {
+      "name": "Goblin Diplomats",
+      "count": "1"
+    },
+    {
+      "name": "Goblin Glory Chaser",
+      "count": "1"
+    },
+    {
+      "name": "Goblin Goon",
+      "count": "1"
+    },
+    {
+      "name": "Goblin Grenade",
+      "count": "1"
+    },
+    {
+      "name": "Goblin Rabblemaster",
+      "count": "1"
+    },
+    {
+      "name": "Goblin Razerunners",
+      "count": "1"
+    },
+    {
+      "name": "Goblin Ringleader",
+      "count": "2"
+    },
+    {
+      "name": "Goblin Tunneler",
+      "count": "1"
+    },
+    {
+      "name": "Goblin Wardriver",
+      "count": "2"
+    },
+    {
+      "name": "Hordeling Outburst",
+      "count": "1"
+    },
+    {
+      "name": "Krenko, Mob Boss",
+      "count": "1"
+    },
+    {
+      "name": "Krenko's Command",
+      "count": "3"
+    },
+    {
+      "name": "Mountain",
+      "count": "20"
+    },
+    {
+      "name": "Relentless Assault",
+      "count": "1"
+    },
+    {
+      "name": "Tarfire",
+      "count": "2"
+    },
+    {
+      "name": "Warren Instigator",
+      "count": "1"
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "name": "Sigarda's Coven",
+  "cards": [
+    {
+      "name": "Augur of Autumn",
+      "count": "1"
+    },
+    {
+      "name": "Bereaved Survivor // Dauntless Avenger",
+      "count": "1"
+    },
+    {
+      "name": "Candlegrove Witch",
+      "count": "1"
+    },
+    {
+      "name": "Candlelit Cavalry",
+      "count": "1"
+    },
+    {
+      "name": "Chaplain of Alms // Chapel Shieldgeist",
+      "count": "1"
+    },
+    {
+      "name": "Clarion Cathars",
+      "count": "1"
+    },
+    {
+      "name": "Clear Shot",
+      "count": "1"
+    },
+    {
+      "name": "Consuming Blob",
+      "count": "1"
+    },
+    {
+      "name": "Dryad's Revival",
+      "count": "1"
+    },
+    {
+      "name": "Duel for Dominance",
+      "count": "1"
+    },
+    {
+      "name": "Evolving Wilds",
+      "count": "1"
+    },
+    {
+      "name": "Field of Ruin",
+      "count": "1"
+    },
+    {
+      "name": "Forest",
+      "count": "7"
+    },
+    {
+      "name": "Gavony Silversmith",
+      "count": "1"
+    },
+    {
+      "name": "Howl of the Hunt",
+      "count": "1"
+    },
+    {
+      "name": "Join the Dance",
+      "count": "1"
+    },
+    {
+      "name": "Loyal Gryff",
+      "count": "2"
+    },
+    {
+      "name": "Lunarch Veteran // Luminous Phantom",
+      "count": "1"
+    },
+    {
+      "name": "Might of the Old Ways",
+      "count": "1"
+    },
+    {
+      "name": "Mystic Skull // Mystic Monstrosity",
+      "count": "1"
+    },
+    {
+      "name": "Plains",
+      "count": "7"
+    },
+    {
+      "name": "Ritual Guardian",
+      "count": "1"
+    },
+    {
+      "name": "Ritual of Hope",
+      "count": "1"
+    },
+    {
+      "name": "Sigarda, Champion of Light",
+      "count": "1"
+    },
+    {
+      "name": "Snarling Wolf",
+      "count": "1"
+    },
+    {
+      "name": "Storm the Festival",
+      "count": "1"
+    },
+    {
+      "name": "Timberland Guide",
+      "count": "1"
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "name": "Enraged Dinos",
+  "cards": [
+    {
+      "name": "Atzocan Seer",
+      "count": "1"
+    },
+    {
+      "name": "Cleansing Ray",
+      "count": "1"
+    },
+    {
+      "name": "Colossal Dreadmaw",
+      "count": "1"
+    },
+    {
+      "name": "Divine Verdict",
+      "count": "1"
+    },
+    {
+      "name": "Evolving Wilds",
+      "count": "1"
+    },
+    {
+      "name": "Forest",
+      "count": "6"
+    },
+    {
+      "name": "Frilled Deathspitter",
+      "count": "2"
+    },
+    {
+      "name": "Hunt the Weak",
+      "count": "2"
+    },
+    {
+      "name": "Mountain",
+      "count": "5"
+    },
+    {
+      "name": "Mutiny",
+      "count": "1"
+    },
+    {
+      "name": "Naturalize",
+      "count": "1"
+    },
+    {
+      "name": "Needletooth Raptor",
+      "count": "2"
+    },
+    {
+      "name": "Orazca Frillback",
+      "count": "1"
+    },
+    {
+      "name": "Overgrown Armasaur",
+      "count": "1"
+    },
+    {
+      "name": "Plains",
+      "count": "4"
+    },
+    {
+      "name": "Plummet",
+      "count": "1"
+    },
+    {
+      "name": "Raging Regisaur",
+      "count": "1"
+    },
+    {
+      "name": "Shake the Foundations",
+      "count": "1"
+    },
+    {
+      "name": "Snubhorn Sentry",
+      "count": "1"
+    },
+    {
+      "name": "Sun Sentinel",
+      "count": "1"
+    },
+    {
+      "name": "Sun-Collared Raptor",
+      "count": "1"
+    },
+    {
+      "name": "Sun-Crested Pterodon",
+      "count": "1"
+    },
+    {
+      "name": "Tilonalli's Crown",
+      "count": "1"
+    },
+    {
+      "name": "Traveler's Amulet",
+      "count": "1"
+    },
+    {
+      "name": "Zetalpa, Primal Dawn",
+      "count": "1"
+    }
+  ]
+}

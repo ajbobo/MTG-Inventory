@@ -1,0 +1,121 @@
+{
+  "name": "Drizzt and the Dragon",
+  "cards": [
+    {
+      "name": "Arborea Pegasus",
+      "count": "1"
+    },
+    {
+      "name": "Bull's Strength",
+      "count": "1"
+    },
+    {
+      "name": "Compelled Duel",
+      "count": "1"
+    },
+    {
+      "name": "Dawnbringer Cleric",
+      "count": "1"
+    },
+    {
+      "name": "Dire Wolf Prowler",
+      "count": "1"
+    },
+    {
+      "name": "Drizzt Do'Urden",
+      "count": "1"
+    },
+    {
+      "name": "Forest",
+      "count": "8"
+    },
+    {
+      "name": "Gnoll Hunter",
+      "count": "1"
+    },
+    {
+      "name": "Grand Master of Flowers",
+      "count": "1"
+    },
+    {
+      "name": "Hunter's Mark",
+      "count": "1"
+    },
+    {
+      "name": "Icingdeath, Frost Tyrant",
+      "count": "1"
+    },
+    {
+      "name": "Inspiring Bard",
+      "count": "1"
+    },
+    {
+      "name": "Keen-Eared Sentry",
+      "count": "1"
+    },
+    {
+      "name": "Minimus Containment",
+      "count": "1"
+    },
+    {
+      "name": "Monk of the Open Hand",
+      "count": "1"
+    },
+    {
+      "name": "Nadaar, Selfless Paladin",
+      "count": "1"
+    },
+    {
+      "name": "Plains",
+      "count": "8"
+    },
+    {
+      "name": "Planar Ally",
+      "count": "1"
+    },
+    {
+      "name": "Prosperous Innkeeper",
+      "count": "1"
+    },
+    {
+      "name": "Ranger's Longbow",
+      "count": "1"
+    },
+    {
+      "name": "Sylvan Shepherd",
+      "count": "1"
+    },
+    {
+      "name": "Varis, Silverymoon Ranger",
+      "count": "1"
+    },
+    {
+      "name": "Wandering Troubadour",
+      "count": "1"
+    },
+    {
+      "name": "You Happen On a Glade",
+      "count": "1"
+    },
+    {
+      "name": "You Meet in a Tavern",
+      "count": "1"
+    },
+    {
+      "name": "You're Ambushed on the Road",
+      "count": "1"
+    },
+    {
+      "name": "Fifty Feet of Rope",
+      "count": "1"
+    },
+    {
+      "name": "Scaled Herbalist",
+      "count": "1"
+    },
+    {
+      "name": "Veteran Dungeoneer",
+      "count": "1"
+    }
+  ]
+}

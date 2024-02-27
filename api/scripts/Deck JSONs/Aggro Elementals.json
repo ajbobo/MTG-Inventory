@@ -1,0 +1,85 @@
+{
+  "name": "Aggro Elementals",
+  "cards": [
+    {
+      "name": "Act of Treason",
+      "count": "2"
+    },
+    {
+      "name": "Cavalier of Flame",
+      "count": "1"
+    },
+    {
+      "name": "Chandra, Acolyte of Flame",
+      "count": "1"
+    },
+    {
+      "name": "Chandra's Embercat",
+      "count": "3"
+    },
+    {
+      "name": "Chandra's Outrage",
+      "count": "1"
+    },
+    {
+      "name": "Diamond Knight",
+      "count": "1"
+    },
+    {
+      "name": "Fire Elemental",
+      "count": "2"
+    },
+    {
+      "name": "Lavakin Brawler",
+      "count": "1"
+    },
+    {
+      "name": "Maniacal Rage",
+      "count": "1"
+    },
+    {
+      "name": "Marauder's Axe",
+      "count": "1"
+    },
+    {
+      "name": "Mask of Immolation",
+      "count": "1"
+    },
+    {
+      "name": "Meteor Golem",
+      "count": "1"
+    },
+    {
+      "name": "Mountain",
+      "count": "15"
+    },
+    {
+      "name": "Reduce to Ashes",
+      "count": "1"
+    },
+    {
+      "name": "Scampering Scorcher",
+      "count": "1"
+    },
+    {
+      "name": "Scorch Spitter",
+      "count": "2"
+    },
+    {
+      "name": "Shock",
+      "count": "2"
+    },
+    {
+      "name": "Tectonic Rift",
+      "count": "1"
+    },
+    {
+      "name": "Uncaged Fury",
+      "count": "1"
+    },
+    {
+      "name": "Unchained Berserker",
+      "count": "1"
+    }
+  ]
+}

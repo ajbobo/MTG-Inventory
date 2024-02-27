@@ -1,0 +1,101 @@
+{
+  "name": "Nightmares and Memories",
+  "cards": [
+    {
+      "name": "Ashiok, Nightmare Muse",
+      "count": "1"
+    },
+    {
+      "name": "Atris, Oracle of Half-Truths",
+      "count": "1"
+    },
+    {
+      "name": "Blight-Breath Catoblepas",
+      "count": "1"
+    },
+    {
+      "name": "Devourer of Memory",
+      "count": "1"
+    },
+    {
+      "name": "Erebos's Intervention",
+      "count": "1"
+    },
+    {
+      "name": "Final Death",
+      "count": "1"
+    },
+    {
+      "name": "Gray Merchant of Asphodel",
+      "count": "1"
+    },
+    {
+      "name": "Island",
+      "count": "4"
+    },
+    {
+      "name": "Mire's Grasp",
+      "count": "2"
+    },
+    {
+      "name": "Mogis's Favor",
+      "count": "2"
+    },
+    {
+      "name": "Nyxborn Marauder",
+      "count": "2"
+    },
+    {
+      "name": "Rage-Scarred Berserker",
+      "count": "1"
+    },
+    {
+      "name": "Scavenging Harpy",
+      "count": "1"
+    },
+    {
+      "name": "Soul-Guide Lantern",
+      "count": "1"
+    },
+    {
+      "name": "Soulreaper of Mogis",
+      "count": "2"
+    },
+    {
+      "name": "Swamp",
+      "count": "10"
+    },
+    {
+      "name": "Temple of Deceit",
+      "count": "1"
+    },
+    {
+      "name": "Thaumaturge's Familiar",
+      "count": "1"
+    },
+    {
+      "name": "Thundering Chariot",
+      "count": "1"
+    },
+    {
+      "name": "Tymaret, Chosen from Death",
+      "count": "1"
+    },
+    {
+      "name": "Underworld Charger",
+      "count": "1"
+    },
+    {
+      "name": "Unknown Shores",
+      "count": "1"
+    },
+    {
+      "name": "Venomous Hierophant",
+      "count": "1"
+    },
+    {
+      "name": "Wings of Hubris",
+      "count": "1"
+    }
+  ]
+}

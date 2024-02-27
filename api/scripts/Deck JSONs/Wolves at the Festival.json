@@ -1,0 +1,89 @@
+{
+  "name": "Wolves at the Festival",
+  "cards": [
+    {
+      "name": "Abandon the Post",
+      "count": "1"
+    },
+    {
+      "name": "Bird Admirer // Wing Shredder",
+      "count": "2"
+    },
+    {
+      "name": "Burly Breaker // Dire-Strain Demolisher",
+      "count": "2"
+    },
+    {
+      "name": "Duel for Dominance",
+      "count": "1"
+    },
+    {
+      "name": "Forest",
+      "count": "9"
+    },
+    {
+      "name": "Harvesttide Infiltrator // Harvesttide Assailant",
+      "count": "1"
+    },
+    {
+      "name": "Howl of the Hunt",
+      "count": "1"
+    },
+    {
+      "name": "Kessig Naturalist // Lord of the Ulvenwald",
+      "count": "2"
+    },
+    {
+      "name": "Lambholt Harrier",
+      "count": "1"
+    },
+    {
+      "name": "Moonrager's Slash",
+      "count": "1"
+    },
+    {
+      "name": "Mountain",
+      "count": "7"
+    },
+    {
+      "name": "Outland Liberator // Frenzied Trapbreaker",
+      "count": "2"
+    },
+    {
+      "name": "Pack's Betrayal",
+      "count": "1"
+    },
+    {
+      "name": "Pestilent Wolf",
+      "count": "1"
+    },
+    {
+      "name": "Play with Fire",
+      "count": "2"
+    },
+    {
+      "name": "Plummet",
+      "count": "1"
+    },
+    {
+      "name": "Spellrune Painter // Spellrune Howler",
+      "count": "1"
+    },
+    {
+      "name": "Storm the Festival",
+      "count": "1"
+    },
+    {
+      "name": "Tireless Hauler // Dire-Strain Brawler",
+      "count": "1"
+    },
+    {
+      "name": "Unnatural Moonrise",
+      "count": "1"
+    },
+    {
+      "name": "Voldaren Stinger",
+      "count": "1"
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "name": "Garruk and Friends",
+  "cards": [
+    {
+      "name": "Ayara, First of Locthwain",
+      "count": "1"
+    },
+    {
+      "name": "Curious Pair // Treats to Share",
+      "count": "1"
+    },
+    {
+      "name": "Deathless Knight",
+      "count": "1"
+    },
+    {
+      "name": "Eye Collector",
+      "count": "2"
+    },
+    {
+      "name": "Fierce Witchstalker",
+      "count": "1"
+    },
+    {
+      "name": "Forest",
+      "count": "6"
+    },
+    {
+      "name": "Garenbrig Carver // Shield's Might",
+      "count": "1"
+    },
+    {
+      "name": "Garruk, Cursed Huntsman",
+      "count": "1"
+    },
+    {
+      "name": "Gilded Goose",
+      "count": "1"
+    },
+    {
+      "name": "Gingerbread Cabin",
+      "count": "2"
+    },
+    {
+      "name": "Insatiable Appetite",
+      "count": "1"
+    },
+    {
+      "name": "Keeper of Fables",
+      "count": "1"
+    },
+    {
+      "name": "Lash of Thorns",
+      "count": "1"
+    },
+    {
+      "name": "Once Upon a Time",
+      "count": "1"
+    },
+    {
+      "name": "Order of Midnight // Alter Fate",
+      "count": "1"
+    },
+    {
+      "name": "Outmuscle",
+      "count": "1"
+    },
+    {
+      "name": "Return of the Wildspeaker",
+      "count": "2"
+    },
+    {
+      "name": "Return to Nature",
+      "count": "1"
+    },
+    {
+      "name": "Rosethorn Acolyte // Seasonal Ritual",
+      "count": "1"
+    },
+    {
+      "name": "Stonecoil Serpent",
+      "count": "1"
+    },
+    {
+      "name": "Swamp",
+      "count": "6"
+    },
+    {
+      "name": "Tall as a Beanstalk",
+      "count": "1"
+    },
+    {
+      "name": "Tuinvale Treefolk // Oaken Boon",
+      "count": "1"
+    },
+    {
+      "name": "Wishclaw Talisman",
+      "count": "1"
+    },
+    {
+      "name": "Witch's Cottage",
+      "count": "2"
+    },
+    {
+      "name": "Wolf's Quarry",
+      "count": "1"
+    }
+  ]
+}

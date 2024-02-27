@@ -1,0 +1,109 @@
+{
+  "name": "Oozing Graveyard",
+  "cards": [
+    {
+      "name": "Bird Admirer // Wing Shredder",
+      "count": "2"
+    },
+    {
+      "name": "Brood Weaver",
+      "count": "1"
+    },
+    {
+      "name": "Burly Breaker // Dire-Strain Demolisher",
+      "count": "1"
+    },
+    {
+      "name": "Consuming Blob",
+      "count": "1"
+    },
+    {
+      "name": "Crawl from the Cellar",
+      "count": "1"
+    },
+    {
+      "name": "Dawnhart Rejuvenator",
+      "count": "1"
+    },
+    {
+      "name": "Dryad's Revival",
+      "count": "1"
+    },
+    {
+      "name": "Duel for Dominance",
+      "count": "1"
+    },
+    {
+      "name": "Eaten Alive",
+      "count": "1"
+    },
+    {
+      "name": "Eccentric Farmer",
+      "count": "1"
+    },
+    {
+      "name": "Ecstatic Awakener // Awoken Demon",
+      "count": "1"
+    },
+    {
+      "name": "Evolving Wilds",
+      "count": "1"
+    },
+    {
+      "name": "Forest",
+      "count": "8"
+    },
+    {
+      "name": "Gisa, Glorious Resurrector",
+      "count": "1"
+    },
+    {
+      "name": "Howl of the Hunt",
+      "count": "1"
+    },
+    {
+      "name": "Infernal Grasp",
+      "count": "1"
+    },
+    {
+      "name": "Morbid Opportunist",
+      "count": "1"
+    },
+    {
+      "name": "No Way Out",
+      "count": "1"
+    },
+    {
+      "name": "Old Stickfingers",
+      "count": "1"
+    },
+    {
+      "name": "Olivia's Midnight Ambush",
+      "count": "1"
+    },
+    {
+      "name": "Siege Zombie",
+      "count": "1"
+    },
+    {
+      "name": "Snarling Wolf",
+      "count": "1"
+    },
+    {
+      "name": "Storm the Festival",
+      "count": "1"
+    },
+    {
+      "name": "Swamp",
+      "count": "7"
+    },
+    {
+      "name": "Timberland Guide",
+      "count": "1"
+    },
+    {
+      "name": "Vampire Interloper",
+      "count": "1"
+    }
+  ]
+}

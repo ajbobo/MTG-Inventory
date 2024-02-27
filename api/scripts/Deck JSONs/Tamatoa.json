@@ -1,0 +1,93 @@
+{
+  "name": "Tamatoa",
+  "cards": [
+    {
+      "name": "Acclaimed Contender",
+      "count": "1"
+    },
+    {
+      "name": "All That Glitters",
+      "count": "1"
+    },
+    {
+      "name": "Ardenvale Paladin",
+      "count": "2"
+    },
+    {
+      "name": "Beloved Princess",
+      "count": "1"
+    },
+    {
+      "name": "Charmed Sleep",
+      "count": "1"
+    },
+    {
+      "name": "Corridor Monitor",
+      "count": "1"
+    },
+    {
+      "name": "Emry, Lurker of the Loch",
+      "count": "1"
+    },
+    {
+      "name": "Fortifying Provisions",
+      "count": "2"
+    },
+    {
+      "name": "Frogify",
+      "count": "2"
+    },
+    {
+      "name": "Island",
+      "count": "8"
+    },
+    {
+      "name": "Mantle of Tides",
+      "count": "1"
+    },
+    {
+      "name": "Merfolk Secretkeeper // Venture Deeper",
+      "count": "1"
+    },
+    {
+      "name": "Midnight Clock",
+      "count": "1"
+    },
+    {
+      "name": "Plains",
+      "count": "8"
+    },
+    {
+      "name": "Shinechaser",
+      "count": "2"
+    },
+    {
+      "name": "Shining Armor",
+      "count": "1"
+    },
+    {
+      "name": "So Tiny",
+      "count": "1"
+    },
+    {
+      "name": "Syr Alin, the Lion's Claw",
+      "count": "1"
+    },
+    {
+      "name": "Syr Elenora, the Discerning",
+      "count": "1"
+    },
+    {
+      "name": "Weapon Rack",
+      "count": "1"
+    },
+    {
+      "name": "Witching Well",
+      "count": "1"
+    },
+    {
+      "name": "Youthful Knight",
+      "count": "1"
+    }
+  ]
+}

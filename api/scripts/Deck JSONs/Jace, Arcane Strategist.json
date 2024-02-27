@@ -1,0 +1,89 @@
+{
+  "name": "Jace, Arcane Strategist",
+  "cards": [
+    {
+      "name": "Band Together",
+      "count": "2"
+    },
+    {
+      "name": "Bioessence Hydra",
+      "count": "1"
+    },
+    {
+      "name": "Bloom Hulk",
+      "count": "3"
+    },
+    {
+      "name": "Courage in Crisis",
+      "count": "2"
+    },
+    {
+      "name": "Forest",
+      "count": "11"
+    },
+    {
+      "name": "Guildpact Informant",
+      "count": "4"
+    },
+    {
+      "name": "Island",
+      "count": "10"
+    },
+    {
+      "name": "Jace, Arcane Strategist",
+      "count": "1"
+    },
+    {
+      "name": "Jace's Projection",
+      "count": "3"
+    },
+    {
+      "name": "Jace's Ruse",
+      "count": "2"
+    },
+    {
+      "name": "Jace's Triumph",
+      "count": "1"
+    },
+    {
+      "name": "Kiora, Behemoth Beckoner",
+      "count": "1"
+    },
+    {
+      "name": "Kiora's Dambreaker",
+      "count": "2"
+    },
+    {
+      "name": "Merfolk Skydiver",
+      "count": "2"
+    },
+    {
+      "name": "New Horizons",
+      "count": "2"
+    },
+    {
+      "name": "Pollenbright Druid",
+      "count": "3"
+    },
+    {
+      "name": "Primordial Wurm",
+      "count": "1"
+    },
+    {
+      "name": "Simic Guildgate",
+      "count": "4"
+    },
+    {
+      "name": "Spark Double",
+      "count": "1"
+    },
+    {
+      "name": "Stealth Mission",
+      "count": "2"
+    },
+    {
+      "name": "Wardscale Crocodile",
+      "count": "2"
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "name": "Rakdos - Dragon's Maze",
+  "cards": [
+    {
+      "name": "Abnormal Endurance",
+      "count": "1"
+    },
+    {
+      "name": "Bogstomper",
+      "count": "1"
+    },
+    {
+      "name": "Brawl-Bash Ogre",
+      "count": "1"
+    },
+    {
+      "name": "Diregraf Ghoul",
+      "count": "1"
+    },
+    {
+      "name": "Doublecast",
+      "count": "1"
+    },
+    {
+      "name": "Exava, Rakdos Blood Witch",
+      "count": "1"
+    },
+    {
+      "name": "Fervent Strike",
+      "count": "1"
+    },
+    {
+      "name": "Fungal Infection",
+      "count": "1"
+    },
+    {
+      "name": "Gravedigger",
+      "count": "1"
+    },
+    {
+      "name": "Guttersnipe",
+      "count": "1"
+    },
+    {
+      "name": "Hostile Minotaur",
+      "count": "1"
+    },
+    {
+      "name": "Knight of Malice",
+      "count": "1"
+    },
+    {
+      "name": "Lava Axe",
+      "count": "1"
+    },
+    {
+      "name": "Maze Rusher",
+      "count": "1"
+    },
+    {
+      "name": "Morgue Burst",
+      "count": "1"
+    },
+    {
+      "name": "Mountain",
+      "count": "8"
+    },
+    {
+      "name": "Murder",
+      "count": "2"
+    },
+    {
+      "name": "Rakdos Drake",
+      "count": "1"
+    },
+    {
+      "name": "Settle the Score",
+      "count": "1"
+    },
+    {
+      "name": "Skeleton Archer",
+      "count": "1"
+    },
+    {
+      "name": "Skymarch Bloodletter",
+      "count": "2"
+    },
+    {
+      "name": "Sparktongue Dragon",
+      "count": "1"
+    },
+    {
+      "name": "Strangling Spores",
+      "count": "1"
+    },
+    {
+      "name": "Swamp",
+      "count": "8"
+    }
+  ]
+}

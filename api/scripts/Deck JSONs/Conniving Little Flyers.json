@@ -1,0 +1,117 @@
+{
+  "name": "Conniving Little Flyers",
+  "cards": [
+    {
+      "name": "Brokers Hideout",
+      "count": "1"
+    },
+    {
+      "name": "Cutthroat Contender",
+      "count": "1"
+    },
+    {
+      "name": "Faerie Vandal",
+      "count": "1"
+    },
+    {
+      "name": "Fake Your Own Death",
+      "count": "1"
+    },
+    {
+      "name": "Getaway Car",
+      "count": "1"
+    },
+    {
+      "name": "Gilded Pinions",
+      "count": "1"
+    },
+    {
+      "name": "Island",
+      "count": "4"
+    },
+    {
+      "name": "Kill Shot",
+      "count": "1"
+    },
+    {
+      "name": "Knockout Blow",
+      "count": "1"
+    },
+    {
+      "name": "Ledger Shredder",
+      "count": "2"
+    },
+    {
+      "name": "Majestic Metamorphosis",
+      "count": "1"
+    },
+    {
+      "name": "Nimble Larcenist",
+      "count": "1"
+    },
+    {
+      "name": "Obscura Initiate",
+      "count": "1"
+    },
+    {
+      "name": "Obscura Storefront",
+      "count": "1"
+    },
+    {
+      "name": "Out of the Way",
+      "count": "1"
+    },
+    {
+      "name": "Paragon of Modernity",
+      "count": "1"
+    },
+    {
+      "name": "Plains",
+      "count": "4"
+    },
+    {
+      "name": "Psychic Pickpocket",
+      "count": "1"
+    },
+    {
+      "name": "Queza, Augur of Agonies",
+      "count": "1"
+    },
+    {
+      "name": "Raffine's Informant",
+      "count": "3"
+    },
+    {
+      "name": "Security Bypass",
+      "count": "1"
+    },
+    {
+      "name": "Sky Crier",
+      "count": "1"
+    },
+    {
+      "name": "Skybridge Towers",
+      "count": "1"
+    },
+    {
+      "name": "Sleep with the Fishes",
+      "count": "1"
+    },
+    {
+      "name": "Swamp",
+      "count": "4"
+    },
+    {
+      "name": "Toluz, Clever Conductor",
+      "count": "1"
+    },
+    {
+      "name": "Vampire Scrivener",
+      "count": "1"
+    },
+    {
+      "name": "Waterfront District",
+      "count": "1"
+    }
+  ]
+}

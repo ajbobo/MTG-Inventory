@@ -1,0 +1,97 @@
+{
+  "name": "Wolves at the Wedding",
+  "cards": [
+    {
+      "name": "Boarded Window",
+      "count": "1"
+    },
+    {
+      "name": "Bramble Wurm",
+      "count": "1"
+    },
+    {
+      "name": "Cemetery Gatekeeper",
+      "count": "1"
+    },
+    {
+      "name": "Child of the Pack // Savage Packmate",
+      "count": "1"
+    },
+    {
+      "name": "Daybreak Combatants",
+      "count": "2"
+    },
+    {
+      "name": "Dormant Grove // Gnarled Grovestrider",
+      "count": "2"
+    },
+    {
+      "name": "Evolving Wilds",
+      "count": "1"
+    },
+    {
+      "name": "Flourishing Hunter",
+      "count": "2"
+    },
+    {
+      "name": "Forest",
+      "count": "8"
+    },
+    {
+      "name": "Howling Moon",
+      "count": "1"
+    },
+    {
+      "name": "Howlpack Piper // Wildsong Howler",
+      "count": "1"
+    },
+    {
+      "name": "Hungry Ridgewolf",
+      "count": "2"
+    },
+    {
+      "name": "Ill-Tempered Loner // Howlpack Avenger",
+      "count": "1"
+    },
+    {
+      "name": "Investigator's Journal",
+      "count": "1"
+    },
+    {
+      "name": "Massive Might",
+      "count": "1"
+    },
+    {
+      "name": "Mountain",
+      "count": "7"
+    },
+    {
+      "name": "Nature's Embrace",
+      "count": "1"
+    },
+    {
+      "name": "Packsong Pup",
+      "count": "1"
+    },
+    {
+      "name": "Sawblade Slinger",
+      "count": "1"
+    },
+    {
+      "name": "Sheltering Boughs",
+      "count": "1"
+    },
+    {
+      "name": "Snarling Wolf",
+      "count": "1"
+    },
+    {
+      "name": "Voltaic Visionary // Volt-Charged Berserker",
+      "count": "1"
+    },
+    {
+      "name": "Weary Prisoner // Wrathful Jailbreaker",
+      "count": "1"
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "name": "WBU - Return to Ravnica",
+  "cards": [
+    {
+      "name": "Angelic Edict",
+      "count": "1"
+    },
+    {
+      "name": "Archon of the Triumvirate",
+      "count": "1"
+    },
+    {
+      "name": "Armory Guard",
+      "count": "1"
+    },
+    {
+      "name": "Azorius Charm",
+      "count": "1"
+    },
+    {
+      "name": "Crosstown Courier",
+      "count": "1"
+    },
+    {
+      "name": "Dimir Charm",
+      "count": "1"
+    },
+    {
+      "name": "Dispel",
+      "count": "1"
+    },
+    {
+      "name": "Dramatic Rescue",
+      "count": "1"
+    },
+    {
+      "name": "Fatal Fumes",
+      "count": "1"
+    },
+    {
+      "name": "Haunter of Nightveil",
+      "count": "1"
+    },
+    {
+      "name": "Inaction Injunction",
+      "count": "1"
+    },
+    {
+      "name": "Island",
+      "count": "7"
+    },
+    {
+      "name": "Maze Glider",
+      "count": "1"
+    },
+    {
+      "name": "Mindstatic",
+      "count": "1"
+    },
+    {
+      "name": "Obzedat's Aid",
+      "count": "1"
+    },
+    {
+      "name": "Plains",
+      "count": "6"
+    },
+    {
+      "name": "Psychic Spiral",
+      "count": "1"
+    },
+    {
+      "name": "Purge the Profane",
+      "count": "1"
+    },
+    {
+      "name": "Security Blockade",
+      "count": "1"
+    },
+    {
+      "name": "Simic Fluxmage",
+      "count": "1"
+    },
+    {
+      "name": "Stealer of Secrets",
+      "count": "1"
+    },
+    {
+      "name": "Swamp",
+      "count": "4"
+    },
+    {
+      "name": "Syndic of Tithes",
+      "count": "1"
+    },
+    {
+      "name": "Totally Lost",
+      "count": "1"
+    },
+    {
+      "name": "Uncovered Clues",
+      "count": "1"
+    },
+    {
+      "name": "Vassal Soul",
+      "count": "1"
+    }
+  ]
+}

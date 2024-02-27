@@ -1,0 +1,97 @@
+{
+  "name": "Fast Elementals",
+  "cards": [
+    {
+      "name": "Act of Treason",
+      "count": "1"
+    },
+    {
+      "name": "Anvilwrought Raptor",
+      "count": "1"
+    },
+    {
+      "name": "Cavalier of Flame",
+      "count": "1"
+    },
+    {
+      "name": "Chandra, Acolyte of Flame",
+      "count": "1"
+    },
+    {
+      "name": "Chandra's Embercat",
+      "count": "3"
+    },
+    {
+      "name": "Chandra's Outrage",
+      "count": "1"
+    },
+    {
+      "name": "Evolving Wilds",
+      "count": "1"
+    },
+    {
+      "name": "Fire Elemental",
+      "count": "1"
+    },
+    {
+      "name": "Forest",
+      "count": "7"
+    },
+    {
+      "name": "Fry",
+      "count": "1"
+    },
+    {
+      "name": "Gargos, Vicious Watcher",
+      "count": "1"
+    },
+    {
+      "name": "Lavakin Brawler",
+      "count": "1"
+    },
+    {
+      "name": "Mask of Immolation",
+      "count": "1"
+    },
+    {
+      "name": "Meteor Golem",
+      "count": "1"
+    },
+    {
+      "name": "Mountain",
+      "count": "8"
+    },
+    {
+      "name": "Natural End",
+      "count": "1"
+    },
+    {
+      "name": "Netcaster Spider",
+      "count": "1"
+    },
+    {
+      "name": "Plummet",
+      "count": "1"
+    },
+    {
+      "name": "Pulse of Murasa",
+      "count": "2"
+    },
+    {
+      "name": "Scampering Scorcher",
+      "count": "1"
+    },
+    {
+      "name": "Scorch Spitter",
+      "count": "2"
+    },
+    {
+      "name": "Shock",
+      "count": "1"
+    },
+    {
+      "name": "Thicket Crasher",
+      "count": "1"
+    }
+  ]
+}

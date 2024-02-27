@@ -1,0 +1,89 @@
+{
+  "name": "Enlist Em All",
+  "cards": [
+    {
+      "name": "Argivian Cavalier",
+      "count": "1"
+    },
+    {
+      "name": "Baird, Argivian Recruiter",
+      "count": "1"
+    },
+    {
+      "name": "Benalish Faithbonder",
+      "count": "1"
+    },
+    {
+      "name": "Captain's Call",
+      "count": "1"
+    },
+    {
+      "name": "Cleaving Skyrider",
+      "count": "2"
+    },
+    {
+      "name": "Electrostatic Infantry",
+      "count": "1"
+    },
+    {
+      "name": "Goblin Picker",
+      "count": "1"
+    },
+    {
+      "name": "Griffin Protector",
+      "count": "2"
+    },
+    {
+      "name": "Hammerhand",
+      "count": "2"
+    },
+    {
+      "name": "Heroic Charge",
+      "count": "1"
+    },
+    {
+      "name": "Hurloon Battle Hymn",
+      "count": "1"
+    },
+    {
+      "name": "Jaya's Firenado",
+      "count": "1"
+    },
+    {
+      "name": "Join Forces",
+      "count": "1"
+    },
+    {
+      "name": "Lightning Strike",
+      "count": "2"
+    },
+    {
+      "name": "Love Song of Night and Day",
+      "count": "1"
+    },
+    {
+      "name": "Mesa Cavalier",
+      "count": "2"
+    },
+    {
+      "name": "Molten Monstrosity",
+      "count": "2"
+    },
+    {
+      "name": "Mountain",
+      "count": "7"
+    },
+    {
+      "name": "Plains",
+      "count": "8"
+    },
+    {
+      "name": "Sacred Peaks",
+      "count": "1"
+    },
+    {
+      "name": "Tori D'Avenant, Fury Rider",
+      "count": "1"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "name": "Karn, Traxos, Evra",
+  "cards": [
+    {
+      "name": "Adamant Will",
+      "count": "1"
+    },
+    {
+      "name": "Arvad the Cursed",
+      "count": "1"
+    },
+    {
+      "name": "Aryel, Knight of Windgrace",
+      "count": "1"
+    },
+    {
+      "name": "Cabal Evangel",
+      "count": "1"
+    },
+    {
+      "name": "Call the Cavalry",
+      "count": "2"
+    },
+    {
+      "name": "Drudge Sentinel",
+      "count": "1"
+    },
+    {
+      "name": "Dub",
+      "count": "1"
+    },
+    {
+      "name": "Evra, Halcyon Witness",
+      "count": "1"
+    },
+    {
+      "name": "Howling Golem",
+      "count": "1"
+    },
+    {
+      "name": "Jousting Lance",
+      "count": "2"
+    },
+    {
+      "name": "Karn, Scion of Urza",
+      "count": "1"
+    },
+    {
+      "name": "Memorial to Folly",
+      "count": "1"
+    },
+    {
+      "name": "Mesa Unicorn",
+      "count": "1"
+    },
+    {
+      "name": "Plains",
+      "count": "9"
+    },
+    {
+      "name": "Sergeant-at-Arms",
+      "count": "2"
+    },
+    {
+      "name": "Serra Disciple",
+      "count": "2"
+    },
+    {
+      "name": "Shield of the Realm",
+      "count": "1"
+    },
+    {
+      "name": "Sparring Construct",
+      "count": "1"
+    },
+    {
+      "name": "Stronghold Confessor",
+      "count": "1"
+    },
+    {
+      "name": "Swamp",
+      "count": "6"
+    },
+    {
+      "name": "Traxos, Scourge of Kroog",
+      "count": "1"
+    },
+    {
+      "name": "Voltaic Servant",
+      "count": "2"
+    }
+  ]
+}

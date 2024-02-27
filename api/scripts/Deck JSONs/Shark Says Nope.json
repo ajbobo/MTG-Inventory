@@ -1,0 +1,85 @@
+{
+  "name": "Shark Says Nope",
+  "cards": [
+    {
+      "name": "Anticipate",
+      "count": "2"
+    },
+    {
+      "name": "Capture Sphere",
+      "count": "3"
+    },
+    {
+      "name": "Convolute",
+      "count": "1"
+    },
+    {
+      "name": "Crystacean",
+      "count": "1"
+    },
+    {
+      "name": "Cunning Nightbonder",
+      "count": "1"
+    },
+    {
+      "name": "Essence Scatter",
+      "count": "3"
+    },
+    {
+      "name": "Evolving Wilds",
+      "count": "1"
+    },
+    {
+      "name": "Facet Reader",
+      "count": "2"
+    },
+    {
+      "name": "Frost Lynx",
+      "count": "1"
+    },
+    {
+      "name": "Island",
+      "count": "13"
+    },
+    {
+      "name": "Mountain",
+      "count": "2"
+    },
+    {
+      "name": "Mystic Subdual",
+      "count": "1"
+    },
+    {
+      "name": "Of One Mind",
+      "count": "1"
+    },
+    {
+      "name": "Ominous Seas",
+      "count": "1"
+    },
+    {
+      "name": "Rielle, the Everwise",
+      "count": "1"
+    },
+    {
+      "name": "Shark Typhoon",
+      "count": "1"
+    },
+    {
+      "name": "Springjaw Trap",
+      "count": "1"
+    },
+    {
+      "name": "Startling Development",
+      "count": "2"
+    },
+    {
+      "name": "Thieving Otter",
+      "count": "1"
+    },
+    {
+      "name": "Voracious Greatshark",
+      "count": "1"
+    }
+  ]
+}

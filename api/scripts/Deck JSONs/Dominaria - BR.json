@@ -1,0 +1,105 @@
+{
+  "name": "Dominaria - BR",
+  "cards": [
+    {
+      "name": "Amaranthine Wall",
+      "count": "1"
+    },
+    {
+      "name": "Cabal Evangel",
+      "count": "2"
+    },
+    {
+      "name": "Demonic Vigor",
+      "count": "1"
+    },
+    {
+      "name": "Fervent Strike",
+      "count": "1"
+    },
+    {
+      "name": "Fiery Intervention",
+      "count": "1"
+    },
+    {
+      "name": "Fire Elemental",
+      "count": "1"
+    },
+    {
+      "name": "Fungal Infection",
+      "count": "1"
+    },
+    {
+      "name": "Ghitu Lavarunner",
+      "count": "2"
+    },
+    {
+      "name": "Guardians of Koilos",
+      "count": "1"
+    },
+    {
+      "name": "Howling Golem",
+      "count": "1"
+    },
+    {
+      "name": "Keldon Warcaller",
+      "count": "1"
+    },
+    {
+      "name": "Memorial to War",
+      "count": "1"
+    },
+    {
+      "name": "Mountain",
+      "count": "7"
+    },
+    {
+      "name": "Orcish Vandal",
+      "count": "1"
+    },
+    {
+      "name": "Rite of Belzenlok",
+      "count": "1"
+    },
+    {
+      "name": "Run Amok",
+      "count": "1"
+    },
+    {
+      "name": "Settle the Score",
+      "count": "1"
+    },
+    {
+      "name": "Siege-Gang Commander",
+      "count": "1"
+    },
+    {
+      "name": "Soul Salvage",
+      "count": "1"
+    },
+    {
+      "name": "Stronghold Confessor",
+      "count": "1"
+    },
+    {
+      "name": "Swamp",
+      "count": "8"
+    },
+    {
+      "name": "Thallid Omnivore",
+      "count": "1"
+    },
+    {
+      "name": "Warlord's Fury",
+      "count": "1"
+    },
+    {
+      "name": "Weatherlight",
+      "count": "1"
+    },
+    {
+      "name": "Whisper, Blood Liturgist",
+      "count": "1"
+    }
+  ]
+}

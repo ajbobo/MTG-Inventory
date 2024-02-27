@@ -1,0 +1,117 @@
+{
+  "name": "Big Monsters of Zagoth",
+  "cards": [
+    {
+      "name": "Almighty Brushwagg",
+      "count": "1"
+    },
+    {
+      "name": "Back for More",
+      "count": "1"
+    },
+    {
+      "name": "Blood Curdle",
+      "count": "1"
+    },
+    {
+      "name": "Boneyard Lurker",
+      "count": "1"
+    },
+    {
+      "name": "Call of the Death-Dweller",
+      "count": "1"
+    },
+    {
+      "name": "Capture Sphere",
+      "count": "1"
+    },
+    {
+      "name": "Cavern Whisperer",
+      "count": "2"
+    },
+    {
+      "name": "Charge of the Forever-Beast",
+      "count": "1"
+    },
+    {
+      "name": "Chittering Harvester",
+      "count": "1"
+    },
+    {
+      "name": "Crystacean",
+      "count": "1"
+    },
+    {
+      "name": "Duskfang Mentor",
+      "count": "1"
+    },
+    {
+      "name": "Emergent Ultimatum",
+      "count": "1"
+    },
+    {
+      "name": "Evolving Wilds",
+      "count": "1"
+    },
+    {
+      "name": "Facet Reader",
+      "count": "2"
+    },
+    {
+      "name": "Forest",
+      "count": "5"
+    },
+    {
+      "name": "Greater Sandwurm",
+      "count": "1"
+    },
+    {
+      "name": "Island",
+      "count": "4"
+    },
+    {
+      "name": "Ominous Seas",
+      "count": "1"
+    },
+    {
+      "name": "Sudden Spinnerets",
+      "count": "1"
+    },
+    {
+      "name": "Swamp",
+      "count": "4"
+    },
+    {
+      "name": "Thieving Otter",
+      "count": "1"
+    },
+    {
+      "name": "Thornwood Falls",
+      "count": "1"
+    },
+    {
+      "name": "Titans' Nest",
+      "count": "1"
+    },
+    {
+      "name": "Unexpected Fangs",
+      "count": "1"
+    },
+    {
+      "name": "Voracious Greatshark",
+      "count": "1"
+    },
+    {
+      "name": "Zagoth Crystal",
+      "count": "1"
+    },
+    {
+      "name": "Zagoth Mamba",
+      "count": "1"
+    },
+    {
+      "name": "Zagoth Triome",
+      "count": "1"
+    }
+  ]
+}

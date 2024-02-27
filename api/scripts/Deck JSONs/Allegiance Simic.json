@@ -1,0 +1,93 @@
+{
+  "name": "Allegiance Simic",
+  "cards": [
+    {
+      "name": "Applied Biomancy",
+      "count": "2"
+    },
+    {
+      "name": "Arrester's Admonition",
+      "count": "1"
+    },
+    {
+      "name": "Breeding Pool",
+      "count": "1"
+    },
+    {
+      "name": "Clear the Mind",
+      "count": "1"
+    },
+    {
+      "name": "Eyes Everywhere",
+      "count": "1"
+    },
+    {
+      "name": "Forest",
+      "count": "7"
+    },
+    {
+      "name": "Growth Spiral",
+      "count": "2"
+    },
+    {
+      "name": "Island",
+      "count": "7"
+    },
+    {
+      "name": "Mammoth Spider",
+      "count": "1"
+    },
+    {
+      "name": "Mass Manipulation",
+      "count": "1"
+    },
+    {
+      "name": "Pteramander",
+      "count": "1"
+    },
+    {
+      "name": "Regenesis",
+      "count": "1"
+    },
+    {
+      "name": "Sauroform Hybrid",
+      "count": "1"
+    },
+    {
+      "name": "Scuttlegator",
+      "count": "2"
+    },
+    {
+      "name": "Simic Guildgate",
+      "count": "2"
+    },
+    {
+      "name": "Skitter Eel",
+      "count": "2"
+    },
+    {
+      "name": "Sphinx of the Guildpact",
+      "count": "1"
+    },
+    {
+      "name": "Steeple Creeper",
+      "count": "2"
+    },
+    {
+      "name": "Stony Strength",
+      "count": "1"
+    },
+    {
+      "name": "Sylvan Brushstrider",
+      "count": "1"
+    },
+    {
+      "name": "Thought Collapse",
+      "count": "1"
+    },
+    {
+      "name": "Windstorm Drake",
+      "count": "1"
+    }
+  ]
+}

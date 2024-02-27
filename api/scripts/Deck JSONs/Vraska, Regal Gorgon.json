@@ -1,0 +1,93 @@
+{
+  "name": "Vraska, Regal Gorgon",
+  "cards": [
+    {
+      "name": "Attendant of Vraska",
+      "count": "3"
+    },
+    {
+      "name": "Bartizan Bats",
+      "count": "2"
+    },
+    {
+      "name": "Beast Whisperer",
+      "count": "1"
+    },
+    {
+      "name": "Bounty of Might",
+      "count": "1"
+    },
+    {
+      "name": "Dead Weight",
+      "count": "3"
+    },
+    {
+      "name": "Devkarin Dissident",
+      "count": "1"
+    },
+    {
+      "name": "Douser of Lights",
+      "count": "1"
+    },
+    {
+      "name": "Forest",
+      "count": "10"
+    },
+    {
+      "name": "Glowspore Shaman",
+      "count": "2"
+    },
+    {
+      "name": "Golgari Guildgate",
+      "count": "4"
+    },
+    {
+      "name": "Ironshell Beetle",
+      "count": "2"
+    },
+    {
+      "name": "Kraul Foragers",
+      "count": "1"
+    },
+    {
+      "name": "Kraul Raider",
+      "count": "4"
+    },
+    {
+      "name": "Lotleth Giant",
+      "count": "1"
+    },
+    {
+      "name": "Prey Upon",
+      "count": "2"
+    },
+    {
+      "name": "Rhizome Lurcher",
+      "count": "2"
+    },
+    {
+      "name": "Spinal Centipede",
+      "count": "3"
+    },
+    {
+      "name": "Swamp",
+      "count": "12"
+    },
+    {
+      "name": "Swarm Guildmage",
+      "count": "1"
+    },
+    {
+      "name": "Vraska, Regal Gorgon",
+      "count": "1"
+    },
+    {
+      "name": "Vraska's Stoneglare",
+      "count": "2"
+    },
+    {
+      "name": "Wild Ceratok",
+      "count": "1"
+    }
+  ]
+}

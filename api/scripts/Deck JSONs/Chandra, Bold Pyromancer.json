@@ -1,0 +1,97 @@
+{
+  "name": "Chandra, Bold Pyromancer",
+  "cards": [
+    {
+      "name": "Baloth Gorger",
+      "count": "2"
+    },
+    {
+      "name": "Chandra, Bold Pyromancer",
+      "count": "1"
+    },
+    {
+      "name": "Chandra's Outburst",
+      "count": "2"
+    },
+    {
+      "name": "Elfhame Druid",
+      "count": "3"
+    },
+    {
+      "name": "Fiery Intervention",
+      "count": "1"
+    },
+    {
+      "name": "Fight with Fire",
+      "count": "1"
+    },
+    {
+      "name": "Fire Elemental",
+      "count": "3"
+    },
+    {
+      "name": "Forest",
+      "count": "11"
+    },
+    {
+      "name": "Gaea's Protector",
+      "count": "1"
+    },
+    {
+      "name": "Ghitu Chronicler",
+      "count": "1"
+    },
+    {
+      "name": "Gift of Growth",
+      "count": "2"
+    },
+    {
+      "name": "Gilded Lotus",
+      "count": "1"
+    },
+    {
+      "name": "Grunn, the Lonely King",
+      "count": "1"
+    },
+    {
+      "name": "Karplusan Hound",
+      "count": "3"
+    },
+    {
+      "name": "Krosan Druid",
+      "count": "1"
+    },
+    {
+      "name": "Llanowar Elves",
+      "count": "2"
+    },
+    {
+      "name": "Marwyn, the Nurturer",
+      "count": "1"
+    },
+    {
+      "name": "Mountain",
+      "count": "11"
+    },
+    {
+      "name": "Pierce the Sky",
+      "count": "1"
+    },
+    {
+      "name": "Primordial Wurm",
+      "count": "1"
+    },
+    {
+      "name": "Pyromantic Pilgrim",
+      "count": "4"
+    },
+    {
+      "name": "Shivan Fire",
+      "count": "2"
+    },
+    {
+      "name": "Timber Gorge",
+      "count": "4"
+    }
+  ]
+}

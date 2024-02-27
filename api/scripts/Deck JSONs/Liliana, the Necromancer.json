@@ -1,0 +1,89 @@
+{
+  "name": "Liliana, the Necromancer",
+  "cards": [
+    {
+      "name": "Abnormal Endurance",
+      "count": "2"
+    },
+    {
+      "name": "Arisen Gorgon",
+      "count": "3"
+    },
+    {
+      "name": "Blood Divination",
+      "count": "2"
+    },
+    {
+      "name": "Demon of Catastrophes",
+      "count": "1"
+    },
+    {
+      "name": "Diregraf Ghoul",
+      "count": "2"
+    },
+    {
+      "name": "Gravedigger",
+      "count": "1"
+    },
+    {
+      "name": "Gravewaker",
+      "count": "1"
+    },
+    {
+      "name": "Lich's Caress",
+      "count": "2"
+    },
+    {
+      "name": "Liliana, the Necromancer",
+      "count": "1"
+    },
+    {
+      "name": "Liliana's Spoils",
+      "count": "2"
+    },
+    {
+      "name": "Meteor Golem",
+      "count": "1"
+    },
+    {
+      "name": "Murder",
+      "count": "2"
+    },
+    {
+      "name": "Reassembling Skeleton",
+      "count": "1"
+    },
+    {
+      "name": "Skeleton Archer",
+      "count": "1"
+    },
+    {
+      "name": "Skymarch Bloodletter",
+      "count": "2"
+    },
+    {
+      "name": "Sovereign's Bite",
+      "count": "1"
+    },
+    {
+      "name": "Strangling Spores",
+      "count": "1"
+    },
+    {
+      "name": "Swamp",
+      "count": "26"
+    },
+    {
+      "name": "Tattered Mummy",
+      "count": "4"
+    },
+    {
+      "name": "Vampire Sovereign",
+      "count": "2"
+    },
+    {
+      "name": "Walking Corpse",
+      "count": "2"
+    }
+  ]
+}
