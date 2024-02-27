@@ -24,7 +24,13 @@ public class MtgInvContext : DbContext
             .ToContainer("Collection")
             .HasPartitionKey("Key")
             .HasNoDiscriminator();
+
+        builder.Entity<DeckData>()
+            .ToContainer("Decks")
+            .HasPartitionKey("Key")
+            .HasNoDiscriminator();
     }
 
     public DbSet<CollectionInput> Collection { get; set; } = default!;
+    public DbSet<DeckData> Decks { get; set; } = default!;
 }

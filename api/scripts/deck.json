@@ -1,0 +1,105 @@
+{
+  "name": "A Pair of Gods",
+  "cards": [
+    {
+      "name": "Battlefield Raptor",
+      "count": "1"
+    },
+    {
+      "name": "Bound in Gold",
+      "count": "2"
+    },
+    {
+      "name": "Codespell Cleric",
+      "count": "1"
+    },
+    {
+      "name": "Doomskar Oracle",
+      "count": "1"
+    },
+    {
+      "name": "Egon, God of Death // Throne of Death",
+      "count": "1"
+    },
+    {
+      "name": "Elderfang Disciple",
+      "count": "3"
+    },
+    {
+      "name": "Great Hall of Starnheim",
+      "count": "1"
+    },
+    {
+      "name": "Iron Verdict",
+      "count": "1"
+    },
+    {
+      "name": "Kaya's Onslaught",
+      "count": "1"
+    },
+    {
+      "name": "Koma's Faithful",
+      "count": "1"
+    },
+    {
+      "name": "Plains",
+      "count": "5"
+    },
+    {
+      "name": "Poison the Cup",
+      "count": "2"
+    },
+    {
+      "name": "Priest of the Haunted Edge",
+      "count": "2"
+    },
+    {
+      "name": "Reidane, God of the Worthy // Valkmira, Protector's Shield",
+      "count": "1"
+    },
+    {
+      "name": "Revitalize",
+      "count": "1"
+    },
+    {
+      "name": "Righteous Valkyrie",
+      "count": "1"
+    },
+    {
+      "name": "Shimmerdrift Vale",
+      "count": "1"
+    },
+    {
+      "name": "Snow-Covered Plains",
+      "count": "2"
+    },
+    {
+      "name": "Snow-Covered Swamp",
+      "count": "1"
+    },
+    {
+      "name": "Snowfield Sinkhole",
+      "count": "1"
+    },
+    {
+      "name": "Spectral Steel",
+      "count": "1"
+    },
+    {
+      "name": "Stalwart Valkyrie",
+      "count": "1"
+    },
+    {
+      "name": "Swamp",
+      "count": "5"
+    },
+    {
+      "name": "Vengeful Reaper",
+      "count": "2"
+    },
+    {
+      "name": "Withercrown",
+      "count": "1"
+    }
+  ]
+}
