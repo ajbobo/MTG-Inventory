@@ -1,1 +1,4 @@
-<p>deck-contents-panel works!</p>
+<div *ngIf="deck">
+    <h2>{{deck.name}}</h2>
+    <app-deck-contents-row *ngFor="let card of deck.cards" [card]="card"></app-deck-contents-row>
+</div>

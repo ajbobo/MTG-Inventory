@@ -20,7 +20,7 @@ export class DeckListPanelComponent {
     deckList: DeckData[] = [];
 
     constructor(
-        private inventory: InventoryService
+        private inventory: InventoryService,
     ) { }
 
     ngOnInit(): void {
@@ -28,7 +28,7 @@ export class DeckListPanelComponent {
     }
 
     getDeckList(): void {
-        console.log("Getting deck lists");
+        console.log("Getting list of Decks");
         var index: number = 0;
         this.inventory.getDeckList().subscribe(p => {
             this.deckList = p;

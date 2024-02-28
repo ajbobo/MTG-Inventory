@@ -71,8 +71,14 @@ export class InventoryService {
   }
 
   getDeckList(): Observable<DeckData[]> {
-    const url: string = `${this.apiUrl}/Decks`
+    const url: string = `${this.apiUrl}/Decks`;
     console.log(`DeckList URL: ${url}`);
+    return this.http.get<DeckData[]>(url);
+  }
+
+  getSingleDeck(key: string): Observable<DeckData[]> {
+    const url: string = `${this.apiUrl}/Decks/${key}`;
+    console.log(`Getting deck from URL: ${url}`);
     return this.http.get<DeckData[]>(url);
   }
 }

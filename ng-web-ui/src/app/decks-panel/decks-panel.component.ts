@@ -8,8 +8,8 @@ import { InventoryService } from '../inventory.service';
     standalone: true,
     templateUrl: './decks-panel.component.html',
     styleUrl: './decks-panel.component.scss',
-    imports: [DeckContentsPanelComponent, DeckListPanelComponent]
+    imports: [DeckContentsPanelComponent, DeckListPanelComponent],
+    providers: []
 })
 export class DecksPanelComponent {
-
 }
