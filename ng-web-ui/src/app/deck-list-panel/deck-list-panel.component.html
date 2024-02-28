@@ -1,5 +1,3 @@
-<p>Before</p>
 <div class="deck-list">
-    <app-deck-list-row *ngFor="let deck of deckList" [name]="deck.name"></app-deck-list-row>
+    <app-deck-list-row *ngFor="let deck of deckList" [deck]="deck"></app-deck-list-row>
 </div>
-<p>After</p>

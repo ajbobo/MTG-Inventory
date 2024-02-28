@@ -29,6 +29,10 @@ export class DeckListPanelComponent {
 
     getDeckList(): void {
         console.log("Getting deck lists");
-        this.inventory.getDeckList().subscribe(p => this.deckList = p);
+        var index: number = 0;
+        this.inventory.getDeckList().subscribe(p => {
+            this.deckList = p;
+            this.deckList.forEach(d => d.index = index++);
+        });
     }
 }

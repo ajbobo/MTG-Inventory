@@ -1,1 +1,6 @@
-<p>deck-list-row works! for {{name}}</p>
+<div *ngIf="deck" [class]="hasMouse ? 'selected-row' : deck?.index! % 2 == 0 ? 'even-row' : 'odd-row'"
+    (mouseover)="hasMouse=true" (mouseout)="hasMouse=false" (click)="onClick()">
+    <div class="deck-row">
+        <p>{{deck?.name}}</p>
+    </div>
+</div>

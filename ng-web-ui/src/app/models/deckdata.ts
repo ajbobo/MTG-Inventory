@@ -4,4 +4,5 @@ export interface DeckData {
     key: string;
     name: string;
     cards: DeckCardCount[];
+    index: number;
 }
