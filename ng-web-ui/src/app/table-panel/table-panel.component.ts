@@ -42,6 +42,13 @@ export class TablePanelComponent {
     this.getCardList();
   }
 
+  ngOnDestroy(): void {
+    this.inventory.changeActiveSet(undefined);
+    this._curSet = undefined;
+    this.cardList = [];
+    this.cardListChange.emit(this.cardList);
+  }
+
   getCardList(): void {
     this.inventory.getCardList().subscribe(s => {
       this.cardList = s;

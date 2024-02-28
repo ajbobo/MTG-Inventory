@@ -1,16 +1,11 @@
 --- General ---
-Rename "foil | prerelease" and "foil" in Angular, Maui App, and DB to be capitalized
+Rename "foil | prerelease" and "foil" in Angular, and DB to be capitalized
 
 --- API ---
-Add deck creation/retrieval
 
 --- Angular App ---
 Highlight text in search box when it receives focus
 Add user authentication
-Add deck storage
-
---- Maui App ---
-Selecting a card in the list with the keyboard and pressing Enter or Space should open the card's CTC page - I can't find a way to do this in MAUI
 
 --- Term ---
 Add option to ChooseSetDialog to only show sets that are in User_Inv
@@ -25,3 +20,7 @@ Add a way to save decks
     Should also import them from the DeckBox files
 Add a way to open the card image? (Probably in a separate app, but if I can imbed it, that would be cool)
 Published build needs an icon
+
+--- Misc ---
+I added basic deck storage to the API, and then a simple UI to ng-web-ui (see "decks" branch)
+  I don't think I need it. I've never gone back to look up the decks I've stored.
