@@ -4,12 +4,14 @@ import { CardData } from './models/carddata';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CardTypeCount } from './models/cardtypecount';
+import { DeckData } from './models/deckdata';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InventoryService {
-   // The proxy.conf.json file connects this to the full URL when running locally
+
+  // The proxy.conf.json file connects this to the full URL when running locally
   private apiUrl: string = (isDevMode() ? '/api' : 'https://mtg-inventory.azurewebsites.net/api');
   private curSet?: MTG_Set;
   private countFilter: string = '';
@@ -62,11 +64,15 @@ export class InventoryService {
     const body = { ctCs: card.ctCs };
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        'Content-Type': 'application/json'
       })
     };
     return this.http.post<string>(url, JSON.stringify(body), httpOptions);
   }
 
-
+  getDeckList(): Observable<DeckData[]> {
+    const url: string = `${this.apiUrl}/Decks`
+    console.log(`DeckList URL: ${url}`);
+    return this.http.get<DeckData[]>(url);
+  }
 }
