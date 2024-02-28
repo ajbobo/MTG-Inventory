@@ -26,7 +26,7 @@ export class InventoryService {
     return this.http.get<MTG_Set[]>(url); // This should have error handling and maybe logging
   }
 
-  changeActiveSet(set: MTG_Set): void {
+  changeActiveSet(set?: MTG_Set): void {
     this.curSet = set;
   }
 
