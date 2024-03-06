@@ -6,6 +6,7 @@ Rename "foil | prerelease" and "foil" in Angular, and DB to be capitalized
 --- Angular App ---
 Highlight text in search box when it receives focus
 Add user authentication
+Replace isDirty events with a service
 
 --- Term ---
 Add option to ChooseSetDialog to only show sets that are in User_Inv
