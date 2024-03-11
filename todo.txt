@@ -4,9 +4,13 @@ Rename "foil | prerelease" and "foil" in Angular, and DB to be capitalized
 --- API ---
 
 --- Angular App ---
-Highlight text in search box when it receives focus
 Add user authentication
 Replace isDirty events with a service
+Add Spinners where appropriate (loading set names, loading card list, etc.) - https://getbootstrap.com/docs/5.3/components/spinners/#border-spinner
+Replace Bootstrap UI components with Angular Material UI (https://material.angular.io/)? 
+    Use Expansion Panel instead of CardRow - Probably want to lazy-load the internal controls since there are so many rows
+    Use Menu or Select instead of DropDown
+    Replace Buttons
 
 --- Term ---
 Add option to ChooseSetDialog to only show sets that are in User_Inv
@@ -17,8 +21,6 @@ Add filters:
     CTC attributes (Foil, Prerelease, etc)
     Type
     Name
-Add a way to save decks
-    Should also import them from the DeckBox files
 Add a way to open the card image? (Probably in a separate app, but if I can imbed it, that would be cool)
 Published build needs an icon
 

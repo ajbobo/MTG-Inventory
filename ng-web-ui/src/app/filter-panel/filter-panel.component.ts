@@ -26,6 +26,7 @@ export class FilterPanelComponent {
   @Input() set needsFocus(focus: boolean) {
     if (focus) {
       this.searchInput?.nativeElement.focus();
+      this.searchInput?.nativeElement.select();
     }
   }
 
