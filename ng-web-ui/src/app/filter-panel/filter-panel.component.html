@@ -35,7 +35,7 @@
     </div>
 
     <div class="horizontal">
-        <button class="btn btn-outline-secondary btn-sm" (click)="clearSelectedCard()">X</button>
+        <button mat-stroked-button color="primary" class="sm-button" (click)="clearSelectedCard()">X</button>
         <input #cardSearch id="cardSearch" type="text" class="form-control" [(ngModel)]="card" [ngbTypeahead]="search"
             [inputFormatter]="formatter" [resultFormatter]="formatter" (selectItem)="onSelectItem($event)" />
     </div>

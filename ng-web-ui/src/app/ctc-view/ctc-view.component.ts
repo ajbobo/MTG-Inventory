@@ -3,6 +3,7 @@ import { CardData } from '../models/carddata';
 import { CardTypeCount } from '../models/cardtypecount';
 import { JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { CtcRowComponent } from '../ctc-row/ctc-row.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-ctc-view',
@@ -11,7 +12,8 @@ import { CtcRowComponent } from '../ctc-row/ctc-row.component';
     NgIf,
     NgForOf,
     CtcRowComponent,
-    JsonPipe
+    JsonPipe,
+    MatButtonModule
   ],
   templateUrl: './ctc-view.component.html',
   styleUrl: './ctc-view.component.scss'
@@ -30,7 +32,7 @@ export class CtcViewComponent {
     if (!this.curCard?.ctCs)
       this.curCard!.ctCs = [];
 
-      var ctc: CardTypeCount = { cardType: (this.curCard?.ctCs.length == 0 ? "Standard" : "foil"), count: 1 };
+    var ctc: CardTypeCount = { cardType: (this.curCard?.ctCs.length == 0 ? "Standard" : "foil"), count: 1 };
 
     this.curCard?.ctCs.push(ctc);
     this.curCard!.totalCount++;

@@ -6,6 +6,7 @@ import { Observable, OperatorFunction, debounceTime, distinctUntilChanged, map }
 import { NgFor, NgIf } from '@angular/common';
 import { InventoryService } from '../inventory.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-filter-panel',
@@ -15,7 +16,8 @@ import { ActivatedRoute, Router } from '@angular/router';
     FormsModule,
     NgbTypeaheadModule,
     NgIf,
-    NgFor
+    NgFor,
+    MatButtonModule
   ],
   templateUrl: './filter-panel.component.html',
   styleUrl: './filter-panel.component.scss'
