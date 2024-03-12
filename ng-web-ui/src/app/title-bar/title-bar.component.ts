@@ -4,11 +4,18 @@ import { MTG_Set } from '../models/mtg_set';
 import { NgFor } from '@angular/common';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-title-bar',
   standalone: true,
-  imports: [NgFor, NgbDropdownModule],
+  imports: [
+    NgFor,
+    NgbDropdownModule,
+    MatSelectModule,
+    MatFormFieldModule
+  ],
   templateUrl: './title-bar.component.html',
   styleUrl: './title-bar.component.scss'
 })

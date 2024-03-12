@@ -8,9 +8,9 @@ Add user authentication
 Replace isDirty events with a service
 Add Spinners where appropriate (loading set names, loading card list, etc.) - https://getbootstrap.com/docs/5.3/components/spinners/#border-spinner
 Replace Bootstrap UI components with Angular Material UI (https://material.angular.io/)? 
-    Replace Input
+    Replace Input with AutoComplete
     X Replace Buttons
-    Use Menu or Select instead of DropDown
+    X Use Menu or Select instead of DropDown
     Use Expansion Panel instead of CardRow - Probably want to lazy-load the internal controls since there are so many rows
 
 

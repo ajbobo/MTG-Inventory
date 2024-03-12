@@ -7,6 +7,8 @@ import { NgFor, NgIf } from '@angular/common';
 import { InventoryService } from '../inventory.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-filter-panel',
@@ -17,7 +19,9 @@ import { MatButtonModule } from '@angular/material/button';
     NgbTypeaheadModule,
     NgIf,
     NgFor,
-    MatButtonModule
+    MatButtonModule,
+    MatSelectModule,
+    MatFormFieldModule
   ],
   templateUrl: './filter-panel.component.html',
   styleUrl: './filter-panel.component.scss'

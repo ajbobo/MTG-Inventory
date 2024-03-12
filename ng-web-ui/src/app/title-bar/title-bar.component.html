@@ -1,17 +1,15 @@
 <div class="title-header">
     <img src={{this.getSetIcon()}} class="top-icon" />
 
-    <div ngbDropdown class="d-inline-block">
-        <button type="button" class="btn btn-primary" id="setDropdown" ngbDropdownToggle>
-            {{this.getSetDisplayName()}}
-        </button>
-        <div ngbDropdownMenu aria-labelledby="setDropdown" class="set-dropdown">
-            <button ngbDropdownItem *ngFor="let set of setList" (click)="routeTo(set)">
-                <img src={{set.iconUrl}} class="menu-icon"/>
+    <mat-form-field class="set-dropdown">
+        <mat-label>Active Set:</mat-label>
+        <mat-select>
+            <mat-option *ngFor="let set of setList" [value]="set.name" (click)="routeTo(set)">
+                <img src={{set.iconUrl}} class="menu-icon" />
                 {{set.name}} ({{set.code}})
-            </button>
-        </div>
-    </div>
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
 
     <img src={{this.getSetIcon()}} class="top-icon" />
 </div>
