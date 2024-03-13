@@ -7,10 +7,6 @@ Rename "foil | prerelease" and "foil" in Angular, and DB to be capitalized
 Add user authentication
 Replace isDirty events with a service
 Add Spinners where appropriate (loading set names, loading card list, etc.) - https://getbootstrap.com/docs/5.3/components/spinners/#border-spinner
-Replace Bootstrap UI components with Angular Material UI (https://material.angular.io/)? 
-    Use Expansion Panel instead of CardRow - Probably want to lazy-load the internal controls since there are so many rows
-    Use Menu or Select instead of DropDown
-    Replace Buttons
 
 --- Term ---
 Add option to ChooseSetDialog to only show sets that are in User_Inv

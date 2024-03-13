@@ -22,16 +22,5 @@ import { CardData } from './models/carddata';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  // title = 'ng-web-ui';
-  // curSet?: MTG_Set;
-  // cardList: CardData[] = [];
-  // selectedCard?: CardData;
-
-  // focusFilter: boolean = false;
-
-  // onIsDirty(ev: boolean) {
-  //   this.focusFilter = true;
-  //   setTimeout(() => this.focusFilter = false, 200); // We need to set focusFilter back to false AFTER the focus changes
-  // }
 
 }
