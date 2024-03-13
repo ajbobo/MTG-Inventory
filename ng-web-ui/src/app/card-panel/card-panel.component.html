@@ -1,4 +1,6 @@
-<div *ngIf="curCard">
+@if (curCard) {
+  <div>
     <img src={{curCard.frontImageUrl}} class="card-view"/>
     <img src={{curCard.backImageUrl}} class="card-view"/>
-</div>
+  </div>
+}

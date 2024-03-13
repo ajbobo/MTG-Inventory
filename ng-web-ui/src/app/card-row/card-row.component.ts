@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CardData } from '../models/carddata';
-import { NgIf } from '@angular/common';
+
 import { CtcViewComponent } from '../ctc-view/ctc-view.component';
 import { CardPanelComponent } from '../card-panel/card-panel.component';
 import { InventoryService } from '../inventory.service';
@@ -10,10 +10,9 @@ import { CardTypeCount } from '../models/cardtypecount';
   selector: 'app-card-row',
   standalone: true,
   imports: [
-    NgIf,
     CtcViewComponent,
     CardPanelComponent
-  ],
+],
   templateUrl: './card-row.component.html',
   styleUrl: './card-row.component.scss'
 })

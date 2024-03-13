@@ -1,20 +1,21 @@
 <div class="table-panel">
-    @if (!loading){ 
-    <div *ngIf="selectedCard; else elseBlock">
-        <app-card-row [card]="selectedCard" [(expandedCard)]="selectedCard!.index"
-            (isDirty)="onIsDirty($event)"></app-card-row>
-    </div>
-    <ng-template #elseBlock>
-        <app-card-row *ngFor="let card of cardList" [card]="card" [(expandedCard)]="expandedCard"
-            (isDirty)="onIsDirty($event)"></app-card-row>
-    </ng-template>
+  @if (!loading){
+    @if (selectedCard) {
+      <div>
+        <app-card-row [card]="selectedCard" [(expandedCard)]="selectedCard!.index" (isDirty)="onIsDirty($event)"></app-card-row>
+      </div>
+    } @else {
+      @for (card of cardList; track card) {
+        <app-card-row [card]="card" [(expandedCard)]="expandedCard" (isDirty)="onIsDirty($event)"></app-card-row>
+      }
     }
-    @else {
-    <div class="d-flex justify-content-center">
-        <div class="spinner-border m-1" role="status">
-            <span class="sr-only"></span>
-        </div>
-        <p class="aligned-message">Loading cards...</p>
+  }
+  @else {
+  <div class="d-flex justify-content-center">
+    <div class="spinner-border m-1" role="status">
+      <span class="sr-only"></span>
     </div>
-    }
+    <p class="aligned-message">Loading cards...</p>
+  </div>
+}
 </div>

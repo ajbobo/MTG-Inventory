@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { InventoryService } from '../inventory.service';
 import { MTG_Set } from '../models/mtg_set';
-import { NgFor } from '@angular/common';
+
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-title-bar',
   standalone: true,
-  imports: [NgFor, NgbDropdownModule],
+  imports: [NgbDropdownModule],
   templateUrl: './title-bar.component.html',
   styleUrl: './title-bar.component.scss'
 })

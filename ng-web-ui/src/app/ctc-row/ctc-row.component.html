@@ -1,17 +1,19 @@
 <div class="ctc-row">
-    <p class="ctc-count bold">{{ctc?.count}}</p>
+  <p class="ctc-count bold">{{ctc?.count}}</p>
 
-    <div ngbDropdown class="d-inline-block">
-        <button type="button" class="btn btn-outline-secondary btn-sm" id="typeDropdown" ngbDropdownToggle (click)="$event.stopPropagation()">
-            {{ctc?.cardType}}
-        </button>
-        <div ngbDropdownMenu aria-labelledby="typeDropdown" class="set-dropdown">
-            <button ngbDropdownItem *ngFor="let type of typeList" (click)="setCTCType(type, $event)">{{type}}</button>
-        </div>
+  <div ngbDropdown class="d-inline-block">
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="typeDropdown" ngbDropdownToggle (click)="$event.stopPropagation()">
+      {{ctc?.cardType}}
+    </button>
+    <div ngbDropdownMenu aria-labelledby="typeDropdown" class="set-dropdown">
+      @for (type of typeList; track type) {
+        <button ngbDropdownItem (click)="setCTCType(type, $event)">{{type}}</button>
+      }
     </div>
+  </div>
 
-    <button class="btn btn-outline-primary btn-sm" (click)="IncrementCTC(ctc, $event)">+</button>
-    <button class="btn btn-outline-primary btn-sm" (click)="DecrementCTC(ctc, $event)">-</button>
-    <button class="btn btn-outline-primary btn-sm" (click)="SetCTCto4(ctc, $event)">=4</button>
-    <button class="btn btn-outline-primary btn-sm" (click)="DeleteCTC(ctc, $event)">X</button>
+  <button class="btn btn-outline-primary btn-sm" (click)="IncrementCTC(ctc, $event)">+</button>
+  <button class="btn btn-outline-primary btn-sm" (click)="DecrementCTC(ctc, $event)">-</button>
+  <button class="btn btn-outline-primary btn-sm" (click)="SetCTCto4(ctc, $event)">=4</button>
+  <button class="btn btn-outline-primary btn-sm" (click)="DeleteCTC(ctc, $event)">X</button>
 </div>

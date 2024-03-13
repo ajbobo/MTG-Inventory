@@ -3,7 +3,7 @@ import { NgbDropdownModule, NgbTypeaheadConfig, NgbTypeaheadModule, NgbTypeahead
 import { CardData } from '../models/carddata';
 import { FormsModule } from '@angular/forms';
 import { Observable, OperatorFunction, debounceTime, distinctUntilChanged, map } from 'rxjs';
-import { NgFor, NgIf } from '@angular/common';
+
 import { InventoryService } from '../inventory.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -13,10 +13,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   imports: [
     NgbDropdownModule,
     FormsModule,
-    NgbTypeaheadModule,
-    NgIf,
-    NgFor
-  ],
+    NgbTypeaheadModule
+],
   templateUrl: './filter-panel.component.html',
   styleUrl: './filter-panel.component.scss'
 })

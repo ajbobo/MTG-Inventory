@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { MTG_Card } from '../models/mtg_card';
-import { NgIf } from '@angular/common';
+
 
 @Component({
   selector: 'app-card-panel',
   standalone: true,
-  imports: [NgIf],
+  imports: [],
   templateUrl: './card-panel.component.html',
   styleUrl: './card-panel.component.scss'
 })

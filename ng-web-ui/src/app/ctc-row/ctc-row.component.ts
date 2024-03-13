@@ -1,15 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CardTypeCount } from '../models/cardtypecount';
-import { NgFor } from '@angular/common';
+
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-ctc-row',
   standalone: true,
   imports: [
-    NgFor,
     NgbDropdownModule
-  ],
+],
   templateUrl: './ctc-row.component.html',
   styleUrl: './ctc-row.component.scss'
 })

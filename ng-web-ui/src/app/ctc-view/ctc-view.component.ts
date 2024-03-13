@@ -1,18 +1,16 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CardData } from '../models/carddata';
 import { CardTypeCount } from '../models/cardtypecount';
-import { JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { JsonPipe } from '@angular/common';
 import { CtcRowComponent } from '../ctc-row/ctc-row.component';
 
 @Component({
   selector: 'app-ctc-view',
   standalone: true,
   imports: [
-    NgIf,
-    NgForOf,
     CtcRowComponent,
     JsonPipe
-  ],
+],
   templateUrl: './ctc-view.component.html',
   styleUrl: './ctc-view.component.scss'
 })

@@ -1,17 +1,25 @@
-<div *ngIf="card?.card" [class]="hasMouse ? 'selected-row' : card?.index! % 2 == 0 ? 'even-row' : 'odd-row'"
-        (mouseover)="hasMouse=(card?.index != expandedCard)" (mouseout)="hasMouse=false" (click)="onClick()">
-        <div class="card-row">
-                <p class="id bold">{{card?.card!.collectorNumber}}</p>
-                <p><img src={{getRaritySymbol()}} class="rarity-image" /></p>
-                <p class="name bold">{{card?.card!.name}}</p>
-                <p class="price" [class]="card?.card!.price! > 1 ? 'bold' : ''">${{card?.card!.price}}</p>
-                <p class="count" [class]="card?.totalCount! > 0 ? 'bold' : ''" class="horizontal">{{card?.totalCount}}
-                        <img *ngIf="hasFoil()" src="/assets/foil.png" class="count-decorator" />
-                        <img *ngIf="hasOther()" src="/assets/other.png" class="count-decorator" />
-                </p>
-        </div>
-        <div *ngIf="card?.index === expandedCard" class="card-row">
-                <app-card-panel [curCard]="card?.card"></app-card-panel>
-                <app-ctc-view [curCard]="card" (isDirty)="onIsDirty($event)"></app-ctc-view>
-        </div>
-</div>
+@if (card?.card) {
+  <div [class]="hasMouse ? 'selected-row' : card?.index! % 2 == 0 ? 'even-row' : 'odd-row'"
+    (mouseover)="hasMouse=(card?.index != expandedCard)" (mouseout)="hasMouse=false" (click)="onClick()">
+    <div class="card-row">
+      <p class="id bold">{{card?.card!.collectorNumber}}</p>
+      <p><img src={{getRaritySymbol()}} class="rarity-image" /></p>
+      <p class="name bold">{{card?.card!.name}}</p>
+      <p class="price" [class]="card?.card!.price! > 1 ? 'bold' : ''">${{card?.card!.price}}</p>
+      <p class="count" [class]="card?.totalCount! > 0 ? 'bold' : ''" class="horizontal">{{card?.totalCount}}
+        @if (hasFoil()) {
+          <img src="/assets/foil.png" class="count-decorator" />
+        }
+        @if (hasOther()) {
+          <img src="/assets/other.png" class="count-decorator" />
+        }
+      </p>
+    </div>
+    @if (card?.index === expandedCard) {
+      <div class="card-row">
+        <app-card-panel [curCard]="card?.card"></app-card-panel>
+        <app-ctc-view [curCard]="card" (isDirty)="onIsDirty($event)"></app-ctc-view>
+      </div>
+    }
+  </div>
+}
