@@ -6,11 +6,21 @@
       {{this.getSetDisplayName()}}
     </button>
     <div ngbDropdownMenu aria-labelledby="setDropdown" class="set-dropdown">
-      @for (set of setList; track set) {
-        <button ngbDropdownItem (click)="routeTo(set)">
-          <img src={{set.iconUrl}} class="menu-icon"/>
-          {{set.name}} ({{set.code}})
-        </button>
+      @if (setList) {
+        @for (set of setList; track set) {
+          <button ngbDropdownItem (click)="routeTo(set)">
+            <img src={{set.iconUrl}} class="menu-icon"/>
+            {{set.name}} ({{set.code}})
+          </button>
+        }
+      }
+      @else {
+        <div class="d-flex justify-content-center">
+          <div class="spinner-border" role="status">
+            <span class="sr-only"></span>
+          </div>
+          Loading sets...
+        </div>
       }
     </div>
   </div>
