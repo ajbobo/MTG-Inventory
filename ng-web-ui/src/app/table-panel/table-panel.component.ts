@@ -16,10 +16,12 @@ import { MTG_Set } from '../models/mtg_set';
   styleUrl: './table-panel.component.scss'
 })
 export class TablePanelComponent {
+  loading: boolean = false;
   expandedCard: number = -1;
 
   private _curSet?: MTG_Set;
   @Input() set curSet(value: MTG_Set | undefined) {
+    this.loading = true;
     this._curSet = value;
     this.getCardList();
   }
@@ -54,6 +56,7 @@ export class TablePanelComponent {
       this.cardList = s;
       this.cardList.forEach((v, i) => v.index = i); // Set each card's display index number, so that they can be highlighted correctly
       this.cardListChange.emit(this.cardList);
+      this.loading = false;
     });
   }
 
