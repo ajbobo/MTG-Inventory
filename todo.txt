@@ -6,7 +6,6 @@ Rename "foil | prerelease" and "foil" in Angular, and DB to be capitalized
 --- Angular App ---
 Add user authentication
 Replace isDirty events with a service
-Add Spinners where appropriate (loading set names, loading card list, etc.) - https://getbootstrap.com/docs/5.3/components/spinners/#border-spinner
 
 --- Term ---
 Add option to ChooseSetDialog to only show sets that are in User_Inv
