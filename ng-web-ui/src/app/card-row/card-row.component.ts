@@ -5,13 +5,15 @@ import { CtcViewComponent } from '../ctc-view/ctc-view.component';
 import { CardPanelComponent } from '../card-panel/card-panel.component';
 import { InventoryService } from '../inventory.service';
 import { CardTypeCount } from '../models/cardtypecount';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-card-row',
   standalone: true,
   imports: [
     CtcViewComponent,
-    CardPanelComponent
+    CardPanelComponent,
+    DecimalPipe
 ],
   templateUrl: './card-row.component.html',
   styleUrl: './card-row.component.scss'

@@ -1,7 +1,7 @@
 {
   "/api": {
     "target": "https://mtg-inventory.azurewebsites.net",
-    "secure": true,
+    "secure": false,
     "changeOrigin": true
   }
 }
