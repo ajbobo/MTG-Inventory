@@ -6,6 +6,7 @@ import { CardPanelComponent } from '../card-panel/card-panel.component';
 import { InventoryService } from '../inventory.service';
 import { CardTypeCount } from '../models/cardtypecount';
 import { DecimalPipe } from '@angular/common';
+import { ChangesService } from '../changes.service';
 
 @Component({
   selector: 'app-card-row',
@@ -26,9 +27,14 @@ export class CardRowComponent {
   @Input() expandedCard: number = -1;
   @Output() expandedCardChange = new EventEmitter<number>();
 
-  @Output() isDirty = new EventEmitter<boolean>();
+  // @Output() isDirty = new EventEmitter<boolean>();
 
-  constructor(private inventory: InventoryService) { }
+  constructor(
+    private inventory: InventoryService,
+    private changes: ChangesService
+    ) {
+      changes.dataChanged.subscribe(v => this.onIsDirty(v));
+    }
 
   getRaritySymbol(): string {
     return `/assets/${this.card?.card!.rarity}.png`;
@@ -59,7 +65,7 @@ export class CardRowComponent {
   }
 
   onIsDirty(ev: boolean) {
-    // The card has been changed; calculate its new totalCount, push its CTCs to the API, then notify upstream
+    // The card has been changed; calculate its new totalCount, push its CTCs to the API
     var cnt = 0;
     var updatedCTCs: CardTypeCount[] = [];
     this.card?.ctCs!.forEach(v => {
@@ -72,6 +78,7 @@ export class CardRowComponent {
 
     this.inventory.updateCardCTCs(this.card).subscribe();
 
-    this.isDirty.emit(ev);
+    // this.changes.changedMade();
+    // this.isDirty.emit(ev);
   }
 }

@@ -23,7 +23,7 @@
     @if (card?.index === expandedCard) {
       <div class="card-row">
         <app-card-panel [curCard]="card?.card"></app-card-panel>
-        <app-ctc-view [curCard]="card" (isDirty)="onIsDirty($event)"></app-ctc-view>
+        <app-ctc-view [curCard]="card"></app-ctc-view>
       </div>
     }
   </div>

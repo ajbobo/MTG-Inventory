@@ -3,6 +3,7 @@ import { CardData } from '../models/carddata';
 import { CardTypeCount } from '../models/cardtypecount';
 import { JsonPipe } from '@angular/common';
 import { CtcRowComponent } from '../ctc-row/ctc-row.component';
+import { ChangesService } from '../changes.service';
 
 @Component({
   selector: 'app-ctc-view',
@@ -17,11 +18,9 @@ import { CtcRowComponent } from '../ctc-row/ctc-row.component';
 export class CtcViewComponent {
   @Input() curCard?: CardData;
 
-  @Output() isDirty = new EventEmitter<boolean>();
-
-  onIsDirty(ev: boolean) {
-    this.isDirty.emit(ev);
-  }
+  constructor(
+    private changes: ChangesService
+  ){ }
 
   addNewCTC(ev: MouseEvent) {
     console.log("Adding CTC")
@@ -33,7 +32,7 @@ export class CtcViewComponent {
     this.curCard?.ctCs.push(ctc);
     this.curCard!.totalCount++;
 
-    this.isDirty.emit(true);
+    this.changes.changesMade();
 
     ev.stopPropagation();
   }

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CardTypeCount } from '../models/cardtypecount';
 
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { ChangesService } from '../changes.service';
 
 @Component({
   selector: 'app-ctc-row',
@@ -17,12 +18,14 @@ export class CtcRowComponent {
 
   @Input() ctc?: CardTypeCount;
 
-  @Output() isDirty = new EventEmitter<boolean>();
+  constructor(
+    private changes: ChangesService
+  ) {}
 
   setCTCType(type: string, ev: MouseEvent){
     if (this.ctc) {
       this.ctc.cardType = type;
-      this.isDirty.emit(true);
+      this.changes.changesMade();
     }
 
     ev.stopPropagation();
@@ -31,7 +34,7 @@ export class CtcRowComponent {
   setCount(ctc: CardTypeCount, count: number) {
     ctc.count = count;
 
-    this.isDirty.emit(true);
+    this.changes.changesMade();
   }
 
   IncrementCTC(ctc: CardTypeCount | undefined, ev: MouseEvent) {

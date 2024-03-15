@@ -4,6 +4,7 @@ import { FilterPanelComponent } from '../filter-panel/filter-panel.component';
 import { TablePanelComponent } from '../table-panel/table-panel.component';
 import { MTG_Set } from '../models/mtg_set';
 import { CardData } from '../models/carddata';
+import { ChangesService } from '../changes.service';
 
 @Component({
   selector: 'app-collection-panel',
@@ -23,6 +24,12 @@ export class CollectionPanelComponent {
   selectedCard?: CardData;
   
   focusFilter: boolean = false;
+
+  constructor(
+    private changes: ChangesService
+  ) {
+    this.changes.dataChanged.subscribe(v => this.onIsDirty(v));
+  }
 
   onIsDirty(ev: boolean) {
     this.focusFilter = true;

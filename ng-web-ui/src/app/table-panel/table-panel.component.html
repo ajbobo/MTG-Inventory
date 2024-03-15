@@ -2,11 +2,11 @@
   @if (!loading){
     @if (selectedCard) {
       <div>
-        <app-card-row [card]="selectedCard" [(expandedCard)]="selectedCard!.index" (isDirty)="onIsDirty($event)"></app-card-row>
+        <app-card-row [card]="selectedCard" [(expandedCard)]="selectedCard!.index" ></app-card-row>
       </div>
     } @else {
       @for (card of cardList; track card) {
-        <app-card-row [card]="card" [(expandedCard)]="expandedCard" (isDirty)="onIsDirty($event)"></app-card-row>
+        <app-card-row [card]="card" [(expandedCard)]="expandedCard" ></app-card-row>
       }
     }
   }

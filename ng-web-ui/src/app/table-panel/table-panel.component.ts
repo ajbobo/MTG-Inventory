@@ -4,6 +4,7 @@ import { InventoryService } from '../inventory.service';
 import { CardRowComponent } from '../card-row/card-row.component';
 
 import { MTG_Set } from '../models/mtg_set';
+import { ChangesService } from '../changes.service';
 
 @Component({
   selector: 'app-table-panel',
@@ -36,8 +37,11 @@ export class TablePanelComponent {
   @Output() isDirty = new EventEmitter<boolean>();
 
   constructor(
-    private inventory: InventoryService
-  ) { }
+    private inventory: InventoryService,
+    private changes: ChangesService
+  ) { 
+    this.changes.dataChanged.subscribe(v => this.cardListChange.emit(this.cardList));
+  }
 
   ngOnInit(): void {
     this.getCardList();
@@ -57,10 +61,5 @@ export class TablePanelComponent {
       this.cardListChange.emit(this.cardList);
       this.loading = false;
     });
-  }
-
-  onIsDirty(ev: boolean) {
-    this.cardListChange.emit(this.cardList); // Refresh anything bound to the cardList
-    this.isDirty.emit(ev);
   }
 }
