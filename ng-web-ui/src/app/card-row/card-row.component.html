@@ -6,10 +6,10 @@
       <p><img src={{getRaritySymbol()}} class="rarity-image" /></p>
       <p class="name bold">{{card?.card!.name}}</p>
       @if (hasFoil()) {
-        <p class="price" [class]="card?.card!.priceFoil! > 1 ? 'bold' : ''">${{card?.card!.priceFoil | number: '1.2'}}</p>
+        <p class="price" [class]="card?.card!.priceFoil! > 1 ? 'bold' : ''">${{card?.card!.priceFoil | number: '1.2-2'}}</p>
       }
       @else {
-        <p class="price" [class]="card?.card!.price! > 1 ? 'bold' : ''">${{card?.card!.price}}</p>
+        <p class="price" [class]="card?.card!.price! > 1 ? 'bold' : ''">${{card?.card!.price | number: '1.2-2'}}</p>
       }
       <p class="count" [class]="card?.totalCount! > 0 ? 'bold' : ''" class="horizontal">{{card?.totalCount}}
         @if (hasFoil()) {
