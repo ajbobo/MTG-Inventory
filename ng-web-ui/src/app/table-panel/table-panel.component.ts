@@ -40,7 +40,7 @@ export class TablePanelComponent {
     private inventory: InventoryService,
     private changes: ChangesService
   ) { 
-    this.changes.dataChanged.subscribe(v => this.cardListChange.emit(this.cardList));
+    this.changes.cardChanged.subscribe(v => this.cardListChange.emit(this.cardList));
   }
 
   ngOnInit(): void {

@@ -6,6 +6,7 @@ import { Observable, OperatorFunction, debounceTime, distinctUntilChanged, map }
 
 import { InventoryService } from '../inventory.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ChangesService } from '../changes.service';
 
 @Component({
   selector: 'app-filter-panel',
@@ -14,19 +15,12 @@ import { ActivatedRoute, Router } from '@angular/router';
     NgbDropdownModule,
     FormsModule,
     NgbTypeaheadModule
-],
+  ],
   templateUrl: './filter-panel.component.html',
   styleUrl: './filter-panel.component.scss'
 })
 export class FilterPanelComponent {
   @ViewChild('cardSearch') searchInput?: ElementRef; // Finds the element with the #cardSearch tag
-
-  @Input() set needsFocus(focus: boolean) {
-    if (focus) {
-      this.searchInput?.nativeElement.focus();
-      this.searchInput?.nativeElement.select();
-    }
-  }
 
   private _cardList: CardData[] = []
   @Input() set cardList(value: CardData[]) {
@@ -47,20 +41,23 @@ export class FilterPanelComponent {
   priceFilter: string = 'All';
   rarityFilter: string = 'All';
 
-   // The values from the URL, if provided
+  // The values from the URL, if provided
   setCode: string = "";
   cardNumber: string = "";
 
   constructor(
-    config: NgbTypeaheadConfig, 
-    private inventory: InventoryService, 
+    config: NgbTypeaheadConfig,
+    private inventory: InventoryService,
+    private changes: ChangesService,
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute
+  ) {
     config.showHint = true;
-    this.route.params.subscribe(p => { 
-      this.setCode = p['setCode']; 
-      this.cardNumber = p['cardNumber']; 
+    this.route.params.subscribe(p => {
+      this.setCode = p['setCode'];
+      this.cardNumber = p['cardNumber'];
     });
+    this.changes.cardChanged.subscribe(v => this.onCardChanged(v));
   }
 
   card: any; // Holds the card that is found by the search box
@@ -116,7 +113,7 @@ export class FilterPanelComponent {
     this.router.navigate(['/collection', this.setCode]);
     this.selectedCardChange.emit(undefined);
   }
-  
+
   private displaySelectedCard() {
     if (this.cardNumber) {
       const selCard: CardData | undefined = this._cardList.find(x => x.card.collectorNumber === this.cardNumber);
@@ -130,6 +127,11 @@ export class FilterPanelComponent {
         this.router.navigate(['/notfound']);
       }
     }
+  }
+
+  onCardChanged(_: CardData): void {
+    this.searchInput?.nativeElement.focus();
+    this.searchInput?.nativeElement.select();
   }
 
 }

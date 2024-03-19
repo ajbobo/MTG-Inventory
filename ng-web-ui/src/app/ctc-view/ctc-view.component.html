@@ -2,7 +2,7 @@
   @if (curCard?.ctCs?.length) {
     <div>
       @for (curCTC of curCard?.ctCs; track curCTC) {
-        <app-ctc-row [ctc]="curCTC"> </app-ctc-row>
+        <app-ctc-row [ctc]="curCTC" [card]="curCard"> </app-ctc-row>
       }
     </div>
   }

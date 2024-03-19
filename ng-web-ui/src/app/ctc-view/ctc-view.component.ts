@@ -32,7 +32,7 @@ export class CtcViewComponent {
     this.curCard?.ctCs.push(ctc);
     this.curCard!.totalCount++;
 
-    this.changes.changesMade();
+    this.changes.changeCard(this.curCard!);
 
     ev.stopPropagation();
   }

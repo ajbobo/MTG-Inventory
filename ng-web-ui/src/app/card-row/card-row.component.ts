@@ -27,13 +27,11 @@ export class CardRowComponent {
   @Input() expandedCard: number = -1;
   @Output() expandedCardChange = new EventEmitter<number>();
 
-  // @Output() isDirty = new EventEmitter<boolean>();
-
   constructor(
     private inventory: InventoryService,
     private changes: ChangesService
     ) {
-      changes.dataChanged.subscribe(v => this.onIsDirty(v));
+      this.changes.cardChanged.subscribe(v => this.onCardChanged(v));
     }
 
   getRaritySymbol(): string {
@@ -64,11 +62,14 @@ export class CardRowComponent {
     this.expandedCardChange.emit(this.expandedCard);
   }
 
-  onIsDirty(ev: boolean) {
-    // The card has been changed; calculate its new totalCount, push its CTCs to the API
+  onCardChanged(card: CardData) {
+    if (card != this.card)
+      return;
+  
+  // The card has been changed; calculate its new totalCount, push its CTCs to the API
     var cnt = 0;
     var updatedCTCs: CardTypeCount[] = [];
-    this.card?.ctCs!.forEach(v => {
+    this.card?.ctCs?.forEach(v => {
       if (v.count > 0)
         updatedCTCs.push(v);
         cnt += v.count;
@@ -77,8 +78,5 @@ export class CardRowComponent {
     this.card!.totalCount = cnt;
 
     this.inventory.updateCardCTCs(this.card).subscribe();
-
-    // this.changes.changedMade();
-    // this.isDirty.emit(ev);
   }
 }

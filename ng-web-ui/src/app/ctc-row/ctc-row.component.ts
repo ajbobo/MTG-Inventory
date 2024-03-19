@@ -3,6 +3,7 @@ import { CardTypeCount } from '../models/cardtypecount';
 
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChangesService } from '../changes.service';
+import { CardData } from '../models/carddata';
 
 @Component({
   selector: 'app-ctc-row',
@@ -17,6 +18,7 @@ export class CtcRowComponent {
   typeList: string[] = ['Standard', 'foil', 'foil | prerelease', 'Spanish', 'Autographed'];
 
   @Input() ctc?: CardTypeCount;
+  @Input() card?: CardData;
 
   constructor(
     private changes: ChangesService
@@ -25,7 +27,7 @@ export class CtcRowComponent {
   setCTCType(type: string, ev: MouseEvent){
     if (this.ctc) {
       this.ctc.cardType = type;
-      this.changes.changesMade();
+      this.changes.changeCard(this.card!);
     }
 
     ev.stopPropagation();
@@ -34,7 +36,7 @@ export class CtcRowComponent {
   setCount(ctc: CardTypeCount, count: number) {
     ctc.count = count;
 
-    this.changes.changesMade();
+    this.changes.changeCard(this.card!);
   }
 
   IncrementCTC(ctc: CardTypeCount | undefined, ev: MouseEvent) {

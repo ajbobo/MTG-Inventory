@@ -57,7 +57,7 @@ export class InventoryService {
     if (card === undefined)
       return new Observable<any>();
 
-    console.log("Writing to API");
+    console.log("Writing to API - " + card.card.name);
     const url: string = `${this.apiUrl}/Collection/${this.curSet?.code}/${card.card.collectorNumber}`
     const body = { ctCs: card.ctCs };
     const httpOptions = {
