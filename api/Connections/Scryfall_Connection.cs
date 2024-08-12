@@ -1,5 +1,6 @@
 using Newtonsoft.Json.Linq;
 using ExtensionMethods;
+using System.Net.Http.Headers;
 
 namespace mtg_api;
 
@@ -15,6 +16,9 @@ public class Scryfall_Connection : IScryfall_Connection
     public Scryfall_Connection(HttpClient httpClient)
     {
         _httpClient = httpClient;
+        HttpRequestHeaders headers = _httpClient.DefaultRequestHeaders;
+        headers.Add("Accept", "application/json");
+        headers.Add("User-Agent", "MTGInv/1.0");
     }
 
     public bool IsCollectableSetType(string setType, string block, string parent)
