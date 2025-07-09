@@ -5,6 +5,7 @@ import { TablePanelComponent } from '../table-panel/table-panel.component';
 import { MTG_Set } from '../models/mtg_set';
 import { CardData } from '../models/carddata';
 import { ChangesService } from '../changes.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-collection-panel',
@@ -22,4 +23,10 @@ export class CollectionPanelComponent {
   curSet?: MTG_Set;
   cardList: CardData[] = [];
   selectedCard?: CardData;
+
+  constructor(
+    private titleService: Title
+  ) {
+    this.titleService.setTitle("MTG Inventory");
+  }
 }

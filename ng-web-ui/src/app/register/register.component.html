@@ -1,17 +1,21 @@
-<form class="login-form w-100 m-auto">
+<form class="login-form w-100 m-auto" (submit)="onSubmit($event)">
     <img class="logo mx-auto d-block" src="https://svgs.scryfall.io/sets/planeswalker.svg" />
     <div class="form-floating">
-        <input type="text" class="form-control" id="inputUsername" placeholder="username">
+        <input type="text" class="form-control" [ngClass]="{'is-invalid':invalidUsername}" id="inputUsername" placeholder="username" name="username" [(ngModel)]="username">
         <label for="inputUsername">Username</label>
+        <div class="invalid-feedback">You must enter a name</div>
     </div>
     <div class="form-floating">
-        <input type="password" class="form-control" id="inputPassword" placeholder="password">
+        <input type="password" class="form-control" [ngClass]="{'is-invalid':invalidPassword}" id="inputPassword" placeholder="password" name="password1" [(ngModel)]="password1">
         <label for="inputPassword" class="form-label">Password</label>
+        <div class="invalid-feedback">The password doesn't meet criteria</div>
     </div>
     <div class="form-floating">
-        <input type="password" class="form-control" id="confirmPassword" placeholder="password">
+        <input type="password" class="form-control" [ngClass]="{'is-invalid':passwordMismatch}" id="confirmPassword" placeholder="password"name="password2" [(ngModel)]="password2">
         <label for="confirmPassword" class="form-label">Confirm Password</label>
+        <div class="invalid-feedback">The passwords don't match</div>
     </div>
     <button class="btn btn-primary w-100 py-2 my-2" type="submit">Register</button>
 </form>
 <p><a routerLink="/collection">Collection</a></p>
+<p><a routerLink="/login">Login</a></p>

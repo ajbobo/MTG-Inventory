@@ -1,15 +1,18 @@
-<form class="login-form w-100 m-auto">
+<form class="login-form w-100 m-auto" (submit)="onSubmit($event)">
     <img class="logo mx-auto d-block" src="https://svgs.scryfall.io/sets/planeswalker.svg" />
     <div class="form-floating">
-        <input type="text" class="form-control" id="inputUsername" placeholder="username">
+        <input type="text" class="form-control" [ngClass]="{'is-invalid':invalidUsername}" id="inputUsername" placeholder="username" name="username" [(ngModel)]="username">
         <label for="inputUsername">Username</label>
+        <div class="invalid-feedback">Enter a valid name</div>
     </div>
     <div class="form-floating">
-        <input type="password" class="form-control" id="inputPassword" placeholder="password">
+        <input type="password" class="form-control" [ngClass]="{'is-invalid':invalidPassword}" id="inputPassword" placeholder="password" name="password" [(ngModel)]="password">
         <label for="inputPassword" class="form-label">Password</label>
+        <div class="invalid-feedback">Enter a password</div>
     </div>
     <button class="btn btn-primary w-100 py-2 my-2" type="submit">Sign in</button>
     <p class="text-center">Need an account? <a routerLink="/register">Register</a></p>
     <p class="text-center"><a routerLink="/resetpassword">Forgot password?</a></p>
 </form>
 <p><a routerLink="/collection">Collection</a></p>
+<p><a routerLink="/login">Login</a></p>
